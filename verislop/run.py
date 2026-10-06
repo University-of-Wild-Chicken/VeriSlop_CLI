@@ -20,10 +20,11 @@ from pathlib import Path
 from typing import Any
 
 from . import SCHEMA_VERSION, canonical, fsutil
-from .errors import Diagnostic, InfrastructureError, UsageError
+from .errors import Diagnostic, InfrastructureError, UsageError, VeriSlopError
 from .events import EventSink
 from .package import Package, find_runs_dir, new_run_id
 from .stage import StageResult
+from .bridges.vscore_checker import EdgeFailure
 
 STAGES = ("interpret", "formalize", "prove", "accept", "export", "review:formal_contract", "bridge:prepare", "generate", "link", "test",
           "review:release", "verify")
@@ -32,6 +33,11 @@ STAGES = ("interpret", "formalize", "prove", "accept", "export", "review:formal_
 def _proceed(stage: str, pkg: Package, res: StageResult) -> bool:
     if res.status == "INFRASTRUCTURE_FAILURE":
         return False
+    if stage in ("generate", "link", "bridge:accept"):
+        from .backends.registry import is_vscore
+
+        if is_vscore(pkg):
+            return res.status == "PASS"
     if stage == "interpret":
         evs = [e for e in pkg.evidence.for_claim("INTERPRETATION:request") if e.valid]
         return bool(evs) and evs[-1].result.get("milestone_outcome") == "PASS"
@@ -70,6 +76,9 @@ def _params_from_args(args: argparse.Namespace) -> dict[str, Any]:
         "implementation_candidate": ap(args.implementation_candidate), "bindings_candidate": ap(args.bindings_candidate),
         "bridge_proposal": os.path.abspath(args.bridge_proposal) if getattr(args, "bridge_proposal", None) else None,
         "bridge_candidate_dir": os.path.abspath(args.bridge_candidate_dir) if getattr(args, "bridge_candidate_dir", None) else None,
+        "bridge_id": getattr(args, "bridge_id", None),
+        "tests_flag": ("no_tests" if getattr(args, "no_tests", False) else "require_tests"
+                       if getattr(args, "require_tests", False) else "omitted"),
         "resolve": list(args.resolve or []), "non_interactive": bool(args.non_interactive),
         "budget_seconds": args.budget_seconds, "seed": args.seed, "cases": args.cases,
         "attachments": [ap(a) for a in (args.attachment or [])], "repository_revision": args.repository_revision,
@@ -114,12 +123,26 @@ def _run_stage(name: str, pkg: Package, ev: EventSink, p: dict[str, Any]) -> Sta
 
         return review.run(pkg, ev, Path(cfg), checkpoint=name.split(":", 1)[1])
     if name == "generate":
-        agent = agents.implementer_agent(cfg, pkg, ev) if (cfg and not p["implementation_candidate"]) else None
+        adopting = p.get("target") == "vscore" and p.get("bridge_id") and not p["implementation_candidate"]
+        agent = agents.implementer_agent(cfg, pkg, ev) if (cfg and not p["implementation_candidate"] and not adopting) else None
         return generate.run(pkg, ev, tier=p["tier"], target=p["target"], endpoint=p["endpoint"], require_state=p["require_state"],
                             candidate=Path(p["implementation_candidate"]) if p["implementation_candidate"] else None,
-                            bindings=Path(p["bindings_candidate"]) if p["bindings_candidate"] else None, agent=agent)
+                            bindings=Path(p["bindings_candidate"]) if p["bindings_candidate"] else None, agent=agent,
+                            bridge_id=p.get("bridge_id"), tests_flag=p.get("tests_flag", "omitted"))
     if name == "link":
         return link.run(pkg, ev)
+    if name == "bridge:accept":
+        from .backends.vscore import selection
+        from .bridges.vscore_checker import accept as bridge_accept
+
+        return bridge_accept(pkg, selection(pkg)["bridge_id"], ev)
+    if name == "release:finalize":
+        from .backends.vscore_closure import mechanical_snapshot
+        from .backends.vscore_release import finalize
+
+        snapshot = mechanical_snapshot(pkg)
+        return finalize(pkg, ev, snapshot, config=Path(cfg) if cfg else None,
+                        endpoint=p["endpoint"], require_state=p["require_state"])
     if name == "test":
         return testing.run(pkg, ev, seed=p["seed"], cases=p["cases"])
     if name == "verify":
@@ -139,6 +162,12 @@ def _review_configured(cfg: str | None, checkpoint: str) -> bool:
 
 
 def _stages_for(p: dict[str, Any]) -> list[str]:
+    if p.get("tier") == 2 and p.get("target") == "vscore":
+        ordered = ["interpret", "review:interpretation", "formalize", "prove", "accept", "export",
+                   "review:formal_contract", "bridge:prepare", "generate", "link", "bridge:accept",
+                   "review:implementation", "verify", "review:release", "release:finalize"]
+        return [s for s in ordered if (s != "bridge:prepare" or p.get("bridge_proposal"))
+                and (not s.startswith("review:") or _review_configured(p.get("config"), s.split(":", 1)[1]))]
     out = []
     for s in STAGES:
         if s == "bridge:prepare" and not p.get("bridge_proposal"):
@@ -158,34 +187,60 @@ def _execute(pkg: Package, ev: EventSink, p: dict[str, Any], start_after: set[st
     collected: list[Diagnostic] = []
     final: StageResult | None = None
     stopped_at = None
+    vscore_pipeline = p.get("tier") == 2 and p.get("target") == "vscore"
+    if vscore_pipeline:
+        # A resume is a fresh verification request, even after an earlier success.
+        # Recorded completion never substitutes for the two clean executions.
+        start_after = start_after - {"verify", "review:release", "release:finalize"}
     try:
         for stage in _stages_for(p):
             if stage in start_after:
                 continue
-            if stage == "verify":
+            if stage == "verify" and not vscore_pipeline:
                 break
             t0 = time.time()
             res = _run_stage(stage, pkg, ev, p)
             history.append({"stage": stage, "status": res.status, "codes": sorted({d.code for d in res.diagnostics}),
                             "seconds": int(time.time() - t0)})
             pkg.set_meta("stage_history", history)
-            collected.extend(d for d in res.diagnostics if d.severity in ("blocking", "infrastructure"))
+            mechanical_pass = (stage == "verify" and vscore_pipeline and res.summary.get("mechanical_status") == "VERIFIED")
+            if not mechanical_pass:
+                collected.extend(d for d in res.diagnostics if d.severity in ("blocking", "infrastructure"))
+            if stage in ("verify", "release:finalize"):
+                final = res
+            if stage == "verify" and vscore_pipeline and not mechanical_pass:
+                stopped_at = stage
+                break
             if not _proceed(stage, pkg, res):
                 stopped_at = stage
                 ev.emit("diagnostic", "run", f"pipeline stops after {stage}: {res.status}")
                 break
             pkg.set_meta("completed_stages", sorted(_completed(pkg) | {stage}))
-        final = _run_stage("verify", pkg, ev, p)
+        if final is None:
+            final = _run_stage("verify", pkg, ev, p)
+        elif vscore_pipeline and final.summary.get("mechanical_status") == "VERIFIED" and stopped_at:
+            # Preserve the mechanical fact when a separately required review rejects it.
+            final = _run_stage("release:finalize", pkg, ev, p)
     except KeyboardInterrupt:
         ev.emit("diagnostic", "run", "interrupted; recording an incomplete run")
-        _interrupted_report(pkg, collected)
+        _interrupted_report(pkg, collected, p)
         raise
-    except InfrastructureError as exc:
+    except (VeriSlopError, EdgeFailure) as exc:
         collected.extend(exc.diagnostics)
-        final = _run_stage("verify", pkg, ev, p)
+        if not exc.diagnostics:
+            collected.append(Diagnostic("INVALID_CANDIDATE", str(exc)))
+        try:
+            final = _run_stage("verify", pkg, ev, p)
+        except (VeriSlopError, EdgeFailure) as verify_error:
+            from .stage import status_from
+
+            collected.extend(verify_error.diagnostics)
+            final = StageResult("verify", status_from(collected), "pipeline did not complete verification")
+            final.diagnostics = list(collected)
     assert final is not None
     seen = {(d.code, d.message) for d in final.diagnostics}
     final.diagnostics = [d for d in collected if (d.code, d.message) not in seen] + final.diagnostics
+    _ensure_report(pkg, final, p)
     if stopped_at:
         final.lines.insert(0, f"pipeline stopped after `{stopped_at}`; downstream stages did not run")
     final.command = "run"
@@ -196,13 +251,29 @@ def _execute(pkg: Package, ev: EventSink, p: dict[str, Any], start_after: set[st
     return final
 
 
-def _interrupted_report(pkg: Package, diags: list[Diagnostic]) -> None:
+def _ensure_report(pkg: Package, result: StageResult, parameters: dict[str, Any]) -> None:
+    """Even admission/infrastructure exits before a closure freeze get a bounded report."""
+    if "report" in result.artifacts and pkg.path("report").is_file():
+        return
+    from . import report as reportmod, view
+
+    terminal = "INFRASTRUCTURE_FAILURE" if result.status == "INFRASTRUCTURE_FAILURE" else "BLOCKED"
+    record = reportmod.build(pkg, view.derive(pkg), terminal, result.diagnostics, [],
+        {"compared": [], "mismatches": []}, parameters, parameters.get("endpoint"),
+        parameters.get("require_state"), None, [], {"configured": bool(parameters.get("config"))}, pkg.file_digest("accepted_ir"))
+    fsutil.write_json(pkg.path("report"), record, pretty=True)
+
+
+def _interrupted_report(pkg: Package, diags: list[Diagnostic], parameters: dict[str, Any] | None = None) -> None:
     from . import report as reportmod, view
 
     try:
         v = view.derive(pkg)
         d = diags + [Diagnostic("INTERRUPTED", "the run was cancelled; required checks remain unresolved")]
-        rep = reportmod.build(pkg, v, "BLOCKED", d, [], {"compared": [], "mismatches": []}, {}, None, None, None, [], {"configured": False}, None)
+        params = parameters or {}
+        rep = reportmod.build(pkg, v, "BLOCKED", d, [], {"compared": [], "mismatches": []}, params,
+                              params.get("endpoint"), params.get("require_state"), None, [],
+                              {"configured": bool(params.get("config"))}, None)
         rep["qualified_result"] = "INTERRUPTED: incomplete run; no verification success"
         fsutil.write_json(pkg.path("report"), rep, pretty=True)
     except Exception:  # noqa: BLE001 - best effort while handling cancellation
@@ -213,6 +284,13 @@ def run(args: argparse.Namespace) -> StageResult:
     params = _params_from_args(args)
     if bool(params["bridge_proposal"]) != bool(params["bridge_candidate_dir"]):
         raise UsageError("--bridge-proposal and --bridge-candidate-dir must be supplied together")
+    if params.get("tier") == 2 and params.get("target") == "vscore" and params["bridge_proposal"]:
+        if params["implementation_candidate"]:
+            raise UsageError("choose either a prepared bridge proposal or an implementation candidate")
+        proposal_id = canonical.load_file(Path(params["bridge_proposal"]))["bridge_id"]
+        if params["bridge_id"] and params["bridge_id"] != proposal_id:
+            raise UsageError("--bridge-id must match the selected proposal")
+        params["bridge_id"] = proposal_id
     if args.tier is not None and args.tier not in range(5):
         raise UsageError("--tier must be 0..4")
     runs = Path(args.runs_dir) if args.runs_dir else find_runs_dir()
@@ -265,11 +343,25 @@ def resume(args: argparse.Namespace) -> StageResult:
 
         _, preparation_diags = verify_preparations(pkg)
         problems.extend(preparation_diags)
+        if params.get("tier") == 2 and params.get("target") == "vscore":
+            from .backends.vscore import selection
+            from .backends.vscore_closure import validate_frozen
+            from .bridges.manifest import InvalidPackage
+
+            if (pkg.root / "closure/selection.json").is_file():
+                try:
+                    selection(pkg)
+                except (EdgeFailure, InvalidPackage, VeriSlopError, OSError, ValueError, KeyError) as exc:
+                    problems.extend(getattr(exc, "diagnostics", None) or
+                                    [Diagnostic(getattr(exc, "code", "INPUT_MUTATION"), str(exc))])
+            if (pkg.root / "closure/manifest.json").is_file():
+                problems.extend(validate_frozen(pkg))
         if problems:
             from .stage import status_from
 
             res = StageResult("resume", status_from(problems), "frozen root verified before resuming")
             res.diagnostics = problems
+            _ensure_report(pkg, res, params)
             return res
         done = _completed(pkg)
         res = _execute(pkg, ev, params, done)

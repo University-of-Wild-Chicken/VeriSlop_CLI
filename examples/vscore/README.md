@@ -50,5 +50,9 @@ The accepted theorem `VeriSlopBridgeProof.edge : VeriSlopBridgeGoal.EdgeProp` st
   implementation relation. They are proved inside the goal from the accepted theorems.
 
 The certificate is scoped to the VSCore source and its Lean semantics. Running the program with a
-host interpreter, or compiling it, is outside this edge. `END_TO_END_VERIFIED` is not assigned yet
-(see `verislop capabilities`).
+host interpreter, or compiling it, is outside this edge. `bridge accept` alone assigns no
+`END_TO_END_VERIFIED`. The complete Tier 2 pipeline additionally freezes materialization and
+link claims, executes two complete source closure builds and checks all required provenance
+before assigning `END_TO_END_VERIFIED [restricted_source; vscore/0.1]`. Use the one-command
+Tier 2 example in the [repository README](../../README.md#tier-2-vscore-restricted-source).
+Applicable optional `TESTED` remains `PENDING`; requiring a campaign is unsupported.

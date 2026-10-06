@@ -35,6 +35,15 @@ FINAL_CLAIMS = {
 
 
 def closure_manifest(pkg: Package) -> dict[str, Any] | None:
+    from .backends import registry as backend_registry
+
+    backend, dispatch_diags = backend_registry.frozen_backend(pkg)
+    if dispatch_diags:
+        return None
+    if backend and backend["id"] == backend_registry.VSCORE_ID:
+        from .backends import vscore_closure
+
+        return vscore_closure.closure_manifest(pkg)
     files: dict[str, Path] = {}
     needed = {
         "claims.json": pkg.path("claims"),
@@ -62,6 +71,15 @@ def closure_manifest(pkg: Package) -> dict[str, Any] | None:
 
 
 def closure_input_root(pkg: Package) -> str | None:
+    from .backends import registry as backend_registry
+
+    backend, dispatch_diags = backend_registry.frozen_backend(pkg)
+    if dispatch_diags:
+        return None
+    if backend and backend["id"] == backend_registry.VSCORE_ID:
+        from .backends import vscore_closure
+
+        return vscore_closure.closure_input_root(pkg)
     m = closure_manifest(pkg)
     if m is None:
         return None
@@ -138,6 +156,16 @@ def _lifecycle_code(entry: dict[str, Any], milestone: str) -> str:
 
 def run(pkg: Package, events: EventSink, *, endpoint: str | None = None, require_state: str | None = None,
         config: Path | None = None) -> StageResult:
+    from .backends import registry as backend_registry
+
+    backend, dispatch_diags = backend_registry.frozen_backend(pkg)
+    if dispatch_diags:
+        return StageResult("verify", "BLOCKED", "registered frozen backend", diagnostics=dispatch_diags,
+                           summary={"terminal_status": "BLOCKED", "mechanical_status": "BLOCKED"})
+    if backend and backend["id"] == backend_registry.VSCORE_ID:
+        from .backends import vscore_closure
+
+        return vscore_closure.run(pkg, events, endpoint=endpoint, require_state=require_state, config=config)
     from . import report as reportmod, view
 
     events.emit("stage_started", "verify", "frozen closure: clean builds, determinism, provenance")

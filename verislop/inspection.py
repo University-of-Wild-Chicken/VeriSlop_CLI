@@ -39,6 +39,40 @@ REMEDIATION = {
 }
 
 
+def _recorded_vscore(pkg: Package, result: StageResult) -> StageResult:
+    """Inspection reads recorded evidence; only verify performs a fresh mechanical gate."""
+    from .backends import registry
+
+    claims_error = None
+    try:
+        frozen = registry.frozen_claims(pkg)
+    except (OSError, ValueError) as exc:
+        frozen, claims_error = None, exc
+
+    def is_vscore_report(value):
+        return (isinstance(value, dict) and value.get("schema_version") == "0.2"
+                and (value.get("target") == "vscore" or value.get("backend") == registry.VSCORE_ID))
+
+    recorded = registry.claims_format(frozen) == "0.2" or is_vscore_report(result.summary)
+    if not recorded and callable(getattr(pkg, "path", None)):
+        # The report remains historical even when the claims that once selected its
+        # backend are absent or damaged. This fallback identifies a display only.
+        try:
+            stored = pkg.path("report")
+            recorded = stored.is_file() and is_vscore_report(canonical.load_file(stored))
+        except (OSError, ValueError):
+            pass
+    if recorded:
+        result.summary = {**result.summary, "freshness": "recorded_execution_only"}
+        result.lines.insert(0, "Recorded VSCore execution only; run verify for a fresh mechanical and release gate.")
+        if claims_error is not None or (frozen is not None and registry.claims_format(frozen) == "unsupported"):
+            result.diagnostics.append(Diagnostic("INVALID_CANDIDATE", "frozen implementation claims are unreadable or unsupported; the displayed VSCore execution is historical"))
+            result.status = "BLOCKED"
+    elif claims_error is not None:
+        raise claims_error
+    return result
+
+
 def inspect(pkg: Package, kind: str, ident: str | None) -> StageResult:
     res = StageResult("inspect", "PASS", "read-only inspection")
     if kind == "obligation":
@@ -65,27 +99,27 @@ def inspect(pkg: Package, kind: str, ident: str | None) -> StageResult:
             res.lines.append(f"  {m:<20} {e['outcome']:<15} {e['reason']}")
         if rec.get("formal"):
             res.lines.append(f"  formal: {rec['formal']['representation']} {rec['formal']['lean_symbol']} {rec['formal']['statement_hash']}")
-        return res
+        return _recorded_vscore(pkg, res)
     if kind == "evidence":
         if not ident:
             res.summary = {"evidence": [{"id": e.id, "claim": e.claim_id, "status": e.status, "verifier": e.record.get("verifier_id"),
                                          "valid": e.valid, "verifier_current": e.verifier_current} for e in pkg.evidence.load()]}
             res.lines = [f"{e.id} {e.claim_id:<28} {e.status:<8} {e.record.get('verifier_id')}" + ("" if e.valid else " INVALID") +
                          ("" if e.verifier_current else " (verifier changed)") for e in pkg.evidence.load()]
-            return res
+            return _recorded_vscore(pkg, res)
         e = pkg.evidence.by_id(ident.removeprefix("evidence:"))
         if e is None:
             raise UsageError(f"unknown evidence {ident}")
         res.summary = {"record": e.record, "result": e.result, "problems": e.problems, "verifier_current": e.verifier_current}
         res.lines = [canonical.dumps_pretty(res.summary).decode()]
-        return res
+        return _recorded_vscore(pkg, res)
     paths = {"report": pkg.path("report"), "certificate": pkg.path("accepted") / "acceptance.json", "ir": pkg.path("accepted_ir")}
     p = paths[kind]
     if not p.is_file():
         raise UsageError(f"no {kind} in {pkg.root}")
     res.summary = canonical.load_file(p)
     res.lines = [f"{kind}: {pkg.rel(p)} ({canonical.digest(p.read_bytes())})"]
-    return res
+    return _recorded_vscore(pkg, res)
 
 
 def status(pkg: Package) -> StageResult:
@@ -99,7 +133,7 @@ def status(pkg: Package) -> StageResult:
     for prob in v["evidence_integrity_problems"]:
         res.diagnostics.append(Diagnostic("STALE_OR_UNBOUND_EVIDENCE", f"evidence {prob['evidence_id']}: {prob['problems'][0]}", severity="warning"))
     res.artifacts["obligation_view"] = pkg.rel(pkg.path("view"))
-    return res
+    return _recorded_vscore(pkg, res)
 
 
 def explain_block(pkg: Package) -> StageResult:
@@ -129,7 +163,7 @@ def explain_block(pkg: Package) -> StageResult:
             res.lines.append(f"      -> {r['remediation']}")
     if not res.summary["reasons"]:
         res.lines.append("  nothing is blocked")
-    return res
+    return _recorded_vscore(pkg, res)
 
 
 def diff(a: Package, b: Package) -> StageResult:

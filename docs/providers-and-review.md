@@ -4,7 +4,7 @@ Version 0.1 design candidate · 2026-10-05
 
 VeriSlop MUST let users provide API credentials for multiple model services, assign named models to agent roles, and configure the number and composition of adversarial reviewers at each review tier. Acceptance consensus at a lower review tier advances the same candidate to the next tier. The final tier's acceptance completes the review hierarchy.
 
-This is a proposed interface, not a claim that any provider adapter has already been implemented or tested.
+This document specifies the provider and review interface, including requirements beyond the current implementation. See [the implementation notes](implementation.md#7-providers-and-review) for registered adapters and limitations. Automated conformance tests use loopback mock services; implemented protocol support is not a claim of live-provider conformance.
 
 ## 1. Two independent kinds of tier
 

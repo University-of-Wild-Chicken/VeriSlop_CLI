@@ -42,7 +42,7 @@ BRIDGES: list[dict[str, Any]] = [
         "assurance": "runtime detection plus executed tests; never END_TO_END_VERIFIED",
     },
     {
-        "tier": 2, "target": "vscore", "endpoint": "restricted_source", "status": "partial",
+        "tier": 2, "target": "vscore", "endpoint": "restricted_source", "status": "supported",
         "language": "vscore/0.1", "semantics": "vscore-semantics/0.1",
         "relation_templates": {"vscore.reference_refinement/0.1": "verislop.vscore-checker"},
         "available": ("`verislop bridge accept`/`bridge verify`: kernel-checked exact-byte parse and typing equations, "
@@ -54,10 +54,9 @@ BRIDGES: list[dict[str, Any]] = [
         "unsupported": ("opaque lean_expr statements, calls inside range-quantifier bounds, obligations that mention no "
                         "implementation symbol, recursion, loops, calls between entries, state, sequences and I/O; "
                         "executing the source with any interpreter or compiler is outside the certificate"),
-        "end_to_end_eligible": False,
-        "reason": ("semantic edges are accepted by the registered VSCore checker, but generate/link/test/closure do not "
-                   "yet dispatch to the VSCore backend, so END_TO_END_VERIFIED [restricted_source; vscore/0.1] is never "
-                   "assigned and runs remain blocked"),
+        "end_to_end_eligible": True,
+        "testing": "unsupported",
+        "assurance": "END_TO_END_VERIFIED [restricted_source; vscore/0.1] after complete mechanical closure; independent TESTED unavailable",
     },
     {"tier": 3, "status": "unsupported",
      "reason": "no proof-producing generator or verified extraction route with artifact-specific preservation proofs is integrated"},
@@ -78,7 +77,21 @@ FORMAL = {
 }
 
 
-def capability(tier: int, target: str, endpoint: str) -> tuple[bool, str]:
+def capability(tier: int, target: str, endpoint: str, *, require_tests: bool = False,
+               backend_version: str | None = None, obligations: list[dict[str, Any]] | None = None) -> tuple[bool, str]:
+    from .backends.registry import select
+
+    descriptor = select(tier, target, endpoint, backend_version)
+    if descriptor is None:
+        return False, f"no registered backend for Tier {tier}, target {target!r}, endpoint {endpoint!r}, version {backend_version!r}"
+    if require_tests and descriptor["testing"] != "supported":
+        return False, "no independent VSCore campaign is registered"
+    if tier == 2 and obligations is not None:
+        from .backends.admission import unsupported, covered
+
+        bad = unsupported(obligations)
+        if bad or not covered(obligations):
+            return False, f"no complete admitted guarantee set (unsupported: {', '.join(bad) or 'empty'})"
     for b in BRIDGES:
         if b["tier"] != tier:
             continue
@@ -116,7 +129,10 @@ def report() -> StageResult:
             res.lines.append(f"Tier {b['tier']} {b['target']} -> {b['endpoint']}: PARTIAL — {b['available']}; {b['reason']}")
         else:
             res.lines.append(f"Tier {b['tier']}: UNSUPPORTED — {b['reason']}")
-    res.lines.append("END_TO_END_VERIFIED: no supported combination (Tiers 0/1 are ineligible by definition)")
+    from .backends.registry import DESCRIPTORS
+
+    res.summary["backend_descriptors"] = DESCRIPTORS
+    res.lines.append("END_TO_END_VERIFIED: Tier 2 vscore -> restricted_source only; Tiers 0/1 are ineligible and Tiers 3/4 unsupported")
     return res
 
 

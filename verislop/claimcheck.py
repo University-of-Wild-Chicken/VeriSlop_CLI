@@ -116,6 +116,57 @@ def evaluate_claim(claim: Mapping[str, Any], evidence: Iterable[Evidence],
                 or not isinstance(ev.result.get("proposition_hash"), str)):
             return assessment("FAIL", "PASS evidence does not satisfy the typed semantic-edge predicate", ev,
                               "STALE_OR_UNBOUND_EVIDENCE")
+    elif predicate in ("vscore-materialized/0.1", "vscore-linked/0.1"):
+        key, digest_key, producer = (("materialized", "inventory_hash", "verislop.vscore-materializer")
+            if predicate == "vscore-materialized/0.1" else ("structural_linked", "link_record_hash", "verislop.vscore-linker"))
+        digest = ev.result.get(digest_key)
+        if (issuer != producer or ev.result.get(key) is not True or ev.result.get("milestone_outcome") != "PASS"
+                or not _hash(digest) or (predicate == "vscore-materialized/0.1" and ev.result.get("proof_checked") is not False)
+                or (predicate == "vscore-linked/0.1" and (ev.result.get("correspondence") != "structural"
+                     or ev.result.get("semantic_acceptance") is not False))):
+            return assessment("FAIL", "PASS evidence does not satisfy the registered VSCore predicate", ev,
+                              "STALE_OR_UNBOUND_EVIDENCE")
+    elif predicate in ("closure-clean-builds/0.2", "closure-determinism/0.2", "closure-provenance/0.2",
+                       "closure-endpoint/0.2", "vscore-end-to-end/0.1"):
+        valid = (issuer == "verislop.closure" and ev.result.get("format") == predicate
+                 and ev.result.get("milestone_outcome") == "PASS" and root_kind == "closure_root"
+                 and ev.result.get("binding_root") == "closure_root")
+        if predicate == "vscore-end-to-end/0.1":
+            premises = ev.result.get("premises")
+            valid = valid and (ev.result.get("endpoint") == "restricted_source"
+                and ev.result.get("language") == "vscore/0.1" and ev.result.get("semantic_acceptance") is True
+                and ev.result.get("complete_mechanical_closure") is True
+                and ev.result.get("obligation") == claim.get("obligation")
+                and ev.result.get("revision") == claim.get("revision")
+                and ev.result.get("accepted_statement_hash") == claim.get("accepted_statement_hash")
+                and isinstance(premises, list)
+                and [p.get("claim_id") for p in premises if isinstance(p, dict)] == claim.get("premises")
+                and all(isinstance(p, dict) and p.get("outcome") == "PASS" for p in premises))
+        else:
+            valid = valid and ev.result.get("predicate_satisfied") is True
+            if predicate in ("closure-clean-builds/0.2", "closure-determinism/0.2"):
+                builds = ev.result.get("builds")
+                valid = valid and isinstance(builds, list) and len(builds) == 2 and all(
+                    isinstance(b, dict) and b.get("ok") is True
+                    and b.get("producer") == {"verifier_id": issuer, "verifier_hash": verifier_hash(issuer)}
+                    for b in builds)
+            if predicate == "closure-determinism/0.2":
+                from .backends.vscore_closure import COMPARISON_SLOTS
+
+                deterministic = ev.result.get("determinism", {})
+                valid = valid and isinstance(deterministic, dict) and deterministic.get("mismatches") == [] and deterministic.get("compared") == list(COMPARISON_SLOTS)
+                valid = valid and all(set(b.get("outputs", {})) == set(COMPARISON_SLOTS) for b in ev.result.get("builds", []))
+            elif predicate == "closure-provenance/0.2":
+                nonfinal = ev.result.get("nonfinal_claims")
+                valid = valid and isinstance(nonfinal, list) and bool(nonfinal) and all(
+                    isinstance(c, dict) and (not c.get("required") or c.get("outcome") == "PASS") for c in nonfinal)
+                valid = valid and all(ev.result.get(k) is True for k in
+                    ("declared_dependencies", "public_provenance_complete", "output_plan_complete"))
+            elif predicate == "closure-endpoint/0.2":
+                valid = valid and ev.result.get("endpoint") == "restricted_source" and ev.result.get("complete_required_coverage") is True
+        if not valid:
+            return assessment("FAIL", "PASS evidence does not satisfy the typed closure predicate", ev,
+                              "STALE_OR_UNBOUND_EVIDENCE")
     elif predicate in ("milestone-pass/0.1", "interpretation-coverage/0.1"):
         if ev.result.get("milestone_outcome") != "PASS":
             return assessment("FAIL", "PASS evidence does not satisfy the typed milestone PASS predicate", ev,
@@ -128,3 +179,8 @@ def evaluate_claim(claim: Mapping[str, Any], evidence: Iterable[Evidence],
     else:
         return assessment("UNSUPPORTED", f"unregistered result predicate {predicate!r}", ev, "UNSUPPORTED_SEMANTICS")
     return assessment("PASS", ev.result.get("reason") or f"registered evidence from {issuer}", ev)
+
+
+def _hash(value: Any) -> bool:
+    return (isinstance(value, str) and len(value) == 71 and value.startswith("sha256:")
+            and all(c in "0123456789abcdef" for c in value[7:]))

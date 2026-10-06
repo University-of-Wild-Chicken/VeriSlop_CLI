@@ -361,6 +361,14 @@ def load_inputs(pkg: Package) -> tuple[dict[str, Any] | None, dict[str, Any] | N
 
 
 def run(pkg: Package, events: EventSink, *, seed: int | None = None, cases: int | None = None, timeout: float = 120.0) -> StageResult:
+    from .backends.registry import frozen_backend, VSCORE_ID
+
+    backend, diagnostics = frozen_backend(pkg)
+    if diagnostics or (backend and backend["id"] == VSCORE_ID):
+        result = StageResult("test", "BLOCKED", "no independent VSCore campaign is registered")
+        result.diagnostics = diagnostics or [Diagnostic("UNSUPPORTED_CAPABILITY",
+            "VSCore TESTED is unsupported: kernel checks and proof acceptance are not a target campaign")]
+        return result
     events.emit("stage_started", "test", "running the frozen Tier 0 campaign on the target artifact")
     result = StageResult("test", "PASS", "the required target campaign passed its frozen criteria (test evidence, not proof)")
     irj, claims, link, diags = load_inputs(pkg)

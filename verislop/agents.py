@@ -313,11 +313,15 @@ Return ONLY one JSON object:
 Every public top-level function must be bound to a symbol or declared in helpers with a reason."""
 
 
-def implementer_agent(config: str | Path, pkg: Package, events: EventSink) -> Callable[[dict[str, Any]], tuple[dict[str, bytes], dict]]:
+def implementer_agent(config: str | Path, pkg: Package, events: EventSink, *, attempts: int = 3, proof_attempts: int = 3) -> Callable[[dict[str, Any]], tuple[dict[str, bytes], dict]]:
     broker, conf = _broker(config, pkg)
     agent = _role(conf, "implementer")
 
     def run(ctx: dict[str, Any]) -> tuple[dict[str, bytes], dict]:
+        if ctx["parameters"].get("target") == "vscore":
+            if ctx["parameters"].get("backend") != "verislop.backend.vscore/0.1":
+                raise UsageError("no registered VSCore agent target was selected", [Diagnostic("UNSUPPORTED_CAPABILITY", "VSCore implementer needs the frozen registered backend")])
+            return _vscore_implementation(broker, conf, pkg, events, ctx, attempts, proof_attempts)
         statements = {oid: {"display": st.get("display"), "representation": st["representation"]} for oid, st in ctx["statements"].items()}
         user = ("ACCEPTED SEMANTIC PROFILE (symbols to implement):\n" + json.dumps(ctx["profile"]["symbols"], indent=1)
                 + "\nENUMERATIONS:\n" + json.dumps(ctx["profile"]["enums"], indent=1)
@@ -333,3 +337,183 @@ def implementer_agent(config: str | Path, pkg: Package, events: EventSink) -> Ca
                              [Diagnostic("INVALID_CANDIDATE", f"unparseable implementer proposal: {exc}")]) from None
 
     return run
+
+
+VSCORE_IMPLEMENTER_SYSTEM = f"""You are a VeriSlop VSCore implementation agent ({PROMPT_VERSION}). Propose a total pure
+vscore/0.1 program and its one-to-one accepted-symbol relation for the exact accepted contract.
+The delivered endpoint is restricted_source under vscore-semantics/0.1. Nat is mathematical and unbounded.
+Use only the supplied source grammar: Nat, Bool, Unit, accepted finite enumerations, nested Result, expressions,
+conditionals, let and Result matches. No loops, entry calls, helpers, state, I/O or machine-width arithmetic.
+Every entry binds exactly one accepted function; every called symbol in the required formulas must be bound.
+Every additional entry also needs total refinement. Preserve all accepted assumptions and do not narrow input types.
+Return ONLY a JSON object with exactly:
+{{"program": <source program object>, "relation": <relation descriptor object>, "proof_source": <optional Lean proof text>}}
+The supervisor encodes exact canonical source/relation bytes and derives the Lean goal. Omit proof_source if you have
+no proof. Never supply a goal/proposition hash, accepted IR, evidence, lifecycle state or an imported contract.
+The optional proof imports VeriSlopBridgeGoal and declares VeriSlopBridgeProof.edge : VeriSlopBridgeGoal.EdgeProp.
+Your proposals have no acceptance authority; the registered kernel checks decide every result."""
+
+VSCORE_PROVER_SYSTEM = f"""You are a VeriSlop VSCore proof agent ({PROMPT_VERSION}). Propose one Lean 4 proof module for the
+verifier-generated exact goal, fixed source and accepted reference below. The target is restricted_source.
+Import VeriSlopBridgeGoal. Prove theorem VeriSlopBridgeProof.edge : VeriSlopBridgeGoal.EdgeProp, usually by applying
+VeriSlopBridgeGoal.edge_of_refines to a total proof of each Refines_<symbol>. The goal includes exact parse/typing,
+input coverage, total refinement for every bound entry and transfer of every required accepted guarantee.
+Do not change source, bindings, goal, accepted reference, domain types, assumptions or imported definitions.
+No sorry, axiom, native_decide, implemented_by, extern or additional imported modules outside pinned policy.
+Return ONLY the complete proof module in one ```lean code block. A failed attempt receives bounded checker diagnostics;
+no response assigns an evidence outcome or lifecycle state."""
+
+
+def _proof_text(text: str) -> str:
+    matches = re.findall(r"```lean\s*\n(.*?)```", text, re.S)
+    return matches[-1] if matches else text
+
+
+def _vscore_context(pkg: Package, ctx: dict[str, Any]) -> dict[str, Any]:
+    """Supply exact accepted packages/reference and supervisor-owned language limits."""
+    from . import schemas
+    from .backends import admission, registry
+    from .targets import vscore_source, vscore_target
+
+    formulas = {}
+    for oid, rec in sorted(ctx["ir"]["obligations"].items()):
+        package = admission.formula_package(pkg, rec)
+        if package is None:
+            raise UsageError(f"accepted formula/metadata package {oid} is missing or changed",
+                             [Diagnostic("INPUT_MUTATION", f"accepted expression package {oid} does not bind its bytes")])
+        formulas[oid] = {"revision": rec["revision"], "statement_hash": rec["formal"]["statement_hash"],
+                         "formula_ref": rec["formal"]["formula_ref"], "package": package}
+    certificate = canonical.load_file(pkg.root / ctx["ir"]["acceptance_certificate_ref"])
+    reference = certificate["artifacts"]["source"]
+    reference_bytes = (pkg.root / reference["path"]).read_bytes()
+    if canonical.digest(reference_bytes) != reference["sha256"]:
+        raise UsageError("accepted reference bytes changed", [Diagnostic("INPUT_MUTATION", "accepted reference source no longer matches its certificate")])
+    return {"accepted_ir": ctx["ir"], "accepted_packages": formulas, "accepted_profile": ctx["profile"],
+            "parameters": ctx["parameters"], "required_obligations": ctx["required_obligations"],
+            "source_grammar": canonical.load_file(schemas.schema_dir() / "vscore-source.schema.json"),
+            "relation_format": canonical.load_file(schemas.schema_dir() / "vscore-relation.schema.json"),
+            "feature_limits": {"source_bytes": vscore_source.MAX_SOURCE_BYTES, "proof_bytes": vscore_target.MAX_PROOF_BYTES,
+                               "bindings": vscore_target.MAX_BINDINGS, "excluded_surfaces": registry.VSCORE_EXCLUDED},
+            "accepted_reference": {"path": reference["path"], "sha256": reference["sha256"],
+                                   "lean_source": reference_bytes.decode("utf-8")},
+            "lean_toolchain": certificate["toolchain"]["pin"]}
+
+
+def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, ctx: dict,
+                           attempts: int, proof_attempts: int) -> tuple[dict[str, bytes], dict]:
+    """Bounded source/proof search before selection; every source and proof attempt is retained."""
+    from . import fsutil, schemas
+    from .bridges import vscore_checker
+    from .targets import vscore_target
+
+    if not 1 <= attempts <= 10 or not 0 <= proof_attempts <= 10:
+        raise UsageError("VSCore search budgets require 1..10 source attempts and 0..10 proof attempts")
+    fixed = _vscore_context(pkg, ctx)
+    implementer = _role(conf, "implementer")
+    prover = conf["roles"].get("prover")
+    feedback: list[str] = []
+    fallback: dict[str, bytes] | None = None
+    root = pkg.root / "agents" / "vscore-attempts"
+    root.mkdir(parents=True, exist_ok=True)
+    first = 1
+    while (root / f"source-{first}").exists():
+        first += 1
+
+    def diagnostics(exc: Exception) -> list[str]:
+        ds = getattr(exc, "diagnostics", None)
+        return [d.message[:2000] for d in ds[:20]] if ds else [str(exc)[:2000]]
+
+    def retain(stage: Path, data: dict[str, bytes]) -> None:
+        for name, value in data.items():
+            fsutil.write_once(stage / name, value)
+
+    def checked(stage: Path, source: bytes, relation: bytes, proof: bytes | None, label: str):
+        try:
+            spec, build, info = vscore_checker.preview(pkg, source, relation, proof=proof)
+            fsutil.write_json(stage / f"checks/{label}.json",
+                              {"proof_checked": proof is not None, "passed": True,
+                               "proposition_hash": info["proposition_hash"], "source_hash": canonical.digest(source)}, once=True)
+            return spec, build, info
+        except vscore_checker.EdgeFailure as exc:
+            fsutil.write_json(stage / f"checks/{label}.json",
+                              {"proof_checked": proof is not None, "passed": False,
+                               "diagnostics": [d.to_json() for d in exc.diagnostics[:20]],
+                               "source_hash": canonical.digest(source)}, once=True)
+            if any(d.severity == "infrastructure" for d in exc.diagnostics):
+                raise InfrastructureError("VSCore preview infrastructure failed", exc.diagnostics) from exc
+            raise
+
+    for offset in range(attempts):
+        number = first + offset
+        stage = root / f"source-{number}"
+        user = "FIXED ACCEPTED CONTRACT AND TARGET (data):\n" + json.dumps(fixed, ensure_ascii=False)
+        if feedback:
+            user += "\nBOUNDED CHECKER DIAGNOSTICS FROM THE PREVIOUS ATTEMPT:\n- " + "\n- ".join(feedback[:20])
+        comp = broker.call(implementer, f"implementer/vscore/{number}", VSCORE_IMPLEMENTER_SYSTEM, user, "generate")
+        events.emit("candidate_proposal", "generate", f"VSCore source proposal (attempt {number})")
+        fsutil.write_once(stage / "response.txt", comp.text.encode("utf-8"))
+        try:
+            proposed = extract_json(comp.text)
+            if not isinstance(proposed, dict) or not {"program", "relation"} <= set(proposed) or set(proposed) - {"program", "relation", "proof_source"}:
+                raise ValueError("VSCore proposal must contain only program, relation and optional proof_source")
+            if not isinstance(proposed["program"], dict) or not isinstance(proposed["relation"], dict):
+                raise ValueError("program and relation must be JSON objects")
+            issues = schemas.validate("vscore-source", proposed["program"])
+            if issues:
+                raise ValueError(f"vscore-source: {issues[0]}")
+            source, relation = canonical.dumps(proposed["program"]), canonical.dumps(proposed["relation"])
+            vscore_target.load_relation(relation)
+            if "proof_source" in proposed and not isinstance(proposed["proof_source"], str):
+                raise ValueError("proof_source must be Lean text")
+            retain(stage, {"program.vscore.json": source, "relation.json": relation})
+            spec, _, info = checked(stage, source, relation, None, "source")
+            retain(stage, {"VeriSlopBridgeGoal.lean": spec.text.encode(), "model.json": info["model"], "profile.json": info["profile"]})
+        except (ValueError, TypeError, KeyError, vscore_target.BridgeInvalid, vscore_checker.EdgeFailure) as exc:
+            feedback = diagnostics(exc)
+            fsutil.write_json(stage / "source-diagnostics.json", {"diagnostics": feedback}, once=True)
+            continue
+        proof = proposed.get("proof_source", "import VeriSlopBridgeGoal\nnamespace VeriSlopBridgeProof\ntheorem edge : VeriSlopBridgeGoal.EdgeProp := by sorry\nend VeriSlopBridgeProof\n").encode("utf-8")
+        proof_feedback: list[str] = []
+        last_bounded_proof = proof if len(proof) <= vscore_target.MAX_PROOF_BYTES else b"import VeriSlopBridgeGoal\nnamespace VeriSlopBridgeProof\ntheorem edge : VeriSlopBridgeGoal.EdgeProp := by sorry\nend VeriSlopBridgeProof\n"
+        if "proof_source" in proposed:
+            retain(stage, {"proofs/initial.lean": proof})
+            try:
+                if len(proof) > vscore_target.MAX_PROOF_BYTES:
+                    raise ValueError("initial proof exceeds the registered proof size budget")
+                checked(stage, source, relation, proof, "initial-proof")
+                return {"program.vscore.json": source, "relation.json": relation, "Proof.lean": proof}, {}
+            except (ValueError, vscore_checker.EdgeFailure) as exc:
+                proof_feedback = diagnostics(exc)
+        prover_context = {"parameters": fixed["parameters"], "source_hash": canonical.digest(source),
+                          "source": proposed["program"], "relation": proposed["relation"],
+                          "generated_goal": spec.text, "accepted_reference": fixed["accepted_reference"],
+                          "accepted_packages": fixed["accepted_packages"], "accepted_profile": fixed["accepted_profile"],
+                          "lean_toolchain": fixed["lean_toolchain"],
+                          "verifier_library": {name: data.decode("utf-8") for name, data in vscore_target.library_sources().items()}}
+        for proof_number in range(1, proof_attempts + 1 if prover else 1):
+            user = "FIXED VSCORE PROOF CONTEXT (data):\n" + json.dumps(prover_context, ensure_ascii=False)
+            user += "\nCURRENT CANDIDATE PROOF:\n```lean\n" + proof.decode("utf-8") + "\n```\n"
+            if proof_feedback:
+                user += "\nBOUNDED CHECKER DIAGNOSTICS:\n- " + "\n- ".join(proof_feedback[:20])
+            comp = broker.call(prover, f"prover/vscore/{number}/{proof_number}", VSCORE_PROVER_SYSTEM, user, "generate")
+            proof = _proof_text(comp.text).encode("utf-8")
+            if len(proof) <= vscore_target.MAX_PROOF_BYTES:
+                last_bounded_proof = proof
+            retain(stage, {f"proofs/{proof_number}.lean": proof})
+            events.emit("candidate_proposal", "generate", f"VSCore proof proposal (source {number}, proof {proof_number})")
+            try:
+                if len(proof) > vscore_target.MAX_PROOF_BYTES:
+                    raise ValueError("proof exceeds the registered proof size budget")
+                checked(stage, source, relation, proof, f"proof-{proof_number}")
+                return {"program.vscore.json": source, "relation.json": relation, "Proof.lean": proof}, {}
+            except (ValueError, vscore_checker.EdgeFailure) as exc:
+                proof_feedback = diagnostics(exc)
+        # A failed proof search leaves a concrete source candidate for IMPLEMENTED/LINKED.
+        fallback = {"program.vscore.json": source, "relation.json": relation, "Proof.lean": last_bounded_proof}
+        feedback = proof_feedback or ["no configured prover established the exact refinement theorem"]
+        fsutil.write_json(stage / "proof-diagnostics.json", {"diagnostics": feedback, "proof_search_exhausted": True}, once=True)
+    if fallback is not None:
+        events.emit("progress", "generate", "bounded VSCore proof search exhausted; source candidate remains available for materialization")
+        return fallback, {}
+    raise UsageError("VSCore implementer produced no well-formed source within its bounded search budget",
+                     [Diagnostic("BUDGET_EXHAUSTED", "VSCore source attempts exhausted", details={"diagnostics": feedback})])

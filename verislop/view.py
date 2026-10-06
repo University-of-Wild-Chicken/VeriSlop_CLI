@@ -78,6 +78,16 @@ def derive(pkg: Package, roots: dict[str, str | None] | None = None) -> dict[str
         roots["closure_root"] = closure_input_root(pkg)
     records, ir_obl, extras = _records(pkg)
     impl = implementation_claims(pkg)
+    unsupported: dict[str, str] = {}
+    if impl and impl.get("format") == "verislop.implementation-claims/0.2":
+        from . import contract as C
+        from .backends import admission
+        from .export import verified_ir
+
+        accepted, digest, _, diagnostics = verified_ir(pkg)
+        if accepted and not diagnostics and digest == impl["bound_to"]["accepted_ir"]:
+            features, reasons = admission.features(pkg, accepted, C.frozen_json(pkg, "profile.json"))
+            unsupported = {oid: reasons[oid] for oid in admission.unsupported(features)}
     contract_claims = canonical.load_file(pkg.path("claims")) if pkg.path("claims").is_file() else None
     frozen_claims = {c["claim_id"]: c for inventory in (contract_claims, impl) if inventory
                      for c in inventory["claims"]}
@@ -108,6 +118,9 @@ def derive(pkg: Package, roots: dict[str, str | None] | None = None) -> dict[str
                 applicable, why = c["applicable"], c["reason"]
             if not applicable:
                 life[m] = milestone_entry("NOT_APPLICABLE", why)
+                continue
+            if oid in unsupported and m in ("IMPLEMENTED", "LINKED", "END_TO_END_VERIFIED"):
+                life[m] = milestone_entry("UNSUPPORTED", unsupported[oid], scope=["restricted_source; vscore/0.1"])
                 continue
             cid = claim_id(m, oid, rev)
             c = frozen_claims.get(cid)
@@ -170,6 +183,10 @@ def _implementation_refs(pkg: Package) -> dict[str, list[str]]:
     if not p.is_file():
         return {}
     link = canonical.load_file(p)
+    if link.get("format") == "verislop.link-record/0.2":
+        from .backends.vscore import implementation_refs
+
+        return implementation_refs(link)
     out: dict[str, list[str]] = {}
     for b in link.get("bindings", []):
         obj = b["implementation_object"]

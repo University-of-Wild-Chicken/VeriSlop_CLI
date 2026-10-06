@@ -99,6 +99,15 @@
             "type": "string",
             "minLength": 1
           },
+          "model_identity": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "mode": {"const": "pinned"},
+              "resolved_model": {"type": "string", "minLength": 1}
+            },
+            "required": ["mode", "resolved_model"]
+          },
           "tool_profile": {
             "enum": [
               "review_readonly",
@@ -156,6 +165,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "require_fixed_model_snapshot": {"type": "boolean"},
         "checkpoints": {
           "type": "array",
           "items": {

@@ -1,6 +1,8 @@
-# Next milestone: Tier 2 pipeline and restricted-source closure
+# Tier 2 pipeline and restricted-source closure
 
-**Status: specification only.** This document defines the next implementation milestone after the VSCore semantic-edge checker. It does not enable a capability, change an evidence outcome, or authorize an `END_TO_END_VERIFIED` claim in the current CLI. Tier 2 remains partial until the release gates below pass. Finish this milestone before beginning the Tier 3 lowerer.
+**Status: implemented for the admitted Tier 2 restricted-source profile.** The CLI now dispatches generation, linking, semantic acceptance and complete mechanical closure to VSCore, with separate review release gates. Bounded increment and independent [checked subtraction](../examples/vscore-subtraction/README.md) are complete fixtures. Each actual `END_TO_END_VERIFIED` result still requires the exact frozen instance to pass its registered checks; implementation status alone is no evidence. Tier 3 and Tier 4 remain unsupported.
+
+The finite release regressions are in `tests/test_vscore_pipeline.py`, `tests/test_vscore_closure.py`, `tests/test_vscore_review.py` and `tests/test_vscore_subtraction.py`. `formal/ClosureModel*.lean` supplies a design model, with finite admission/lifecycle conformance checks in `tests/test_closure_model.py`; its theorems do not prove the Python pipeline, hashes, isolation or provenance implementation correct.
 
 The deliverable is one working pipeline from an accepted contract to a delivered `vscore/0.1` source artifact, with finite mechanical closure at `restricted_source`. The existing VSCore parser, evaluator, adapters, generated refinement goal and registered semantic checker are reused. The new work is dispatch, complete frozen claims and roots, lifecycle evidence, clean rebuild integration, reporting and release orchestration.
 
@@ -200,7 +202,7 @@ Thus `END_TO_END_VERIFIED: PASS` and `TESTED: PENDING` is intentional and valid:
 
 ## 9. CLI and pipeline behavior
 
-The commands in this section describe the proposed milestone behavior. They are not a statement that the current CLI supports Tier 2 closure.
+The commands in this section describe the implemented Tier 2 workflow for the admitted profile. Unsupported required obligations, campaigns and stronger endpoints still block admission.
 
 For a run whose contract is already accepted, the manual workflow is:
 
@@ -214,7 +216,7 @@ verislop verify --package RUN --endpoint restricted-source \
   --require-state END_TO_END_VERIFIED
 ```
 
-`generate` derives and prepares the bridge in this proposed workflow; no manually copied hash is necessary. Existing `vscore goal`, `bridge prepare`, `bridge accept` and `bridge verify` remain available for separate bridge development. To adopt an already prepared bridge, use `generate ... --bridge-id ID` without `--candidate` or `--bindings`. An existing Python-style `--bindings` proposal is invalid for this backend; bindings come from the selected VSCore relation.
+`generate` derives and prepares the bridge in this workflow; no manually copied hash is necessary. Existing `vscore goal`, `bridge prepare`, `bridge accept` and `bridge verify` remain available for separate bridge development. To adopt an already prepared bridge, use `generate ... --bridge-id ID` without `--candidate` or `--bindings`. An existing Python-style `--bindings` proposal is invalid for this backend; bindings come from the selected VSCore relation.
 
 The one-command release fixture is:
 
@@ -229,16 +231,17 @@ verislop run --runs-dir .verislop/runs --run-id bounded-vscore \
   --implementation-candidate examples/vscore --non-interactive
 ```
 
-With no bridge ID argument, this pipeline selects `implementation`. Add a `run --bridge-id` option for an explicitly named new candidate; it must agree with a supplied bridge proposal ID. Capability rejection happens before generation; the command never silently changes tier, target or endpoint.
+With no bridge ID argument, this pipeline selects `implementation`. Use `run --bridge-id` for an explicitly named new candidate; it must agree with a supplied bridge proposal ID. Capability rejection happens before generation; the command never silently changes tier, target or endpoint.
 
-For Tier 2 the stage order becomes:
+The Tier 2 stage order is:
 
 ```text
-interpret → formalize/freeze → prove → accept → export
+interpret → configured interpretation review
+→ formalize/freeze → prove → accept → export
 → configured formal-contract review
 → generate/materialize → link → bridge accept
 → configured implementation review
-→ required campaign, if supported
+→ campaign skipped by admitted policy (TESTED PENDING)
 → freeze closure → mechanical verification and snapshot
 → configured release review → release finalization → report
 ```
@@ -308,11 +311,11 @@ TESTED: PENDING — campaign not required by frozen policy
 
 That rendering is permitted only when the selected instance passed. Reports must not infer two passing builds from one successful build, infer semantic acceptance from the presence of a certificate, or describe an optional test campaign as executed when it was skipped. `endpoint.established` is null when the requested endpoint was not mechanically established. A mechanical success with rejected review explicitly displays `release blocked` without obscuring either fact.
 
-Change `capabilities` to supported only after §14 passes. Its single admitted E2E combination names tier/target/endpoint/backend/language/semantics/template, supported property fragment, limitations and `testing: unsupported`. The internal capability/admission API checks test requirements and the complete required obligation set, not merely the numeric tier; this does not add a public CLI subset-selection option. A required campaign, unsupported obligation or stronger endpoint still blocks this combination. Tier 3 and Tier 4 remain unsupported, and no `restricted_source` result can satisfy either.
+`capabilities` publishes the single admitted E2E combination with tier/target/endpoint/backend/language/semantics/template, supported property fragment, limitations and `testing: unsupported`; §14 remains its finite regression gate. The internal capability/admission API checks test requirements and the complete required obligation set, not merely the numeric tier; this does not add a public CLI subset-selection option. A required campaign, unsupported obligation or stronger endpoint still blocks this combination. Tier 3 and Tier 4 remain unsupported, and no `restricted_source` result can satisfy either.
 
 ## 12. Second complete fixture
 
-Add a separate accepted contract and VSCore source for checked subtraction:
+The independent `examples/vscore-subtraction/` fixture supplies a separate accepted contract and VSCore source for checked subtraction:
 
 ```text
 subtractIfEnough(balance, amount) =

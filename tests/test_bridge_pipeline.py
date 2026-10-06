@@ -52,9 +52,9 @@ class BridgePipelineIntegration(unittest.TestCase):
     def tearDownClass(cls):
         cls.tmp.cleanup()
 
-    def test_prepared_certificate_is_reported_without_enabling_tier2(self):
+    def test_prepared_generic_bridge_cannot_establish_semantics_or_e2e(self):
         self.assertEqual(self.code, 2, (self.result, self.output))
-        self.assertIn("UNSUPPORTED_CAPABILITY", codes(self.result))
+        self.assertIn("ORPHAN_CLAIM", codes(self.result))
         stages = self.result["summary"]["stages"]
         self.assertEqual(next(s for s in stages if s["stage"] == "bridge:prepare")["status"], "PASS")
         report = canonical.load_file(self.package / "report.json")

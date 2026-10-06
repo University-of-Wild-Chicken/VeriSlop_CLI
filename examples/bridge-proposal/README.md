@@ -19,5 +19,5 @@ It cannot establish the proposed relation or any implementation milestone.
 
 A generated preparation certificate records that limited preparation result.
 The refinement claim remains pending; semantic acceptance and
-`END_TO_END_VERIFIED` remain unavailable. The example's `restricted_source`
+`END_TO_END_VERIFIED` remain unavailable for this metadata-only bundle. The example's `restricted_source`
 endpoint is a requested endpoint, not an assurance already achieved.

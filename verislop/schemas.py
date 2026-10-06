@@ -52,6 +52,15 @@ IDS = {
     "vscore-profile": "urn:verislop:schema:vscore-profile:0.1",
     "vscore-implementation-ir": "urn:verislop:schema:vscore-implementation-ir:0.1",
     "vscore-edge-certificate": "urn:verislop:schema:vscore-edge-certificate:0.1",
+    "implementation-claims-v2": "urn:verislop:schema:implementation-claims:0.2",
+    "implementation-bindings-v2": "urn:verislop:schema:implementation-bindings:0.2",
+    "link-record-v2": "urn:verislop:schema:link-record:0.2",
+    "implementation-selection-v2": "urn:verislop:schema:implementation-selection:0.2",
+    "vscore-materialization": "urn:verislop:schema:vscore-materialization:0.1",
+    "closure-plan": "urn:verislop:schema:closure-plan:0.2",
+    "closure-manifest": "urn:verislop:schema:closure-manifest:0.2",
+    "mechanical-result": "urn:verislop:schema:mechanical-result:0.2",
+    "run-report-v2": "urn:verislop:schema:run-report:0.2",
 }
 
 

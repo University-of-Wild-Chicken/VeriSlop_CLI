@@ -2,9 +2,9 @@
 
 Version: 0.1 design candidate · 2026-10-05
 
-Product name: **VeriSlop CLI**, expanded as **Verify the Slop CLI**. Proposed executable: `verislop`.
+Product name: **VeriSlop CLI**, expanded as **Verify the Slop CLI**. Executable: `verislop`.
 
-This document specifies a system to build. MUST and MUST NOT describe requirements for that future system. Examples are designs, not evidence of a completed VeriSlop run. The accompanying Lean fixture checks a small formal model only.
+This document specifies the product requirements, including implemented capabilities and future extensions. MUST and MUST NOT remain normative; [implementation notes](implementation.md) and `verislop capabilities` identify the current supported profiles. Examples here are designs, not evidence of a completed run. A standalone reference-model proof does not establish implementation correctness; endpoint closure requires its separate artifact-bound correspondence and verification checks.
 
 ## 1. Product contract
 
@@ -447,7 +447,7 @@ The future system is not conformant until these have executable checks:
 19. Declarations, non-goals, assumptions, and unresolved ambiguities never get fabricated theorem-proof milestones.
 20. An E2E report includes the exact endpoint, artifact root, assumptions, trust, and claim coverage; ordinary Tier 0/1 campaigns are ineligible.
 
-These scenarios are the implementation acceptance plan, not a claim that the current repository runs them.
+These scenarios define the implementation acceptance plan; current test coverage is described in [the repository README](../README.md#tests). The plan itself is not evidence that a particular run passed.
 
 ## 14. Delivery plan
 
@@ -457,10 +457,10 @@ The foundation also includes the provider broker and configurable adversarial re
 
 **Milestone B — useful Tier 0/1 workflow.** Add one target language, exact data adapters, executable predicates, generated property campaigns, runtime wrappers, evidence/reporting, two-build closure, and resumable bounded agent orchestration. Label tested/enforced behavior precisely.
 
-**Milestone C — narrow Tier 2.** Specify a small language semantics, checked front end, translation/correspondence certificates, and per-program correctness proofs. Demonstrate source-endpoint E2E on the bounded-increment fixture plus an error-producing parser or stateful transition example.
+**Milestone C — narrow Tier 2.** Specify a small language semantics, checked front end, translation/correspondence certificates, and per-program correctness proofs. Demonstrate source-endpoint E2E on bounded increment plus an independent error-producing pure fixture. The admitted VSCore profile uses checked subtraction; parsers and stateful transitions require separate semantics extensions.
 
 **Milestone D — Tier 3 backend.** Integrate a concrete proof-producing or verified extraction path with explicit target-language preservation and artifact binding. Require negative tests for changed extracted output and adapters.
 
 **Milestone E — Tier 4 integration.** Choose one existing verified compiler/ISA ecosystem or a narrowly scoped direct binary verifier. Close all remaining toolchain edges for a specified target and deployment model. Do not advertise this tier until actual certificates exist for delivered bytes.
 
-Initial engineering choices still to fix before implementation: target language, implementation of the specified DSL v0.1 core, proof export/checker compatibility for the pinned Lean release, contract library, runtime isolation mechanism, concrete provider-adapter transport details, and supported endpoint profiles. These are product decisions, not missing evidence to be papered over by the specification.
+The current foundation fixes Python for Tier 0/1, the DSL v0.1 core, Lean 4.34.1 export/replay, the bundled contract profiles, Linux/bubblewrap isolation, registered provider protocols and the admitted VSCore source endpoint. Tier 3 lowering, machine semantics and native deployment profiles remain separate engineering milestones with their own required evidence; the implemented source profile does not select or validate those future components.

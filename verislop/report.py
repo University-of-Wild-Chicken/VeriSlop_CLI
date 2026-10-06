@@ -24,6 +24,8 @@ def _qualified(terminal: str, params: dict[str, Any], diags: list[Diagnostic]) -
         if tier == 1:
             tested = params.get("require_tests")
             return "VERIFIED closure; implementation assurance: runtime-monitored (detection)" + (" + TESTED" if tested else "") + " (Tier 1)"
+        if tier == 2:
+            return "VERIFIED closure; END_TO_END_VERIFIED [restricted_source; vscore/0.1]"
         return f"VERIFIED closure (Tier {tier})"
     blocking = sorted({d.code for d in diags if d.severity == "blocking"})
     infra = sorted({d.code for d in diags if d.severity == "infrastructure"})
@@ -130,7 +132,7 @@ def build(pkg: Package, view: dict[str, Any], terminal: str, diags: list[Diagnos
     routing = canonical.load_file(pkg.path("routing")) if pkg.path("routing").is_file() else {}
     roots = {**pkg.roots(), "closure_input_root": closure_root, "accepted_ir": ir_hash,
              "certificate": canonical.digest(cert_p.read_bytes()) if cert_p.is_file() else None}
-    return {
+    record = {
         "schema_version": SCHEMA_VERSION,
         "artifact_kind": "run_report",
         "run_id": pkg.run_id,
@@ -173,6 +175,28 @@ def build(pkg: Package, view: dict[str, Any], terminal: str, diags: list[Diagnos
             "evidence": "evidence/",
         }.items() if v},
     }
+    if tier == 2 and params.get("target") == "vscore":
+        required_guarantees = [o for o in obligations.values() if o["required"] and o["role"] == "guarantee"
+                               and o["outcomes"]["END_TO_END_VERIFIED"] != "NOT_APPLICABLE"]
+        established = bool(required_guarantees) and all(o["outcomes"]["END_TO_END_VERIFIED"] == "PASS" for o in required_guarantees)
+        record.update({"schema_version": "0.2", "format": "verislop.run-report/0.2",
+                       "backend": params.get("backend", "verislop.backend.vscore/0.1"),
+                       "language": "vscore/0.1", "semantics": "vscore-semantics/0.1", "closure_id": None,
+                       "mechanical_result": None,
+                       "mechanical_status": "VERIFIED" if established else "INFRASTRUCTURE_FAILURE" if terminal == "INFRASTRUCTURE_FAILURE" else "BLOCKED",
+                       "release_status": "NOT_REQUIRED" if not review.get("configured") else "ACCEPTED" if terminal == "VERIFIED" else "BLOCKED"})
+        record["endpoint"] = {"requested": requested_ep, "established": "restricted_source" if established else None,
+                              "end_to_end_eligible": True,
+                              "statement": "END_TO_END_VERIFIED [restricted_source; vscore/0.1]: exact source under the normative Lean semantics"
+                              if established else "restricted_source endpoint not established by complete mechanical closure"}
+        from .backends.registry import VSCORE_EXCLUDED
+
+        record["surfaces"]["excluded"] = sorted(set(record["surfaces"]["excluded"] + VSCORE_EXCLUDED))
+        if established:
+            record["surfaces"]["verified"].append("total reference refinement and transported required guarantees for the exact delivered VSCore source")
+            for obligation in required_guarantees:
+                obligation["implementation_assurance"] += "; proved correspondence at restricted_source; vscore/0.1"
+    return record
 
 
 def render_lines(rep: dict[str, Any]) -> list[str]:

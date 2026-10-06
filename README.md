@@ -6,9 +6,9 @@ This repository contains the **design specification** and a **working implementa
 
 - [Specification](docs/specification.md), [contract expression IR](docs/contract-ir.md), [obligation states](docs/obligation-states.md), [providers and adversarial review](docs/providers-and-review.md): the normative design.
 - [Implementation notes](docs/implementation.md): how the CLI realises the specification, artifact by artifact, and where it stops.
-- [Tier 2–4 specification and implementation outline](docs/tier-2-4.md): proposed source, extraction and machine-code backends, with proof obligations and release gates.
+- [Tier 2–4 specification and implementation outline](docs/tier-2-4.md): implemented restricted-source closure and proposed extraction and machine-code backends, with proof obligations and release gates.
 - [Schemas](schemas/): JSON interfaces. Schema validity is structure only; semantic validators check the rest.
-- [Examples](examples/): the bounded-increment request with a candidate draft, ledger, formalization, Lean fixture and Python implementation.
+- [Examples](examples/): bounded increment with Python and VSCore candidates, and an independent [checked-subtraction VSCore contract](examples/vscore-subtraction/README.md).
 
 Every obligation carries these symbols:
 
@@ -78,9 +78,9 @@ bin/verislop explain-block --package $P
 | `prove` | tactic portfolio, prover agent, or a candidate file | nothing (acceptance decides) | — |
 | `accept` | — | isolated rebuild, `Kernel.Environment.replay`, identity of statements/definitions/registry, transitive axiom walk on the replayed environment, constructive witnesses read from proof terms | TYPECHECKED, PROVED |
 | `export` | — | IR reconstructed only from the certificate's environment; round trip and defeq rechecked; byte-identical re-export | (reification evidence) |
-| `generate` | implementer agent or existing code | capability check (no silent downgrade), frozen implementation claims, sandboxed byte compilation | IMPLEMENTED |
+| `generate` | implementer agent or existing code | capability check, frozen implementation claims, registered backend materialization | IMPLEMENTED |
 | `link` | binding proposal | unique structural bindings; coverage from the accepted semantic closure | LINKED |
-| `test` | — | Tier 0 campaign on hash-verified target bytes in an isolated interpreter | TESTED |
+| `test` | — | Tier 0/1 campaign on hash-verified target bytes; explicitly unsupported for VSCore | TESTED |
 | `verify` | — | two isolated clean builds, determinism, provenance of every required claim, endpoint, review gate | END_TO_END_VERIFIED (UNSUPPORTED at Tiers 0/1), closure claims |
 
 Run status has exactly three terminal values (`VERIFIED`, `BLOCKED`, `INFRASTRUCTURE_FAILURE`), always qualified, as in `VERIFIED closure; implementation assurance: TESTED (Tier 0)`. Exit codes: `0` the command's gate passed (only `verify`/`run` assert closure), `2` blocked, `3` infrastructure failure, `64` invalid invocation, `130` interrupted. `--json` prints one result object on stdout with progress on stderr. `--events PATH` streams schema-versioned JSON Lines.
@@ -91,10 +91,10 @@ Run status has exactly three terminal values (`VERIFIED`, `BLOCKED`, `INFRASTRUC
 |---|---|---|---|
 | 0 | Python, `python-v0_1` / `test_campaign` | supported | TESTED for the recorded campaign |
 | 1 | Python / `instrumented_runtime` | supported | runtime detection (raise before return) + TESTED |
-| 2 | VSCore `vscore/0.1` / `restricted_source` | **partial** | registered semantic-edge acceptance (`bridge accept`); runs stay blocked, no END_TO_END_VERIFIED yet |
+| 2 | VSCore `vscore/0.1` / `restricted_source` | supported for the admitted pure profile | END_TO_END_VERIFIED under the normative Lean source semantics; runtime campaigns unsupported |
 | 3–4 | extraction, machine code | **unsupported** | capability diagnostic; never downgraded |
 
-No supported combination yields `END_TO_END_VERIFIED`. Opaque Lean statements can be accepted and PROVED, but they get no fabricated test oracle or monitor. Liveness and physical-resource obligations are never discharged by finite campaigns.
+Tier 2 can establish `END_TO_END_VERIFIED [restricted_source; vscore/0.1]` for its complete required guarantee set. Opaque Lean statements can be accepted and PROVED, but they get no fabricated test oracle or monitor. Liveness and physical-resource obligations are never discharged by finite campaigns.
 
 The shared bridge certificate workflow prepares frozen inputs from an accepted run:
 
@@ -133,7 +133,19 @@ Acceptance requires all of the following:
 
 Certificate evidence binds the complete descriptor, including obligation revisions, theorem identities and every compiled module part. Verification checks these bindings independently; a full recheck must reproduce the complete descriptor and build artifacts.
 
-The run pipeline does not dispatch to VSCore yet, so `END_TO_END_VERIFIED` is not assigned. See [the VSCore notes](docs/implementation.md#tier-2-vscore-01-restricted-source) and [the next milestone specification](docs/tier-2-closure-milestone.md).
+The complete pipeline also supports VSCore directly:
+
+```bash
+bin/verislop run --prompt-file examples/request.txt --mode software --tier 2 --target vscore \
+  --draft-candidate examples/draft.json --ledger-candidate examples/interpretation.json \
+  --formalization-candidate examples/formalization \
+  --proof-candidate examples/lean/BoundedIncrement.lean \
+  --implementation-candidate examples/vscore --non-interactive
+```
+
+It materializes and structurally links the selected source before semantic acceptance, then performs two complete source rebuilds and checks every required contract, bridge and closure claim. Mechanical success establishes the source endpoint; applicable optional `TESTED` remains `PENDING`. Explicitly requiring tests is rejected before agent work because no VSCore campaign backend exists. Host execution, interpreters, compilers and native binaries remain outside the endpoint.
+
+Reports separate `mechanical_status` from `release_status`. Configured review may block release while the current mechanical proof remains verified. A release vote can survive a fresh successful `verify` only after both exact execution inventories validate and their registered deterministic projections match. Read-only VSCore report/status inspection labels recorded executions as historical; run `verify` for a fresh gate. See [the VSCore notes](docs/implementation.md#tier-2-vscore-01-restricted-source), [the closure requirements](docs/tier-2-closure-milestone.md), and [the independent subtraction example](examples/vscore-subtraction/README.md).
 
 Accepted runs must match the current verifier hashes. Regenerate a run after updating verifier code; preparation rejects stale certificates and evidence.
 
@@ -165,22 +177,27 @@ bin/verislop verify --package $P --config verislop.json        # review is an ad
 
 Review consensus is deterministic over immutable ballots. Missing or malformed ballots never count. Blocking findings and failed mechanical checks veto acceptance. Acceptance escalates tier by tier, and changed artifacts invalidate old votes. Review never assigns a proof or bridge milestone.
 
+Review model identity is frozen before voting. A configured alias explicitly trusts the provider's request-time selection; returned model IDs remain ballot provenance. To require an immutable snapshot, set each reviewer's `model_identity` to `{"mode":"pinned","resolved_model":"SNAPSHOT_ID"}` and `review.require_fixed_model_snapshot` to `true`. Missing pinned identities fail preflight, and responses with a different identity cannot count. Frozen VSCore source/proof selections cannot enter Python repair.
+
 ## Tests
 
 ```bash
 python3 -m unittest discover -s tests -v     # uses the real Lean toolchain and clean builds
 ```
 
-282 tests cover the specification's twenty acceptance scenarios (§13), Lean module bundles and private dependencies, filesystem containment and cleanup, bounded provider probes, the shared bridge-certificate workflow and the Tier 2 VSCore bridge. VSCore tests evaluate the normative parser, type checker and evaluator in the kernel against a malformed and ill-typed source suite, audit the library's axioms, and accept the bounded-increment fixture through two builds and a re-executing verify. They also reject sorry, candidate axioms, `native_decide`, weaker statements, proofs for other programs, unsupported constructs, missing bindings, wrong enumeration mappings, wrong proposition hashes, native endpoints, source mutation, forged certificates, tampered IR and stale checkers. They include rejection of a changed definition or weakened theorem, `sorry`, hidden axioms and `native_decide`, false preconditions without witnesses, and draft mutation that cannot change the re-exported IR. Bridge tests replay real accepted contracts, reject hash-consistent forged compiled artifacts, reproduce preparation roots, check no-clobber publication and reject removed preparation indexes on resume. They also reject forged PASS certificates, stale roots, detached endpoints, premise cycles, unsafe files and excessive JSON complexity. Evidence tests require the assigned issuer and preserve infrastructure failures. Other checks cover opaque statements without oracles, stale evidence after a target change, empty campaigns, nondeterminism, orphan claims, crashed checkers and cancellation. Provider and review tests use loopback mock services across the four wire protocols; no real credentials or live-service conformance results are included.
+The tests cover the specification's twenty acceptance scenarios (§13), Lean module bundles and private dependencies, filesystem containment and cleanup, bounded provider probes, the shared bridge-certificate workflow and the Tier 2 VSCore bridge. VSCore tests evaluate the normative parser, type checker and evaluator in the kernel against a malformed and ill-typed source suite, audit the library's axioms, and accept the bounded-increment fixture through two builds and a re-executing verify. They also reject sorry, candidate axioms, `native_decide`, weaker statements, proofs for other programs, unsupported constructs, missing bindings, wrong enumeration mappings, wrong proposition hashes, native endpoints, source mutation, forged certificates, tampered IR and stale checkers. They include rejection of a changed definition or weakened theorem, `sorry`, hidden axioms and `native_decide`, false preconditions without witnesses, and draft mutation that cannot change the re-exported IR. Bridge tests replay real accepted contracts, reject hash-consistent forged compiled artifacts, reproduce preparation roots, check no-clobber publication and reject removed preparation indexes on resume. They also reject forged PASS certificates, stale roots, detached endpoints, premise cycles, unsafe files and excessive JSON complexity. Evidence tests require the assigned issuer and preserve infrastructure failures. Other checks cover opaque statements without oracles, stale evidence after a target change, empty campaigns, nondeterminism, orphan claims, crashed checkers and cancellation. Provider and review tests use loopback mock services across the four wire protocols; no real credentials or live-service conformance results are included.
 
 The correctness regressions cover Unit results, reflexive and logical formulas, accepted predicate aliases, helper-name collisions, oversized numeric tokens, complete certificate metadata, module-part binding and disagreement between recorded builds. These include compiled candidate proofs, kernel replay and exact implementation-IR re-export.
+
+Tier 2 closure regressions cover complete dispatch, independent materialization/linking, two fresh builds, immutable execution inventories, provenance, mutation, resume, optional-test admission and separate review release gates. Checked subtraction exercises its own accepted contract and proof, zero/equality/underflow and values above `2^64`, plus typed incorrect programs that fail refinement. Finite Lean-model conformance tests compare admission and lifecycle decisions; the model theorems do not prove the Python pipeline or its byte/isolation/provenance checks.
 
 ## Repository layout
 
 ```text
 docs/        normative specification + implementation notes
 schemas/     JSON Schemas (design + implementation artifacts)
-examples/    bounded-increment request and candidates
+examples/    bounded-increment and checked-subtraction requests and candidates
+formal/      Lean design model and finite admission/lifecycle conformance oracle
 verislop/    the CLI (pure Python) and lean/VeriSlopKernel.lean (trusted kernel tool)
 tests/       unit, acceptance-scenario and provider/review tests
 bin/         source-checkout launcher

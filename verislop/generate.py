@@ -86,11 +86,14 @@ def implementation_claims(ir: dict[str, Any], ir_hash: str, cert_hash: str, para
     }
 
 
-def resolve_parameters(pkg: Package, tier: int | None, target: str, endpoint: str | None, require_state: str | None,
-                       require_tests: bool) -> tuple[dict[str, Any], list[Diagnostic]]:
+def resolve_parameters(pkg: Package, tier: int | None, target: str | None, endpoint: str | None, require_state: str | None,
+                       require_tests: bool | None, tests_flag: str | None = None, bridge_id: str | None = None) -> tuple[dict[str, Any], list[Diagnostic]]:
     diags: list[Diagnostic] = []
     req = canonical.load_file(pkg.path("request")) if pkg.path("request").is_file() else {}
     default_applied = False
+    if target is None:
+        frozen_path = pkg.path("closure") / "implementation-claims.json"
+        target = canonical.load_file(frozen_path)["parameters"]["target"] if frozen_path.is_file() else "python"
     if tier is None:
         tier = req.get("tier")
     if tier is None:
@@ -105,16 +108,33 @@ def resolve_parameters(pkg: Package, tier: int | None, target: str, endpoint: st
     if require_state == "END_TO_END_VERIFIED" and tier < 2:
         diags.append(Diagnostic("UNSUPPORTED_CAPABILITY",
                                 f"END_TO_END_VERIFIED was required but Tier {tier} ({ep}) is ineligible for it by definition"))
+    if target == "vscore":
+        from .backends import admission, registry
+        flag = tests_flag or ("omitted" if require_tests is None else "require_tests" if require_tests else "no_tests")
+        err, resolved = admission.resolve_params(tier, target, ep, "0.1", require_state, flag)
+        if err:
+            diags.append(Diagnostic(err, "requested VSCore backend/state/test policy is unsupported; no implementation work was invoked"))
+        params = {"tier": tier, "target": target, "endpoint": ep, "backend": registry.VSCORE_ID,
+                  "language": "vscore/0.1", "semantics": "vscore-semantics/0.1",
+                  "require_state": resolved["state"] if resolved else admission.resolve_state(tier, require_state),
+                  "require_tests": resolved["require_tests"] if resolved else admission.resolve_tests(tier, require_state, flag)[1],
+                  "bridge_id": bridge_id or "implementation", "tier_default_applied": default_applied}
+        return params, diags
+    from .backends import admission
+    flag = tests_flag or ("omitted" if require_tests is None else "require_tests" if require_tests else "no_tests")
+    test_error, require_tests = admission.resolve_tests(tier, require_state, flag)
+    if test_error:
+        diags.append(Diagnostic(test_error, "--no-tests contradicts --require-state TESTED; a requested campaign cannot be dropped"))
     params = {"tier": tier, "target": target, "endpoint": ep, "require_state": require_state,
               "require_tests": bool(require_tests or tier == 0), "serialization_profile": "python-v0_1",
               "tier_default_applied": default_applied}
     return params, diags
 
 
-def run(pkg: Package, events: EventSink, *, ir: Path | None = None, tier: int | None = None, target: str = "python",
+def run(pkg: Package, events: EventSink, *, ir: Path | None = None, tier: int | None = None, target: str | None = None,
         endpoint: str | None = None, require_state: str | None = None, candidate: Path | None = None,
         bindings: Path | None = None, agent: Callable[[dict[str, Any]], tuple[dict[str, bytes], dict[str, Any]]] | None = None,
-        require_tests: bool = True) -> StageResult:
+        require_tests: bool | None = None, tests_flag: str | None = None, bridge_id: str | None = None) -> StageResult:
     events.emit("stage_started", "generate", "verifying the accepted contract before implementation work")
     result = StageResult("generate", "PASS", "implementation candidate materialized for the frozen tier")
     if ir is not None:
@@ -127,15 +147,31 @@ def run(pkg: Package, events: EventSink, *, ir: Path | None = None, tier: int | 
     assert irj is not None and ir_hash and cert is not None
     claims_path = pkg.path("closure") / "implementation-claims.json"
     if claims_path.is_file() and tier is None and endpoint is None and require_state is None:
-        # Re-materializing (e.g. a repair) inside a frozen implementation phase keeps its parameters.
+        # Resume replays frozen bytes; explicit policy changes cannot be ignored.
         params, pdiags = canonical.load_file(claims_path)["parameters"], []
+        if target is not None and target != params["target"]:
+            pdiags.append(Diagnostic("CLAIM_MUTATION", "changing the frozen implementation target requires a new run package"))
+        if require_tests is not None or tests_flag not in (None, "omitted"):
+            from .backends import admission
+            flag = tests_flag or ("require_tests" if require_tests else "no_tests")
+            err, requested_tests = admission.resolve_tests(params["tier"], params["require_state"], flag)
+            if err or requested_tests != params["require_tests"]:
+                pdiags.append(Diagnostic(err or "CLAIM_MUTATION", "changing the frozen test policy requires a new run package"))
+        if bridge_id is not None and params.get("bridge_id") != bridge_id:
+            pdiags.append(Diagnostic("CLAIM_MUTATION", "changing the frozen bridge selection requires a new run package"))
     else:
-        params, pdiags = resolve_parameters(pkg, tier, target, endpoint, require_state, require_tests)
+        params, pdiags = resolve_parameters(pkg, tier, target, endpoint, require_state, require_tests, tests_flag, bridge_id)
     if pdiags:
         result.diagnostics = pdiags
         result.status = "BLOCKED"
         result.summary = {"capability": params}
         return result
+    if params.get("backend") == "verislop.backend.vscore/0.1":
+        from .backends import vscore
+        return vscore.generate(pkg, events, irj, ir_hash, cert, params, candidate=candidate,
+                               bridge_id=bridge_id, bindings=bindings, agent=agent)
+    if bridge_id is not None:
+        raise UsageError("--bridge-id selects only the VSCore implementation backend")
     if params["tier_default_applied"]:
         result.diagnostics.append(Diagnostic("UNSUPPORTED_CAPABILITY", "no tier was specified: Tier 0 applies; its outcome is test evidence, not implementation proof", severity="info"))
     profile = C.frozen_json(pkg, "profile.json")

@@ -163,6 +163,12 @@ class Package:
         return fsutil.manifest_root(manifest) if manifest else None
 
     def implementation_root(self) -> str | None:
+        from .backends.registry import is_vscore
+
+        if is_vscore(self):
+            from .backends.vscore import implementation_root
+
+            return implementation_root(self)
         impl = self.path("implementation")
         if not impl.is_dir():
             return None
@@ -173,6 +179,12 @@ class Package:
         return canonical.digest(p.read_bytes()) if p.is_file() else None
 
     def link_root(self) -> str | None:
+        from .backends.registry import is_vscore
+
+        if is_vscore(self):
+            from .backends.vscore import link_root
+
+            return link_root(self)
         ir = self.file_digest("accepted_ir")
         impl = self.implementation_root()
         bindings = self.path("bridges") / "bindings.json"

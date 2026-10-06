@@ -1,6 +1,6 @@
 # Contract expression IR, version 0.1
 
-This document specifies the finite expression core used by [specification.md](specification.md) §§5 and 7. It is a design requirement, not an implemented exporter or evidence of acceptance. The existing Lean fixture uses ordinary propositions; migration to this DSL is future implementation work.
+This document specifies the finite expression core used by [specification.md](specification.md) §§5 and 7. The CLI implements the registered DSL exporter and semantic checks described in [the implementation notes](implementation.md); this specification is not evidence that a particular contract was accepted. Bundled formalization fixtures bind their Lean propositions to the DSL, and unsupported expressions retain explicit opaque or unsupported treatment.
 
 MUST and MUST NOT are normative. The core supports pure first-order contracts over natural numbers, Booleans, unit, finite enumerations, and explicit results. Sequences, products, arbitrary sums, state, traces, cost models, higher-order functions, and polymorphic terms require later extensions or an opaque Lean expression. An exporter MUST reject unsupported constructors rather than approximate them.
 
@@ -195,4 +195,4 @@ An opaque expression package uses `encoding = "verislop.lean-export-ref/0.1"` wi
 
 The referenced lossless format MUST preserve core expression constructors, binder structure, universe levels/parameters, constant identities and instantiations, declaration types/bodies, and required dependency closure. A validator must resolve and replay it without candidate-controlled notation or pretty printers. Unresolved metavariables/free variables or incomplete exports are invalid. Lossless means relative to that declared core-export format; it does not mean preserving source comments, notation, or tactic scripts.
 
-No generic normalizer or runtime monitor is implied. A later adapter may provide a typed DSL expression and an accepted equivalence certificate; until then the expression remains opaque with explicit bridge limitations. The existing JSON envelope schemas do not implement this exporter or its semantic validator.
+No generic normalizer or runtime monitor is implied. A later adapter may provide a typed DSL expression and an accepted equivalence certificate; until then the expression remains opaque with explicit bridge limitations. JSON schema validity alone establishes structure; registered export, replay and semantic checks establish the artifact correspondence.

@@ -1,0 +1,620 @@
+{
+  "schema_version": "0.1",
+  "artifact_kind": "draft",
+  "request_ref": "examples/vscore-subtraction/request.txt",
+  "category_review": {
+    "entities": "Mathematical Nat operands and explicit Result(DebitError, Nat) with one error constructor.",
+    "preconditions": "Natural operands are nonnegative by their type; there is no upper bound or success-domain assumption.",
+    "postconditions": "The sufficient-balance equation and successful reconstruction are separate required guarantees.",
+    "invariants": "Every successful remaining value is bounded by the starting balance.",
+    "safety_properties": "The output bound is B1; no additional safety claim is introduced.",
+    "liveness_properties": "Temporal progress is explicitly excluded.",
+    "resource_constraints": "Physical resource use is explicitly excluded.",
+    "error_semantics": "The one error constructor occurs exactly for balance < amount, including all underflow cases.",
+    "explicit_non_goals": "No host interpreter, fixed-width encoding, physical-resource or temporal-progress guarantee.",
+    "ambiguities": "Result constructor, mathematical domain and the equality boundary are explicit."
+  },
+  "entities": [
+    {
+      "id": "D1",
+      "revision": 1,
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "Inputs balance and amount are Nat; subtractIfEnough returns Result(DebitError, Nat) with exactly DebitError.insufficient.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/vscore-subtraction/request.txt",
+          "document_hash": "sha256:021aa7ab807ee3c95f2fb89ca2256dd6a5987a0356c1e28970c61c86ee32a190",
+          "start_byte": 0,
+          "end_byte": 187,
+          "origin": "explicit",
+          "interpretation": "Independent checked-subtraction request clause."
+        }
+      ],
+      "scope": [
+        "mathematical Nat checked-subtraction reference model"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Kernel-check the exact accepted declaration or guarantee."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/vscore-subtraction/request.txt"
+          ],
+          "reason": "Recorded interpretation of the independent request; the supervisor checks its provenance and coverage.",
+          "scope": [
+            "checked-subtraction illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "preconditions": [
+    {
+      "id": "A1",
+      "revision": 1,
+      "kind": "precondition",
+      "role": "assumption",
+      "statement": "The caller supplies nonnegative natural operands with no upper bound.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/vscore-subtraction/request.txt",
+          "document_hash": "sha256:021aa7ab807ee3c95f2fb89ca2256dd6a5987a0356c1e28970c61c86ee32a190",
+          "start_byte": 188,
+          "end_byte": 267,
+          "origin": "explicit",
+          "interpretation": "Independent checked-subtraction request clause."
+        }
+      ],
+      "scope": [
+        "mathematical Nat checked-subtraction reference model"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Kernel-check the exact accepted declaration or guarantee."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/vscore-subtraction/request.txt"
+          ],
+          "reason": "Recorded interpretation of the independent request; the supervisor checks its provenance and coverage.",
+          "scope": [
+            "checked-subtraction illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "postconditions": [
+    {
+      "id": "S1",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "When amount <= balance, the result is ok(balance - amount).",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/vscore-subtraction/request.txt",
+          "document_hash": "sha256:021aa7ab807ee3c95f2fb89ca2256dd6a5987a0356c1e28970c61c86ee32a190",
+          "start_byte": 268,
+          "end_byte": 320,
+          "origin": "explicit",
+          "interpretation": "Independent checked-subtraction request clause."
+        }
+      ],
+      "scope": [
+        "mathematical Nat checked-subtraction reference model"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Kernel-check the exact accepted declaration or guarantee.",
+        "Check concrete zero/equality success and underflow witnesses through W1."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/vscore-subtraction/request.txt"
+          ],
+          "reason": "Recorded interpretation of the independent request; the supervisor checks its provenance and coverage.",
+          "scope": [
+            "checked-subtraction illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        }
+      }
+    },
+    {
+      "id": "R1",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "After success, remaining + amount = balance.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/vscore-subtraction/request.txt",
+          "document_hash": "sha256:021aa7ab807ee3c95f2fb89ca2256dd6a5987a0356c1e28970c61c86ee32a190",
+          "start_byte": 321,
+          "end_byte": 414,
+          "origin": "explicit",
+          "interpretation": "Independent checked-subtraction request clause."
+        }
+      ],
+      "scope": [
+        "mathematical Nat checked-subtraction reference model"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Kernel-check the exact accepted declaration or guarantee."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/vscore-subtraction/request.txt"
+          ],
+          "reason": "Recorded interpretation of the independent request; the supervisor checks its provenance and coverage.",
+          "scope": [
+            "checked-subtraction illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "invariants": [
+    {
+      "id": "B1",
+      "revision": 1,
+      "kind": "invariant",
+      "role": "guarantee",
+      "statement": "Every successful remaining result is at most balance.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/vscore-subtraction/request.txt",
+          "document_hash": "sha256:021aa7ab807ee3c95f2fb89ca2256dd6a5987a0356c1e28970c61c86ee32a190",
+          "start_byte": 321,
+          "end_byte": 414,
+          "origin": "explicit",
+          "interpretation": "Independent checked-subtraction request clause."
+        }
+      ],
+      "scope": [
+        "mathematical Nat checked-subtraction reference model"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Kernel-check the exact accepted declaration or guarantee."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/vscore-subtraction/request.txt"
+          ],
+          "reason": "Recorded interpretation of the independent request; the supervisor checks its provenance and coverage.",
+          "scope": [
+            "checked-subtraction illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "safety_properties": [],
+  "liveness_properties": [],
+  "resource_constraints": [],
+  "error_semantics": [
+    {
+      "id": "E1",
+      "revision": 1,
+      "kind": "error_semantics",
+      "role": "guarantee",
+      "statement": "error(insufficient) occurs if and only if balance < amount.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/vscore-subtraction/request.txt",
+          "document_hash": "sha256:021aa7ab807ee3c95f2fb89ca2256dd6a5987a0356c1e28970c61c86ee32a190",
+          "start_byte": 415,
+          "end_byte": 472,
+          "origin": "explicit",
+          "interpretation": "Independent checked-subtraction request clause."
+        }
+      ],
+      "scope": [
+        "mathematical Nat checked-subtraction reference model"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Kernel-check the exact accepted declaration or guarantee.",
+        "Check concrete zero/equality success and underflow witnesses through W1."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/vscore-subtraction/request.txt"
+          ],
+          "reason": "Recorded interpretation of the independent request; the supervisor checks its provenance and coverage.",
+          "scope": [
+            "checked-subtraction illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "explicit_non_goals": [
+    {
+      "id": "N1",
+      "revision": 1,
+      "kind": "explicit_non_goal",
+      "role": "exclusion",
+      "statement": "Machine widths, host execution, physical resources and temporal progress are outside this fixture.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/vscore-subtraction/request.txt",
+          "document_hash": "sha256:021aa7ab807ee3c95f2fb89ca2256dd6a5987a0356c1e28970c61c86ee32a190",
+          "start_byte": 578,
+          "end_byte": 690,
+          "origin": "explicit",
+          "interpretation": "Independent checked-subtraction request clause."
+        }
+      ],
+      "scope": [
+        "mathematical Nat checked-subtraction reference model"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Kernel-check the exact accepted declaration or guarantee."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/vscore-subtraction/request.txt"
+          ],
+          "reason": "Recorded interpretation of the independent request; the supervisor checks its provenance and coverage.",
+          "scope": [
+            "checked-subtraction illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "applicable by role",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "ambiguities": []
+}

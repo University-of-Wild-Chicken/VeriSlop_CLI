@@ -1,10 +1,10 @@
 # VeriSlop Tiers 2–4: specification and implementation outline
 
-Status: specification of proposed extensions, with partial implementation. This document specifies release gates. Implemented so far: the shared certificate infrastructure (Phase A) and the Tier 2 semantic-edge checker for `vscore/0.1`, i.e. Phase B except pipeline dispatch and end-to-end closure (see Phase B). Tiers 3 and 4 are not implemented, and no backend yet yields `END_TO_END_VERIFIED`. The existing [specification](specification.md), [obligation states](obligation-states.md), and [implementation notes](implementation.md) remain the baseline.
+Status: Tier 2 implemented for the admitted pure `vscore/0.1` source profile; Tiers 3 and 4 remain proposed extensions. The shared certificate infrastructure (Phase A), VSCore semantic-edge checker, backend dispatch and restricted-source closure (Phase B) are present. Only an instance whose complete frozen claims pass can yield `END_TO_END_VERIFIED [restricted_source; vscore/0.1]`. The existing [specification](specification.md), [obligation states](obligation-states.md), and [implementation notes](implementation.md) remain the baseline.
 
 The recommended sequence is **Tier 2 restricted source → Tier 3 certified bytecode lowering → Tier 4 exact machine-code regions → whole native executables**. Tiers identify bridge strategies and endpoints. A larger tier number does not automatically establish more properties.
 
-The next concrete milestone is [Tier 2 pipeline and restricted-source closure](tier-2-closure-milestone.md). That specification fixes backend dispatch, complete claims and roots, lifecycle applicability, two full semantic rebuilds, optional-test policy, review ordering, compatibility and finite release tests. It is specification-only: finish those gates before enabling Tier 2 E2E or beginning Tier 3.
+The implemented [Tier 2 pipeline and restricted-source closure](tier-2-closure-milestone.md) requirements fix backend dispatch, complete claims and roots, lifecycle applicability, two complete source rebuilds, optional-test policy, review ordering, compatibility and finite release tests. The next separate implementation milestone is the Tier 3 lowerer; this source closure adds no extraction or machine-code endpoint.
 
 ## 1. Shared verification contract
 
@@ -137,7 +137,7 @@ Opaque contract terms are not automatically executable. They may receive a forma
 
 ### 2.4 Release gate
 
-Tier 2 can first support functional postconditions, explicit result/error semantics, pure value invariants and termination under the declared source semantics. General reactive liveness, state invariants, machine overflow and physical resources remain unsupported until separately modeled.
+The admitted Tier 2 profile supports functional postconditions, explicit result/error semantics and pure value invariants. The typed evaluator's totality is established under the declared source semantics; this does not admit reactive liveness, state invariants, machine overflow or physical-resource obligations. Those remain unsupported until separately modeled.
 
 The bounded-increment source must pass exact parsing/typing, reference correspondence, obligation transfer, existing non-vacuity checks, and two isolated reproducible builds. Its state is scoped to the delivered VSCore source. Executing a Python VSCore interpreter or compiling Lean normally adds an execution boundary that this certificate does not close.
 
@@ -342,7 +342,7 @@ A compiled certificate checker returning `true` is not sufficient merely because
 
 ### Phase A: shared infrastructure before any E2E capability
 
-The shared certificate workflow (#1) is implemented: strict proposal/plan/manifest/certificate schemas, `bridge prepare`, read-only `bridge check`, `bridge verify`, exact-byte artifact validation, actual accepted-contract replay, assigned-verifier evidence checks and run/resume/report integration. Preparation reconstructs the accepted IR and freezes a new bridge bundle before producing structural evidence and a preparation certificate. It establishes the accepted-contract import and structural preparation only. The semantic-checker registry is supervisor-owned and closed to package input. Its first entry is the Tier 2 VSCore checker (Phase B). Backend dispatch and endpoint closure below are still pending.
+The shared certificate workflow (#1) is implemented: strict proposal/plan/manifest/certificate schemas, `bridge prepare`, read-only `bridge check`, `bridge verify`, exact-byte artifact validation, actual accepted-contract replay, assigned-verifier evidence checks and run/resume/report integration. Preparation reconstructs the accepted IR and freezes a new bridge bundle before producing structural evidence and a preparation certificate. It establishes the accepted-contract import and structural preparation only. The semantic-checker registry is supervisor-owned and closed to package input. Its first entry is the Tier 2 VSCore checker (Phase B), whose complete backend dispatch and endpoint closure are implemented below.
 
 Introduce a backend registry and separate candidate production from registered checking. Its interface should cover capability discovery, source inventory, preparation of frozen bridge goals, materialization, structural linkage, proof acceptance, accepted-program export, optional tests, clean builds and endpoint assessment. A candidate cannot register its own verifier or relation template at runtime.
 
@@ -371,10 +371,10 @@ Implementation status:
 - **Done.** Schemas exist for the source, relation, model/profile descriptors, implementation IR and edge certificate. The kernel tool replays several modules together.
 - **Done.** The CLI provides `bridge accept`, the re-executing `bridge verify`, and the advisory `vscore parse` and `vscore goal`.
 - **Done.** The bounded-increment fixture (`examples/vscore/`) passes two isolated builds. The rejection suite of §7 for Tier 2 is in `tests/test_vscore.py`.
-- **Pending.** `generate`, `link`, `test` and closure do not dispatch to the VSCore backend, so `END_TO_END_VERIFIED [restricted_source; vscore/0.1]` is not assigned. `verislop capabilities` publishes Tier 2 as `partial`.
-- **Pending.** A second error-producing example.
+- **Done.** `generate`, `link` and complete closure dispatch to the VSCore backend; the admitted pure profile can establish `END_TO_END_VERIFIED [restricted_source; vscore/0.1]` after every required frozen claim passes. `verislop capabilities` publishes that exact profile as supported. Required campaigns are rejected at admission; an explicit `test` is unsupported and cannot produce a PASS.
+- **Done.** The independent checked-subtraction contract/source/proof fixture (`examples/vscore-subtraction/`) covers success, equality, underflow and unbounded Nat values, with incorrect source variants rejected at the exact refinement target.
 
-The remaining Phase B work is specified in [the Tier 2 closure milestone](tier-2-closure-milestone.md). Its endpoint is exact VSCore source under the normative Lean semantics. It permits mechanical E2E with optional `TESTED` still pending, adds no interpreter or test campaign, and keeps review release approval separate from mechanical proof. The milestone also requires an independent checked-subtraction fixture and preserves Tier 0/1 compatibility; capability enablement is the final step after its finite release suite.
+The implemented Phase B closure requirements and finite regressions are specified in [the Tier 2 closure milestone](tier-2-closure-milestone.md). Its endpoint is exact VSCore source under the normative Lean semantics. It permits mechanical E2E with optional `TESTED` still pending, adds no interpreter or campaign, keeps review release approval separate from mechanical proof and preserves legacy Tier 0/1 package meaning. These finite tests and per-instance checks do not constitute a proof of the Python supervisor implementation.
 
 ### Phase C: Tier 3 MVP
 

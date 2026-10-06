@@ -70,6 +70,18 @@ def _scope(view: dict[str, Any], checkpoint: str) -> list[str]:
 
 def candidate_root(pkg: Package, checkpoint: str) -> str | None:
     from .closure import closure_input_root
+    from .backends import registry
+
+    if registry.is_vscore(pkg):
+        if checkpoint == "release":
+            from .backends.vscore_closure import mechanical_snapshot
+            snapshot = mechanical_snapshot(pkg)
+            return snapshot["closure_root"] if snapshot else None
+        if checkpoint == "implementation":
+            from .backends import vscore
+            return canonical.digest_json({"format": "verislop.review-implementation-root/0.2",
+                                          "implementation_root": pkg.implementation_root(), "link_root": pkg.link_root(),
+                                          "selection": vscore.selection(pkg)})
 
     if checkpoint == "interpretation":
         return pkg.interpretation_root()
@@ -119,7 +131,69 @@ def build_packet(pkg: Package, checkpoint: str) -> dict[str, Any]:
     if checkpoint == "release" and (pkg.path("tests") / "results.json").is_file():
         packet["tests"] = canonical.load_file(pkg.path("tests") / "results.json")
     packet["evidence"] = sorted(e.id for e in pkg.evidence.load() if e.valid and e.verifier_current)
+    from .backends import registry
+    if registry.is_vscore(pkg) and checkpoint != "release":
+        allowed_claims = tuple(m + ":" for m in allowed) + ("REIFIED:", "INTERPRETATION:")
+        packet["evidence"] = sorted(e.id for e in pkg.evidence.load() if e.valid and e.verifier_current
+                                    and e.claim_id.startswith(allowed_claims)
+                                    and (checkpoint != "interpretation" or e.record["verifier_id"] == "verislop.interpretation-recorder"))
+    if checkpoint in ("implementation", "release") and registry.is_vscore(pkg):
+        from .backends import vscore, vscore_closure
+        from .bridges import vscore_checker
+        selection = vscore.selection(pkg)
+        bundle = pkg.root / "bridges" / selection["bridge_id"]
+        semantic = bundle / "semantic" / vscore_checker.edge_key(selection["edge_id"])
+        packet["assurance_boundary"] = (
+            "The endpoint is restricted_source under vscore/0.1 and vscore-semantics/0.1. Exact source bytes, "
+            "normative Lean decoding, checked types, actual representation adapters, evaluator and transported "
+            "accepted properties are in scope. Host execution, VM/compiler/linker/loader/OS services and native "
+            "code, machine-width encodings, state, loops, I/O, concurrency, fairness and physical resources are excluded. "
+            "TESTED remains PENDING when the frozen policy omits a campaign.")
+        packet["checked_link_inventory"] = canonical.load_file(pkg.path("bridges") / "link.json")
+        packet["vscore"] = {"selection": selection, "source": (pkg.path("implementation") / "program.vscore.json").read_text(),
+                            "goal": (semantic / "goal/VeriSlopBridgeGoal.lean").read_text() if (semantic / "goal/VeriSlopBridgeGoal.lean").is_file() else None,
+                            "certificate": canonical.load_file(semantic / "certificate.json") if (semantic / "certificate.json").is_file() else None,
+                            "implementation_ir": canonical.load_file(semantic / "implementation-ir.json") if (semantic / "implementation-ir.json").is_file() else None}
+        if checkpoint == "release":
+            snapshot = vscore_closure.mechanical_snapshot(pkg)
+            if snapshot is None:
+                raise UsageError("VSCore release review requires a mechanically checked snapshot first",
+                                 [Diagnostic("REVIEW_NOT_RUN", "run verify before release review")])
+            packet["mechanical_snapshot"] = snapshot
+            packet["required_mechanical_claims"] = [c for c in snapshot["claims"] if c["required"]]
     return packet
+
+
+def model_resolution_manifest(conf: dict, resolved, models: dict[str, str]) -> dict:
+    """Freeze the identity policy before ballots; aliases explicitly trust provider selection."""
+    rows = []
+    for agent, alias in sorted(models.items()):
+        spec = conf["agents"][agent]
+        provider = spec["provider"]
+        pinned = spec.get("model_identity")
+        if conf["review"].get("require_fixed_model_snapshot") and pinned is None:
+            raise UsageError("review policy requires fixed model snapshots",
+                             [Diagnostic("CONFIGURATION_INVALID", f"reviewer {agent} has an unresolved model alias")])
+        rows.append({"agent": agent, "provider": provider, "endpoint_profile": resolved.profiles[provider],
+                     "configured_alias": alias, "mode": "pinned" if pinned else "provider_alias",
+                     "expected_model": pinned["resolved_model"] if pinned else None,
+                     "trust": "configured immutable model identity must match every response" if pinned else
+                              "the provider selects the model at request time; observed returned identities remain ballot provenance"})
+    return {"format": "verislop.model-resolution-manifest/0.1", "models": rows,
+            "require_fixed_snapshot": bool(conf["review"].get("require_fixed_model_snapshot", False))}
+
+
+def reviewer_configuration_hash(conf: dict, resolved) -> str:
+    # Config contains credential references, never credential values. Retain all nonsecret fields
+    # and the actually resolved endpoint-profile identities, including membership and counts.
+    return canonical.digest_json({"configuration": conf, "resolved_endpoint_profiles": resolved.profiles,
+                                  "prompt_template_hash": canonical.digest(REVIEW_SYSTEM.encode())})
+
+
+def _model_matches(manifest: dict, agent: str, requested: str, returned: str | None) -> bool:
+    row = next((m for m in manifest["models"] if m["agent"] == agent), None)
+    return bool(row and row["configured_alias"] == requested and
+                (row["mode"] == "provider_alias" or row["expected_model"] == returned))
 
 
 def target_components(pkg: Package, conf: dict[str, Any], checkpoint: str, packet: dict[str, Any], models: dict[str, str]) -> dict[str, Any]:
@@ -220,6 +294,17 @@ def tally_tier(tier: dict[str, Any], membership: list[str], ballots: dict[str, d
 
 def _mechanical_veto(pkg: Package, checkpoint: str) -> list[str]:
     from . import view as viewmod
+    from .backends import registry
+
+    if checkpoint == "release" and registry.is_vscore(pkg):
+        from .backends.vscore_closure import mechanical_snapshot
+        snapshot = mechanical_snapshot(pkg)
+        if snapshot is None:
+            return ["MECHANICAL:snapshot-missing"]
+        failures = [c["claim_id"] for c in snapshot["claims"] if c["required"] and c["outcome"] != "PASS"]
+        if snapshot["mechanical_status"] != "VERIFIED":
+            failures.append("MECHANICAL:" + snapshot["mechanical_status"])
+        return sorted(set(failures))
 
     claims = []
     if pkg.path("claims").is_file():
@@ -267,7 +352,9 @@ def run(pkg: Package, events: EventSink, config: Path | None, checkpoint: str | 
             result.summary = {"final": "REVIEW_ACCEPTED", "campaign": cert["campaign_id"], "target_root": cert["root"], "repair_rounds": rounds}
             break
         result.diagnostics.extend(diags)
-        repairable = checkpoint in ("implementation", "release") and cert["final"] == "CHANGES_REQUESTED"
+        from .backends import registry
+        repairable = (checkpoint in ("implementation", "release") and cert["final"] == "CHANGES_REQUESTED"
+                      and not registry.is_vscore(pkg))
         if repairable and rounds < budgets["max_repair_rounds"] and not cert["mechanical_veto"]:
             rounds += 1
             events.emit("progress", "review", f"repair round {rounds}: changes requested; repairing and restarting at the first tier")
@@ -303,7 +390,22 @@ def _campaign(pkg: Package, events: EventSink, conf: dict[str, Any], r, checkpoi
         for g in t["reviewers"]:
             models[g["agent"]] = broker.model_for(g["agent"])
     comps = target_components(pkg, conf, checkpoint, packet, models)
+    manifest = model_resolution_manifest(conf, r, models)
+    projection = None
+    from .backends import registry
+    if checkpoint == "release" and registry.is_vscore(pkg):
+        from . import review_projection
+        projection = review_projection.build(pkg, packet["mechanical_snapshot"])
+        comps = review_projection.review_target(checkpoint, packet["mechanical_snapshot"]["closure_root"],
+                    projection["projection_hash"], reviewer_configuration_hash(conf, r), canonical.digest_json(manifest))
     root = canonical.digest_json(comps)
+    fsutil.write_json(cdir / "model-resolution.json", manifest, once=True)
+    if projection:
+        fsutil.write_json(cdir / "mechanical-projection.json", projection["projection"], once=True)
+        fsutil.write_json(cdir / "execution-inventory.json", projection["raw_inventory"], once=True)
+        fsutil.write_json(cdir / "audit.json", {"mechanical_result_path": packet["mechanical_snapshot"]["mechanical_result_path"],
+                                              "raw_inventory_hash": projection["raw_inventory_hash"],
+                                              "packet_hash": canonical.digest_json(packet)}, once=True)
     fsutil.write_json(cdir / "packet.json", packet, pretty=True)
     fsutil.write_json(cdir / "campaign.json", {"schema_version": SCHEMA_VERSION, "campaign_id": campaign_id, "checkpoint": checkpoint,
                                               "review_target_root": root, "target_components": comps,
@@ -336,6 +438,9 @@ def _campaign(pkg: Package, events: EventSink, conf: dict[str, Any], r, checkpoi
                     comp = broker.call(agent, slot, REVIEW_SYSTEM, user, f"review:{checkpoint}")
                 except InfrastructureError as exc:
                     return slot, None, {"slot_id": slot, "kind": "provider_failure", "detail": exc.message}
+                if not _model_matches(manifest, agent, comp.requested_model, comp.returned_model):
+                    return slot, None, {"slot_id": slot, "kind": "model_identity_mismatch",
+                                        "detail": "provider response differs from the identity policy frozen before voting"}
                 try:
                     from .agents import extract_json
 
@@ -416,7 +521,7 @@ def _campaign(pkg: Package, events: EventSink, conf: dict[str, Any], r, checkpoi
     cert = {
         "schema_version": SCHEMA_VERSION, "artifact_kind": "consensus_certificate", "campaign_id": campaign_id,
         "checkpoint": checkpoint, "review_target_root": root, "target_components": comps, "scope": packet["scope"],
-        "config_hash": comps["review_config"], "tiers": tiers_out,
+        "config_hash": comps.get("review_config", comps.get("reviewer_configuration_hash")), "tiers": tiers_out,
         "final": "REVIEW_ACCEPTED" if final == "REVIEW_ACCEPTED" else final, "mechanical_veto": veto,
     }
     issues = schemas.validate("consensus-certificate", cert)
@@ -438,6 +543,10 @@ def _repair(pkg: Package, events: EventSink, config: Path, cert: dict[str, Any])
     """Bounded repair for implementation/release: the repairer proposes a new implementation
     candidate from the findings; mechanical checks re-run and the hierarchy restarts at tier 1."""
     from . import agents, generate, link, testing
+    from .backends import registry
+    if registry.is_vscore(pkg):
+        events.emit("diagnostic", "review", "a frozen VSCore source/proof repair requires a new candidate and run package")
+        return False
 
     try:
         broker, conf = agents._broker(config, pkg)
@@ -476,11 +585,29 @@ def _repair(pkg: Package, events: EventSink, config: Path, cert: dict[str, Any])
 
 def _recheck(pkg: Package, cert: dict[str, Any], conf: dict[str, Any]) -> list[str]:
     problems = []
+    if schemas.validate("consensus-certificate", cert):
+        return ["consensus certificate schema is invalid"]
     tiers = {t["id"]: t for t in conf["review"]["review_tiers"]}
+    if [t["tier_id"] for t in cert["tiers"]] != list(tiers):
+        problems.append("configured review tiers are missing, duplicated or reordered")
+    manifest_path = pkg.path("reviews") / cert["campaign_id"] / "model-resolution.json"
+    manifest = canonical.load_file(manifest_path) if manifest_path.is_file() else None
+    packet_path = pkg.path("reviews") / cert["campaign_id"] / "packet.json"
+    if "packet" in cert["target_components"]:
+        if not packet_path.is_file() or canonical.digest_json(canonical.load_file(packet_path)) != cert["target_components"]["packet"]:
+            problems.append("original review packet missing or mutated")
+    if cert["target_components"].get("format") == "verislop.review-target/0.2":
+        if manifest is None or canonical.digest_json(manifest) != cert["target_components"]["model_resolution_manifest_hash"]:
+            problems.append("frozen model-resolution manifest missing or mutated")
+    reached = True
     final = "REVIEW_ACCEPTED"
     for t in cert["tiers"]:
         if t["result"] == "NOT_REACHED":
+            if reached:
+                problems.append("a required review tier was not reached without a prior failed tier")
             continue
+        if not reached:
+            problems.append("review escalated after a failed tier")
         tier = tiers.get(t["tier_id"])
         if tier is None:
             problems.append(f"tier {t['tier_id']} is not in the configuration")
@@ -488,16 +615,35 @@ def _recheck(pkg: Package, cert: dict[str, Any], conf: dict[str, Any]) -> list[s
         expected = [f"{tier['id']}/{g['agent']}#{i + 1}" for g in tier["reviewers"] for i in range(g["count"])]
         if expected != t["membership"]:
             problems.append(f"tier {t['tier_id']}: membership differs from configuration")
+        if t["policy"] != tier["consensus"]:
+            problems.append(f"tier {t['tier_id']}: consensus policy differs from configuration")
         ballots = {}
         for b in t["ballots"]:
+            fsutil.check_relpath(b["ballot_ref"])
             p = pkg.root / b["ballot_ref"]
             if not p.is_file() or canonical.digest(p.read_bytes()) != b["ballot_hash"]:
                 problems.append(f"ballot {b['ballot_ref']} missing or mutated")
                 continue
             rec = canonical.load_file(p)
+            if schemas.validate("review-ballot", rec):
+                problems.append(f"ballot {b['ballot_ref']} schema is invalid")
+                continue
             if rec["review_target_root"] != cert["review_target_root"] or rec["slot_id"] != b["slot_id"]:
                 problems.append(f"ballot {b['ballot_ref']} is bound to a different target or slot")
                 continue
+            if rec["campaign_id"] != cert["campaign_id"] or rec["checkpoint"] != cert["checkpoint"] or rec["verdict"] != b["verdict"]:
+                problems.append(f"ballot {b['ballot_ref']} campaign/checkpoint/verdict identity differs")
+                continue
+            fsutil.check_relpath(rec["transcript_ref"])
+            transcript_path = pkg.root / rec["transcript_ref"]
+            if not transcript_path.is_file() or canonical.digest_file(transcript_path) != rec["transcript_hash"]:
+                problems.append(f"ballot {b['ballot_ref']} raw transcript missing or mutated")
+                continue
+            if manifest is not None:
+                agent = b["slot_id"].split("/", 1)[1].split("#", 1)[0]
+                if not _model_matches(manifest, agent, rec["requested_model"], rec["returned_model"]):
+                    problems.append(f"ballot {b['ballot_ref']} violates the frozen model identity policy")
+                    continue
             if b["slot_id"] in ballots:
                 problems.append(f"duplicate ballot for slot {b['slot_id']}")
                 continue
@@ -507,6 +653,7 @@ def _recheck(pkg: Package, cert: dict[str, Any], conf: dict[str, Any]) -> list[s
             problems.append(f"tier {t['tier_id']}: stored result {t['result']} does not re-tally ({tally['result']})")
         if tally["result"] != "TIER_ACCEPTED":
             final = tally["result"]
+            reached = False
     if final != cert["final"]:
         problems.append(f"final decision {cert['final']} does not re-tally ({final})")
     return problems
@@ -542,6 +689,9 @@ def gate(pkg: Package, config: Path) -> dict[str, Any]:
     from .providers import config as pcfg
 
     conf = pcfg.load(config)
+    from .backends import registry
+    if registry.is_vscore(pkg):
+        return _vscore_gate(pkg, conf)
     info: dict[str, Any] = {"configured": True, "checkpoints": {}, "diagnostics": []}
     rdir = pkg.path("reviews")
     for cp in conf["review"]["checkpoints"]:
@@ -571,4 +721,89 @@ def gate(pkg: Package, config: Path) -> dict[str, Any]:
             info["diagnostics"].append(Diagnostic("REVIEW_REJECTED", f"{cp} review final decision: {cert['final']}"))
         else:
             info["checkpoints"][cp] = "REVIEW_ACCEPTED"
+    return info
+
+
+def _vscore_gate(pkg: Package, conf: dict) -> dict:
+    from . import review_projection
+    from .backends import vscore_closure
+    from .providers import config as pcfg
+    from .providers.broker import Broker
+    from .bridges.manifest import InvalidPackage
+
+    info = {"configured": True, "checkpoints": {}, "diagnostics": [], "projection_reuse": {}}
+    resolved = pcfg.resolve(conf, pcfg.load_user_profiles(None))
+    if any(d.severity == "blocking" for d in resolved.diagnostics):
+        info["diagnostics"] += resolved.diagnostics
+        return info
+    broker = Broker(resolved, None)
+    models = {g["agent"]: broker.model_for(g["agent"]) for t in conf["review"]["review_tiers"] for g in t["reviewers"]}
+    manifest = model_resolution_manifest(conf, resolved, models)
+    snapshot = vscore_closure.mechanical_snapshot(pkg)
+    current = review_projection.build(pkg, snapshot) if snapshot else None
+    rdir = pkg.path("reviews")
+    for checkpoint in conf["review"]["checkpoints"]:
+        campaigns = []
+        for folder in sorted(rdir.glob("rc-*")) if rdir.is_dir() else []:
+            path = folder / "consensus-certificate.json"
+            if path.is_file():
+                cert = canonical.load_file(path)
+                if cert["checkpoint"] == checkpoint:
+                    campaigns.append((folder, cert))
+        if not campaigns:
+            info["checkpoints"][checkpoint] = "REVIEW_NOT_RUN"
+            info["diagnostics"].append(Diagnostic("REVIEW_NOT_RUN", f"required {checkpoint} review has not run"))
+            continue
+        folder, cert = campaigns[-1]
+        stored_conf = canonical.load_file(folder / "campaign.json")["config"]
+        problems = _recheck(pkg, cert, conf)
+        try:
+            if checkpoint == "release":
+                if current is None:
+                    raise InvalidPackage("release has no mechanically checked execution")
+                target = review_projection.review_target(checkpoint, snapshot["closure_root"], current["projection_hash"],
+                            reviewer_configuration_hash(conf, resolved), canonical.digest_json(manifest))
+                if cert["target_components"] != target or cert["review_target_root"] != canonical.digest_json(target):
+                    raise InvalidPackage("current semantics, environment, reviewer configuration or model identity policy changed")
+                audit = canonical.load_file(folder / "audit.json")
+                original_path = audit["mechanical_result_path"]
+                fsutil.check_relpath(original_path)
+                original = vscore_closure.validate_execution((pkg.root / original_path).parent, expected_root=snapshot["closure_root"])
+                original["mechanical_result_path"] = original_path
+                previous = review_projection.build(pkg, original)
+                original_inventory = canonical.load_file(folder / "execution-inventory.json")
+                original_projection = canonical.load_file(folder / "mechanical-projection.json")
+                if (previous["raw_inventory"] != original_inventory or previous["raw_inventory_hash"] != audit["raw_inventory_hash"] or
+                        previous["projection"] != original_projection or
+                        canonical.dumps(previous["projection"]) != canonical.dumps(current["projection"])):
+                    raise InvalidPackage("original/current exact inventories or registered projections differ")
+                if canonical.digest_file(folder / "packet.json") != audit["packet_hash"]:
+                    # Packet is pretty-printed; its audit identity is the canonical payload.
+                    if canonical.digest_json(canonical.load_file(folder / "packet.json")) != audit["packet_hash"]:
+                        raise InvalidPackage("original review packet changed")
+                info["review_target"] = cert["review_target_root"]
+                info["projection_reuse"][checkpoint] = {"original_raw_inventory_hash": previous["raw_inventory_hash"],
+                    "current_raw_inventory_hash": current["raw_inventory_hash"], "projection_hash": current["projection_hash"],
+                    "target": cert["review_target_root"]}
+            else:
+                # These checkpoints retain their established contract-phase identities.
+                components = cert["target_components"]
+                frozen_models = canonical.load_file(folder / "model-resolution.json")
+                if (components["candidate_root"] != candidate_root(pkg, checkpoint) or
+                        components["review_config"] != canonical.digest_json(pcfg.redacted(conf)) or
+                        components["resolved_models"] != models or frozen_models != manifest):
+                    raise InvalidPackage("configured checkpoint no longer targets the current candidate")
+        except (InvalidPackage, OSError, ValueError, KeyError) as exc:
+            problems.append(str(exc))
+        if problems:
+            info["checkpoints"][checkpoint] = "STALE"
+            info["diagnostics"].append(Diagnostic("REVIEW_NOT_RUN", f"{checkpoint} review cannot be reused: {problems[0]}"))
+        elif cert["final"] != "REVIEW_ACCEPTED":
+            info["checkpoints"][checkpoint] = cert["final"]
+            failures = [f for t in cert["tiers"] for f in t["execution_failures"]]
+            infrastructure = any(f["kind"] == "provider_failure" for f in failures)
+            info["diagnostics"].append(Diagnostic("PROVIDER_FAILURE" if infrastructure else "REVIEW_REJECTED",
+                f"{checkpoint} review decision: {cert['final']}", severity="infrastructure" if infrastructure else "blocking"))
+        else:
+            info["checkpoints"][checkpoint] = "REVIEW_ACCEPTED"
     return info

@@ -377,10 +377,15 @@ class VSCoreBridgeFlowTests(unittest.TestCase):
         self.assertTrue(summary["semantic_certificates"][0]["rechecked"])
         self.assertIs(summary["assigns_end_to_end_verified"], False)
 
-    def test_end_to_end_milestone_is_still_not_published(self):
+    def test_capability_requires_closure_beyond_standalone_edge_acceptance(self):
         ok, why = capability(2, "vscore", "restricted_source")
-        self.assertFalse(ok)
-        self.assertIn("END_TO_END_VERIFIED", why)
+        self.assertTrue(ok, why)
+        from verislop import view
+        from verislop.package import Package
+
+        obligations = view.derive(Package(self.package))["obligations"]
+        self.assertFalse(any(r["lifecycle"]["END_TO_END_VERIFIED"]["outcome"] == "PASS"
+                             for r in obligations.values()))
 
     def test_acceptance_is_write_once(self):
         code, result, _ = run_cli("bridge", "accept", "--package", str(self.package), "--bridge-id", BRIDGE)

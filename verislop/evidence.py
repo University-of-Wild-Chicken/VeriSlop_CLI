@@ -53,11 +53,12 @@ class Evidence:
 
 
 class EvidenceStore:
-    def __init__(self, pkg: Path, closure_id: str) -> None:
+    def __init__(self, pkg: Path, closure_id: str, *, sequence_base: int = 0) -> None:
         self.pkg = Path(pkg)
         self.dir = self.pkg / "evidence"
         self.raw_dir = self.dir / "raw"
         self.closure_id = closure_id
+        self.sequence_base = sequence_base
         self._cache: list[Evidence] | None = None
 
     # -- writing ------------------------------------------------------------------------------
@@ -82,7 +83,7 @@ class EvidenceStore:
             raise ValueError(f"unregistered verifier {verifier_id}")
         if not scope:
             raise ValueError("evidence requires a non-empty scope")
-        seq = len(self.load()) + 1
+        seq = self.sequence_base + len(self.load()) + 1
         raw = dict(result)
         raw.update({
             "claim_id": claim_id,
@@ -134,11 +135,28 @@ class EvidenceStore:
         if self.dir.is_dir():
             for path in sorted(self.dir.glob("ev-*.json")):
                 out.append(self._load_one(path))
+        executions = self.pkg / "closure" / "executions"
+        if executions.is_dir():
+            for folder in sorted(executions.iterdir()):
+                if not folder.is_dir() or folder.is_symlink():
+                    continue
+                try:
+                    snapshot = validated_execution(folder)
+                except (OSError, ValueError, RuntimeError):
+                    # No portion of an incomplete/corrupt publication is authority.
+                    continue
+                for entry in snapshot["execution_inventory"]:
+                    if entry["path"].startswith("evidence/ev-") and entry["path"].endswith(".json"):
+                        ev = self._load_one(folder / entry["path"], base=folder)
+                        if (ev.claim_id.startswith("END_TO_END_VERIFIED:") and ev.status == "PASS"
+                                and snapshot["mechanical_status"] != "VERIFIED"):
+                            continue
+                        out.append(ev)
         out.sort(key=lambda e: e.sequence)
         self._cache = out
         return out
 
-    def _load_one(self, path: Path) -> Evidence:
+    def _load_one(self, path: Path, *, base: Path | None = None) -> Evidence:
         problems: list[str] = []
         try:
             record = canonical.loads(path.read_bytes())
@@ -152,7 +170,7 @@ class EvidenceStore:
         if record.get("evidence_id") != expected_id or path.stem != expected_id:
             problems.append("evidence ID does not match record content (tampered or corrupt)")
         result: dict[str, Any] = {}
-        raw_path = self.pkg / str(record.get("raw_result_ref", ""))
+        raw_path = (base or self.pkg) / str(record.get("raw_result_ref", ""))
         if raw_path.is_file():
             raw_bytes = raw_path.read_bytes()
             if canonical.digest(raw_bytes) != record.get("raw_result_hash"):
@@ -173,3 +191,29 @@ class EvidenceStore:
             if e.id == evidence_id:
                 return e
         return None
+
+
+def validated_execution(folder: Path) -> dict[str, Any]:
+    """Validate the complete frozen graph and retained outputs without recursion.
+
+    The staged evidence store read by validate_execution has no executions child,
+    so checking a published execution cannot recursively reload the run's history.
+    A malformed, incomplete or stale publication contributes no current evidence.
+    """
+    from .backends import vscore_closure
+    from .bridges.manifest import InvalidPackage
+    from .errors import VeriSlopError
+    from .package import Package
+
+    folder = Path(folder)
+    try:
+        if folder.parent.name != "executions" or folder.parent.parent.name != "closure":
+            raise ValueError("not a declared closure execution directory")
+        pkg = Package(folder.parents[2], resolve_root=False)
+        claims = vscore_closure._claims(pkg)
+        root = vscore_closure.closure_input_root(pkg)
+        roots = vscore_closure._roots(pkg, vscore_closure._selection(pkg), root)
+        return vscore_closure.validate_execution(folder,
+            expected_root=root, frozen_claims=claims, expected_roots=roots)
+    except (vscore_closure.checker.EdgeFailure, InvalidPackage, VeriSlopError, KeyError, TypeError) as exc:
+        raise ValueError(str(exc)) from exc

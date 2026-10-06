@@ -51,6 +51,14 @@ VSCORE_CHECKER = ["bridges/vscore_checker.py", "targets/vscore_target.py", "targ
 VSCORE_SCHEMAS = ["vscore-source.schema.json", "vscore-relation.schema.json", "vscore-model.schema.json",
                   "vscore-profile.schema.json", "vscore-implementation-ir.schema.json",
                   "vscore-edge-certificate.schema.json", *BRIDGE_PREPARATION_SCHEMAS]
+VSCORE_BACKEND = ["backends/__init__.py", "backends/registry.py", "backends/admission.py", "backends/vscore.py",
+                  "backends/vscore_closure.py", "backends/vscore_release.py", "review_projection.py",
+                  "generate.py", "link.py", "testing.py", "run.py", "cli.py", "agents.py", "review.py", "report.py", "inspection.py",
+                  *VSCORE_CHECKER]
+VSCORE_BACKEND_SCHEMAS = ["implementation-claims-v2.schema.json", "implementation-bindings-v2.schema.json",
+                        "link-record-v2.schema.json", "implementation-selection-v2.schema.json",
+                        "vscore-materialization.schema.json", "closure-plan.schema.json", "closure-manifest.schema.json",
+                        "mechanical-result.schema.json", "run-report-v2.schema.json", *VSCORE_SCHEMAS]
 
 # One vocabulary for declared trust, so reports list each trusted component once.
 TRUST = {
@@ -94,6 +102,18 @@ VERIFIERS: dict[str, dict] = {
         "schemas": VSCORE_SCHEMAS,
         "trusted": [TRUST[k] for k in ("lean", "kernel_tool", "vscore", "vscore_goal", "reifier", "sandbox",
                                        "axioms", "orchestration", "os")],
+    },
+    "verislop.vscore-materializer": {
+        "milestones": ["IMPLEMENTED"], "sources": VSCORE_BACKEND, "schemas": VSCORE_BACKEND_SCHEMAS,
+        "trusted": [TRUST[k] for k in ("lean", "kernel_tool", "vscore", "vscore_goal", "sandbox", "orchestration", "os")],
+    },
+    "verislop.vscore-linker": {
+        "milestones": ["LINKED"], "sources": VSCORE_BACKEND, "schemas": VSCORE_BACKEND_SCHEMAS,
+        "trusted": [TRUST[k] for k in ("lean", "kernel_tool", "vscore", "vscore_goal", "orchestration", "os")],
+    },
+    "verislop.vscore-campaign-unavailable": {
+        "milestones": [], "sources": ["backends/registry.py", "testing.py"], "schemas": [],
+        "trusted": [TRUST["orchestration"]],
     },
     "verislop.bridge-semantic-unavailable": {
         "milestones": [],
@@ -168,15 +188,15 @@ VERIFIERS: dict[str, dict] = {
         "milestones": ["END_TO_END_VERIFIED"],
         "sources": ["closure.py", "report.py", "materialize.py", "testing.py", "capabilities.py",
                     "targets/python_target.py", "targets/python_harness.py", "review.py",
-                    "providers/config.py", "providers/registry.py", *BRIDGE_PREPARATION],
+                    "providers/config.py", "providers/registry.py", *BRIDGE_PREPARATION, *VSCORE_BACKEND],
         "schemas": ["report.schema.json", "claims.schema.json", "review-config.schema.json",
                     "review-ballot.schema.json", "consensus-certificate.schema.json",
-                    "endpoint-profiles.schema.json", *BRIDGE_PREPARATION_SCHEMAS],
+                    "endpoint-profiles.schema.json", *BRIDGE_PREPARATION_SCHEMAS, *VSCORE_BACKEND_SCHEMAS],
         "trusted": [TRUST["orchestration"], TRUST["os"]],
     },
     "verislop.review-consensus": {
         "milestones": [],
-        "sources": ["review.py"],
+        "sources": ["review.py", "review_projection.py", "backends/registry.py", "backends/vscore_release.py"],
         "schemas": ["review-ballot.schema.json", "review-config.schema.json", "consensus-certificate.schema.json"],
         "trusted": [TRUST["consensus"]],
     },

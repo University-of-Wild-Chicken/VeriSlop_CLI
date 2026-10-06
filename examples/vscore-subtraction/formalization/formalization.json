@@ -1,0 +1,50 @@
+{
+  "schema_version": "0.1",
+  "artifact_kind": "formalization_candidate",
+  "profile_id": "checked-subtraction-nat.v0_1",
+  "lean_toolchain": "leanprover/lean4:v4.34.1",
+  "lean_file": "Contract.lean",
+  "bindings": [
+    {
+      "obligation": "D1",
+      "declarations": [
+        "VeriSlop.CheckedSubtraction.DebitError",
+        "VeriSlop.CheckedSubtraction.subtractIfEnough"
+      ]
+    },
+    {
+      "obligation": "A1",
+      "predicate": "VeriSlop.CheckedSubtraction.validOperands"
+    },
+    {
+      "obligation": "S1",
+      "theorem": "VeriSlop.CheckedSubtraction.success_equation"
+    },
+    {
+      "obligation": "R1",
+      "theorem": "VeriSlop.CheckedSubtraction.success_reconstructs"
+    },
+    {
+      "obligation": "B1",
+      "theorem": "VeriSlop.CheckedSubtraction.success_is_bounded"
+    },
+    {
+      "obligation": "E1",
+      "theorem": "VeriSlop.CheckedSubtraction.error_iff_insufficient"
+    },
+    {
+      "obligation": "N1"
+    }
+  ],
+  "internal_obligations": [
+    {
+      "id": "W1",
+      "kind": "non_vacuity",
+      "theorem": "VeriSlop.CheckedSubtraction.non_vacuity",
+      "witnesses_for": [
+        "A1"
+      ],
+      "description": "zero/zero and equal positive operands have concrete successes; 2 minus 3 has a concrete insufficient error"
+    }
+  ]
+}

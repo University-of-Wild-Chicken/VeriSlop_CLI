@@ -44,6 +44,14 @@ def run(pkg: Package, events: EventSink, *, ir: Path | None = None, implementati
         return result
     assert irj is not None
     claims = canonical.load_file(claims_path)
+    from .backends import registry
+    backend, backend_diags = registry.frozen_backend(pkg)
+    if backend_diags:
+        result.diagnostics, result.status = backend_diags, status_from(backend_diags)
+        return result
+    if backend and backend["id"] == registry.VSCORE_ID:
+        from .backends import vscore
+        return vscore.link(pkg, events)
     proposal = canonical.load_file(bpath)
     profile = C.frozen_json(pkg, "profile.json")
     statements = C.frozen_json(pkg, "statements.json")["statements"]

@@ -16,7 +16,7 @@ import os
 import sys
 from pathlib import Path
 
-from . import __version__, fsutil
+from . import __version__, canonical, fsutil
 from .errors import (
     EXIT_INTERRUPTED, EXIT_USAGE, Diagnostic, UsageError, VeriSlopError,
 )
@@ -168,13 +168,15 @@ def cmd_generate(args: argparse.Namespace) -> StageResult:
 
     pkg = _package(args, create=False)
     ev = _events(args, pkg)
-    agent = implementer_agent(args.config, pkg, ev) if (args.config and not args.candidate) else None
+    adopting = bool(args.bridge_id and not args.candidate)
+    agent = implementer_agent(args.config, pkg, ev) if (args.config and not args.candidate and not adopting) else None
     return generate.run(
         pkg, ev, ir=Path(args.ir) if args.ir else None, tier=args.tier, target=args.target,
         endpoint=args.endpoint, require_state=args.require_state,
         candidate=Path(args.candidate) if args.candidate else None,
         bindings=Path(args.bindings) if args.bindings else None, agent=agent,
-        require_tests=not args.no_tests,
+        require_tests=None, tests_flag=("no_tests" if args.no_tests else "require_tests" if args.require_tests else "omitted"),
+        bridge_id=args.bridge_id,
     )
 
 
@@ -197,8 +199,22 @@ def cmd_verify(args: argparse.Namespace) -> StageResult:
     from . import closure
 
     pkg = _package(args, create=False)
-    return closure.run(pkg, _events(args, pkg), endpoint=args.endpoint, require_state=args.require_state,
-                       config=Path(args.config) if args.config else None)
+    result = closure.run(pkg, _events(args, pkg), endpoint=args.endpoint, require_state=args.require_state,
+                         config=Path(args.config) if args.config else None)
+    from .run import _ensure_report
+
+    claims = pkg.path("closure") / "implementation-claims.json"
+    params = pkg.meta().get("run_parameters") or {}
+    try:
+        frozen = canonical.load_file(claims) if claims.is_file() else {}
+        if isinstance(frozen, dict) and isinstance(frozen.get("parameters"), dict):
+            params = frozen["parameters"]
+    except (OSError, ValueError):
+        # The closure dispatcher already reports malformed frozen claims. Reporting
+        # that failure must not try to parse the same invalid bytes unguarded.
+        pass
+    _ensure_report(pkg, result, params)
+    return result
 
 
 def cmd_run(args: argparse.Namespace) -> StageResult:
@@ -417,6 +433,10 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--formalization-candidate", help="directory with Contract.lean and formalization.json")
     s.add_argument("--proof-candidate", help="Lean file with proofs for the frozen challenge")
     s.add_argument("--implementation-candidate", help="directory with existing/generated implementation sources")
+    s.add_argument("--bridge-id", help="selected or newly generated implementation bridge")
+    tests = s.add_mutually_exclusive_group()
+    tests.add_argument("--require-tests", action="store_true", help="require an independent target campaign")
+    tests.add_argument("--no-tests", action="store_true", help="omit the optional target campaign")
     s.add_argument("--bridge-proposal", help="optional shared bridge preparation proposal after export")
     s.add_argument("--bridge-candidate-dir", help="artifact root for --bridge-proposal")
     s.add_argument("--bindings-candidate", help="implementation binding proposal (bindings.json)")
@@ -478,12 +498,15 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("generate", parents=[common], help="materialize an implementation candidate for a bridge tier")
     s.add_argument("--ir")
     s.add_argument("--tier", type=int, choices=range(0, 5), metavar="{0..4}")
-    s.add_argument("--target", default="python")
+    s.add_argument("--target", help="target backend (defaults to the frozen target, otherwise python)")
     s.add_argument("--endpoint")
     s.add_argument("--require-state", choices=["TESTED", "END_TO_END_VERIFIED"])
     s.add_argument("--candidate", help="directory with existing implementation sources")
     s.add_argument("--bindings", help="binding proposal for --candidate")
-    s.add_argument("--no-tests", action="store_true", help="release policy does not require TESTED")
+    tests = s.add_mutually_exclusive_group()
+    tests.add_argument("--no-tests", action="store_true", help="release policy does not require TESTED")
+    tests.add_argument("--require-tests", action="store_true", help="release policy requires TESTED")
+    s.add_argument("--bridge-id", help="adopt a prepared bridge, or name the new candidate bridge")
     s.add_argument("--config")
     s.set_defaults(func=cmd_generate)
 
