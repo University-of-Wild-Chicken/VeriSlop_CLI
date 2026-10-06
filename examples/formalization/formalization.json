@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1",
+  "artifact_kind": "formalization_candidate",
+  "profile_id": "bounded-increment-nat.v0_1",
+  "lean_toolchain": "leanprover/lean4:v4.34.1",
+  "lean_file": "Contract.lean",
+  "bindings": [
+    { "obligation": "D1", "declarations": ["VeriSlop.BoundedIncrement.IncrementError", "VeriSlop.BoundedIncrement.increment"] },
+    { "obligation": "A3", "predicate": "VeriSlop.BoundedIncrement.validInput" },
+    { "obligation": "O17", "theorem": "VeriSlop.BoundedIncrement.success_is_successor" },
+    { "obligation": "I2", "theorem": "VeriSlop.BoundedIncrement.success_preserves_bound" },
+    { "obligation": "E1", "theorem": "VeriSlop.BoundedIncrement.error_iff_at_limit" },
+    { "obligation": "N1" }
+  ],
+  "internal_obligations": [
+    {
+      "id": "W1",
+      "kind": "non_vacuity",
+      "theorem": "VeriSlop.BoundedIncrement.non_vacuity",
+      "witnesses_for": ["A3"],
+      "description": "a valid success case and a valid limitReached case both exist under input <= limit"
+    }
+  ]
+}

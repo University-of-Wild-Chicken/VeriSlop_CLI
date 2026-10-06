@@ -1,0 +1,201 @@
+{
+  "schema_version": "0.1",
+  "bridge_tier": 2,
+  "endpoint": "restricted_source",
+  "providers": {
+    "openai": {
+      "adapter": "openai",
+      "api_family": "responses",
+      "endpoint_profile": "openai-direct",
+      "credential_ref": "env:OPENAI_API_KEY",
+      "concurrency": 4,
+      "request_timeout_seconds": 120
+    },
+    "claude": {
+      "adapter": "anthropic",
+      "api_family": "anthropic_messages",
+      "endpoint_profile": "anthropic-direct",
+      "credential_ref": "env:ANTHROPIC_API_KEY",
+      "concurrency": 4,
+      "request_timeout_seconds": 120
+    },
+    "gemini": {
+      "adapter": "google_gemini",
+      "api_family": "gemini_generate_content",
+      "endpoint_profile": "gemini-developer",
+      "credential_ref": "env:GEMINI_API_KEY",
+      "concurrency": 4,
+      "request_timeout_seconds": 120
+    },
+    "deepseek": {
+      "adapter": "deepseek",
+      "api_family": "chat_completions",
+      "endpoint_profile": "deepseek-direct",
+      "credential_ref": "env:DEEPSEEK_API_KEY",
+      "concurrency": 4,
+      "request_timeout_seconds": 120
+    },
+    "qwen": {
+      "adapter": "alibaba_model_studio",
+      "api_family": "chat_completions",
+      "endpoint_profile": "user-selected-dashscope-region-workspace",
+      "credential_ref": "env:DASHSCOPE_API_KEY",
+      "concurrency": 4,
+      "request_timeout_seconds": 120
+    },
+    "glm": {
+      "adapter": "zai",
+      "api_family": "chat_completions",
+      "endpoint_profile": "zai-general",
+      "credential_ref": "env:ZAI_API_KEY",
+      "concurrency": 4,
+      "request_timeout_seconds": 120
+    },
+    "kimi": {
+      "adapter": "moonshot",
+      "api_family": "chat_completions",
+      "endpoint_profile": "moonshot-direct",
+      "credential_ref": "env:MOONSHOT_API_KEY",
+      "concurrency": 4,
+      "request_timeout_seconds": 120
+    },
+    "grok": {
+      "adapter": "xai",
+      "api_family": "responses",
+      "endpoint_profile": "xai-inference",
+      "credential_ref": "env:XAI_API_KEY",
+      "concurrency": 4,
+      "request_timeout_seconds": 120
+    },
+    "muse": {
+      "adapter": "meta",
+      "api_family": "responses",
+      "endpoint_profile": "meta-model-api",
+      "credential_ref": "env:MODEL_API_KEY",
+      "concurrency": 4,
+      "request_timeout_seconds": 120
+    }
+  },
+  "agents": {
+    "author": {
+      "provider": "openai",
+      "model_ref": "env:AUTHOR_MODEL",
+      "tool_profile": "candidate_writer",
+      "max_output_tokens": 8000
+    },
+    "lean-prover": {
+      "provider": "claude",
+      "model_ref": "env:LEAN_PROVER_MODEL",
+      "tool_profile": "proof_sandbox",
+      "max_output_tokens": 8000
+    },
+    "fast-critic": {
+      "provider": "deepseek",
+      "model_ref": "env:FAST_REVIEW_MODEL",
+      "tool_profile": "review_readonly",
+      "max_output_tokens": 8000
+    },
+    "formal-critic": {
+      "provider": "claude",
+      "model_ref": "env:FORMAL_REVIEW_MODEL",
+      "tool_profile": "review_readonly",
+      "max_output_tokens": 8000
+    },
+    "independent-critic": {
+      "provider": "gemini",
+      "model_ref": "env:INDEPENDENT_REVIEW_MODEL",
+      "tool_profile": "review_readonly",
+      "max_output_tokens": 8000
+    },
+    "final-critic": {
+      "provider": "openai",
+      "model_ref": "env:FINAL_REVIEW_MODEL",
+      "tool_profile": "review_readonly",
+      "max_output_tokens": 8000
+    }
+  },
+  "roles": {
+    "interpreter": "author",
+    "formalizer": "author",
+    "prover": "lean-prover",
+    "implementer": "author",
+    "repairer": "author"
+  },
+  "review": {
+    "checkpoints": [
+      "formal_contract",
+      "release"
+    ],
+    "restart_after_repair": "first_tier",
+    "budgets": {
+      "max_repair_rounds": 3,
+      "max_provider_retries": 2,
+      "max_calls_per_instance": 8,
+      "max_total_tokens": 200000,
+      "max_wall_seconds_per_tier": 900
+    },
+    "review_tiers": [
+      {
+        "id": "R0",
+        "reviewers": [
+          {
+            "agent": "fast-critic",
+            "count": 3,
+            "focus": "requirements_and_errors"
+          }
+        ],
+        "consensus": {
+          "mode": "unanimous",
+          "require_all_responses": true,
+          "max_soft_rejects": 0,
+          "max_abstentions": 0,
+          "blocking_findings_veto": true
+        }
+      },
+      {
+        "id": "R1",
+        "reviewers": [
+          {
+            "agent": "formal-critic",
+            "count": 2,
+            "focus": "formalization_and_correspondence"
+          },
+          {
+            "agent": "independent-critic",
+            "count": 1,
+            "focus": "counterexamples"
+          }
+        ],
+        "consensus": {
+          "mode": "unanimous",
+          "require_all_responses": true,
+          "max_soft_rejects": 0,
+          "max_abstentions": 0,
+          "blocking_findings_veto": true
+        }
+      },
+      {
+        "id": "R2",
+        "reviewers": [
+          {
+            "agent": "final-critic",
+            "count": 1,
+            "focus": "complete_artifact_chain"
+          }
+        ],
+        "consensus": {
+          "mode": "unanimous",
+          "require_all_responses": true,
+          "max_soft_rejects": 0,
+          "max_abstentions": 0,
+          "blocking_findings_veto": true
+        }
+      }
+    ]
+  },
+  "release": {
+    "require_mechanical_pass": true,
+    "require_all_review_tiers": true,
+    "require_requested_bridge_tier": true
+  }
+}

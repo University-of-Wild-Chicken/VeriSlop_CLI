@@ -1,0 +1,92 @@
+{
+  "schema_version": "0.1",
+  "format": "verislop.bridge-proposal/0.1",
+  "bridge_id": "bounded-increment-metadata",
+  "tier": 2,
+  "endpoint": "restricted_source",
+  "nodes": [
+    {
+      "node_id": "bounded-source",
+      "kind": "restricted_source",
+      "model_slot": "candidate-model",
+      "profile_slot": "candidate-profile"
+    }
+  ],
+  "artifacts": [
+    {
+      "slot_id": "candidate-source",
+      "role": "source",
+      "node_id": "bounded-source",
+      "path": "candidate/program.txt"
+    },
+    {
+      "slot_id": "candidate-model",
+      "role": "model",
+      "node_id": "bounded-source",
+      "path": "candidate/model.json"
+    },
+    {
+      "slot_id": "candidate-profile",
+      "role": "profile",
+      "node_id": "bounded-source",
+      "path": "candidate/profile.json"
+    },
+    {
+      "slot_id": "candidate-relation",
+      "role": "relation",
+      "node_id": "bounded-source",
+      "path": "candidate/relation.json"
+    },
+    {
+      "slot_id": "candidate-goal",
+      "role": "proposition",
+      "node_id": "bounded-source",
+      "path": "candidate/goal.txt"
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "reference-to-source",
+      "claim_id": "BRIDGE:bounded-increment:refinement",
+      "source_node": "accepted-contract",
+      "target_node": "bounded-source",
+      "relation_slot": "candidate-relation",
+      "expected_proposition_hash": "sha256:c47d453514d5af223c749b26ffabde86365d92ff4b8719dbafc1d8b338b21058",
+      "premises": []
+    }
+  ],
+  "obligations": [
+    {
+      "id": "E1",
+      "required_claims": [
+        "BRIDGE:bounded-increment:refinement"
+      ]
+    },
+    {
+      "id": "I2",
+      "required_claims": [
+        "BRIDGE:bounded-increment:refinement"
+      ]
+    },
+    {
+      "id": "O17",
+      "required_claims": [
+        "BRIDGE:bounded-increment:refinement"
+      ]
+    }
+  ],
+  "reproducible_slots": [
+    "candidate-source",
+    "candidate-model",
+    "candidate-profile",
+    "candidate-relation",
+    "candidate-goal"
+  ],
+  "declared_trust": [
+    {
+      "id": "example-io",
+      "kind": "artifact_io",
+      "description": "Artifact integrity relies on the registered supervisor, filesystem and SHA-256 implementation; candidate descriptions establish no semantics."
+    }
+  ]
+}

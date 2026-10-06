@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:endpoint-profiles:0.1",
+  "title": "User-defined provider endpoint profiles (explicit configuration; never inferred from a model response)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "artifact_kind": { "const": "endpoint_profiles" },
+    "profiles": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "adapter": {
+            "enum": ["openai", "anthropic", "google_gemini", "google_vertex", "deepseek", "alibaba_model_studio",
+                     "zai", "zhipu", "moonshot", "xai", "meta", "openai_compatible", "custom"]
+          },
+          "base_url": { "type": "string", "pattern": "^(https://[^\\s/]+(/[^\\s]*)?|http://(127\\.0\\.0\\.1|localhost)(:[0-9]+)?(/[^\\s]*)?)$" },
+          "auth_scheme": { "enum": ["bearer", "x-api-key", "x-goog-api-key"] },
+          "api_version": { "type": "string", "minLength": 1 },
+          "families": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "enum": ["responses", "chat_completions", "anthropic_messages", "gemini_generate_content"] }
+          },
+          "region": { "type": ["string", "null"] },
+          "workspace": { "type": ["string", "null"] },
+          "auth_check": { "type": ["string", "null"] },
+          "allow_insecure_loopback": { "type": "boolean" }
+        },
+        "required": ["adapter", "base_url", "auth_scheme", "families"]
+      }
+    }
+  },
+  "required": ["schema_version", "artifact_kind", "profiles"]
+}

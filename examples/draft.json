@@ -1,0 +1,539 @@
+{
+  "schema_version": "0.1",
+  "artifact_kind": "draft",
+  "request_ref": "examples/request.txt",
+  "category_review": {
+    "entities": "Natural-number inputs, natural-number successful result, and explicit limitReached error.",
+    "preconditions": "The caller supplies input <= limit; no claim of runtime enforcement.",
+    "postconditions": "Successful output equals input + 1.",
+    "invariants": "Successful output preserves the upper bound.",
+    "safety_properties": "The successful-result bound is represented by I2; no additional safety claim is proposed.",
+    "liveness_properties": "Unbounded temporal progress is explicitly excluded for this mathematical fixture.",
+    "resource_constraints": "Physical resource bounds are explicitly excluded.",
+    "error_semantics": "On valid inputs, error occurs exactly at the limit.",
+    "explicit_non_goals": "External implementation, machine encoding, physical resources, and unbounded liveness are out of this fixture's scope.",
+    "ambiguities": "The illustrative request fixes the mathematical domain and explicitly excludes target implementation choices; no unresolved interpretation is required for this fixture."
+  },
+  "entities": [
+    {
+      "id": "D1",
+      "revision": 1,
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "Inputs limit and input and successful outputs are Nat; failure is IncrementError.limitReached.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/request.txt",
+          "document_hash": "sha256:2213797320bd7e3039f08522754c441e3654d5e0f00918aa837ae0cdd15cfe1c",
+          "start_byte": 0,
+          "end_byte": 447,
+          "origin": "explicit",
+          "interpretation": "The entire short fixture request supplies context; exact clause spans should be refined by a production interpreter."
+        }
+      ],
+      "scope": [
+        "mathematical Nat reference model"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Typecheck the formal domain/result declarations."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/request.txt"
+          ],
+          "reason": "Recorded interpretation of the illustrative request; not mathematical proof.",
+          "scope": [
+            "bounded-increment illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "This record role does not assert this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "preconditions": [
+    {
+      "id": "A3",
+      "revision": 1,
+      "kind": "precondition",
+      "role": "assumption",
+      "statement": "The caller supplies input <= limit.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/request.txt",
+          "document_hash": "sha256:2213797320bd7e3039f08522754c441e3654d5e0f00918aa837ae0cdd15cfe1c",
+          "start_byte": 0,
+          "end_byte": 447,
+          "origin": "explicit",
+          "interpretation": "The entire short fixture request supplies context; exact clause spans should be refined by a production interpreter."
+        }
+      ],
+      "scope": [
+        "mathematical Nat reference model"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Export the precondition as an explicit hypothesis, not as an established caller fact."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/request.txt"
+          ],
+          "reason": "Recorded interpretation of the illustrative request; not mathematical proof.",
+          "scope": [
+            "bounded-increment illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "This record role does not assert this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "postconditions": [
+    {
+      "id": "O17",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "Every successful output equals input + 1.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/request.txt",
+          "document_hash": "sha256:2213797320bd7e3039f08522754c441e3654d5e0f00918aa837ae0cdd15cfe1c",
+          "start_byte": 0,
+          "end_byte": 447,
+          "origin": "explicit",
+          "interpretation": "The entire short fixture request supplies context; exact clause spans should be refined by a production interpreter."
+        }
+      ],
+      "scope": [
+        "mathematical Nat reference model"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Prove success_is_successor for the concrete reference function.",
+        "Check a concrete valid success witness."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/request.txt"
+          ],
+          "reason": "Recorded interpretation of the illustrative request; not mathematical proof.",
+          "scope": [
+            "bounded-increment illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "invariants": [
+    {
+      "id": "I2",
+      "revision": 1,
+      "kind": "invariant",
+      "role": "guarantee",
+      "statement": "Every successful output is at most limit.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/request.txt",
+          "document_hash": "sha256:2213797320bd7e3039f08522754c441e3654d5e0f00918aa837ae0cdd15cfe1c",
+          "start_byte": 0,
+          "end_byte": 447,
+          "origin": "explicit",
+          "interpretation": "The entire short fixture request supplies context; exact clause spans should be refined by a production interpreter."
+        }
+      ],
+      "scope": [
+        "mathematical Nat reference model"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Prove success_preserves_bound for the concrete reference function."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/request.txt"
+          ],
+          "reason": "Recorded interpretation of the illustrative request; not mathematical proof.",
+          "scope": [
+            "bounded-increment illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "safety_properties": [],
+  "liveness_properties": [],
+  "resource_constraints": [],
+  "error_semantics": [
+    {
+      "id": "E1",
+      "revision": 1,
+      "kind": "error_semantics",
+      "role": "guarantee",
+      "statement": "Under input <= limit, limitReached occurs if and only if input = limit.",
+      "required": true,
+      "source_refs": [
+        {
+          "document_ref": "examples/request.txt",
+          "document_hash": "sha256:2213797320bd7e3039f08522754c441e3654d5e0f00918aa837ae0cdd15cfe1c",
+          "start_byte": 0,
+          "end_byte": 447,
+          "origin": "explicit",
+          "interpretation": "The entire short fixture request supplies context; exact clause spans should be refined by a production interpreter."
+        }
+      ],
+      "scope": [
+        "mathematical Nat reference model"
+      ],
+      "dependencies": [
+        {
+          "id": "A3",
+          "relation": "assumes"
+        },
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Prove error_iff_at_limit with validInput as an explicit hypothesis.",
+        "Check a concrete valid error witness."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/request.txt"
+          ],
+          "reason": "Recorded interpretation of the illustrative request; not mathematical proof.",
+          "scope": [
+            "bounded-increment illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "explicit_non_goals": [
+    {
+      "id": "N1",
+      "revision": 1,
+      "kind": "explicit_non_goal",
+      "role": "exclusion",
+      "statement": "No target-language implementation, machine-integer encoding, physical resource bound, or unbounded temporal progress guarantee is claimed.",
+      "required": false,
+      "source_refs": [
+        {
+          "document_ref": "examples/request.txt",
+          "document_hash": "sha256:2213797320bd7e3039f08522754c441e3654d5e0f00918aa837ae0cdd15cfe1c",
+          "start_byte": 0,
+          "end_byte": 447,
+          "origin": "explicit",
+          "interpretation": "The entire short fixture request supplies context; exact clause spans should be refined by a production interpreter."
+        }
+      ],
+      "scope": [
+        "mathematical Nat reference model"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Retain the exclusion in the interpreted and formal metadata; prohibit stronger public claims."
+      ],
+      "state": "INTERPRETED",
+      "lifecycle": {
+        "INTERPRETED": {
+          "outcome": "PASS",
+          "evidence_refs": [
+            "provenance:examples/request.txt"
+          ],
+          "reason": "Recorded interpretation of the illustrative request; not mathematical proof.",
+          "scope": [
+            "bounded-increment illustrative draft"
+          ]
+        },
+        "FORMALIZED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "outcome": "PENDING",
+          "evidence_refs": [],
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "This record role does not assert this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "This record role does not assert this milestone.",
+          "scope": []
+        },
+        "LINKED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "This record role does not assert this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "This record role does not assert this milestone.",
+          "scope": []
+        },
+        "END_TO_END_VERIFIED": {
+          "outcome": "NOT_APPLICABLE",
+          "evidence_refs": [],
+          "reason": "This record role does not assert this milestone.",
+          "scope": []
+        }
+      }
+    }
+  ],
+  "ambiguities": []
+}

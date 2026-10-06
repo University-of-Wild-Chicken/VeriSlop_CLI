@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1",
+  "artifact_kind": "interpretation",
+  "request": {
+    "document_ref": "examples/request.txt",
+    "document_hash": "sha256:2213797320bd7e3039f08522754c441e3654d5e0f00918aa837ae0cdd15cfe1c",
+    "byte_length": 447
+  },
+  "clauses": [
+    { "start_byte": 0, "end_byte": 61, "disposition": "obligations", "refs": ["D1"],
+      "note": "Domain and result declarations over mathematical Nat." },
+    { "start_byte": 62, "end_byte": 118, "disposition": "obligations", "refs": ["A3"],
+      "note": "Caller-supplied precondition; a hypothesis, not an established fact." },
+    { "start_byte": 119, "end_byte": 155, "disposition": "obligations", "refs": ["O17"] },
+    { "start_byte": 156, "end_byte": 186, "disposition": "obligations", "refs": ["E1"] },
+    { "start_byte": 187, "end_byte": 233, "disposition": "obligations", "refs": ["I2"] },
+    { "start_byte": 234, "end_byte": 289, "disposition": "obligations", "refs": ["O17", "E1"],
+      "note": "Witness acceptance criteria of O17 and E1; formalization adds a non-vacuity obligation." },
+    { "start_byte": 290, "end_byte": 446, "disposition": "exclusion", "refs": ["N1"] }
+  ],
+  "assumptions": [
+    {
+      "id": "A3",
+      "supplied_by": "the caller of increment",
+      "discharged_at": "the caller's own obligations, outside this contract; no runtime enforcement is claimed"
+    }
+  ],
+  "ambiguities": [],
+  "selected_defaults": []
+}
