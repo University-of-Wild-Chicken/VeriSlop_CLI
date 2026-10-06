@@ -7,6 +7,7 @@ This repository contains the **design specification** and a **working implementa
 - [Specification](docs/specification.md), [contract expression IR](docs/contract-ir.md), [obligation states](docs/obligation-states.md), [providers and adversarial review](docs/providers-and-review.md): the normative design.
 - [Implementation notes](docs/implementation.md): how the CLI realises the specification, artifact by artifact, and where it stops.
 - [Tier 2–4 specification and implementation outline](docs/tier-2-4.md): implemented restricted-source closure and proposed extraction and machine-code backends, with proof obligations and release gates.
+- [TESTED campaign specification and formalism](docs/tested-campaigns.md): proposed strict campaign semantics, finite Lean model, VSCore testing outline and concrete-counterexample review requirements. This design does not enable VSCore campaigns.
 - [Schemas](schemas/): JSON interfaces. Schema validity is structure only; semantic validators check the rest.
 - [Examples](examples/): bounded increment with Python and VSCore candidates, and an independent [checked-subtraction VSCore contract](examples/vscore-subtraction/README.md).
 
@@ -175,7 +176,7 @@ bin/verislop verify --package $P --config verislop.json        # review is an ad
 
 `providers probe` requires explicit `--live` and sends one JSON echo challenge per selected `--agent` (repeat the flag to select more). It checks protocol parsing, the challenge, returned model metadata and token usage through the actual broker, with no retries, a maximum 30-second request timeout and bounded output. Probe responses are not saved as transcripts. A successful probe establishes that this call worked; agent reliability, model alias equivalence and formal correctness remain separate questions. Use `--endpoint-profiles PATH` for user-supplied Meta Muse and Qwen/DashScope regional endpoints.
 
-Review consensus is deterministic over immutable ballots. Missing or malformed ballots never count. Blocking findings and failed mechanical checks veto acceptance. Acceptance escalates tier by tier, and changed artifacts invalidate old votes. Review never assigns a proof or bridge milestone.
+Reviewers at every tier must construct concrete probes before voting. The supervisor replays them against the bound artifacts and records expected versus observed results. Only confirmed counterexamples count as technical rejections; speculative findings are invalid and unresolved replay leaves review incomplete. Stored votes re-tally from their raw responses and replay receipts. See [the counterexample protocol](docs/adversarial-counterexamples.md) for supported probe kinds and limits. Acceptance escalates tier by tier, and changed artifacts invalidate old votes. Review never assigns a proof or bridge milestone.
 
 Review model identity is frozen before voting. A configured alias explicitly trusts the provider's request-time selection; returned model IDs remain ballot provenance. To require an immutable snapshot, set each reviewer's `model_identity` to `{"mode":"pinned","resolved_model":"SNAPSHOT_ID"}` and `review.require_fixed_model_snapshot` to `true`. Missing pinned identities fail preflight, and responses with a different identity cannot count. Frozen VSCore source/proof selections cannot enter Python repair.
 

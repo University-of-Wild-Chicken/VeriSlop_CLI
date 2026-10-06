@@ -54,11 +54,13 @@ VSCORE_SCHEMAS = ["vscore-source.schema.json", "vscore-relation.schema.json", "v
 VSCORE_BACKEND = ["backends/__init__.py", "backends/registry.py", "backends/admission.py", "backends/vscore.py",
                   "backends/vscore_closure.py", "backends/vscore_release.py", "review_projection.py",
                   "generate.py", "link.py", "testing.py", "run.py", "cli.py", "agents.py", "review.py", "report.py", "inspection.py",
-                  *VSCORE_CHECKER]
+                  "review_counterexamples.py", "targets/python_harness.py", "materialize.py", "segment.py", *VSCORE_CHECKER]
 VSCORE_BACKEND_SCHEMAS = ["implementation-claims-v2.schema.json", "implementation-bindings-v2.schema.json",
                         "link-record-v2.schema.json", "implementation-selection-v2.schema.json",
                         "vscore-materialization.schema.json", "closure-plan.schema.json", "closure-manifest.schema.json",
-                        "mechanical-result.schema.json", "run-report-v2.schema.json", *VSCORE_SCHEMAS]
+                        "mechanical-result.schema.json", "run-report-v2.schema.json",
+                        "review-ballot-v2.schema.json", "review-counterexample-proposal.schema.json",
+                        "review-counterexample-receipt.schema.json", *VSCORE_SCHEMAS]
 
 # One vocabulary for declared trust, so reports list each trusted component once.
 TRUST = {
@@ -196,9 +198,20 @@ VERIFIERS: dict[str, dict] = {
     },
     "verislop.review-consensus": {
         "milestones": [],
-        "sources": ["review.py", "review_projection.py", "backends/registry.py", "backends/vscore_release.py"],
-        "schemas": ["review-ballot.schema.json", "review-config.schema.json", "consensus-certificate.schema.json"],
+        "sources": ["review.py", "review_counterexamples.py", "review_projection.py",
+                    "testing.py", "segment.py", "targets/python_harness.py", *VSCORE_BACKEND],
+        "schemas": ["review-ballot.schema.json", "review-ballot-v2.schema.json", "review-config.schema.json",
+                    "review-counterexample-proposal.schema.json", "review-counterexample-receipt.schema.json",
+                    "consensus-certificate.schema.json", *VSCORE_BACKEND_SCHEMAS],
         "trusted": [TRUST["consensus"]],
+    },
+    "verislop.review-counterexample": {
+        "milestones": [],
+        "sources": ["review_counterexamples.py", "testing.py", "materialize.py", "segment.py", "targets/python_harness.py",
+                    "backends/registry.py", "backends/vscore_closure.py", *VSCORE_CHECKER],
+        "schemas": ["review-counterexample-proposal.schema.json", "review-counterexample-receipt.schema.json",
+                    "implementation-bindings.schema.json", *VSCORE_BACKEND_SCHEMAS],
+        "trusted": [TRUST[k] for k in ("oracle", "adapters", "cpython", "sandbox", "orchestration", "os")],
     },
 }
 

@@ -34,6 +34,8 @@ A deterministic structural binding uniquely connects the obligation, checked for
 
 The registered target-artifact campaign actually ran and satisfied its frozen pass criteria. Evidence identifies the artifact, contract, harness, oracle, seeds/fixtures, effective case counts, results, and limitations. Empty, all-discarded, skipped, or reference-only campaigns cannot satisfy a required target campaign. A failed campaign records `TESTED: FAIL`; it does not mean the obligation reached a successful TESTED milestone.
 
+The [TESTED campaign specification](tested-campaigns.md) supplies a proposed strict `0.2` acceptance rule and finite Lean design model, with explicit compatibility notes for the current Python campaign. Its proposed VSCore backend remains unsupported until implemented and registered.
+
 ### END_TO_END_VERIFIED
 
 The exact accepted obligation is connected by checked semantic correspondence to the requested implementation endpoint, and all required assumptions, semantic adapters, build/provenance checks, and claim-specific preservation obligations are accounted for. Each included logical claim is proved or discharged by a registered sound certificate checker. No required semantic edge is merely an LLM judgment, a name match, a test, or an unproved translation assumption, even if that missing edge is disclosed as trusted. Residual logic/checker/environment trust remains separately declared.

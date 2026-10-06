@@ -244,9 +244,17 @@ class VSCoreReviewIntegration(unittest.TestCase):
         cls.tmp = TempDir()
         cls.verdict = "ACCEPT"
         def handler(system, user, model):
-            packet = json.loads(user.split("\n", 1)[1].split("\nLOWER-TIER", 1)[0])
+            packet, _ = json.JSONDecoder().raw_decode(user.split("\n", 1)[1].lstrip())
+            claim_id = packet["counterexample_policy"]["mechanical_claim_ids"][0]
+            search = {"method": "bounded mechanical probes", "attempted_cases": 1,
+                      "probes": [{"kind": "mechanical_failure", "claim_id": claim_id}],
+                      "conclusion": "NO_COUNTEREXAMPLE_FOUND"}
+            findings = [] if cls.verdict == "ACCEPT" else [{
+                "id": "F1", "severity": "blocking", "obligations": packet["scope"],
+                "statement": "Large natural inputs might fail; no concrete counterexample was constructed."}]
             return json.dumps({"verdict": cls.verdict, "reviewed_obligations": packet["scope"],
-                               "findings": [], "limitations": ["mock review"], "rationale": "fixture"})
+                               "findings": findings, "search": search,
+                               "limitations": ["mock review"], "rationale": "fixture"})
         cls.mock = MockLLM(handler)
         cls.config, cls.env = mock_config(cls.tmp.path, cls.mock.port, [unanimous("release", "r", 1)], checkpoints=["release"])
         cls.base = cls.tmp.path / "base"
@@ -280,6 +288,14 @@ class VSCoreReviewIntegration(unittest.TestCase):
         self.assertIn("REVIEW_NOT_RUN", codes(blocked))
         code, accepted, _ = self.cli("review", "--checkpoint", "release", "--config", str(self.config))
         self.assertEqual(code, 0, accepted)
+        ballot_paths = list((self.package / "reviews").glob("rc-*/ballots/*.json"))
+        self.assertEqual(len(ballot_paths), 1)
+        ballot = canonical.load_file(ballot_paths[0])
+        self.assertEqual(ballot["schema_version"], "0.2")
+        self.assertEqual(ballot["search"]["method"], "bounded mechanical probes")
+        self.assertEqual(ballot["search"]["attempted_cases"], 1)
+        self.assertEqual(ballot["search"]["conclusion"], "NO_COUNTEREXAMPLE_FOUND")
+        self.assertEqual(len(ballot["counterexample_receipts"]), 1)
         packet = review.build_packet(Package(self.package, resolve_root=False), "release")
         self.assertIn("normative Lean", packet["assurance_boundary"])
         self.assertTrue(packet["required_mechanical_claims"])
@@ -291,15 +307,22 @@ class VSCoreReviewIntegration(unittest.TestCase):
         self.assertEqual(report["review_projection"]["hash"], reused["projection_hash"])
         self.assertEqual(report["review_target"], accepted["summary"]["target_root"])
 
-    def test_review_rejection_preserves_mechanical_e2e_and_prevents_python_repair(self):
+    def test_unsubstantiated_rejection_is_incomplete_preserves_e2e_and_prevents_python_repair(self):
         type(self).verdict = "REJECT"
         conf = canonical.load_file(self.config)
         conf["review"]["budgets"]["max_repair_rounds"] = 2
         path = self.tmp.path / "repair-policy.json"
         path.write_bytes(canonical.dumps(conf))
         with patch("verislop.review._repair", side_effect=AssertionError("frozen VSCore entered Python repair")):
-            code, rejected, _ = self.cli("review", "--checkpoint", "release", "--config", str(path))
-        self.assertEqual(code, 2, rejected)
+            code, rejected, output = self.cli("review", "--checkpoint", "release", "--config", str(path))
+        self.assertEqual(code, 2, (rejected, output))
+        self.assertIn("REVIEW_INCOMPLETE", codes(rejected))
+        self.assertNotIn("REVIEW_REJECTED", codes(rejected))
+        certificate = canonical.load_file(next((self.package / "reviews").glob("rc-*/consensus-certificate.json")))
+        self.assertEqual(certificate["final"], "INCOMPLETE")
+        self.assertEqual(certificate["tiers"][0]["result"], "INCOMPLETE")
+        self.assertEqual(certificate["tiers"][0]["tally"]["rejects"], 0)
+        self.assertEqual(certificate["tiers"][0]["ballots"], [])
         code, blocked, _ = self.cli("verify", "--config", str(path))
         self.assertEqual(code, 2, blocked)
         self.assertEqual(blocked["summary"]["mechanical_status"], "VERIFIED")

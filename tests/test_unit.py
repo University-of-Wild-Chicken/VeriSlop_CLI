@@ -193,7 +193,10 @@ class ConsensusTests(unittest.TestCase):
         self.assertIsNone(parse_ballot({"verdict": "ACCEPT", "reviewed_obligations": ["O1"]}, scope)[0])  # subset cannot accept
         self.assertIsNone(parse_ballot({"verdict": "ACCEPT", "reviewed_obligations": scope,
                                         "findings": [{"severity": "blocking", "statement": "x"}]}, scope)[0])
-        ok, err = parse_ballot({"verdict": "ACCEPT", "reviewed_obligations": scope, "findings": []}, scope)
+        ok, err = parse_ballot({"verdict": "ACCEPT", "reviewed_obligations": scope, "findings": [],
+            "search": {"method": "probe the recorded interpretation claim", "attempted_cases": 1,
+                       "probes": [{"kind": "mechanical_failure", "claim_id": "INTERPRETATION:request"}],
+                       "conclusion": "NO_COUNTEREXAMPLE_FOUND"}}, scope)
         self.assertIsNotNone(ok, err)
 
 

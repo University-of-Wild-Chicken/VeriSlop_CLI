@@ -2,7 +2,8 @@
 
     prompt -> classify/interpret -> draft + ledger -> formalize + statement check -> freeze
     -> prove (untrusted) -> accept (isolated replay + audits) -> export (accepted IR)
-    -> [review formal_contract] -> generate (tier) -> link -> test -> [review release]
+    -> [review formal_contract] -> generate (tier) -> link -> [review implementation]
+    -> test -> [review release] (with interpretation review immediately after interpretation)
     -> verify (two clean builds, provenance) -> report.json
 
 Each stage proceeds only when the artifact it needs exists and passed its own gate; independent
@@ -26,7 +27,8 @@ from .package import Package, find_runs_dir, new_run_id
 from .stage import StageResult
 from .bridges.vscore_checker import EdgeFailure
 
-STAGES = ("interpret", "formalize", "prove", "accept", "export", "review:formal_contract", "bridge:prepare", "generate", "link", "test",
+STAGES = ("interpret", "review:interpretation", "formalize", "prove", "accept", "export", "review:formal_contract",
+          "bridge:prepare", "generate", "link", "review:implementation", "test",
           "review:release", "verify")
 
 

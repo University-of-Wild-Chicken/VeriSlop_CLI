@@ -63,16 +63,45 @@ PROPOSAL = {
 }
 
 
-def packet_scope(user: str) -> list[str]:
+def review_packet(user: str) -> dict:
     m = re.search(r"review_target_root [^)]*\):\n(\{.*?\})\n", user, re.S)
-    return json.loads(m.group(1))["scope"] if m else ["*"]
+    if m is None:
+        raise AssertionError("review mock did not receive a bound packet")
+    return json.loads(m.group(1))
+
+
+def packet_scope(user: str) -> list[str]:
+    return review_packet(user)["scope"]
+
+
+def accepted_review(user: str, scope: list[str], rationale: str = "bounded fixture search completed") -> dict:
+    """Construct a concrete probe; the supervisor decides whether it finds a failure."""
+    claims = review_packet(user)["counterexample_policy"]["mechanical_claim_ids"]
+    claim = "INTERPRETATION:request" if "INTERPRETATION:request" in claims else claims[0]
+    probe = {"kind": "mechanical_failure", "claim_id": claim}
+    return {"verdict": "ACCEPT", "reviewed_obligations": scope, "findings": [], "limitations": [],
+            "rationale": rationale,
+            "search": {"method": "attempt to reproduce a failed required mechanical claim", "attempted_cases": 1,
+                       "probes": [probe], "conclusion": "NO_COUNTEREXAMPLE_FOUND"}}
+
+
+def rejected_boundary_review(scope: list[str]) -> dict:
+    probe = {"kind": "target_case", "obligation_id": "E1", "assignment": [{"int": "0"}, {"int": "0"}]}
+    return {"verdict": "REJECT", "reviewed_obligations": scope, "limitations": [],
+            "rationale": "the equal-input boundary produces a success instead of the required error",
+            "search": {"method": "execute the limit=input=0 boundary", "attempted_cases": 1,
+                       "probes": [probe], "conclusion": "COUNTEREXAMPLE_CANDIDATE"},
+            "findings": [{"id": "F1", "severity": "blocking", "obligations": ["E1"],
+                          "statement": "limit=input=0 returns ok(1), contradicting error iff input=limit",
+                          "location": "bounded_increment.py:increment", "expected": "limitReached",
+                          "counterexample": probe}]}
 
 
 class Behaviour:
     """Mutable mock behaviour shared with the server thread."""
 
     def __init__(self) -> None:
-        self.review = lambda slot_user, scope: {"verdict": "ACCEPT", "reviewed_obligations": scope, "findings": [], "limitations": [], "rationale": "ok"}
+        self.review = accepted_review
         self.calls: list[str] = []
 
     def __call__(self, system: str, user: str, model: str) -> str:
@@ -114,7 +143,7 @@ class ProviderReviewTests(unittest.TestCase):
         cls.tmp.cleanup()
 
     def setUp(self) -> None:
-        self.behaviour.review = lambda user, scope: {"verdict": "ACCEPT", "reviewed_obligations": scope, "findings": [], "limitations": [], "rationale": "ok"}
+        self.behaviour.review = accepted_review
         self.behaviour.calls.clear()
         self.mock.requests.clear()
 
@@ -202,17 +231,23 @@ class ProviderReviewTests(unittest.TestCase):
         self.assertEqual(self.mock.requests, [])
 
     def test_full_run_with_agents_for_every_role_and_review_gates(self):
+        conf = canonical.load_file(self.config)
+        conf["review"]["checkpoints"] = ["interpretation", "formal_contract", "implementation", "release"]
+        every_checkpoint = self.tmp.path / "every-checkpoint.json"
+        every_checkpoint.write_bytes(canonical.dumps(conf))
         code, res, err = self.cli("run", "--prompt-file", str(EX / "request.txt"), "--request-ref", "examples/request.txt",
-                                  "--tier", "0", "--target", "python", "--config", str(self.config),
+                                  "--tier", "0", "--target", "python", "--config", str(every_checkpoint),
                                   "--runs-dir", str(self.tmp.path / "agent-runs"), "--run-id", "run-agents", "--non-interactive")
         self.assertEqual(code, 0, (res, err[-2000:]))
         for role in ("interpreter", "formalizer", "implementer", "review"):
             self.assertIn(role, self.behaviour.calls)
         rep = canonical.load_file(self.tmp.path / "agent-runs" / "run-agents" / "report.json")
         self.assertEqual(rep["terminal_status"], "VERIFIED")
-        self.assertEqual(rep["review"]["checkpoints"], {"formal_contract": "REVIEW_ACCEPTED", "release": "REVIEW_ACCEPTED"})
+        self.assertEqual(rep["review"]["checkpoints"], {cp: "REVIEW_ACCEPTED" for cp in conf["review"]["checkpoints"]})
         stages = [h["stage"] for h in canonical.load_file(self.tmp.path / "agent-runs" / "run-agents" / "package.json")["stage_history"]]
+        self.assertLess(stages.index("review:interpretation"), stages.index("formalize"))
         self.assertLess(stages.index("review:formal_contract"), stages.index("generate"))  # contract reviewed before generation
+        self.assertLess(stages.index("review:implementation"), stages.index("test"))
 
     # -- review -------------------------------------------------------------------------------------------
 
@@ -252,12 +287,13 @@ class ProviderReviewTests(unittest.TestCase):
         self.assertEqual(info["checkpoints"]["release"], "STALE")
 
     def test_lower_tier_rejection_prevents_escalation(self):
-        def review(user, scope):
-            return {"verdict": "REJECT", "reviewed_obligations": scope, "rationale": "E1 boundary unclear",
-                    "findings": [{"id": "F1", "severity": "major", "obligations": ["E1"], "statement": "boundary unclear"}]}
-        self.behaviour.review = review
-        pkg = copy_pkg(self.base, self.tmp.path / "rev-reject")
-        code, res, _ = self.cli("review", "--package", str(pkg), "--config", str(self.config), "--checkpoint", "formal_contract")
+        self.behaviour.review = lambda user, scope: rejected_boundary_review(scope)
+        bad = impl_variant(self.tmp.path, "rev-reject-impl",
+                           "def increment(limit, input):\n    return ('ok', input + 1) if input <= limit else ('error', 'limitReached')\n")
+        pkg = self.tmp.path / "rev-reject"
+        built = build(pkg, "link", impl=bad)
+        self.assertEqual(built["link"][0], 0, built)
+        code, res, _ = self.cli("review", "--package", str(pkg), "--config", str(self.config), "--checkpoint", "release")
         self.assertEqual(code, 2)
         self.assertIn("REVIEW_REJECTED", codes(res))
         cert = canonical.load_file(next((pkg / "reviews").glob("*/consensus-certificate.json")))
@@ -284,11 +320,14 @@ class ProviderReviewTests(unittest.TestCase):
     def test_late_rejection_triggers_repair_and_restart_at_first_tier(self):
         def review(user, scope):
             if "v2 repaired" in user:
-                return {"verdict": "ACCEPT", "reviewed_obligations": scope, "findings": [], "rationale": "fixed"}
-            return {"verdict": "REJECT", "reviewed_obligations": scope, "rationale": "needs a docstring",
-                    "findings": [{"id": "F1", "severity": "minor", "statement": "add documentation"}]}
+                return accepted_review(user, scope, "the concrete boundary counterexample is repaired")
+            return rejected_boundary_review(scope)
         self.behaviour.review = review
-        pkg = copy_pkg(self.base, self.tmp.path / "rev-repair")
+        bad = impl_variant(self.tmp.path, "rev-repair-impl",
+                           "def increment(limit, input):\n    return ('ok', input + 1) if input <= limit else ('error', 'limitReached')\n")
+        pkg = self.tmp.path / "rev-repair"
+        built = build(pkg, "link", impl=bad)
+        self.assertEqual(built["link"][0], 0, built)
         code, res, _ = self.cli("review", "--package", str(pkg), "--config", str(self.config_repair), "--checkpoint", "release")
         self.assertEqual(code, 0, res)
         self.assertEqual(res["summary"]["repair_rounds"], 1)
