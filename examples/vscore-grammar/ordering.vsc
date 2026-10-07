@@ -1,0 +1,27 @@
+// Regression examples for future parser/elaborator/evaluator implementations.
+program "vscore/0.2" profile "pure-data/0.2";
+
+fn subtract(a: Nat, b: Nat) -> Nat { a - b }
+
+entry call_order() -> Nat { call subtract(5, 2) }
+entry associativity() -> Nat { 5 - 3 - 1 }
+entry list_order() -> Nat {
+  List.fold(list[Nat](1, 2), 0; acc, item => acc * 10 + item)
+}
+entry nat_order() -> Nat {
+  Nat.fold(3, 0; index, acc => acc * 10 + index)
+}
+entry fold_scope() -> Nat {
+  List.fold(list[Nat](1, 2), 0; acc, item => let y = acc; item + y)
+}
+entry shadowing(x: Nat, y: Nat) -> Nat {
+  let x = y + 1; x + y
+}
+entry result_payload(x: Nat) -> Nat {
+  match ok[Nat](5) {
+    ok(value) => value + x;
+    error(problem) => problem + x;
+  }
+}
+entry exact_natural() -> Nat { 18446744073709551617 }
+entry @"legacy.id-with-hyphen"(n: Nat) -> Nat { n }

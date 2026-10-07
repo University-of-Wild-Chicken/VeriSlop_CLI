@@ -1,0 +1,49 @@
+// Proposed authoring syntax. The current CLI does not accept vscore/0.2.
+program "vscore/0.2" profile "pure-data/0.2";
+
+record Pair {
+  left: Nat;
+  right: Nat;
+}
+
+variant Lookup {
+  absent;
+  present(Nat);
+}
+
+fn subtract(a: Nat, b: Nat) -> Nat {
+  a - b
+}
+
+fn difference(p: Record(Pair)) -> Nat {
+  call subtract(p.left, p.right)
+}
+
+entry pair_difference() -> Nat {
+  call difference(record Pair { left = 5, right = 2 })
+}
+
+entry sum(xs: List(Nat)) -> Nat {
+  List.fold(xs, 0; acc, item => acc + item)
+}
+
+entry lookup_or_zero(x: Variant(Lookup)) -> Nat {
+  match x {
+    variant Lookup.absent() => 0;
+    variant Lookup.present(value) => value;
+  }
+}
+
+entry option_or_zero(x: Option(Nat)) -> Nat {
+  match x {
+    none => 0;
+    some(value) => value;
+  }
+}
+
+entry head(xs: List(Nat)) -> Option(Nat) {
+  match xs {
+    nil => none[Nat];
+    cons(value, tail) => some(value);
+  }
+}

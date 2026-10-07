@@ -148,6 +148,8 @@ It materializes and structurally links the selected source before semantic accep
 
 Reports separate `mechanical_status` from `release_status`. Configured review may block release while the current mechanical proof remains verified. A release vote can survive a fresh successful `verify` only after both exact execution inventories validate and their registered deterministic projections match. Read-only VSCore report/status inspection labels recorded executions as historical; run `verify` for a fresh gate. See [the VSCore notes](docs/implementation.md#tier-2-vscore-01-restricted-source), [the closure requirements](docs/tier-2-closure-milestone.md), and [the independent subtraction example](examples/vscore-subtraction/README.md).
 
+The [generalized VSCore grammar proposal](docs/vscore-generalized-grammar.md) specifies a possible `vscore/0.2` pure language with records, variants, options, lists, acyclic helper calls and finite folds. It includes [surface EBNF](grammar/vscore-0.2.ebnf), binding/evaluation rules and concrete design checks. These are design artifacts; the registered CLI capability remains `vscore/0.1`.
+
 Accepted runs must match the current verifier hashes. Regenerate a run after updating verifier code; preparation rejects stale certificates and evidence.
 
 Lean 4.34.1 `module` files are supported, including public sections and private declarations. Acceptance stores all compiled module parts together and replays the complete private declaration environment, so hidden axioms or proof dependencies cannot disappear at the export boundary. Imports must still come from the pinned toolchain; Mathlib and other third-party libraries remain unsupported.
