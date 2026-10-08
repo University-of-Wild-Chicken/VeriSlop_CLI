@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_controller/g03_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:9b209a024d71e7bdf8ceeff95c91ed9d3c75aceba19fcad9e82ed16c1f0a646a",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:b62a02033a7b38626b7ec31f63119c6a7b3531e5d5d45dc6030c1298836cede9",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    n = data[\\\"n\\\"]\\n    source = data[\\\"source\\\"]\\n    edges = data[\\\"edges\\\"]\\n\\n    distances = [None] * n\\n    distances[source] = 0\\n\\n    for _ in range(n - 1):\\n        changed = False\\n        for u, v, cost in edges:\\n            if distances[u] is not None:\\n                candidate = distances[u] + cost\\n                if distances[v] is None or candidate < distances[v]:\\n                    distances[v] = candidate\\n                    changed = True\\n        if not changed:\\n            break\\n\\n    affected = [False] * n\\n    adjacency = [[] for _ in range(n)]\\n    for u, v, cost in edges:\\n        adjacency[u].append(v)\\n        if distances[u] is not None and (\\n            distances[v] is None or distances[u] + cost < distances[v]\\n        ):\\n            affected[v] = True\\n\\n    queue = [v for v, is_affected in enumerate(affected) if is_affected]\\n    head = 0\\n    while head < len(queue):\\n        u = queue[head]\\n        head += 1\\n        for v in adjacency[u]:\\n            if not affected[v]:\\n                affected[v] = True\\n                queue.append(v)\\n\\n    return [\\\"-inf\\\" if affected[v] else distances[v] for v in range(n)]\"}}",
+  "transport": "collaboration"
+}

@@ -1,0 +1,1682 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "A1": {
+      "acceptance_criteria": [
+        "Splitting 'a\\n' yields ['a', '']",
+        "Splitting 'a' yields ['a']"
+      ],
+      "dependencies": [],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by implementation and discharged at line splitting logic in solve",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-2f2427f619407184eab2a2cd9d557343"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: UNSUPPORTED_SEMANTICS",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by implementation and discharged at line splitting logic in solve",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-bdc6ffb271e8e8f72098ed50589bd992"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "line splitting"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by implementation and discharged at line splitting logic in solve",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by implementation and discharged at line splitting logic in solve",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "line splitting"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 284,
+          "interpretation": "Line splitting rule",
+          "origin": "explicit",
+          "start_byte": 244
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input text is split into lines using LF (\\n) as the delimiter, preserving a final empty line if the text ends with LF."
+    },
+    "D1": {
+      "acceptance_criteria": [
+        "solution.py exists",
+        "solve is defined in solution.py",
+        "solve is pure (no side effects, no external I/O)"
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-bd21a3f62c873139df92cbdb0383d822"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solution.py"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "solution.py"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 119,
+          "interpretation": "Module and function definition",
+          "origin": "explicit",
+          "start_byte": 64
+        },
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 1103,
+          "interpretation": "Reiteration of module and function definition",
+          "origin": "explicit",
+          "start_byte": 1027
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The solution is a Python module solution.py containing a pure function solve(data)."
+    },
+    "D2": {
+      "acceptance_criteria": [
+        "data is a dict",
+        "data contains key 'text'",
+        "data['text'] is a string"
+      ],
+      "dependencies": [],
+      "id": "D2",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-0f6ff6218dda37c368c90fbf5f43b094"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input structure"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input structure"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 243,
+          "interpretation": "Input schema",
+          "origin": "explicit",
+          "start_byte": 223
+        },
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 1225,
+          "interpretation": "JSON compatibility",
+          "origin": "explicit",
+          "start_byte": 1152
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input to solve is a JSON-compatible Python value representing an object with a single key 'text' whose value is a string."
+    },
+    "D3": {
+      "acceptance_criteria": [
+        "Return value is a list",
+        "Each element is a dict with keys 'info', 'start', 'end', 'text', 'closed'"
+      ],
+      "dependencies": [],
+      "id": "D3",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-cd3c91f7a7a269cf3dbc079b9fb7ef8e"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output structure"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "output structure"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 781,
+          "interpretation": "Output schema",
+          "origin": "explicit",
+          "start_byte": 701
+        },
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 1225,
+          "interpretation": "JSON compatibility",
+          "origin": "explicit",
+          "start_byte": 1152
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The output of solve is a JSON-serializable list of objects, each with keys 'info', 'start', 'end', 'text', and 'closed'."
+    },
+    "O1": {
+      "acceptance_criteria": [
+        "```py is a valid backtick opener",
+        "~~~x is a valid tilde opener",
+        "    ``` is not an opener (4 spaces)",
+        "`` is not an opener (only 2 backticks)"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-05e400bd32ec5c36ee7800bdb3c3456e"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "opener detection"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "opener detection"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 421,
+          "interpretation": "Opener definition",
+          "origin": "explicit",
+          "start_byte": 285
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "A line outside a fence is an opener if it starts with 0..3 ASCII spaces, followed by at least three identical backticks or tildes, followed by arbitrary info text."
+    },
+    "O10": {
+      "acceptance_criteria": [
+        "Body lines ['a', 'b'] yield 'a\\nb'",
+        "Empty body yields ''"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O10",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-265126929f173b774dae62d3e7d3dad1"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "text field"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "text field"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 836,
+          "interpretation": "Text field definition",
+          "origin": "explicit",
+          "start_byte": 782
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'text' field is the concatenation of body lines (lines between opener and closer, or opener and EOF) joined by LF, without adding a trailing newline."
+    },
+    "O11": {
+      "acceptance_criteria": [
+        "Closed block has closed=true",
+        "Unclosed block has closed=false"
+      ],
+      "dependencies": [
+        {
+          "id": "O5",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O11",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-825eb949ec4c7cfbeb80f013a6368279"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "closed field"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "closed field"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 906,
+          "interpretation": "Closed field definition",
+          "origin": "explicit",
+          "start_byte": 874
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'closed' field is true if a closer was found, false if the block extends to EOF without a closer."
+    },
+    "O12": {
+      "acceptance_criteria": [
+        "    ``` is not an opener",
+        "    ``` inside a fence is not a closer"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "refines"
+        },
+        {
+          "id": "O5",
+          "relation": "refines"
+        }
+      ],
+      "id": "O12",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-6dcb920f6941357d36788531f1a2adf0"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "indentation handling"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "indentation handling"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 952,
+          "interpretation": "Indentation exclusion",
+          "origin": "explicit",
+          "start_byte": 907
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Lines with 4 or more leading spaces are not considered fence openers or closers; they are ordinary text."
+    },
+    "O13": {
+      "acceptance_criteria": [
+        "Input '~~~x\\na\\n' yields text 'a\\n' for the unclosed block"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O13",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-59e7e7d2023c4a59317f28cb9e79ac98"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "final line handling"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "final line handling"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 1025,
+          "interpretation": "Final line inclusion",
+          "origin": "explicit",
+          "start_byte": 953
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If the input text ends with LF, the resulting final empty line is included in the split and belongs to an unclosed block if the block is still open."
+    },
+    "O14": {
+      "acceptance_criteria": [
+        "Calling solve(data) twice yields identical results"
+      ],
+      "dependencies": [],
+      "id": "O14",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-4c8a50295bcc1524964a630ae9ce5041"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "determinism"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "determinism"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 1103,
+          "interpretation": "Determinism requirement",
+          "origin": "explicit",
+          "start_byte": 1027
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function solve is deterministic: the same input always produces the same output."
+    },
+    "O15": {
+      "acceptance_criteria": [
+        "No imports from non-standard libraries",
+        "No file, network, or subprocess I/O"
+      ],
+      "dependencies": [],
+      "id": "O15",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-a4ff5cc4f24f48bd8d1ed3aaa6e81aee"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "library constraints"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "library constraints"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 222,
+          "interpretation": "Standard library constraint",
+          "origin": "explicit",
+          "start_byte": 172
+        },
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 1151,
+          "interpretation": "Standard library constraint",
+          "origin": "explicit",
+          "start_byte": 1104
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function uses only the Python standard library and performs no external I/O."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "```a`b is not a valid backtick opener",
+        "```py is a valid backtick opener"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "refines"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-dfb7a8bcd6f9b687313dcfbfd7aa7770"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "backtick opener validation"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "backtick opener validation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 481,
+          "interpretation": "Backtick info constraint",
+          "origin": "explicit",
+          "start_byte": 422
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "A backtick opener is invalid if the info text contains any backtick character."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "~~~a~~~b is a valid tilde opener"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "refines"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-f94fb4d5aa486c1fed890ac465aa919a"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "tilde opener validation"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "tilde opener validation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 506,
+          "interpretation": "Tilde info constraint",
+          "origin": "explicit",
+          "start_byte": 482
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "A tilde opener's info text is unrestricted (may contain tildes or other characters)."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "Opener '```  py  ' yields info 'py'",
+        "Opener '~~~x' yields info 'x'"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-cbfee79cb744bd69525d0131734e710d"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "info extraction"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "info extraction"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 542,
+          "interpretation": "Info trimming rule",
+          "origin": "explicit",
+          "start_byte": 507
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'info' field in the output is the info text from the opener line, trimmed using Python str.strip()."
+    },
+    "O5": {
+      "acceptance_criteria": [
+        "If opener is ``` (3 backticks), closer must be at least 3 backticks",
+        "If opener is ~~~ (3 tildes), closer must be at least 3 tildes",
+        "Closer cannot have info text"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-c88361cd7de68c6075be981ff7ad4eab"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "closer detection"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "closer detection"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 649,
+          "interpretation": "Closer definition",
+          "origin": "explicit",
+          "start_byte": 543
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Inside a fence, a closer is a line with 0..3 spaces, followed by the same marker (backtick or tilde) repeated at least as many times as the opener, followed only by spaces or tabs."
+    },
+    "O6": {
+      "acceptance_criteria": [
+        "A ``` line inside a ~~~ fence is content, not a closer or new opener"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-020dc9cb51afa35ab1df6cbd924449df"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "nesting behavior"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "nesting behavior"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 700,
+          "interpretation": "No nesting",
+          "origin": "explicit",
+          "start_byte": 650
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Fences do not nest; any fence-like syntax inside an open fence is treated as ordinary content."
+    },
+    "O7": {
+      "acceptance_criteria": [
+        "Fences are listed in the order their openers appear"
+      ],
+      "dependencies": [
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-1d455b68a5546c7c1fc49a2a875e1738"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output ordering"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output ordering"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 781,
+          "interpretation": "Ordering requirement",
+          "origin": "explicit",
+          "start_byte": 701
+        },
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 1291,
+          "interpretation": "Ordering requirement",
+          "origin": "explicit",
+          "start_byte": 1226
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The output list contains one object per encountered fence, in the order they appear in the input."
+    },
+    "O8": {
+      "acceptance_criteria": [
+        "First line is start=0"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O8",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-7c3a1d960e5a7802cc5b7b15198a7cc0"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "start field"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "start field"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 781,
+          "interpretation": "Start field definition",
+          "origin": "explicit",
+          "start_byte": 701
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'start' field is the zero-based line number of the opener line."
+    },
+    "O9": {
+      "acceptance_criteria": [
+        "Closed block has integer end",
+        "Unclosed block has null end"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O9",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-f8b7772ef8396324707e0c47575538bc"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "end field"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "end field"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f6b006ee5f4cf39441ba336d96fe28eec4fb1de71c57d069b52bf43e9e417a05",
+          "document_ref": "prompt.txt",
+          "end_byte": 906,
+          "interpretation": "End field definition",
+          "origin": "explicit",
+          "start_byte": 838
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'end' field is the zero-based line number of the closer line, or null if the block is unclosed at EOF."
+    }
+  },
+  "roots": {
+    "contract_candidate_root": "sha256:1d7f3ddf18362eec38518fbe09c0aedf1bfc6b8769cd3a277beec44935d1e231",
+    "interpretation_root": "sha256:de28c5219d04db90118c9606075439b265306c5df198736b15ad1aff9e2dc7ae"
+  },
+  "schema_version": "0.1"
+}

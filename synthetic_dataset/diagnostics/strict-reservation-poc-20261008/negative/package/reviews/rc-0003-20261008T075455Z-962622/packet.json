@@ -1,0 +1,1015 @@
+{
+  "acceptance": {
+    "gate": "accepted_and_proved",
+    "obligations": {
+      "D1": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "I1": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "N1": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O1": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O2": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O3": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O4": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      }
+    }
+  },
+  "assurance_boundary": "Lean proofs establish the reference model only; Tier 0/1 implementation evidence is testing or runtime detection, never END_TO_END_VERIFIED.",
+  "bindings": [
+    {
+      "binding_id": "B-reserve",
+      "formal_declaration": {
+        "args": [
+          "Nat",
+          "Nat"
+        ],
+        "decl_hash": "sha256:27f2d4df9b8615d484875dc3336314ff7930db820193e27d922943c53dc7390f",
+        "lean_decl": "VeriSlop.Reserve.reserve",
+        "result": {
+          "result": {
+            "error": {
+              "enum": "ReserveError"
+            },
+            "ok": "Nat"
+          }
+        }
+      },
+      "implementation_object": {
+        "file": "reserve.py",
+        "file_hash": "sha256:43c2e87ca3d5b3402f33a437df41a8ca5915c536ab805e8684d4be34d135bf5b",
+        "lineno": 1,
+        "qualname": "reserve",
+        "source_hash": "sha256:43c2e87ca3d5b3402f33a437df41a8ca5915c536ab805e8684d4be34d135bf5b"
+      },
+      "obligations": [
+        "D1",
+        "I1",
+        "O1",
+        "O2",
+        "O3",
+        "O4"
+      ],
+      "serialization_profile": "python-v0_1",
+      "symbol": "reserve"
+    }
+  ],
+  "checkpoint": "release",
+  "counterexample_policy": {
+    "assignment_wire_format": {
+      "Bool": {
+        "example": {
+          "bool": true
+        },
+        "payload": "JSON boolean",
+        "tag": "bool"
+      },
+      "Enum": {
+        "payload": "registered constructor ID from the accepted enumeration",
+        "tag": "str"
+      },
+      "Nat": {
+        "example": {
+          "int": "3"
+        },
+        "payload": "string matching 0|[1-9][0-9]*",
+        "tag": "int"
+      },
+      "Result": {
+        "error_example": {
+          "tuple": [
+            {
+              "str": "error"
+            },
+            {
+              "none": null
+            }
+          ]
+        },
+        "ok_example": {
+          "tuple": [
+            {
+              "str": "ok"
+            },
+            {
+              "int": "3"
+            }
+          ]
+        },
+        "payload": "two values: {str:ok} + tagged ok payload, or {str:error} + tagged error payload",
+        "tag": "tuple"
+      },
+      "Unit": {
+        "example": {
+          "none": null
+        },
+        "payload": "JSON null",
+        "tag": "none"
+      },
+      "examples_are": "syntax illustrations, not constructed reviewer probes or replay evidence",
+      "forbidden_examples": [
+        "left=0, right=0",
+        [
+          0,
+          0
+        ],
+        {
+          "left": 0,
+          "right": 0
+        }
+      ],
+      "limits": {
+        "max_assignment_values": 32,
+        "max_decimal_digits": 1024,
+        "max_string_chars": 1024,
+        "max_tag_depth": 32
+      },
+      "rule": "JSON array, exactly one strict tagged value per accepted leading universal binder, outermost first"
+    },
+    "ballot_protocol": {
+      "max_attempts": 3,
+      "rule": "bounded correction of malformed JSON or invalid probe construction; same packet and reviewer slot"
+    },
+    "format": "verislop.counterexample-policy/0.3",
+    "limitations": [
+      "target_case supports only the admitted pure Python syntax and exact decidable residuals",
+      "imports, I/O, reflection, nested functions, defaults, annotations and decorators are unsupported"
+    ],
+    "max_probes": 8,
+    "mechanical_claim_ids": [
+      "INTERPRETATION:request",
+      "CLOSURE:clean-builds",
+      "CLOSURE:determinism",
+      "CLOSURE:endpoint",
+      "CLOSURE:provenance",
+      "FORMALIZED:D1@1",
+      "FORMALIZED:I1@1",
+      "FORMALIZED:N1@1",
+      "FORMALIZED:O1@1",
+      "FORMALIZED:O2@1",
+      "FORMALIZED:O3@1",
+      "FORMALIZED:O4@1",
+      "IMPLEMENTED:D1@1",
+      "IMPLEMENTED:I1@1",
+      "IMPLEMENTED:O1@1",
+      "IMPLEMENTED:O2@1",
+      "IMPLEMENTED:O3@1",
+      "IMPLEMENTED:O4@1",
+      "INTERPRETED:D1@1",
+      "INTERPRETED:I1@1",
+      "INTERPRETED:N1@1",
+      "INTERPRETED:O1@1",
+      "INTERPRETED:O2@1",
+      "INTERPRETED:O3@1",
+      "INTERPRETED:O4@1",
+      "LINKED:D1@1",
+      "LINKED:I1@1",
+      "LINKED:O1@1",
+      "LINKED:O2@1",
+      "LINKED:O3@1",
+      "LINKED:O4@1",
+      "PROVED:I1@1",
+      "PROVED:O1@1",
+      "PROVED:O2@1",
+      "PROVED:O3@1",
+      "PROVED:O4@1",
+      "TESTED:I1@1",
+      "TESTED:O1@1",
+      "TESTED:O2@1",
+      "TESTED:O3@1",
+      "TESTED:O4@1",
+      "TYPECHECKED:D1@1",
+      "TYPECHECKED:I1@1",
+      "TYPECHECKED:N1@1",
+      "TYPECHECKED:O1@1",
+      "TYPECHECKED:O2@1",
+      "TYPECHECKED:O3@1",
+      "TYPECHECKED:O4@1"
+    ],
+    "proposals": {
+      "mechanical_failure": {
+        "claim_id": "INTERPRETATION:request",
+        "kind": "mechanical_failure"
+      },
+      "target_case": {
+        "assignment": [
+          {
+            "int": "0"
+          }
+        ],
+        "kind": "target_case",
+        "obligation_id": "required guarantee in scope"
+      }
+    },
+    "replay_limits": {
+      "max_arithmetic_bits": 4096,
+      "max_numeral_digits": 1024,
+      "max_target_invocations": 32,
+      "seconds_per_probe": 5
+    },
+    "scope": "concrete probes and independently replayed violations; no reliability speculation",
+    "target_case_binders": {
+      "accepted_ir_sha256": "sha256:eb79301f6e4d67238bdf9832a3dc11b587188d8a5b604401cde15adfff7e2168",
+      "obligations": {
+        "D1": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "I1": {
+          "reason": "unbounded residual quantifiers cannot confirm counterexamples",
+          "status": "unsupported"
+        },
+        "N1": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "O1": {
+          "assignment_arity": 2,
+          "assignment_example": [
+            {
+              "int": "0"
+            },
+            {
+              "int": "0"
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O1@sha256:a5222f9574552d87c2f82e9498f7bd076eee7ac2e99a0504e538161650b515e3",
+          "leading_universal_sorts": [
+            "Nat",
+            "Nat"
+          ],
+          "status": "supported"
+        },
+        "O2": {
+          "assignment_arity": 2,
+          "assignment_example": [
+            {
+              "int": "0"
+            },
+            {
+              "int": "0"
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O2@sha256:afe3e5c97dd48d3240d3d74c82bc5b8fe74ff93d9d4a6794364a35c08a3a1210",
+          "leading_universal_sorts": [
+            "Nat",
+            "Nat"
+          ],
+          "status": "supported"
+        },
+        "O3": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "int": "0"
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O3@sha256:a99044950744ef60ba7314c30f07ff31484af706ffdef62e4f93034e7274c19c",
+          "leading_universal_sorts": [
+            "Nat"
+          ],
+          "status": "supported"
+        },
+        "O4": {
+          "assignment_arity": 2,
+          "assignment_example": [
+            {
+              "int": "0"
+            },
+            {
+              "int": "0"
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O4@sha256:a5222f9574552d87c2f82e9498f7bd076eee7ac2e99a0504e538161650b515e3",
+          "leading_universal_sorts": [
+            "Nat",
+            "Nat"
+          ],
+          "status": "supported"
+        }
+      }
+    },
+    "template_scope": "closed syntax illustrations only; not constructed reviewer probes, search results or votes"
+  },
+  "evidence": [
+    "ev-0bcead63a36275540ff1173ca1562889",
+    "ev-0f8c5a6264f1756d83838eb1a52b8626",
+    "ev-12d441a87901a0f86f9795d7ef1f17fc",
+    "ev-1b4cd144c57ffb3de3e0c051c244852b",
+    "ev-1e468d7a08a25af5126b86803102fbe3",
+    "ev-213efcf7b1ef7a8fe23f0f1c35198c0c",
+    "ev-22fd0eb1b2c2d10d437abe7b71dfb01a",
+    "ev-3156052545ad3c2ec1ec3761cb534214",
+    "ev-32a939bb0825f93eb7d76b3fe2ef9f0a",
+    "ev-3631edff2e50addf11cf1143149a7ed7",
+    "ev-3ace7634dd44f7de231c6b29424acedc",
+    "ev-3e237d045644134aa97862ae8a9f4ed1",
+    "ev-404c82f11eff6a542a568c3aa38a8df6",
+    "ev-408ce4670191c50d7404e57faf0b8ce6",
+    "ev-448600fd3c5b51167b647768ddd6702e",
+    "ev-45327a2b82d3526b90454adcd543c82f",
+    "ev-45707a5fb167e465863f4f6c9ac41ae0",
+    "ev-4845c3768276e7e11a12ebaf547af42e",
+    "ev-4cae5c2994aff4eeceac42ace9b9501e",
+    "ev-4e31a7bde7ff2c83a08a8365ce9edd7c",
+    "ev-50e1e07c27dc88582a71449f6a8c896d",
+    "ev-543ee82b6b105f5330029bfae8fba83a",
+    "ev-568e0be8924dc778ccd335e41d0fe07b",
+    "ev-56f1954d7c84036f2e166cb97ed72ff3",
+    "ev-5aba90572c3d71f561e829ad9366da14",
+    "ev-5abc485e791d43ecf265008059dcdd0a",
+    "ev-5d1ad89f2b9cfadadaf23ad854807708",
+    "ev-6269716f5dfbbd0d90186bf2814c0d1c",
+    "ev-67005c0c072da9c170067c8daa546e65",
+    "ev-6b8158f569c188996dc96206e893a642",
+    "ev-6dd0842ed55e99cca0b426fcddc53c25",
+    "ev-7054743d5fec4ac8db1845d3b259138c",
+    "ev-70c51f76cd36f411a66cfa9d96783e46",
+    "ev-73fc9d904f14823cfe5dcfcc306e31f0",
+    "ev-77023dc3bf32f3bb4c77a0a7553f8712",
+    "ev-806d15f05f71cd6322e0de2a37d189e5",
+    "ev-83eb61cc3aa51f728078819098fc77bf",
+    "ev-84016a62b835cfb00155f45a96ae4be2",
+    "ev-855b7369ff485ff7ce9bad84f3bb77b8",
+    "ev-86be1d648d625c23e076241c308d18ee",
+    "ev-8771f23d4557286e38387633ad8fbeb2",
+    "ev-877984f711fb7fb44ed47a42c03ad4ea",
+    "ev-9446e37c1d9cba4a519a084e823acece",
+    "ev-9503f9038fd9c5960125f9d76be21f34",
+    "ev-96bb7d6cf15a01a9113551dfe5d3852f",
+    "ev-9917b99f709289c59c4d2443780b397d",
+    "ev-9fa5bd7618b53fc0e00f2df026a59715",
+    "ev-a0f1ca7a182101384171df0b2600d0c4",
+    "ev-a1bb01e549de0711a5d37ff655e484c9",
+    "ev-a268c7cb68e123ad3017539755aeedab",
+    "ev-a6552d9257671133fc962caa6655eaa9",
+    "ev-a71088c6a0829faab7900fcf57b28802",
+    "ev-ad7c12efe7ff4aa169259a6a46861cab",
+    "ev-b8281b3243e534517b102cd3ed3a5b26",
+    "ev-ba643502d27bb76f148a91ba76caa05d",
+    "ev-babadb5d13abd4b0cb112a43f0059279",
+    "ev-bb79a35442a7233840d8559dc2324840",
+    "ev-bba35f9dcdb3afedb0d886ca2c26e3c4",
+    "ev-bea9a8bc6258652e21835378b0f619c5",
+    "ev-c16b11e4cf613ea9ebfc93c2aa71d040",
+    "ev-c3a6d7febc08f6e90e507dcd24807f57",
+    "ev-c5a8ad97f5d12ae95e0ab99af7e25a3d",
+    "ev-c7fb9319285119949c1596219d373164",
+    "ev-c809f1715b55bf2c78ce909eba6b7c7f",
+    "ev-cb3ce1fc57fc46c26e92ae3decf101d6",
+    "ev-cb679924ddc1336dd5406ad06bc7cb56",
+    "ev-cbdc19e2bfa67b13035c831c5b088f34",
+    "ev-cd48fa0c01315fc3bc143fad7b0d2b1f",
+    "ev-d6ef159908a7f48d70dfeeed844cd7d7",
+    "ev-d897e818ebb81960052ee9c3eb5e3975",
+    "ev-d9ad1104aa1246d7bf1ac58a2858b130",
+    "ev-e12a0df6a7d888f332ccc842d444aa98",
+    "ev-e2f2d988ed0249edad2763b26c999232",
+    "ev-e62a16662f64910a5957279387ece4d9",
+    "ev-e7fe335b7e7dbba1ad384ae73e3f7810",
+    "ev-e92cb680a1123899769707f4b259693f",
+    "ev-e95abe756e28d6b7c872a41dfca50ed6",
+    "ev-ef6a094be71f8fefe57f520a30e00580",
+    "ev-f3dce56fbb5853484f716e0c91e1cdf5"
+  ],
+  "formal_statements": {
+    "D1": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Reserve.reserve",
+      "representation": "typed_metadata"
+    },
+    "I1": {
+      "display": "∀ x0 : Nat, ∀ x1 : Nat, (x1 ≤ x0 → ∃ x2 : Nat, (reserve(x0, x1) = ok(x2) ∧ x2 ≤ x0))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Reserve.reserve_success_balance_at_most_original",
+      "representation": "contract_dsl"
+    },
+    "N1": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Registry.N1",
+      "representation": "typed_metadata"
+    },
+    "O1": {
+      "display": "∀ x0 : Nat, ∀ x1 : Nat, (x1 ≤ x0 → reserve(x0, x1) = ok((x0 - x1)))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Reserve.reserve_ok_when_sufficient",
+      "representation": "contract_dsl"
+    },
+    "O2": {
+      "display": "∀ x0 : Nat, ∀ x1 : Nat, (x0 < x1 → reserve(x0, x1) = error(ReserveError.insufficient))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Reserve.reserve_error_when_insufficient",
+      "representation": "contract_dsl"
+    },
+    "O3": {
+      "display": "∀ x0 : Nat, reserve(x0, 0) = ok(x0)",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Reserve.reserve_zero_amount",
+      "representation": "contract_dsl"
+    },
+    "O4": {
+      "display": "∀ x0 : Nat, ∀ x1 : Nat, (x1 ≤ x0 → reserve(x0, x1) = ok((x0 - x1)))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Reserve.reserve_exact_subtraction",
+      "representation": "contract_dsl"
+    }
+  },
+  "implementation": {
+    "reserve.py": "def reserve(balance, amount):\n    if amount < balance:\n        return (\"ok\", balance - amount)\n    return (\"error\", \"insufficient\")\n"
+  },
+  "lean_accepted_source": {
+    "path": "accepted/source/76ea545a58a2d8a3288928ca001ec7a60d2ef1f52adff7c3b7444cb5ef6f504e.lean",
+    "sha256": "sha256:76ea545a58a2d8a3288928ca001ec7a60d2ef1f52adff7c3b7444cb5ef6f504e",
+    "text": "import Std\n\n-- BEGIN VERISLOP REGISTRY\n-- Generated by `verislop formalize`. Typed obligation metadata: an index, never evidence.\nnamespace VeriSlop.Registry\n\nstructure SourceRef where\n  documentRef : String\n  documentHash : String\n  startByte : Nat\n  endByte : Nat\n  origin : String\n  interpretation : String\n\nstructure Dependency where\n  id : String\n  relation : String\n\nstructure Entry where\n  id : String\n  revision : Nat\n  kind : String\n  role : String\n  statement : String\n  required : Bool\n  sourceRefs : List SourceRef\n  scope : List String\n  dependencies : List Dependency\n  acceptanceCriteria : List String\n  bindings : List String\n\ndef «D1» : Entry := {\n  id := \"D1\",\n  revision := 1,\n  kind := \"entity\",\n  role := \"declaration\",\n  statement := \"The function reserve takes two arguments, balance and amount, which are unbounded natural numbers including zero.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 0, endByte := 100, origin := \"explicit\", interpretation := \"defines function signature and input domain\" }, { documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 366, endByte := 426, origin := \"explicit\", interpretation := \"confirms argument types\" }],\n  scope := [\"function signature\", \"input domain\"],\n  dependencies := [],\n  acceptanceCriteria := [\"balance is a natural number (>= 0)\", \"amount is a natural number (>= 0)\", \"no upper bound on balance or amount\"],\n  bindings := [\"VeriSlop.Reserve.reserve\", \"VeriSlop.Reserve.ReserveError\"] }\n\ndef «O1» : Entry := {\n  id := \"O1\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"If amount <= balance, the function returns the tuple (\\\"ok\\\", balance - amount).\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 101, endByte := 166, origin := \"explicit\", interpretation := \"defines success case behavior\" }],\n  scope := [\"successful branch\"],\n  dependencies := [{ id := \"D1\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"return value is a tuple of length 2\", \"first element is the string \\\"ok\\\"\", \"second element is balance - amount\"],\n  bindings := [\"VeriSlop.Reserve.reserve_ok_when_sufficient\"] }\n\ndef «O2» : Entry := {\n  id := \"O2\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"If balance < amount, the function returns the tuple (\\\"error\\\", \\\"insufficient\\\").\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 167, endByte := 232, origin := \"explicit\", interpretation := \"defines error case behavior\" }],\n  scope := [\"error branch\"],\n  dependencies := [{ id := \"D1\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"return value is a tuple of length 2\", \"first element is the string \\\"error\\\"\", \"second element is the string \\\"insufficient\\\"\"],\n  bindings := [\"VeriSlop.Reserve.reserve_error_when_insufficient\"] }\n\ndef «O3» : Entry := {\n  id := \"O3\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"If amount is zero, the function returns the tuple (\\\"ok\\\", balance).\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 305, endByte := 365, origin := \"explicit\", interpretation := \"specific case for zero amount\" }],\n  scope := [\"zero amount case\"],\n  dependencies := [{ id := \"D1\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"reserve(balance, 0) returns (\\\"ok\\\", balance)\"],\n  bindings := [\"VeriSlop.Reserve.reserve_zero_amount\"] }\n\ndef «O4» : Entry := {\n  id := \"O4\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"The subtraction in the successful branch is ordinary exact subtraction.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 427, endByte := 494, origin := \"explicit\", interpretation := \"arithmetic semantics\" }],\n  scope := [\"successful branch arithmetic\"],\n  dependencies := [{ id := \"O1\", relation := \"refines\" }],\n  acceptanceCriteria := [\"balance - amount is computed as exact integer subtraction, not floating-point or approximate\"],\n  bindings := [\"VeriSlop.Reserve.reserve_exact_subtraction\"] }\n\ndef «I1» : Entry := {\n  id := \"I1\",\n  revision := 1,\n  kind := \"invariant\",\n  role := \"guarantee\",\n  statement := \"On the successful branch, the returned balance is at most the original balance.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 233, endByte := 304, origin := \"explicit\", interpretation := \"monotonicity invariant for successful operations\" }],\n  scope := [\"successful branch\"],\n  dependencies := [{ id := \"O1\", relation := \"refines\" }],\n  acceptanceCriteria := [\"if return value is (\\\"ok\\\", new_balance), then new_balance <= balance\"],\n  bindings := [\"VeriSlop.Reserve.reserve_success_balance_at_most_original\"] }\n\ndef «N1» : Entry := {\n  id := \"N1\",\n  revision := 1,\n  kind := \"explicit_non_goal\",\n  role := \"exclusion\",\n  statement := \"Behavior on negative numbers, booleans, non-integers, JSON interfaces, machine overflow, physical resource bounds and temporal progress is outside this specification.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 495, endByte := 661, origin := \"explicit\", interpretation := \"explicit exclusion of out-of-scope behaviors\" }],\n  scope := [\"negative numbers\", \"booleans\", \"non-integers\", \"JSON interfaces\", \"machine overflow\", \"physical resource bounds\", \"temporal progress\"],\n  dependencies := [],\n  acceptanceCriteria := [\"No guarantees are made regarding the listed excluded behaviors\"],\n  bindings := [] }\n\ndef entries : List Entry := [«D1», «O1», «O2», «O3», «O4», «I1», «N1»]\n\nend VeriSlop.Registry\n-- END VERISLOP REGISTRY\n\nnamespace VeriSlop.Reserve\n\ninductive ReserveError where\n  | insufficient\n\n/-- The function reserve takes two arguments, balance and amount, which are unbounded natural numbers including zero. -/\ndef reserve (balance amount : Nat) : Except ReserveError Nat :=\n  if amount <= balance then\n    .ok (balance - amount)\n  else\n    .error ReserveError.insufficient\n\n/-- If amount <= balance, the function returns the tuple (\"ok\", balance - amount). -/\ntheorem reserve_ok_when_sufficient (balance amount : Nat) : amount <= balance → reserve balance amount = .ok (balance - amount) := by first | (grind [reserve]) | (simp_all [reserve]; done) | (unfold reserve at *; simp_all; omega) | omega | decide | sorry\n\n/-- If balance < amount, the function returns the tuple (\"error\", \"insufficient\"). -/\ntheorem reserve_error_when_insufficient (balance amount : Nat) : balance < amount → reserve balance amount = .error ReserveError.insufficient := by first | (grind [reserve]) | (simp_all [reserve]; done) | (unfold reserve at *; simp_all; omega) | omega | decide | sorry\n\n/-- If amount is zero, the function returns the tuple (\"ok\", balance). -/\ntheorem reserve_zero_amount (balance : Nat) : reserve balance 0 = .ok balance := by first | (grind [reserve]) | (simp_all [reserve]; done) | (unfold reserve at *; simp_all; omega) | omega | decide | sorry\n\n/-- The subtraction in the successful branch is ordinary exact subtraction. -/\ntheorem reserve_exact_subtraction (balance amount : Nat) : amount <= balance → reserve balance amount = .ok (balance - amount) := by first | (grind [reserve]) | (simp_all [reserve]; done) | (unfold reserve at *; simp_all; omega) | omega | decide | sorry\n\n/-- On the successful branch, the returned balance is at most the original balance. -/\ntheorem reserve_success_balance_at_most_original (balance amount : Nat) : amount <= balance → ∃ new_balance : Nat, reserve balance amount = .ok new_balance ∧ new_balance <= balance := by first | (grind [reserve]) | (simp_all [reserve]; done) | (unfold reserve at *; simp_all; omega) | omega | decide | sorry\n\nend VeriSlop.Reserve"
+  },
+  "lean_challenge": "import Std\n\n-- BEGIN VERISLOP REGISTRY\n-- Generated by `verislop formalize`. Typed obligation metadata: an index, never evidence.\nnamespace VeriSlop.Registry\n\nstructure SourceRef where\n  documentRef : String\n  documentHash : String\n  startByte : Nat\n  endByte : Nat\n  origin : String\n  interpretation : String\n\nstructure Dependency where\n  id : String\n  relation : String\n\nstructure Entry where\n  id : String\n  revision : Nat\n  kind : String\n  role : String\n  statement : String\n  required : Bool\n  sourceRefs : List SourceRef\n  scope : List String\n  dependencies : List Dependency\n  acceptanceCriteria : List String\n  bindings : List String\n\ndef «D1» : Entry := {\n  id := \"D1\",\n  revision := 1,\n  kind := \"entity\",\n  role := \"declaration\",\n  statement := \"The function reserve takes two arguments, balance and amount, which are unbounded natural numbers including zero.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 0, endByte := 100, origin := \"explicit\", interpretation := \"defines function signature and input domain\" }, { documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 366, endByte := 426, origin := \"explicit\", interpretation := \"confirms argument types\" }],\n  scope := [\"function signature\", \"input domain\"],\n  dependencies := [],\n  acceptanceCriteria := [\"balance is a natural number (>= 0)\", \"amount is a natural number (>= 0)\", \"no upper bound on balance or amount\"],\n  bindings := [\"VeriSlop.Reserve.reserve\", \"VeriSlop.Reserve.ReserveError\"] }\n\ndef «O1» : Entry := {\n  id := \"O1\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"If amount <= balance, the function returns the tuple (\\\"ok\\\", balance - amount).\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 101, endByte := 166, origin := \"explicit\", interpretation := \"defines success case behavior\" }],\n  scope := [\"successful branch\"],\n  dependencies := [{ id := \"D1\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"return value is a tuple of length 2\", \"first element is the string \\\"ok\\\"\", \"second element is balance - amount\"],\n  bindings := [\"VeriSlop.Reserve.reserve_ok_when_sufficient\"] }\n\ndef «O2» : Entry := {\n  id := \"O2\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"If balance < amount, the function returns the tuple (\\\"error\\\", \\\"insufficient\\\").\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 167, endByte := 232, origin := \"explicit\", interpretation := \"defines error case behavior\" }],\n  scope := [\"error branch\"],\n  dependencies := [{ id := \"D1\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"return value is a tuple of length 2\", \"first element is the string \\\"error\\\"\", \"second element is the string \\\"insufficient\\\"\"],\n  bindings := [\"VeriSlop.Reserve.reserve_error_when_insufficient\"] }\n\ndef «O3» : Entry := {\n  id := \"O3\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"If amount is zero, the function returns the tuple (\\\"ok\\\", balance).\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 305, endByte := 365, origin := \"explicit\", interpretation := \"specific case for zero amount\" }],\n  scope := [\"zero amount case\"],\n  dependencies := [{ id := \"D1\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"reserve(balance, 0) returns (\\\"ok\\\", balance)\"],\n  bindings := [\"VeriSlop.Reserve.reserve_zero_amount\"] }\n\ndef «O4» : Entry := {\n  id := \"O4\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"The subtraction in the successful branch is ordinary exact subtraction.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 427, endByte := 494, origin := \"explicit\", interpretation := \"arithmetic semantics\" }],\n  scope := [\"successful branch arithmetic\"],\n  dependencies := [{ id := \"O1\", relation := \"refines\" }],\n  acceptanceCriteria := [\"balance - amount is computed as exact integer subtraction, not floating-point or approximate\"],\n  bindings := [\"VeriSlop.Reserve.reserve_exact_subtraction\"] }\n\ndef «I1» : Entry := {\n  id := \"I1\",\n  revision := 1,\n  kind := \"invariant\",\n  role := \"guarantee\",\n  statement := \"On the successful branch, the returned balance is at most the original balance.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 233, endByte := 304, origin := \"explicit\", interpretation := \"monotonicity invariant for successful operations\" }],\n  scope := [\"successful branch\"],\n  dependencies := [{ id := \"O1\", relation := \"refines\" }],\n  acceptanceCriteria := [\"if return value is (\\\"ok\\\", new_balance), then new_balance <= balance\"],\n  bindings := [\"VeriSlop.Reserve.reserve_success_balance_at_most_original\"] }\n\ndef «N1» : Entry := {\n  id := \"N1\",\n  revision := 1,\n  kind := \"explicit_non_goal\",\n  role := \"exclusion\",\n  statement := \"Behavior on negative numbers, booleans, non-integers, JSON interfaces, machine overflow, physical resource bounds and temporal progress is outside this specification.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"examples/proof-of-concept/reservation/request.txt\", documentHash := \"sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc\", startByte := 495, endByte := 661, origin := \"explicit\", interpretation := \"explicit exclusion of out-of-scope behaviors\" }],\n  scope := [\"negative numbers\", \"booleans\", \"non-integers\", \"JSON interfaces\", \"machine overflow\", \"physical resource bounds\", \"temporal progress\"],\n  dependencies := [],\n  acceptanceCriteria := [\"No guarantees are made regarding the listed excluded behaviors\"],\n  bindings := [] }\n\ndef entries : List Entry := [«D1», «O1», «O2», «O3», «O4», «I1», «N1»]\n\nend VeriSlop.Registry\n-- END VERISLOP REGISTRY\n\nnamespace VeriSlop.Reserve\n\ninductive ReserveError where\n  | insufficient\n\n/-- The function reserve takes two arguments, balance and amount, which are unbounded natural numbers including zero. -/\ndef reserve (balance amount : Nat) : Except ReserveError Nat :=\n  if amount <= balance then\n    .ok (balance - amount)\n  else\n    .error ReserveError.insufficient\n\n/-- If amount <= balance, the function returns the tuple (\"ok\", balance - amount). -/\ntheorem reserve_ok_when_sufficient (balance amount : Nat) : amount <= balance → reserve balance amount = .ok (balance - amount) := by sorry\n\n/-- If balance < amount, the function returns the tuple (\"error\", \"insufficient\"). -/\ntheorem reserve_error_when_insufficient (balance amount : Nat) : balance < amount → reserve balance amount = .error ReserveError.insufficient := by sorry\n\n/-- If amount is zero, the function returns the tuple (\"ok\", balance). -/\ntheorem reserve_zero_amount (balance : Nat) : reserve balance 0 = .ok balance := by sorry\n\n/-- The subtraction in the successful branch is ordinary exact subtraction. -/\ntheorem reserve_exact_subtraction (balance amount : Nat) : amount <= balance → reserve balance amount = .ok (balance - amount) := by sorry\n\n/-- On the successful branch, the returned balance is at most the original balance. -/\ntheorem reserve_success_balance_at_most_original (balance amount : Nat) : amount <= balance → ∃ new_balance : Nat, reserve balance amount = .ok new_balance ∧ new_balance <= balance := by sorry\n\nend VeriSlop.Reserve",
+  "lean_challenge_role": "frozen pre-proof template; not the accepted proof artifact",
+  "ledger": {
+    "ambiguities": [],
+    "artifact_kind": "interpretation",
+    "assumptions": [],
+    "clauses": [
+      {
+        "disposition": "obligations",
+        "end_byte": 100,
+        "refs": [
+          "D1"
+        ],
+        "start_byte": 0
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 166,
+        "refs": [
+          "O1"
+        ],
+        "start_byte": 101
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 232,
+        "refs": [
+          "O2"
+        ],
+        "start_byte": 167
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 304,
+        "refs": [
+          "I1"
+        ],
+        "start_byte": 233
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 365,
+        "refs": [
+          "O3"
+        ],
+        "start_byte": 305
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 426,
+        "note": "reinforces input/output domain",
+        "refs": [
+          "D1"
+        ],
+        "start_byte": 366
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 494,
+        "refs": [
+          "O4"
+        ],
+        "start_byte": 427
+      },
+      {
+        "disposition": "exclusion",
+        "end_byte": 661,
+        "refs": [
+          "N1"
+        ],
+        "start_byte": 495
+      }
+    ],
+    "request": {
+      "byte_length": 662,
+      "document_hash": "sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc",
+      "document_ref": "examples/proof-of-concept/reservation/request.txt"
+    },
+    "schema_version": "0.1",
+    "selected_defaults": []
+  },
+  "non_goals": [
+    "Behavior on negative numbers, booleans, non-integers, JSON interfaces, machine overflow, physical resource bounds and temporal progress is outside this specification."
+  ],
+  "obligations": {
+    "D1": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Reserve.reserve",
+        "representation": "typed_metadata"
+      },
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "declaration",
+      "statement": "The function reserve takes two arguments, balance and amount, which are unbounded natural numbers including zero."
+    },
+    "I1": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Reserve.reserve_success_balance_at_most_original",
+        "representation": "contract_dsl"
+      },
+      "kind": "invariant",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "STALE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "On the successful branch, the returned balance is at most the original balance."
+    },
+    "N1": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Registry.N1",
+        "representation": "typed_metadata"
+      },
+      "kind": "explicit_non_goal",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "exclusion",
+      "statement": "Behavior on negative numbers, booleans, non-integers, JSON interfaces, machine overflow, physical resource bounds and temporal progress is outside this specification."
+    },
+    "O1": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Reserve.reserve_ok_when_sufficient",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "STALE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "FAIL",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "If amount <= balance, the function returns the tuple (\"ok\", balance - amount)."
+    },
+    "O2": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Reserve.reserve_error_when_insufficient",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "STALE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "If balance < amount, the function returns the tuple (\"error\", \"insufficient\")."
+    },
+    "O3": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Reserve.reserve_zero_amount",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "STALE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "FAIL",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "If amount is zero, the function returns the tuple (\"ok\", balance)."
+    },
+    "O4": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Reserve.reserve_exact_subtraction",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "STALE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "FAIL",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "The subtraction in the successful branch is ordinary exact subtraction."
+    }
+  },
+  "request": "Implement a Python function reserve(balance, amount) over unbounded natural numbers, including zero.\nReturn the tuple (\"ok\", balance - amount) when amount <= balance.\nReturn the tuple (\"error\", \"insufficient\") when balance < amount.\nEvery successful returned balance must be at most the original balance.\nReserving zero must succeed and return the original balance.\nThe two arguments and successful output are natural numbers; subtraction on the successful branch is ordinary exact subtraction.\nBehavior on negative numbers, booleans, non-integers, JSON interfaces, machine overflow, physical resource bounds and temporal progress is outside this specification.\n",
+  "scope": [
+    "D1",
+    "I1",
+    "N1",
+    "O1",
+    "O2",
+    "O3",
+    "O4"
+  ],
+  "tests": {
+    "artifact_kind": "test_results",
+    "campaign": {
+      "artifact_kind": "test_campaign",
+      "boundary": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "7",
+        "8",
+        "15",
+        "16",
+        "255",
+        "256",
+        "65535",
+        "65536",
+        "2147483647",
+        "2147483648",
+        "4294967295",
+        "4294967296",
+        "9007199254740992",
+        "9223372036854775807",
+        "9223372036854775808",
+        "18446744073709551615",
+        "18446744073709551616",
+        "18446744073709551617"
+      ],
+      "boundary_probability_percent": 20,
+      "cases_per_obligation": 32,
+      "generator": "verislop.nat-sampler/0.1",
+      "grid": [
+        0,
+        1,
+        2
+      ],
+      "hint_probability_percent": 75,
+      "inner_samples": 8,
+      "max_generated_factor": 20,
+      "min_effective_cases": 20,
+      "nondeterminism_rechecks": 64,
+      "per_call_timeout_ms": 5000,
+      "random_mix": {
+        "large_bits": 70,
+        "medium_max": 10000,
+        "small_max": 32,
+        "weights": [
+          60,
+          25,
+          15
+        ]
+      },
+      "schema_version": "0.1",
+      "seed": 20261008,
+      "serialization_profile": "python-v0_1",
+      "shrink": true
+    },
+    "line_coverage": {
+      "reserve.py": {
+        "executable": 4,
+        "executed": 4
+      }
+    },
+    "obligations": {
+      "I1": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 42,
+          "effective": 32,
+          "failures": 0,
+          "generated": 91,
+          "indeterminate": 17,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O1": {
+        "codes": [
+          "TEST_FAILURE"
+        ],
+        "counterexamples": [
+          {
+            "assignment": [
+              "0",
+              "0"
+            ],
+            "minimized": [
+              "0",
+              "0"
+            ],
+            "reason": "consequent is false"
+          },
+          {
+            "assignment": [
+              "1",
+              "1"
+            ],
+            "minimized": [
+              "1",
+              "1"
+            ],
+            "reason": "consequent is false"
+          },
+          {
+            "assignment": [
+              "2",
+              "2"
+            ],
+            "minimized": [
+              "2",
+              "2"
+            ],
+            "reason": "consequent is false"
+          },
+          {
+            "assignment": [
+              "2147483648",
+              "2147483648"
+            ],
+            "minimized": [
+              "2147483648",
+              "2147483648"
+            ],
+            "reason": "consequent is false"
+          },
+          {
+            "assignment": [
+              "256",
+              "256"
+            ],
+            "minimized": [
+              "256",
+              "256"
+            ],
+            "reason": "consequent is false"
+          }
+        ],
+        "counts": {
+          "discarded": 15,
+          "effective": 32,
+          "failures": 9,
+          "generated": 47,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "FAIL"
+      },
+      "O2": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 41,
+          "effective": 32,
+          "failures": 0,
+          "generated": 73,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O3": {
+        "codes": [
+          "TEST_FAILURE"
+        ],
+        "counterexamples": [
+          {
+            "assignment": [
+              "0"
+            ],
+            "minimized": [
+              "0"
+            ],
+            "reason": "consequent is false"
+          }
+        ],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 1,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "FAIL"
+      },
+      "O4": {
+        "codes": [
+          "TEST_FAILURE"
+        ],
+        "counterexamples": [
+          {
+            "assignment": [
+              "0",
+              "0"
+            ],
+            "minimized": [
+              "0",
+              "0"
+            ],
+            "reason": "consequent is false"
+          },
+          {
+            "assignment": [
+              "1",
+              "1"
+            ],
+            "minimized": [
+              "1",
+              "1"
+            ],
+            "reason": "consequent is false"
+          },
+          {
+            "assignment": [
+              "2",
+              "2"
+            ],
+            "minimized": [
+              "2",
+              "2"
+            ],
+            "reason": "consequent is false"
+          },
+          {
+            "assignment": [
+              "255",
+              "255"
+            ],
+            "minimized": [
+              "255",
+              "255"
+            ],
+            "reason": "consequent is false"
+          },
+          {
+            "assignment": [
+              "65535",
+              "65535"
+            ],
+            "minimized": [
+              "65535",
+              "65535"
+            ],
+            "reason": "consequent is false"
+          }
+        ],
+        "counts": {
+          "discarded": 14,
+          "effective": 32,
+          "failures": 13,
+          "generated": 46,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "FAIL"
+      }
+    },
+    "schema_version": "0.1",
+    "test_root": "sha256:68349582c821ca09e18d47cadcd2be89738786cfbaed912676f16302152c88d8"
+  }
+}

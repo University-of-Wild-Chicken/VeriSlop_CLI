@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_a18_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:4351aac64a55a166849680dae04ca44bfd43866655ff57f38026a058391cb64d",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:ac73c6cbb7c9e0338e5caf0d588a7c33d9d74142f50565ff31b406ebd100379b",
+  "text": "{\"files\":{\"solution.py\":\"from fractions import Fraction\\n\\n\\ndef solve(data):\\n    values = {}\\n    results = []\\n    for operation in data[\\\"operations\\\"]:\\n        kind = operation[0]\\n        if kind == \\\"add\\\":\\n            values[operation[1]] = operation[2]\\n        elif kind == \\\"remove\\\":\\n            values.pop(operation[1], None)\\n        elif kind == \\\"median\\\":\\n            ordered = sorted(values.values())\\n            size = len(ordered)\\n            if size == 0:\\n                results.append(None)\\n            elif size % 2:\\n                results.append([ordered[size // 2], 1])\\n            else:\\n                median = Fraction(ordered[size // 2 - 1] + ordered[size // 2], 2)\\n                results.append([median.numerator, median.denominator])\\n    return results\\n\"}}",
+  "transport": "collaboration"
+}

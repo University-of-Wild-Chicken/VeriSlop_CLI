@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_g05_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:94839387924fe7c872996bf6280f204a4da9ed612c1929ad8dd9ba231a6ff7a4",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:f4b454b9aec3ecb11ead30994f279f4cdd3ae64471ce916c29b5507fae9d3187",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    n = data[\\\"n\\\"]\\n    edges = data[\\\"edges\\\"]\\n    graph = [[] for _ in range(n)]\\n\\n    for edge_id, (u, v) in enumerate(edges):\\n        graph[u].append((v, edge_id))\\n        graph[v].append((u, edge_id))\\n\\n    discovery = [-1] * n\\n    low = [0] * n\\n    bridges = []\\n    time = 0\\n\\n    def dfs(vertex, parent_edge):\\n        nonlocal time\\n        discovery[vertex] = low[vertex] = time\\n        time += 1\\n\\n        for neighbor, edge_id in graph[vertex]:\\n            if edge_id == parent_edge:\\n                continue\\n            if discovery[neighbor] == -1:\\n                dfs(neighbor, edge_id)\\n                low[vertex] = min(low[vertex], low[neighbor])\\n                if low[neighbor] > discovery[vertex]:\\n                    bridges.append(edge_id)\\n            else:\\n                low[vertex] = min(low[vertex], discovery[neighbor])\\n\\n    for vertex in range(n):\\n        if discovery[vertex] == -1:\\n            dfs(vertex, -1)\\n\\n    return sorted(bridges)\\n\"}}",
+  "transport": "collaboration"
+}

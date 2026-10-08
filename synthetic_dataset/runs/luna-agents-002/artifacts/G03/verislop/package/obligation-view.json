@@ -1,0 +1,427 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "O1": {
+      "acceptance_criteria": [
+        "Output has exactly n entries ordered by vertex",
+        "Unreachable vertices have null",
+        "Every vertex reachable from a source-reachable negative-cost cycle has value \"-inf\"",
+        "Every other vertex has its minimum integer walk cost from source",
+        "Source starts at distance zero",
+        "Parallel edges and self-loops are handled",
+        "Unreachable negative cycles do not affect output"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all conforming inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 375,
+          "interpretation": "Specifies input fields, bounds, and edge representation",
+          "origin": "explicit",
+          "start_byte": 301
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 420,
+          "interpretation": "Specifies output shape and distance origin",
+          "origin": "explicit",
+          "start_byte": 376
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 451,
+          "interpretation": "Specifies unreachable result encoding",
+          "origin": "explicit",
+          "start_byte": 421
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 545,
+          "interpretation": "Specifies negative-cycle propagation result",
+          "origin": "explicit",
+          "start_byte": 452
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 598,
+          "interpretation": "Specifies finite distance semantics",
+          "origin": "explicit",
+          "start_byte": 546
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 630,
+          "interpretation": "Specifies initial source distance",
+          "origin": "explicit",
+          "start_byte": 599
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 673,
+          "interpretation": "Requires support for these edge cases",
+          "origin": "explicit",
+          "start_byte": 631
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 727,
+          "interpretation": "Specifies treatment of unreachable negative cycles",
+          "origin": "explicit",
+          "start_byte": 674
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For input {n, source, edges}, with n from 1 through 10 and edges [u, v, cost] where cost is an integer from -6 through 9, return a length-n distance list in vertex order. Unreachable vertices are null. Vertices reachable from a negative-cost cycle that is itself reachable from source are \"-inf\". Every other vertex has its minimum integer walk cost from source, which starts at distance zero. Support parallel edges and self-loops; unreachable negative cycles do not affect the output."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "Identical input yields identical output",
+        "No file or network access occurs",
+        "Nothing is printed",
+        "No state is retained across calls"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O2",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all calls"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 227,
+          "interpretation": "Specifies side-effect and state restrictions",
+          "origin": "explicit",
+          "start_byte": 155
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 805,
+          "interpretation": "Requires purity and determinism",
+          "origin": "explicit",
+          "start_byte": 729
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The solve(data) function is pure and deterministic: it does not read files, use the network, print, or retain state across calls."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "Only standard-library facilities are used",
+        "No external I/O occurs"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O3",
+      "kind": "resource_constraint",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "implementation of solve(data)"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 154,
+          "interpretation": "Restricts implementation dependencies",
+          "origin": "explicit",
+          "start_byte": 117
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 853,
+          "interpretation": "Restricts dependencies and I/O",
+          "origin": "explicit",
+          "start_byte": 806
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Use only the Python standard library and perform no external I/O."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "Output follows the specified structure and ordering",
+        "The first public example returns [0, \"-inf\", \"-inf\", \"-inf\", null]",
+        "The second public example returns [0, null, null]"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all conforming inputs, including public examples"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 993,
+          "interpretation": "Requires structure and ordering preservation",
+          "origin": "explicit",
+          "start_byte": 928
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "prompt.txt",
+          "end_byte": 1286,
+          "interpretation": "Provides concrete input/output examples and states that additional cases will be scored",
+          "origin": "explicit",
+          "start_byte": 995
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Preserve the specified input/output structure and exact ordering, and produce the outputs shown for the public examples."
+    }
+  },
+  "roots": {
+    "interpretation_root": "sha256:4bf9cdd077984e6241aa459774d8f5ce4f3967b8090fea7d71f1bab3a3c0b42e"
+  },
+  "schema_version": "0.1"
+}

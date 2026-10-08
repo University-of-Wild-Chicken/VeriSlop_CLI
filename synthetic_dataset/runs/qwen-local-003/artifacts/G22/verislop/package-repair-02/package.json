@@ -1,0 +1,162 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:090d77ec6504339a6ead2354a6c3ff3addee4c087fc70b7fd8182336c7240545",
+  "created_at": "2026-10-08T06:05:28Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-02",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/G22/verislop/package-repair-02/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/G22/verislop/package-repair-02/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/G22/verislop/package-repair-02/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 254:2: unexpected token 'at'; expected command; 302:73: unexpected token 'else'; expected term; 309:51: Function expected at\n  solve\nbut this term has type\n  ?m.1\n\nNote: Expected a function because this term is being applied to the argument\n  ttl\n\nHint: The identifier `solve` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.; 312:16: Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression\n  events\nof type `List Event`; 318:16: Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression\n  events\nof type `List Event`",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:4bc37cd3bb2490f97b35f1a5bc52c724d8ad078f6373d556b3bcb76556fc5d99",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "LeaseContract.solve"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "obligation": "A1",
+              "predicate": "LeaseContract.A1_valid"
+            },
+            {
+              "obligation": "A2",
+              "predicate": "LeaseContract.A2_pure"
+            },
+            {
+              "obligation": "A3",
+              "predicate": "LeaseContract.A3_deterministic"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "LeaseContract.O1"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "LeaseContract.O2"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "LeaseContract.O3"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "LeaseContract.O4"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "LeaseContract.O5"
+            },
+            {
+              "obligation": "O6",
+              "theorem": "LeaseContract.O6"
+            },
+            {
+              "obligation": "I1",
+              "theorem": "LeaseContract.I1"
+            },
+            {
+              "obligation": "I2",
+              "theorem": "LeaseContract.I2"
+            },
+            {
+              "obligation": "I3",
+              "theorem": "LeaseContract.I3"
+            },
+            {
+              "obligation": "I4",
+              "theorem": "LeaseContract.I4"
+            },
+            {
+              "obligation": "I5",
+              "theorem": "LeaseContract.I5"
+            },
+            {
+              "obligation": "S1",
+              "theorem": "LeaseContract.S1"
+            }
+          ],
+          "internal_obligations": [],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "lease_contract.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace LeaseContract\n\ninductive Op where\n  | acquire\n  | renew\n  | release\n\nstructure Event where\n  op : Op\n  at : Nat\n  owner : Nat\n  token : Nat\n\nstructure AcquireResult where\n  ok : Bool\n  token : Nat\n\ninductive EventResult where\n  | acquire (r : AcquireResult)\n  | bool (b : Bool)\n\nstructure Lease where\n  owner : Nat\n  token : Nat\n  expires : Nat\n\nstructure Output where\n  results : List EventResult\n  lease : Nat\n  last_token : Nat\n\ndef solve (ttl : Nat) (events : List Event) : Output :=\n  let rec loop (i : Nat) (lease : Nat) (counter : Nat) (acc : List EventResult) : Output :=\n    if i < events.length then\n      let e := events.get! i\n      let lease' : Nat := if lease = 0 then 0 else if lease.expires <= e.at then 0 else lease\n      let r : EventResult :=\n        match e.op with\n        | Op.acquire =>\n          if lease' = 0 then\n            let c' := counter + 1\n            let l' : Lease := { owner := e.owner, token := c', expires := e.at + ttl }\n            loop (i + 1) l' c' (acc ++ [EventResult.acquire { ok := true, token := c' }])\n          else if lease'.owner = e.owner then\n            loop (i + 1) lease' counter (acc ++ [EventResult.acquire { ok := true, token := lease'.token }])\n          else\n            loop (i + 1) lease' counter (acc ++ [EventResult.acquire { ok := false, token := 0 }])\n        | Op.renew =>\n          if lease' ≠ 0 ∧ lease'.owner = e.owner ∧ lease'.token = e.token then\n            let l' : Lease := { owner := lease'.owner, token := lease'.token, expires := e.at + ttl }\n            loop (i + 1) l' counter (acc ++ [EventResult.bool true])\n          else\n            loop (i + 1) lease' counter (acc ++ [EventResult.bool false])\n        | Op.release =>\n          if lease' ≠ 0 ∧ lease'.owner = e.owner ∧ lease'.token = e.token then\n            loop (i + 1) 0 counter (acc ++ [EventResult.bool true])\n          else\n            loop (i + 1) lease' counter (acc ++ [EventResult.bool false])\n    else\n      { results := acc, lease := lease, last_token := counter }\n  loop 0 0 0 []\n\ntheorem O1 : ∀ (ttl : Nat) (events : List Event), True := by sorry\n\ntheorem O2 : ∀ (ttl : Nat) (events : List Event), (solve ttl events).results.length = events.length := by sorry\n\ntheorem O3 : ∀ (ttl : Nat) (events : List Event) (i : Nat), i < events.length →\n  match (events.get! i).op with\n  | Op.acquire => True\n  | _ => False\n  := by sorry\n\ntheorem O4 : ∀ (ttl : Nat) (events : List Event) (i : Nat), i < events.length →\n  match (events.get! i).op with\n  | Op.renew => True\n  | Op.release => True\n  | _ => False\n  := by sorry\n\ntheorem O5 : ∀ (ttl : Nat) (events : List Event), (solve ttl events).last_token = (solve ttl events).last_token := by sorry\n\ntheorem O6 : ∀ (ttl : Nat) (events : List Event), True := by sorry\n\ntheorem I1 : ∀ (ttl : Nat) (events : List Event) (i : Nat), i < events.length → True := by sorry\n\ntheorem I2 : ∀ (ttl : Nat) (events : List Event), (solve ttl events).last_token ≥ 0 := by sorry\n\ntheorem I3 : ∀ (ttl : Nat) (events : List Event) (i : Nat), i < events.length → True := by sorry\n\ntheorem I4 : ∀ (ttl : Nat) (events : List Event) (i : Nat), i < events.length → True := by sorry\n\ntheorem I5 : ∀ (ttl : Nat) (events : List Event) (i : Nat), i < events.length → True := by sorry\n\ntheorem S1 : ∀ (ttl : Nat) (events : List Event) (i : Nat), i < events.length → True := by sorry\n\nend LeaseContract"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261007,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "CANDIDATE_BUILD_FAILURE"
+      ],
+      "seconds": 93,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

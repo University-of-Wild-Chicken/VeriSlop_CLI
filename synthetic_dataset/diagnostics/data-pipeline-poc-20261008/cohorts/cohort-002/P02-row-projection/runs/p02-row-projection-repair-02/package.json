@@ -1,0 +1,154 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:a76e5c87a1cb45d5a1a89074ed4a1fb18eb48104aac4ad6fbcfb4beab3b09fd5",
+  "created_at": "2026-10-08T09:56:59Z",
+  "recovery_root": "p02-row-projection",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "p02-row-projection-repair-02",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/examples/proof-of-concept/data-pipelines/qwen-config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-002/P02-row-projection/runs/p02-row-projection-repair-02/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-002/P02-row-projection/runs/p02-row-projection-repair-02/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-002/P02-row-projection/runs/p02-row-projection-repair-02/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 228:69: unexpected token ';'; expected '}'; 233:138: unexpected token ';'; expected '}'; 238:138: unexpected token ';'; expected '}'; 241:138: unexpected token ';'; expected '}'; 244:14: Invalid field notation: Identifier or numeral expected",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:a702b102d822c97a31e4af164afd8442bebdc1a1ae651e2bd97bf75e83402032",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "VeriSlop.Contract.Input"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "VeriSlop.Contract.Input"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "declarations": [
+                "VeriSlop.Contract.Input"
+              ],
+              "obligation": "D3"
+            },
+            {
+              "declarations": [
+                "VeriSlop.Contract.Row"
+              ],
+              "obligation": "D4"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlop.Contract.O1_output_shape"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlop.Contract.O2_retained_rows"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "VeriSlop.Contract.O3_row_projection"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "VeriSlop.Contract.O4_total_and_count"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "VeriSlop.Contract.O5_empty_result"
+            },
+            {
+              "obligation": "I1",
+              "theorem": "VeriSlop.Contract.I1_exact_int_arithmetic"
+            },
+            {
+              "obligation": "I2",
+              "theorem": "VeriSlop.Contract.I2_unicode_preserved"
+            },
+            {
+              "obligation": "N1"
+            },
+            {
+              "obligation": "N2"
+            }
+          ],
+          "internal_obligations": [],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "verislop.prompts.0.4.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace VeriSlop.Contract\n\nstructure Row where\n  «tag» : String\n  «amount» : Int\n  «enabled» : Bool\n\nstructure Input where\n  «rows» : List Row\n  «minimum» : Int\n\nstructure OutRow where\n  «tag» : String\n  «amount» : Int\n\nstructure Output where\n  «rows» : List OutRow\n  «total» : Int\n  «count» : Nat\n\ndef solve (data : Input) : Output :=\n  let kept : List Row := data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)\n  let outRows : List OutRow := kept.map (fun r => { «tag» := r. «tag»; «amount» := r. «amount» })\n  let total : Int := kept.foldl (fun acc r => acc + r. «amount») 0\n  { «rows» := outRows; «total» := total; «count» := kept.length }\n\ntheorem O1_output_shape (data : Input) :\n  (solve data). «rows» = (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).map (fun r => { «tag» := r. «tag»; «amount» := r. «amount» }) ∧\n  (solve data). «total» = (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).foldl (fun acc r => acc + r. «amount») 0 ∧\n  (solve data). «count» = (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).length := by sorry\n\ntheorem O2_retained_rows (data : Input) :\n  (solve data). «rows» = (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).map (fun r => { «tag» := r. «tag»; «amount» := r. «amount» }) := by sorry\n\ntheorem O3_row_projection (data : Input) :\n  (solve data). «rows» = (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).map (fun r => { «tag» := r. «tag»; «amount» := r. «amount» }) := by sorry\n\ntheorem O4_total_and_count (data : Input) :\n  (solve data). «total» = (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).foldl (fun acc r => acc + r. «amount») 0 ∧\n  (solve data). «count» = (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).length := by sorry\n\ntheorem O5_empty_result (data : Input) :\n  (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).length = 0 →\n  (solve data). «rows» = [] ∧ (solve data). «total» = 0 ∧ (solve data). «count» = 0 := by sorry\n\ntheorem I1_exact_int_arithmetic (data : Input) :\n  (solve data). «total» = (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).foldl (fun acc r => acc + r. «amount») 0 := by sorry\n\ntheorem I2_unicode_preserved (data : Input) :\n  (solve data). «rows» = (data. «rows».filter (fun r => r. «enabled» && r. «amount» >= data. «minimum»)).map (fun r => { «tag» := r. «tag»; «amount» := r. «amount» }) := by sorry\n\nend VeriSlop.Contract"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "data-pipelines/P02-row-projection.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261008,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "CANDIDATE_BUILD_FAILURE"
+      ],
+      "seconds": 79,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

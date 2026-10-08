@@ -1,0 +1,149 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:f724f32e87c693ebb5651be89597c14bff459e15a3df17e25f13c931b03f872d",
+  "created_at": "2026-10-08T06:27:04Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-01",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/artifacts/A18/verislop/package-repair-01/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/artifacts/A18/verislop/package-repair-01/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/artifacts/A18/verislop/package-repair-01/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 201:0: failed to synthesize 'Inhabited' or 'Nonempty' instance for\n  Input → Results\n\nIf this type is defined using the 'structure' or 'inductive' command, you can try adding a 'deriving Nonempty' clause to it.; 202:0: failed to synthesize 'Inhabited' or 'Nonempty' instance for\n  Entries → Operation → Entries\n\nIf this type is defined using the 'structure' or 'inductive' command, you can try adding a 'deriving Nonempty' clause to it.; 203:0: failed to synthesize 'Inhabited' or 'Nonempty' instance for\n  Entries → Output\n\nIf this type is defined using the 'structure' or 'inductive' command, you can try adding a 'deriving Nonempty' clause to it.; 226:8: Function expected at\n  hasId\nbut this term has type\n  ?m.1\n\nNote: Expected a function because this term is being applied to the argument\n  before\n\nHint: The identifier `hasId` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.; 227:10: Function expected at\n  hasId\nbut this term has type\n  ?m.1\n\nNote: Expected a function because this term is being applied to the argument\n  before\n\nHint: The identifier `hasId` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:e78316496b807a488e47102084af325e98278315c3a27bc8f0fd2875ec66618e",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "MedianStream.solve"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "MedianStream.Operation"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "obligation": "A1",
+              "predicate": "MedianStream.A1"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "MedianStream.O1"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "MedianStream.O2"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "MedianStream.O3"
+            },
+            {
+              "obligation": "I1",
+              "theorem": "MedianStream.I1"
+            },
+            {
+              "obligation": "E1",
+              "theorem": "MedianStream.E1"
+            },
+            {
+              "obligation": "E2",
+              "theorem": "MedianStream.E2"
+            },
+            {
+              "obligation": "N1"
+            }
+          ],
+          "internal_obligations": [
+            {
+              "description": "A caller-supplied operation sequence satisfying the stated bound exists.",
+              "id": "A1_nonvacuity",
+              "kind": "non_vacuity",
+              "theorem": "MedianStream.A1_nonvacuity",
+              "witnesses_for": [
+                "A1"
+              ]
+            }
+          ],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "verislop.prompts_0.2.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace MedianStream\n\ninductive Operation where\n  | add : String → Int → Operation\n  | remove : String → Operation\n  | median : Operation\n\ndef Input := List Operation\n\ninductive Output where\n  | empty : Output\n  | rational : Int → Nat → Output\n\ndef Results := List Output\n\n/-- The caller supplies well-shaped operations, with at most 100 operations. -/\ndef A1 (ops : Input) : Prop := ops.length ≤ 100\n\n/-- These collection and execution terms retain the string, signed-integer,\nand sequence model, which the executable generated-test bridge does not support. -/\nopaque Entries : Type\nopaque solve : Input → Results\nopaque process : Entries → Operation → Entries\nopaque query : Entries → Output\nopaque addReplacesId : Entries → String → Int → Entries → Prop\nopaque removePresentId : Entries → String → Entries → Prop\nopaque removeAbsentIdUnchanged : Entries → String → Entries → Prop\nopaque queryObservesPriorOperations : Entries → Input → Prop\nopaque outputMatchesQueriesInOrder : Input → Results → Prop\nopaque emptyPopulation : Entries → Prop\nopaque reducedPositiveRational : Output → Prop\nopaque conventionalMedian : Entries → Output → Prop\nopaque oneCurrentValuePerId : Entries → Prop\nopaque distinctIdsRemainSeparate : Entries → Prop\nopaque standardLibraryPureDeterministic : Prop\nopaque missingRemovalContinues : Entries → String → Input → Prop\nopaque firstExample : Prop\nopaque secondExample : Prop\n\n/-- Each add, remove, and median transition follows its specified behavior\nunder the caller's schema and operation-count bound. -/\ntheorem O1 : ∀ ops : Input, A1 ops → ∀ before after : Entries,\n  ∀ op : Operation, process before op = after →\n    (match op with\n     | .add id value => addReplacesId before id value after\n     | .remove id =>\n       (hasId before id → removePresentId before id after) ∧\n       (¬ hasId before id → removeAbsentIdUnchanged before id after)\n     | .median => queryObservesPriorOperations before ops) := by sorry\n\nopaque hasId : Entries → String → Prop\n\ntheorem O2 : ∀ entries : Entries,\n  (emptyPopulation entries → query entries = .empty) ∧\n  (¬ emptyPopulation entries →\n    ∃ numerator : Int, ∃ denominator : Nat,\n      query entries = .rational numerator denominator ∧\n      denominator > 0 ∧\n      reducedPositiveRational (.rational numerator denominator) ∧\n      conventionalMedian entries (.rational numerator denominator)) := by sorry\n\ntheorem O3 : firstExample ∧ secondExample := by sorry\n\ntheorem I1 : ∀ entries : Entries,\n  oneCurrentValuePerId entries ∧ distinctIdsRemainSeparate entries := by sorry\n\ntheorem E1 : standardLibraryPureDeterministic := by sorry\n\ntheorem E2 : ∀ entries : Entries, ∀ id : String, ∀ rest : Input,\n  ¬ hasId entries id → missingRemovalContinues entries id rest := by sorry\n\ntheorem A1_nonvacuity : ∃ ops : Input, A1 ops := by sorry\n\nend MedianStream\n"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261007,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "CANDIDATE_BUILD_FAILURE"
+      ],
+      "seconds": 582,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

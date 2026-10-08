@@ -1,0 +1,1312 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "D1": {
+      "acceptance_criteria": [
+        "data is a JSON object",
+        "data has exactly the keys 'rows' and 'minimum'"
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-e416698c52fd72304e911a2f2fefcb2d"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "function input"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "function input"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 84,
+          "interpretation": "function signature",
+          "origin": "explicit",
+          "start_byte": 0
+        },
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 153,
+          "interpretation": "input schema",
+          "origin": "explicit",
+          "start_byte": 85
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function solve accepts a single argument data, which is a JSON object with exactly the fields rows and minimum."
+    },
+    "D2": {
+      "acceptance_criteria": [
+        "data['minimum'] is a signed integer"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "D2",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-daa5581276a976925da2622b11774719"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input field minimum"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input field minimum"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 182,
+          "interpretation": "type of minimum",
+          "origin": "explicit",
+          "start_byte": 154
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The field minimum is a signed integer."
+    },
+    "D3": {
+      "acceptance_criteria": [
+        "data['rows'] is a list",
+        "each element is a JSON object with exactly keys 'tag', 'amount', 'enabled'"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "D3",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-16c3f109b21fe017e0bbcf6c8a2aa4b5"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input field rows"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input field rows"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 346,
+          "interpretation": "structure of rows",
+          "origin": "explicit",
+          "start_byte": 183
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The field rows is a list of JSON objects, each with exactly the fields tag, amount and enabled."
+    },
+    "D4": {
+      "acceptance_criteria": [
+        "row['tag'] is a Unicode string",
+        "row['amount'] is a signed integer",
+        "row['enabled'] is a Boolean"
+      ],
+      "dependencies": [
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "D4",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-813c94a7c50e3e4a8b5219c040622f1c"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input row fields"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input row fields"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 346,
+          "interpretation": "types of row fields",
+          "origin": "explicit",
+          "start_byte": 183
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "In each row, tag is a Unicode string, amount is a signed integer, and enabled is a Boolean."
+    },
+    "I1": {
+      "acceptance_criteria": [
+        "sums are computed without floating-point approximation or overflow"
+      ],
+      "dependencies": [
+        {
+          "id": "O5",
+          "relation": "refines"
+        }
+      ],
+      "id": "I1",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-2f1bd84ea43db55e5b3f27161b53708f"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "arithmetic operations"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "arithmetic operations"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 908,
+          "interpretation": "arithmetic precision",
+          "origin": "explicit",
+          "start_byte": 842
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Arithmetic operations on amounts and total use exact arbitrary-precision signed integer arithmetic."
+    },
+    "I2": {
+      "acceptance_criteria": [
+        "output tag strings are byte-for-byte identical to input tag strings"
+      ],
+      "dependencies": [
+        {
+          "id": "O4",
+          "relation": "refines"
+        }
+      ],
+      "id": "I2",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-33595b53d6405e44b3e904a7d089882b"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "string preservation"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "string preservation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 1004,
+          "interpretation": "string preservation",
+          "origin": "explicit",
+          "start_byte": 909
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Unicode strings in tag fields are preserved exactly, including empty strings, whitespace, and combining characters."
+    },
+    "N1": {
+      "acceptance_criteria": [
+        "no behavior is specified for malformed inputs"
+      ],
+      "dependencies": [],
+      "id": "N1",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-1aff63342e4c3c9c6b1347998351a763"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input validation"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "input validation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 1094,
+          "interpretation": "scope exclusion",
+          "origin": "explicit",
+          "start_byte": 1005
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Handling of inputs outside the stated schema is outside the scope of this task."
+    },
+    "N2": {
+      "acceptance_criteria": [
+        "no behavior is specified for environmental effects"
+      ],
+      "dependencies": [],
+      "id": "N2",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-8548404d94aa14cd60ae5011a7d8fca4"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "environmental effects"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "environmental effects"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 1094,
+          "interpretation": "scope exclusion",
+          "origin": "explicit",
+          "start_byte": 1005
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Environmental effects are outside the scope of this task."
+    },
+    "O1": {
+      "acceptance_criteria": [
+        "return value is a JSON object",
+        "return value has exactly the keys 'rows', 'total', 'count'"
+      ],
+      "dependencies": [],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-ceb8e18c87eb837ae8e8353a88857651"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "function output"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "function output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 558,
+          "interpretation": "output schema",
+          "origin": "explicit",
+          "start_byte": 491
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function returns a JSON object with exactly the fields rows, total and count."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "for every input row, it appears in output rows if and only if row['enabled'] is true and row['amount'] >= minimum"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-40a82f8d7b4f999ff6eaa7189092976e"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output rows"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output rows"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 450,
+          "interpretation": "filtering logic",
+          "origin": "explicit",
+          "start_byte": 347
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The output rows list contains exactly the input rows where enabled is true and amount is greater than or equal to minimum."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "the sequence of retained rows in the output matches the sequence of retained rows in the input"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "refines"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-c1cf773e5ada65950ee28744411b9697"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output rows"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output rows"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 490,
+          "interpretation": "ordering and duplication",
+          "origin": "explicit",
+          "start_byte": 451
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The output rows list preserves the original order and duplicates of the retained input rows."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "for each output row, it has exactly keys 'tag' and 'amount'",
+        "output row['tag'] equals the corresponding input row['tag']",
+        "output row['amount'] equals the corresponding input row['amount']"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "refines"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-700f25d457951ef97d93c50f7201fc65"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output row fields"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output row fields"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 668,
+          "interpretation": "projection logic",
+          "origin": "explicit",
+          "start_byte": 559
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Each output row has exactly the fields tag and amount, copied without alteration from its retained input row."
+    },
+    "O5": {
+      "acceptance_criteria": [
+        "total == sum(row['amount'] for row in retained_rows)"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-9f5f00b1520cbc9f9f9669dc52b59e59"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output total"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output total"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 747,
+          "interpretation": "total calculation",
+          "origin": "explicit",
+          "start_byte": 669
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The output total is the sum of the amounts of all retained rows."
+    },
+    "O6": {
+      "acceptance_criteria": [
+        "count == len(retained_rows)"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-2ef72c3d934010b7024d0b7a044a5a8a"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output count"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output count"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 747,
+          "interpretation": "count calculation",
+          "origin": "explicit",
+          "start_byte": 669
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The output count is the number of retained rows."
+    },
+    "O7": {
+      "acceptance_criteria": [
+        "if retained_rows is empty, then output['rows'] == [], output['total'] == 0, output['count'] == 0"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "refines"
+        },
+        {
+          "id": "O5",
+          "relation": "refines"
+        },
+        {
+          "id": "O6",
+          "relation": "refines"
+        }
+      ],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-aa2bfd588ba5fee53b8a3f93ec7ed756"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "empty result case"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "empty result case"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 841,
+          "interpretation": "empty case behavior",
+          "origin": "explicit",
+          "start_byte": 748
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If no rows are retained, the output rows is an empty list, total is zero, and count is zero."
+    }
+  },
+  "roots": {
+    "interpretation_root": "sha256:c4b3ebd8b0a6b6aa52d09cd40c5a130ab7a3016fdb032e20f13cfe63c9057050"
+  },
+  "schema_version": "0.1"
+}

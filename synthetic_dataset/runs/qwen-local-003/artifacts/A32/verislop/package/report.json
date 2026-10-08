@@ -1,0 +1,197 @@
+{
+  "artifact_kind": "run_report",
+  "artifacts": {
+    "evidence": "evidence/",
+    "obligation_view": "obligation-view.json",
+    "report": "report.json"
+  },
+  "axioms": {},
+  "blocking_reasons": [
+    {
+      "claims": [],
+      "code": "VERIFIER_NOT_RUN",
+      "message": "no frozen challenge; run `verislop formalize` first",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "VERIFIER_NOT_RUN",
+      "message": "the implementation phase has not started (no frozen implementation claims)",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "INTERPRETATION:request"
+      ],
+      "code": "VERIFIER_NOT_RUN",
+      "message": "INTERPRETATION:request: no registered verifier has evaluated this claim",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "CLOSURE:determinism"
+      ],
+      "code": "ORPHAN_CLAIM",
+      "message": "required finalization claim CLOSURE:determinism is absent or invalid",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "CLOSURE:endpoint"
+      ],
+      "code": "ORPHAN_CLAIM",
+      "message": "required finalization claim CLOSURE:endpoint is absent or invalid",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "CLOSURE:clean-builds"
+      ],
+      "code": "ORPHAN_CLAIM",
+      "message": "required finalization claim CLOSURE:clean-builds is absent or invalid",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "CLOSURE:provenance"
+      ],
+      "code": "ORPHAN_CLAIM",
+      "message": "required finalization claim CLOSURE:provenance is absent or invalid",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "REVIEW_NOT_RUN",
+      "message": "review checkpoint formal_contract is configured as a release gate but has not run",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "REVIEW_NOT_RUN",
+      "message": "review checkpoint release is configured as a release gate but has not run",
+      "obligations": [],
+      "severity": "blocking"
+    }
+  ],
+  "bridge_preparations": [],
+  "builds": [],
+  "counts": {
+    "milestones": {
+      "END_TO_END_VERIFIED": {},
+      "FORMALIZED": {},
+      "IMPLEMENTED": {},
+      "INTERPRETED": {},
+      "LINKED": {},
+      "PROVED": {},
+      "TESTED": {},
+      "TYPECHECKED": {}
+    },
+    "obligations": 0,
+    "required_obligations": 0
+  },
+  "determinism": {
+    "compared": [],
+    "excluded_nondeterministic_fields": [
+      "recorded_at",
+      "time",
+      "wall_ms",
+      "frozen_at",
+      "staged candidate module path"
+    ],
+    "mismatches": []
+  },
+  "endpoint": {
+    "end_to_end_eligible": false,
+    "established": null,
+    "requested": "test_campaign",
+    "statement": "No END_TO_END_VERIFIED claim: Tiers 0 and 1 are ineligible; the endpoint is the recorded test campaign or monitored runtime."
+  },
+  "generated_by": {
+    "verifier": "verislop.closure",
+    "verifier_hash": "sha256:aec3ba6cfc00e92de84b3bcb2e56846c125260a783ba8f322d28347b8283bc23",
+    "verislop_version": "0.1.0"
+  },
+  "hypotheses": {},
+  "infrastructure_errors": [
+    {
+      "claims": [],
+      "code": "PROVIDER_FAILURE",
+      "details": {
+        "kind": "provider_error",
+        "status": 500
+      },
+      "message": "local: provider_error: provider returned HTTP 500",
+      "obligations": [],
+      "severity": "infrastructure"
+    }
+  ],
+  "mappings": [],
+  "obligations": {},
+  "provenance": [],
+  "qualified_result": "INFRASTRUCTURE_FAILURE (PROVIDER_FAILURE); no verification success; claim failures also observed: ORPHAN_CLAIM, REVIEW_NOT_RUN, VERIFIER_NOT_RUN",
+  "request": {
+    "document_hash": "sha256:617c3d80fa475dc3fa390527d4ae38eb86b3eb1059b3990ef0e9d1f76755a6ec",
+    "request_ref": "prompt.txt",
+    "routing": {
+      "classifier": "none (mode=software bypasses classification)",
+      "decision": "SOFTWARE",
+      "routing_result": "OBLIGATION_PIPELINE"
+    }
+  },
+  "review": {
+    "checkpoints": {
+      "formal_contract": "REVIEW_NOT_RUN",
+      "release": "REVIEW_NOT_RUN"
+    },
+    "configured": true
+  },
+  "roots": {
+    "accepted_ir": null,
+    "certificate": null,
+    "closure_input_root": null,
+    "contract_input_root": null,
+    "implementation_root": null,
+    "interpretation_root": null,
+    "link_root": null,
+    "test_root": null
+  },
+  "run_id": "package",
+  "schema_version": "0.1",
+  "surfaces": {
+    "excluded": [
+      "machine-code, compiler, runtime and hardware behaviour (no Tier 4 claim)",
+      "behaviour on inputs outside the serialization profile",
+      "physical time, memory and resource bounds unless stated as obligations"
+    ],
+    "trusted": [
+      "Lean 4 kernel and elaborator of the pinned toolchain, with its toolchain .olean files",
+      "VeriSlop kernel tool (replay driver, exporter, axiom walker, witness extractor)",
+      "VeriSlop launcher, bubblewrap and Linux namespace confinement; explicitly mounted runtime roots remain readable",
+      "VeriSlop reifier, DSL denotation builder and canonical serializer (round trip checked per value)",
+      "closure orchestration, manifest canonicalisation and hashing",
+      "logical axioms permitted by the acceptance policy (actual use listed per theorem)",
+      "natural-language interpretation of the request (a recorded semantic assumption, not proved)",
+      "operating system and hardware"
+    ],
+    "verified": []
+  },
+  "terminal_status": "INFRASTRUCTURE_FAILURE",
+  "tier": {
+    "endpoint": null,
+    "requested": 0,
+    "requested_endpoint": "test_campaign",
+    "require_state": "TESTED",
+    "target": "python",
+    "tier_default_applied": false
+  },
+  "warnings": [],
+  "witnesses": {}
+}

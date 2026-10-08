@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-10-07T23:17:25.575476315Z",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 457,
+  "eval_duration": 8501291999,
+  "load_duration": 397233,
+  "message": {
+    "content": "{\"files\":{\"solution.py\":\"import sys\\nfrom collections import defaultdict\\n\\ndef solve(data):\\n    n = data.get('n', 0)\\n    edges = data.get('edges', [])\\n    m = len(edges)\\n    if m == 0:\\n        return []\\n    \\n    # Build adjacency list with edge IDs\\n    adj = [[] for _ in range(n)]\\n    for eid, (u, v) in enumerate(edges):\\n        if u == v:\\n            # Self-loop: add to adjacency but it will never be a bridge\\n            adj[u].append((v, eid))\\n        else:\\n            adj[u].append((v, eid))\\n            adj[v].append((u, eid))\\n    \\n    # Tarjan's bridge-finding algorithm\\n    disc = [-1] * n\\n    low = [-1] * n\\n    parent_edge = [-1] * n  # edge ID used to reach this vertex from parent\\n    time = [0]\\n    is_bridge = [False] * m\\n    \\n    def dfs(u):\\n        time[0] += 1\\n        disc[u] = low[u] = time[0]\\n        for v, eid in adj[u]:\\n            if eid == parent_edge[u]:\\n                continue\\n            if disc[v] == -1:\\n                parent_edge[v] = eid\\n                dfs(v)\\n                low[u] = min(low[u], low[v])\\n                if low[v] > disc[u]:\\n                    is_bridge[eid] = True\\n            else:\\n                low[u] = min(low[u], disc[v])\\n    \\n    for i in range(n):\\n        if disc[i] == -1:\\n            dfs(i)\\n    \\n    # Self-loops are never bridges\\n    for eid, (u, v) in enumerate(edges):\\n        if u == v:\\n            is_bridge[eid] = False\\n    \\n    return [eid for eid in range(m) if is_bridge[eid]]\\n\"}\n}",
+    "role": "assistant"
+  },
+  "model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "prompt_eval_cached_count": 0,
+  "prompt_eval_count": 329,
+  "prompt_eval_duration": 213883000,
+  "total_duration": 8781974846
+}

@@ -7,7 +7,9 @@ This repository contains the **design specification** and a **working implementa
 - [Specification](docs/specification.md), [contract expression IR](docs/contract-ir.md), [obligation states](docs/obligation-states.md), [providers and adversarial review](docs/providers-and-review.md): the normative design.
 - [Implementation notes](docs/implementation.md): how the CLI realises the specification, artifact by artifact, and where it stops.
 - [Tier 2–4 specification and implementation outline](docs/tier-2-4.md): implemented restricted-source closure and proposed extraction and machine-code backends, with proof obligations and release gates.
+- [VSCore 0.2 grammar and source admission](docs/vscore-generalized-grammar.md): implemented surface authoring, canonical Lean decoding, pure data/helpers/folds, and reconstructed source IR; accepted-contract bridging remains unsupported for 0.2.
 - [TESTED campaign specification and formalism](docs/tested-campaigns.md): proposed strict campaign semantics, finite Lean model, VSCore testing outline and concrete-counterexample review requirements. This design does not enable VSCore campaigns.
+- [Structured data test bridge](docs/data-pipeline-bridge.md): signed integers, Unicode strings, lists and fixed-field records, with a preregistered native natural-language proof-of-concept protocol.
 - [Schemas](schemas/): JSON interfaces. Schema validity is structure only; semantic validators check the rest.
 - [Examples](examples/): bounded increment with Python and VSCore candidates, and an independent [checked-subtraction VSCore contract](examples/vscore-subtraction/README.md).
 
@@ -90,7 +92,7 @@ Run status has exactly three terminal values (`VERIFIED`, `BLOCKED`, `INFRASTRUC
 
 | Tier | Target / endpoint | Status | Strongest implementation claim |
 |---|---|---|---|
-| 0 | Python, `python-v0_1` / `test_campaign` | supported | TESTED for the recorded campaign |
+| 0 | Python, `python-v0_1` or `python-v0_2` / `test_campaign` | supported | TESTED for the recorded campaign |
 | 1 | Python / `instrumented_runtime` | supported | runtime detection (raise before return) + TESTED |
 | 2 | VSCore `vscore/0.1` / `restricted_source` | supported for the admitted pure profile | END_TO_END_VERIFIED under the normative Lean source semantics; runtime campaigns unsupported |
 | 3–4 | extraction, machine code | **unsupported** | capability diagnostic; never downgraded |
@@ -148,7 +150,33 @@ It materializes and structurally links the selected source before semantic accep
 
 Reports separate `mechanical_status` from `release_status`. Configured review may block release while the current mechanical proof remains verified. A release vote can survive a fresh successful `verify` only after both exact execution inventories validate and their registered deterministic projections match. Read-only VSCore report/status inspection labels recorded executions as historical; run `verify` for a fresh gate. See [the VSCore notes](docs/implementation.md#tier-2-vscore-01-restricted-source), [the closure requirements](docs/tier-2-closure-milestone.md), and [the independent subtraction example](examples/vscore-subtraction/README.md).
 
-The [generalized VSCore grammar proposal](docs/vscore-generalized-grammar.md) specifies a possible `vscore/0.2` pure language with records, variants, options, lists, acyclic helper calls and finite folds. It includes [surface EBNF](grammar/vscore-0.2.ebnf), binding/evaluation rules and concrete design checks. These are design artifacts; the registered CLI capability remains `vscore/0.1`.
+### VSCore 0.2: authoring and standalone source admission
+
+The [generalized VSCore grammar](docs/vscore-generalized-grammar.md) now has an implemented
+Python authoring frontend and normative Lean 4.34.1 source model. The pure language supports
+records, variants, options, lists, acyclic helper calls and finite list/Nat folds; the
+[surface EBNF](grammar/vscore-0.2.ebnf) fixes precedence and binder order.
+
+```bash
+bin/verislop vscore compile --source examples/vscore-grammar/pure-data.vsc \
+  --out /tmp/pure-data.vscore.json
+bin/verislop vscore parse --source /tmp/pure-data.vscore.json       # advisory
+bin/verislop vscore check --source /tmp/pure-data.vscore.json \
+  --out /tmp/pure-data-source-check                            # new directory
+```
+
+`compile` and `parse` report `authoritative: false`. `check` proves exact canonical JSON
+decoding and program admission, audits/replays the accepted Lean environment, reconstructs
+its AST/signatures/enum registry into `implementation-ir.json`, and compares two isolated
+clean builds. Its report binds the exact source and registered verifier/library/toolchain
+identities. Delivered JSON is limited to 16 KiB for this kernel gate.
+
+This establishes **source admission only**. It assigns no obligation milestone or
+`END_TO_END_VERIFIED` claim, certifies no `.vsc` surface semantics, and supplies no registered
+`TESTED` campaign. Accepted-contract refinement, input coverage and obligation transport
+remain unsupported for 0.2; `vscore goal` reports that capability boundary explicitly. The
+registered implementation bridge continues to use `vscore/0.1`. See the
+[examples and finite correctness fixtures](examples/vscore-grammar/README.md).
 
 Accepted runs must match the current verifier hashes. Regenerate a run after updating verifier code; preparation rejects stale certificates and evidence.
 
@@ -176,11 +204,46 @@ bin/verislop verify --package $P --config verislop.json        # review is an ad
 - Only providers used by a role or review slot need credentials.
 - The adapter families are OpenAI Responses, Chat Completions (DeepSeek, Qwen/DashScope, GLM, Kimi, Grok, OpenAI-compatible), Anthropic Messages and Gemini. They are implemented but **not conformance-tested against live services**. Vertex AI, and Meta Muse or DashScope without a user endpoint profile, are reported as configuration diagnostics.
 
+Local Ollama uses native `/api/chat` and needs no API token for an unauthenticated server.
+Choose any installed model through each agent's `model_ref`, or use the generic
+[Ollama configuration](examples/ollama-review-config.json) with `OLLAMA_MODEL`:
+
+```bash
+export OLLAMA_MODEL='your-installed-model:tag'
+bin/verislop providers check --config examples/ollama-review-config.json --live
+bin/verislop providers probe --config examples/ollama-review-config.json \
+  --agent local-critic --live --max-output-tokens 128
+```
+
+Author and reviewer models may differ. The default server is `http://localhost:11434`;
+use `--endpoint-profiles PATH` for your own server. The installed Qwen at AIx is only a
+tested example. See [model/server selection and digest pins](docs/providers-and-review.md#10-implemented-ollama-support).
+
 `providers probe` requires explicit `--live` and sends one JSON echo challenge per selected `--agent` (repeat the flag to select more). It checks protocol parsing, the challenge, returned model metadata and token usage through the actual broker, with no retries, a maximum 30-second request timeout and bounded output. Probe responses are not saved as transcripts. A successful probe establishes that this call worked; agent reliability, model alias equivalence and formal correctness remain separate questions. Use `--endpoint-profiles PATH` for user-supplied Meta Muse and Qwen/DashScope regional endpoints.
 
 Reviewers at every tier must construct concrete probes before voting. The supervisor replays them against the bound artifacts and records expected versus observed results. Only confirmed counterexamples count as technical rejections; speculative findings are invalid and unresolved replay leaves review incomplete. Stored votes re-tally from their raw responses and replay receipts. See [the counterexample protocol](docs/adversarial-counterexamples.md) for supported probe kinds and limits. Acceptance escalates tier by tier, and changed artifacts invalidate old votes. Review never assigns a proof or bridge milestone.
 
 Review model identity is frozen before voting. A configured alias explicitly trusts the provider's request-time selection; returned model IDs remain ballot provenance. To require an immutable snapshot, set each reviewer's `model_identity` to `{"mode":"pinned","resolved_model":"SNAPSHOT_ID"}` and `review.require_fixed_model_snapshot` to `true`. Missing pinned identities fail preflight, and responses with a different identity cannot count. Frozen VSCore source/proof selections cannot enter Python repair.
+
+Agent-generated contracts receive bounded correction attempts with the exact rejected
+proposal and checker diagnostics. If a frozen contract cannot be proved or accepted,
+`run` can restart formalization in a fresh sibling package while preserving the exact
+request and interpreted obligations. Every proof, accepted IR, implementation, test
+and review gate must run again for that package. Use `--repair-rounds 0..8` to set the
+total restart budget; the default is `review.budgets.max_repair_rounds`. Zero disables
+these restarts. Explicit contract/proof candidates are never automatically rewritten.
+There is no artifact-first bypass of formal acceptance.
+
+Implementation proposals also receive bounded correction with exact binding keys
+and validator diagnostics before materialization. Reviewer protocol corrections
+preserve the same packet, reviewer slot and quorum; a reproduced counterexample
+still blocks acceptance.
+
+The JSON result identifies `summary.active_package` and the recovery journal. Failed
+parent packages retain their own blocked reports. `resume --runs-dir RUNS --run-id ORIGINAL`
+checks the retained bytes and follows the linked active package; its repair budget includes
+already consumed restarts. See [strict recovery](docs/implementation.md#strict-contract-recovery)
+for eligibility and evidence boundaries.
 
 ## Tests
 
@@ -190,9 +253,37 @@ python3 -m unittest discover -s tests -v     # uses the real Lean toolchain and 
 
 The tests cover the specification's twenty acceptance scenarios (§13), Lean module bundles and private dependencies, filesystem containment and cleanup, bounded provider probes, the shared bridge-certificate workflow and the Tier 2 VSCore bridge. VSCore tests evaluate the normative parser, type checker and evaluator in the kernel against a malformed and ill-typed source suite, audit the library's axioms, and accept the bounded-increment fixture through two builds and a re-executing verify. They also reject sorry, candidate axioms, `native_decide`, weaker statements, proofs for other programs, unsupported constructs, missing bindings, wrong enumeration mappings, wrong proposition hashes, native endpoints, source mutation, forged certificates, tampered IR and stale checkers. They include rejection of a changed definition or weakened theorem, `sorry`, hidden axioms and `native_decide`, false preconditions without witnesses, and draft mutation that cannot change the re-exported IR. Bridge tests replay real accepted contracts, reject hash-consistent forged compiled artifacts, reproduce preparation roots, check no-clobber publication and reject removed preparation indexes on resume. They also reject forged PASS certificates, stale roots, detached endpoints, premise cycles, unsafe files and excessive JSON complexity. Evidence tests require the assigned issuer and preserve infrastructure failures. Other checks cover opaque statements without oracles, stale evidence after a target change, empty campaigns, nondeterminism, orphan claims, crashed checkers and cancellation. Provider and review tests use loopback mock services across the four wire protocols; no real credentials or live-service conformance results are included.
 
+VSCore 0.2 regressions check exact canonical parsing and admission against concrete rejected bytes/programs, quoted identifiers, binder and argument order, dead-branch cycles, folds, nested data equality and values above `2^64`. Kernel fixtures prove expected evaluation equations; CLI tests preserve the boundary between advisory authoring, source admission and unsupported contract bridging. These tests assign no generated implementation campaign milestone.
+
 The correctness regressions cover Unit results, reflexive and logical formulas, accepted predicate aliases, helper-name collisions, oversized numeric tokens, complete certificate metadata, module-part binding and disagreement between recorded builds. These include compiled candidate proofs, kernel replay and exact implementation-IR re-export.
 
 Tier 2 closure regressions cover complete dispatch, independent materialization/linking, two fresh builds, immutable execution inventories, provenance, mutation, resume, optional-test admission and separate review release gates. Checked subtraction exercises its own accepted contract and proof, zero/equality/underflow and values above `2^64`, plus typed incorrect programs that fail refinement. Finite Lean-model conformance tests compare admission and lifecycle decisions; the model theorems do not prove the Python pipeline or its byte/isolation/provenance checks.
+
+## Local synthetic benchmark
+
+[synthetic_dataset/](synthetic_dataset/README.md) contains 100 locally authored
+Python tasks, 200 public examples, 957 held-out cases, deterministic generators,
+oracle validation, and the paired raw-model/full-CLI benchmark. Users select
+their own installed Ollama model and endpoint. Both experiments were stopped at the
+user's request; no corpus experiment is running. The retained Qwen run had no
+model-generation or pipeline wall deadline; call/token and candidate-test limits
+remained finite. [Run status](synthetic_dataset/RUN_STATUS.md) links the
+recorded scores, concrete stage failures, and the separate superseded timed run.
+
+A fresh [strict reservation proof of concept](synthetic_dataset/diagnostics/strict-reservation-poc-20261008/SUMMARY.md)
+completed native Qwen generation, Lean acceptance, AST-derived IR, linking, TESTED,
+both concrete review checkpoints and two clean builds. Its independent oracle passed
+400 cases twice; an equality-boundary mutant produced confirmed counterexamples and
+was blocked. This supported-domain control is separate from corpus scores and does
+not establish END_TO_END_VERIFIED.
+
+The [structured data follow-up](synthetic_dataset/diagnostics/data-pipeline-poc-20261008/OVERALL.md)
+extends the contract language to signed integers, Unicode strings, lists and records.
+In its latest fixed three-task Qwen cohort, the numeric pipeline completed the native
+CLI through TESTED and passed 160 independent cases twice. Row and Unicode generation
+failed; the Luna simulation produced no implementations. Original supervisor receipts
+remain 0/3 because a report-shape bug falsely blocked the successful numeric task;
+the separate audit records the native result without rewriting those receipts.
 
 ## Repository layout
 
@@ -203,6 +294,7 @@ examples/    bounded-increment and checked-subtraction requests and candidates
 formal/      Lean design model and finite admission/lifecycle conformance oracle
 verislop/    the CLI (pure Python) and lean/VeriSlopKernel.lean (trusted kernel tool)
 tests/       unit, acceptance-scenario and provider/review tests
+synthetic_dataset/  fixed tasks, benchmark harness, recorded artifacts and reports
 bin/         source-checkout launcher
 ```
 

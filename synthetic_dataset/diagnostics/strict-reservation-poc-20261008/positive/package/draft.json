@@ -1,0 +1,637 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "none",
+    "entities": "function reserve with two natural number arguments",
+    "error_semantics": "returns (\"error\", \"insufficient\") when balance < amount",
+    "explicit_non_goals": "negative numbers, booleans, non-integers, JSON interfaces, machine overflow, physical resource bounds, temporal progress",
+    "invariants": "successful balance <= original balance",
+    "liveness_properties": "none stated",
+    "postconditions": "success and error tuple returns, zero case, exact subtraction",
+    "preconditions": "none stated beyond input domain",
+    "resource_constraints": "none stated",
+    "safety_properties": "none stated"
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "balance is a natural number (>= 0)",
+        "amount is a natural number (>= 0)",
+        "no upper bound on balance or amount"
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:examples/proof-of-concept/reservation/request.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "function signature",
+        "input domain"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc",
+          "document_ref": "examples/proof-of-concept/reservation/request.txt",
+          "end_byte": 100,
+          "interpretation": "defines function signature and input domain",
+          "origin": "explicit",
+          "start_byte": 0
+        },
+        {
+          "document_hash": "sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc",
+          "document_ref": "examples/proof-of-concept/reservation/request.txt",
+          "end_byte": 426,
+          "interpretation": "confirms argument types",
+          "origin": "explicit",
+          "start_byte": 366
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function reserve takes two arguments, balance and amount, which are unbounded natural numbers including zero."
+    }
+  ],
+  "error_semantics": [],
+  "explicit_non_goals": [
+    {
+      "acceptance_criteria": [
+        "No guarantees are made regarding the listed excluded behaviors"
+      ],
+      "dependencies": [],
+      "id": "N1",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:examples/proof-of-concept/reservation/request.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "negative numbers",
+        "booleans",
+        "non-integers",
+        "JSON interfaces",
+        "machine overflow",
+        "physical resource bounds",
+        "temporal progress"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc",
+          "document_ref": "examples/proof-of-concept/reservation/request.txt",
+          "end_byte": 661,
+          "interpretation": "explicit exclusion of out-of-scope behaviors",
+          "origin": "explicit",
+          "start_byte": 495
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Behavior on negative numbers, booleans, non-integers, JSON interfaces, machine overflow, physical resource bounds and temporal progress is outside this specification."
+    }
+  ],
+  "invariants": [
+    {
+      "acceptance_criteria": [
+        "if return value is (\"ok\", new_balance), then new_balance <= balance"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "refines"
+        }
+      ],
+      "id": "I1",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:examples/proof-of-concept/reservation/request.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "successful branch"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc",
+          "document_ref": "examples/proof-of-concept/reservation/request.txt",
+          "end_byte": 304,
+          "interpretation": "monotonicity invariant for successful operations",
+          "origin": "explicit",
+          "start_byte": 233
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "On the successful branch, the returned balance is at most the original balance."
+    }
+  ],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "return value is a tuple of length 2",
+        "first element is the string \"ok\"",
+        "second element is balance - amount"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:examples/proof-of-concept/reservation/request.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "successful branch"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc",
+          "document_ref": "examples/proof-of-concept/reservation/request.txt",
+          "end_byte": 166,
+          "interpretation": "defines success case behavior",
+          "origin": "explicit",
+          "start_byte": 101
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If amount <= balance, the function returns the tuple (\"ok\", balance - amount)."
+    },
+    {
+      "acceptance_criteria": [
+        "return value is a tuple of length 2",
+        "first element is the string \"error\"",
+        "second element is the string \"insufficient\""
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:examples/proof-of-concept/reservation/request.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "error branch"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc",
+          "document_ref": "examples/proof-of-concept/reservation/request.txt",
+          "end_byte": 232,
+          "interpretation": "defines error case behavior",
+          "origin": "explicit",
+          "start_byte": 167
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If balance < amount, the function returns the tuple (\"error\", \"insufficient\")."
+    },
+    {
+      "acceptance_criteria": [
+        "reserve(balance, 0) returns (\"ok\", balance)"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:examples/proof-of-concept/reservation/request.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "zero amount case"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc",
+          "document_ref": "examples/proof-of-concept/reservation/request.txt",
+          "end_byte": 365,
+          "interpretation": "specific case for zero amount",
+          "origin": "explicit",
+          "start_byte": 305
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If amount is zero, the function returns the tuple (\"ok\", balance)."
+    },
+    {
+      "acceptance_criteria": [
+        "balance - amount is computed as exact integer subtraction, not floating-point or approximate"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "refines"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:examples/proof-of-concept/reservation/request.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "successful branch arithmetic"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:474f211cde1946680e3c5668adccbd316fadac499c9c653d49f25349b69081fc",
+          "document_ref": "examples/proof-of-concept/reservation/request.txt",
+          "end_byte": 494,
+          "interpretation": "arithmetic semantics",
+          "origin": "explicit",
+          "start_byte": 427
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The subtraction in the successful branch is ordinary exact subtraction."
+    }
+  ],
+  "preconditions": [],
+  "request_ref": "examples/proof-of-concept/reservation/request.txt",
+  "resource_constraints": [],
+  "safety_properties": [],
+  "schema_version": "0.1"
+}

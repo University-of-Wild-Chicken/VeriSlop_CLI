@@ -1,0 +1,927 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None identified",
+    "entities": "solution.py module, solve function, input data structure, UTF-16 offset definition",
+    "error_semantics": "Boundary errors and overlap errors with specific response structures",
+    "explicit_non_goals": "None explicitly stated",
+    "invariants": "None explicitly stated beyond validation order",
+    "liveness_properties": "None explicitly stated",
+    "postconditions": "Boundary error response, overlap error response, allowed adjacent/zero-length edits, simultaneous splicing with success response, purity/determinism/JSON-serializability, structure/ordering preservation",
+    "preconditions": "Input strings contain no isolated surrogates",
+    "resource_constraints": "Standard library only, no external I/O",
+    "safety_properties": "None explicitly stated"
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "solution.py exists",
+        "solve is defined in solution.py",
+        "solve is a pure function"
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "solution.py"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 123,
+          "interpretation": "module and function declaration",
+          "origin": "explicit",
+          "start_byte": 68
+        },
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 1106,
+          "interpretation": "module and function declaration",
+          "origin": "explicit",
+          "start_byte": 1030
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The solution is a Python module solution.py containing a pure function solve(data)."
+    },
+    {
+      "acceptance_criteria": [
+        "data is a dict with keys 'text' and 'edits'",
+        "text is a string",
+        "edits is a list of dicts with keys 'start', 'end', 'text'",
+        "start and end are integers",
+        "text in edits is a string",
+        "no isolated surrogates in any string"
+      ],
+      "dependencies": [],
+      "id": "D2",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input data"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 345,
+          "interpretation": "input structure definition",
+          "origin": "explicit",
+          "start_byte": 227
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input data is a JSON-compatible Python value with structure {text: string, edits: [{start: int, end: int, text: string}]} where strings contain no isolated surrogates."
+    },
+    {
+      "acceptance_criteria": [
+        "UTF-16 code unit counting is used for all offsets",
+        "BMP characters contribute 1 unit",
+        "Supplementary characters contribute 2 units"
+      ],
+      "dependencies": [],
+      "id": "D3",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "offset calculation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 461,
+          "interpretation": "offset unit definition",
+          "origin": "explicit",
+          "start_byte": 346
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Offsets are counted in UTF-16 code units in the original text, where BMP characters count as 1 unit and supplementary characters count as 2 units."
+    }
+  ],
+  "error_semantics": [],
+  "explicit_non_goals": [],
+  "invariants": [],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "Returns {error: 'boundary', edit: i} for first edit i with start > end",
+        "Returns {error: 'boundary', edit: i} for first edit i where start or end is not a valid character boundary",
+        "Returns {error: 'boundary', edit: i} for first edit i where start < 0 or end > total_units",
+        "Validation is performed in input order"
+      ],
+      "dependencies": [
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "boundary validation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 535,
+          "interpretation": "boundary validity requirement",
+          "origin": "explicit",
+          "start_byte": 462
+        },
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 608,
+          "interpretation": "boundary error response",
+          "origin": "explicit",
+          "start_byte": 536
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If any edit has an invalid boundary (start > end, or start/end not on a character boundary, or out of range 0..total_units), the function returns {error: 'boundary', edit: index} where index is the 0-based index of the first such edit in input order."
+    },
+    {
+      "acceptance_criteria": [
+        "Returns {error: 'overlap', edit: i} for first edit i where start_i < end_{i-1}",
+        "Covers both overlapping spans and backwards ordering",
+        "Validation is performed in input order after boundary checks"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "requires_bridge"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "overlap validation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 788,
+          "interpretation": "overlap validation and error response",
+          "origin": "explicit",
+          "start_byte": 609
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If all boundaries are valid, but an edit's start is less than the previous edit's end (in input order), the function returns {error: 'overlap', edit: index} where index is the 0-based index of the first such edit."
+    },
+    {
+      "acceptance_criteria": [
+        "Edit i with end_i == start_{i+1} does not trigger overlap error",
+        "Multiple edits with start == end at the same position do not trigger overlap error",
+        "Input order is preserved for adjacent/zero-length edits"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "refines"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "overlap validation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 882,
+          "interpretation": "allowed edge cases",
+          "origin": "explicit",
+          "start_byte": 789
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Adjacent edits (where edit i's end equals edit i+1's start) and multiple zero-length inserts at the same point are allowed and do not trigger overlap errors."
+    },
+    {
+      "acceptance_criteria": [
+        "Returns {text: result} on success",
+        "All edits are applied simultaneously using original text coordinates",
+        "No sequential coordinate shifting occurs",
+        "No partial output is produced"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "requires_bridge"
+        },
+        {
+          "id": "O2",
+          "relation": "requires_bridge"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "splicing and output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 978,
+          "interpretation": "splicing behavior and success response",
+          "origin": "explicit",
+          "start_byte": 883
+        },
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 1028,
+          "interpretation": "atomicity requirement",
+          "origin": "explicit",
+          "start_byte": 979
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If all validations pass, the function simultaneously splices all edits using original coordinates and returns {text: result} where result is the final string."
+    },
+    {
+      "acceptance_criteria": [
+        "No external I/O operations",
+        "Only Python standard library is used",
+        "Function is pure (no side effects)",
+        "Function is deterministic (same input yields same output)",
+        "Return value is JSON-serializable"
+      ],
+      "dependencies": [],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "function behavior"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 226,
+          "interpretation": "library and I/O constraint",
+          "origin": "explicit",
+          "start_byte": 176
+        },
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 1106,
+          "interpretation": "purity and determinism requirement",
+          "origin": "explicit",
+          "start_byte": 1030
+        },
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 1228,
+          "interpretation": "JSON compatibility requirement",
+          "origin": "explicit",
+          "start_byte": 1155
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function is pure and deterministic: it uses only the standard library, performs no external I/O, and returns a JSON-serializable value."
+    },
+    {
+      "acceptance_criteria": [
+        "Output structure matches {text: string} or {error: string, edit: int}",
+        "Edit ordering is preserved in validation and splicing"
+      ],
+      "dependencies": [],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output structure"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 1294,
+          "interpretation": "structure and ordering preservation",
+          "origin": "explicit",
+          "start_byte": 1229
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function preserves the specified input/output structure and exact ordering of edits."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "All string inputs are valid Unicode without isolated surrogates"
+      ],
+      "dependencies": [],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at input validation",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at input validation",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at input validation",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at input validation",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "input text",
+        "edit texts"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9a853f6e60ad4aee3506d7a0842ad563d4d2afd9503c294aeacbe8788b96508c",
+          "document_ref": "prompt.txt",
+          "end_byte": 345,
+          "interpretation": "input constraint",
+          "origin": "explicit",
+          "start_byte": 227
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input strings contain no isolated surrogates."
+    }
+  ],
+  "request_ref": "prompt.txt",
+  "resource_constraints": [],
+  "safety_properties": [],
+  "schema_version": "0.1"
+}

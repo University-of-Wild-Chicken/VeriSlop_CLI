@@ -1,0 +1,725 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None.",
+    "entities": "solve(data), flow indexes, flows, jobs, packets, deficits, order, rounds",
+    "error_semantics": "No behavior specified for nonconforming inputs; all inputs are stipulated to conform.",
+    "explicit_non_goals": "None stated.",
+    "invariants": "Per-round flow order and deficit-based head-packet scheduling, including empty reset, head blocking, and deficit carry.",
+    "liveness_properties": "Scheduling stops after the round in which all jobs have been emitted.",
+    "postconditions": "Return order and rounds with packet entries in scheduling order; stop after all jobs are emitted; empty input has zero rounds.",
+    "preconditions": "Inputs conform to the stated shape and positive-value constraints.",
+    "resource_constraints": "Python standard library only; no file reads, network use, printing, or state retained across calls.",
+    "safety_properties": "No oversized head packet is bypassed; no external I/O or cross-call retained state."
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "A function named solve is defined in solution.py.",
+        "The function accepts the specified JSON input and returns a JSON-serializable result."
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "solve(data)"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 923,
+          "interpretation": "Required function and module.",
+          "origin": "explicit",
+          "start_byte": 847
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 1045,
+          "interpretation": "Input and output value contract.",
+          "origin": "explicit",
+          "start_byte": 972
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 1111,
+          "interpretation": "Preserve the result structure and ordering.",
+          "origin": "explicit",
+          "start_byte": 1046
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Provide a pure deterministic Python 3 function solve(data) in solution.py that accepts a JSON value and returns a JSON-serializable value with the specified input/output structure."
+    }
+  ],
+  "error_semantics": [
+    {
+      "acceptance_criteria": [
+        "The specified result is returned for conforming inputs."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "E1",
+      "kind": "error_semantics",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "inputs conforming to the specification"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 262,
+          "interpretation": "Defines the supported input domain.",
+          "origin": "explicit",
+          "start_byte": 221
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For conforming inputs, return the specified scheduling result; behavior for nonconforming inputs is outside the stated input domain."
+    }
+  ],
+  "explicit_non_goals": [],
+  "invariants": [
+    {
+      "acceptance_criteria": [
+        "Flows are visited in ascending index order each round.",
+        "Empty flows have deficit zero after their visit.",
+        "A nonempty flow receives its quantum before packet emission.",
+        "Only consecutive head packets covered by the current deficit are emitted, with each size subtracted.",
+        "An oversized head packet blocks later packets in that flow.",
+        "A flow's deficit persists between rounds unless the flow is empty and reset."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "I1",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "every scheduling round and flow"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 441,
+          "interpretation": "Visit order.",
+          "origin": "explicit",
+          "start_byte": 389
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 480,
+          "interpretation": "Empty-flow deficit behavior.",
+          "origin": "explicit",
+          "start_byte": 442
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 602,
+          "interpretation": "Quantum, emission, and subtraction behavior.",
+          "origin": "explicit",
+          "start_byte": 481
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 659,
+          "interpretation": "Head-of-line blocking.",
+          "origin": "explicit",
+          "start_byte": 603
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 689,
+          "interpretation": "Deficit persistence.",
+          "origin": "explicit",
+          "start_byte": 660
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Maintain a deficit per flow and visit flow indexes in ascending order each round. An empty flow resets its deficit to zero. For a nonempty flow, add its quantum, then emit consecutive head packets while the deficit covers each packet, subtracting each emitted packet size. Never bypass an oversized head packet; deficits carry across rounds."
+    }
+  ],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "The result has order and rounds fields.",
+        "Each emitted packet is represented by its flow index and original job index.",
+        "Packet entries follow the scheduling order."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "I1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "G1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all conforming inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 814,
+          "interpretation": "Result fields and packet entry shape.",
+          "origin": "explicit",
+          "start_byte": 742
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 1111,
+          "interpretation": "Preserve result ordering.",
+          "origin": "explicit",
+          "start_byte": 1046
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Return an object with order and rounds. For each emitted packet, append [flow_index, original_job_index] to order in scheduling order."
+    },
+    {
+      "acceptance_criteria": [
+        "Scheduling ends after the round that emits the final job.",
+        "rounds reports the number of rounds executed.",
+        "An empty input yields order [] and rounds 0."
+      ],
+      "dependencies": [
+        {
+          "id": "I1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "G2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all conforming inputs, including empty inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 741,
+          "interpretation": "Termination and final-round behavior.",
+          "origin": "explicit",
+          "start_byte": 690
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 845,
+          "interpretation": "Empty-input result.",
+          "origin": "explicit",
+          "start_byte": 815
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 1392,
+          "interpretation": "Public empty-input example.",
+          "origin": "explicit",
+          "start_byte": 1330
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Stop after the round in which all jobs have been emitted and report the number of rounds executed. For empty inputs, return zero rounds and an empty order."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "Inputs are limited to the specified conforming input domain."
+      ],
+      "dependencies": [],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by the caller, as stipulated by the request and discharged at the solve(data) input boundary",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by the caller, as stipulated by the request and discharged at the solve(data) input boundary",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by the caller, as stipulated by the request and discharged at the solve(data) input boundary",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by the caller, as stipulated by the request and discharged at the solve(data) input boundary",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "all calls"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 262,
+          "interpretation": "Input-domain assumption.",
+          "origin": "explicit",
+          "start_byte": 221
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 388,
+          "interpretation": "Input shape and value constraints.",
+          "origin": "explicit",
+          "start_byte": 294
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input conforms to the specification: it contains flows, each flow has a positive integer quantum and jobs consisting of positive packet sizes."
+    }
+  ],
+  "request_ref": "prompt.txt",
+  "resource_constraints": [
+    {
+      "acceptance_criteria": [
+        "No non-standard-library dependency is used.",
+        "The function does not read files, access the network, or print.",
+        "Results do not depend on state retained from prior calls."
+      ],
+      "dependencies": [],
+      "id": "R1",
+      "kind": "resource_constraint",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "implementation and each call"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 147,
+          "interpretation": "Dependency restriction.",
+          "origin": "explicit",
+          "start_byte": 110
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 220,
+          "interpretation": "I/O and state restrictions.",
+          "origin": "explicit",
+          "start_byte": 148
+        },
+        {
+          "document_hash": "sha256:cd396a730b2ad2553a7831b39c7ba3b835376efc233c3b8f90e5f32b19c030dc",
+          "document_ref": "prompt.txt",
+          "end_byte": 971,
+          "interpretation": "Reinforces library and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 924
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Use only the Python standard library and perform no external I/O, including file reads, network use, or printing; retain no state across calls."
+    }
+  ],
+  "safety_properties": [],
+  "schema_version": "0.1"
+}

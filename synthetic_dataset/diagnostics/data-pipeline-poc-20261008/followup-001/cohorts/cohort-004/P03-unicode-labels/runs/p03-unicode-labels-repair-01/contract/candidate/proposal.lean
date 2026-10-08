@@ -1,0 +1,15 @@
+import Std
+namespace VeriSlopAST
+structure «Input» where
+  «labels» : (_root_.List _root_.String)
+  «prefix» : _root_.String
+structure «Output» where
+  «labels» : (_root_.List _root_.String)
+  «count» : _root_.Nat
+def «solve» («_v0» : _root_.VeriSlopAST.«Input») : _root_.VeriSlopAST.«Output» := (_root_.VeriSlopAST.«Output».«mk» (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))) (@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))))
+theorem «_vs_body_solve» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), ((_root_.VeriSlopAST.«solve» «_v0») = (_root_.VeriSlopAST.«Output».«mk» (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))) (@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))))) := by intros; rfl
+@[reducible] def «valid_input» («_v0» : _root_.VeriSlopAST.«Input») : Prop := _root_.True
+theorem «_vs_predicate_valid_input» («_v0» : _root_.VeriSlopAST.«Input») : ((_root_.VeriSlopAST.«valid_input» «_v0») ↔ _root_.True) := by rfl
+theorem «solve_correct» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), (((_root_.VeriSlopAST.«Output».«labels» (_root_.VeriSlopAST.«solve» «_v0»)) = (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))) ∧ ((_root_.VeriSlopAST.«Output».«count» (_root_.VeriSlopAST.«solve» «_v0»)) = (@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))))) := by sorry
+theorem «witness_A1» : (∃ («_v0» : _root_.VeriSlopAST.«Input»), (_root_.VeriSlopAST.«valid_input» «_v0»)) := by sorry
+end VeriSlopAST

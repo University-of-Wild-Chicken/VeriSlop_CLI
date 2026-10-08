@@ -1,0 +1,147 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:f1a5df0d9222a9b1a08ce01d636142b342fe6c0430e5e00a76d65370ee1514af",
+  "created_at": "2026-10-08T05:08:39Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-02",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/G20/verislop/package-repair-02/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/G20/verislop/package-repair-02/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/G20/verislop/package-repair-02/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 211:31: Invalid field `sort`: The environment does not contain `List.sort`, so it is not possible to project the field `sort` from an expression\n  buffer\nof type `List (Nat × Int)`; 225:19: fail to show termination for\n  VeriSlop.G20.solve.process.flush\nwith errors\nfailed to infer structural recursion:\nNot considering parameter s of VeriSlop.G20.solve.process.flush:\n  it is unchanged in the recursive calls\nCannot use parameter total':\n  the type Int does not have a `.brecOn` recursor\nCannot use parameter next':\n  failed to eliminate recursive application\n    solve.process.flush s (total' + nd) (next' + 1) buffer''' flushed'\nCannot use parameter buffer'':\n  failed to eliminate recursive application\n    solve.process.flush s (total' + nd) (next' + 1) buffer''' flushed'\nCannot use parameter flushed:\n  the type Bool does not have a `.brecOn` recursor\n\n\nCould not find a decreasing measure.\nThe basic measures relate at each recursive call as follows:\n(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)\n             #1 next' #2 #3\n1) 230:18-68  ?     ?  ?  ≤\n\n#1: total'\n#2: buffer''\n#3: flushed\n\nPlease use `termination_by` to specify a decreasing measure.; 241:72: failed to synthesize instance of type class\n  OfNat Output 1\nnumerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is\n  Output\ndue to the absence of the instance above\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; 241:107: failed to synthesize instance of type class\n  OfNat Output 0\nnumerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is\n  Output\ndue to the absence of the instance above\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; 241:48: invalid {...} notation, expected type is not known",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:cd76842e2024c354379cfec920d8c643c9ad5ed39d601aced7ad302b034a4cf9",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "VeriSlop.G20.solve"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "VeriSlop.G20.Input",
+                "VeriSlop.G20.Event"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "declarations": [
+                "VeriSlop.G20.Output"
+              ],
+              "obligation": "D3"
+            },
+            {
+              "obligation": "A1",
+              "predicate": "VeriSlop.G20.valid_input"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlop.G20.O1_initial_state"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlop.G20.O2_duplicate_conflict"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "VeriSlop.G20.O3_flush_behavior"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "VeriSlop.G20.O4_pending_sorted"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "VeriSlop.G20.O5_memory_retention"
+            },
+            {
+              "obligation": "O6",
+              "theorem": "VeriSlop.G20.O6_pure_deterministic"
+            },
+            {
+              "obligation": "O7",
+              "theorem": "VeriSlop.G20.O7_order_preservation"
+            }
+          ],
+          "internal_obligations": [],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "G20.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace VeriSlop.G20\n\ninductive EventResult where\n  | applied\n  | buffered\n  | duplicate\n  | conflict\n\nstructure Event where\n  seq : Nat\n  delta : Int\n\nstructure Input where\n  events : List Event\n\nstructure Output where\n  results : List EventResult\n  next : Nat\n  total : Int\n  pending : List (Nat × Int)\n\ndef solve (data : Input) : Output :=\n  let events := data.events\n  let seen : List (Nat × Int) := []\n  let buffer : List (Nat × Int) := []\n  let total : Int := 0\n  let next : Nat := 1\n  let results : List EventResult := []\n  let rec process (evs : List Event) (seen : List (Nat × Int)) (buffer : List (Nat × Int)) (total : Int) (next : Nat) (results : List EventResult) : Output\n    := match evs with\n       | [] =>\n         let pending := buffer.sort (fun a b => a.1.compare b.1)\n         { results := results, next := next, total := total, pending := pending }\n       | ev :: rest =>\n         let s := ev.seq\n         let d := ev.delta\n         match seen.find? (fun p => p.1 = s) with\n         | some (s', d') =>\n           if d' = d then\n             process rest seen buffer total next (results ++ [EventResult.duplicate])\n           else\n             process rest seen buffer total next (results ++ [EventResult.conflict])\n         | none =>\n           let buffer' := buffer ++ [(s, d)]\n           let seen' := seen ++ [(s, d)]\n           let rec flush (total' : Int) (next' : Nat) (buffer'' : List (Nat × Int)) (flushed : Bool) : (Int × Nat × List (Nat × Int) × Bool)\n             := match buffer''.find? (fun p => p.1 = next') with\n                | some (ns, nd) =>\n                  let buffer''' := buffer''.filter (fun p => p.1 ≠ ns)\n                  let flushed' := if s = ns then true else flushed\n                  flush (total' + nd) (next' + 1) buffer''' flushed'\n                | none =>\n                  (total', next', buffer'', flushed)\n           let (total'', next'', buffer''', flushed') := flush total next buffer' false\n           let result := if flushed' then EventResult.applied else EventResult.buffered\n           process rest seen' buffer''' total'' next'' (results ++ [result])\n  process events seen buffer total next results\n\ndef valid_input (data : Input) : Prop :=\n  ∀ e ∈ data.events, e.seq > 0\n\ntheorem O1_initial_state (data : Input) : solve { events := [] }.next = 1 ∧ solve { events := [] }.total = 0 := by\n  sorry\n\ntheorem O2_duplicate_conflict (data : Input) (h : valid_input data) : True := by\n  sorry\n\ntheorem O3_flush_behavior (data : Input) (h : valid_input data) : True := by\n  sorry\n\ntheorem O4_pending_sorted (data : Input) (h : valid_input data) : True := by\n  sorry\n\ntheorem O5_memory_retention (data : Input) (h : valid_input data) : True := by\n  sorry\n\ntheorem O6_pure_deterministic (data : Input) : True := by\n  sorry\n\ntheorem O7_order_preservation (data : Input) : True := by\n  sorry\n\nend VeriSlop.G20"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261007,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "CANDIDATE_BUILD_FAILURE"
+      ],
+      "seconds": 78,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

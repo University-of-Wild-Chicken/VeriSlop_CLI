@@ -1,0 +1,854 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None identified that affect correctness. The rules are explicit.",
+    "entities": "The main entity is the solve function in solution.py. It processes a JSON-compatible input structure.",
+    "error_semantics": "The task implies valid input. No specific error handling for malformed input is requested, but the function should not crash on valid JSON inputs.",
+    "explicit_non_goals": "No locale-specific sorting, no Unicode normalization, no decimal or negative number parsing, no external dependencies.",
+    "invariants": "The output list is a permutation of the input list. The relative order of equal elements is preserved.",
+    "liveness_properties": "The function terminates for all valid inputs within the bounded constraints.",
+    "postconditions": "The output is a sorted list of the original strings. The sorting logic follows specific tokenization and comparison rules: numeric vs text tokens, casefold for text, integer value for numbers, stability for equal keys.",
+    "preconditions": "The input is a JSON-compatible Python value with a 'values' key containing a list of strings. The environment is Python 3 with standard library only.",
+    "resource_constraints": "Numeric tokens are bounded to 1000 digits. Memory usage is proportional to input size.",
+    "safety_properties": "No external I/O is performed. Only standard library is used. The function is pure and deterministic."
+  },
+  "entities": [],
+  "error_semantics": [],
+  "explicit_non_goals": [],
+  "invariants": [],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "The output list contains exactly the same elements as the input list, with no duplicates or omissions.",
+        "The order of elements in the output list matches the expected sorted order for all test cases."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 280,
+          "interpretation": "Defines the input structure and the requirement to return the sorted original strings.",
+          "origin": "explicit",
+          "start_byte": 223
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function solve(data) returns a list of strings that is a permutation of the input list data['values'], sorted according to the specified natural ordering."
+    },
+    {
+      "acceptance_criteria": [
+        "Strings are correctly split into alternating numeric and text tokens.",
+        "Numeric tokens consist only of ASCII digits 0-9.",
+        "Text tokens consist of all other characters."
+      ],
+      "dependencies": [],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 364,
+          "interpretation": "Specifies the tokenization rule for the sorting key.",
+          "origin": "explicit",
+          "start_byte": 281
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The sorting algorithm tokenizes each string into maximal ASCII-digit [0-9]+ runs or maximal non-ASCII-digit runs."
+    },
+    {
+      "acceptance_criteria": [
+        "Numeric comparison is based on integer value, not string length or lexicographic order.",
+        "Leading zeros do not affect the numeric value used for comparison."
+      ],
+      "dependencies": [],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 449,
+          "interpretation": "Defines the comparison logic for numeric tokens.",
+          "origin": "explicit",
+          "start_byte": 365
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Numeric tokens are compared by their arbitrary-precision integer value, ignoring leading zeros."
+    },
+    {
+      "acceptance_criteria": [
+        "Text comparison uses the casefolded version of the strings.",
+        "Comparison is lexicographic based on Unicode code points after casefolding."
+      ],
+      "dependencies": [],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 517,
+          "interpretation": "Defines the comparison logic for text tokens.",
+          "origin": "explicit",
+          "start_byte": 450
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Text tokens are compared by Python Unicode casefold lexicographic order."
+    },
+    {
+      "acceptance_criteria": [
+        "When comparing two token sequences, if one has a numeric token and the other has a text token at the same index, the numeric token is considered smaller."
+      ],
+      "dependencies": [],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 584,
+          "interpretation": "Defines the precedence between token types at the same position.",
+          "origin": "explicit",
+          "start_byte": 518
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "At a corresponding position, a numeric token sorts before a text token."
+    },
+    {
+      "acceptance_criteria": [
+        "Comparison proceeds token by token from left to right.",
+        "If all tokens of one sequence match the prefix of the other, the shorter sequence is considered smaller."
+      ],
+      "dependencies": [],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 656,
+          "interpretation": "Defines the general comparison order and prefix handling.",
+          "origin": "explicit",
+          "start_byte": 585
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Tokens are compared left-to-right; if one token sequence is a prefix of the other, the shorter sequence sorts first."
+    },
+    {
+      "acceptance_criteria": [
+        "The sort is stable: equal elements retain their original relative order.",
+        "No additional tie-breaking logic (like spelling or zero-count) is applied."
+      ],
+      "dependencies": [],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 758,
+          "interpretation": "Specifies stability and forbids extra tie-breakers.",
+          "origin": "explicit",
+          "start_byte": 657
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If two strings have completely equal token keys, their relative order in the output matches their original input order (stable sort)."
+    },
+    {
+      "acceptance_criteria": [
+        "Characters like '٢' (Arabic-Indic digit two) are part of text tokens.",
+        "Only ASCII digits 0-9 form numeric tokens."
+      ],
+      "dependencies": [],
+      "id": "O8",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 784,
+          "interpretation": "Clarifies that only ASCII digits are numeric.",
+          "origin": "explicit",
+          "start_byte": 759
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Non-ASCII digits are treated as text tokens, not numeric tokens."
+    },
+    {
+      "acceptance_criteria": [
+        "The token list for an empty string is empty.",
+        "An empty token list is considered a prefix of any non-empty token list, thus sorting first."
+      ],
+      "dependencies": [],
+      "id": "O9",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 812,
+          "interpretation": "Defines the tokenization of empty strings.",
+          "origin": "explicit",
+          "start_byte": 786
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "An empty string has no tokens and sorts before any non-empty string."
+    }
+  ],
+  "preconditions": [],
+  "request_ref": "prompt.txt",
+  "resource_constraints": [
+    {
+      "acceptance_criteria": [
+        "Python's native int type is used or equivalent arbitrary-precision logic is applied.",
+        "No overflow occurs for 1000-digit numbers."
+      ],
+      "dependencies": [],
+      "id": "O10",
+      "kind": "resource_constraint",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bb89525f5157f0745eeacd6581d71e3d56bd6459f1e11bfddc5e3f6f5f905e1c",
+          "document_ref": "prompt.txt",
+          "end_byte": 954,
+          "interpretation": "Specifies the upper bound for numeric token length.",
+          "origin": "explicit",
+          "start_byte": 877
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The solution must handle numeric tokens with up to 1000 digits using arbitrary-precision integers."
+    }
+  ],
+  "safety_properties": [],
+  "schema_version": "0.1"
+}

@@ -1,0 +1,89 @@
+{
+  "compile": {
+    "errors": [
+      "262:59: Invalid field `contains`: The environment does not contain `Function.contains`, so it is not possible to project the field `contains` from an expression\n  fun f => f ≠ e\nof type `Edge → Prop`",
+      "265:48: Invalid field `length`: The environment does not contain `Function.length`, so it is not possible to project the field `length` from an expression\n  fun e => ?m.4 = v\nof type `?m.2 → Prop`",
+      "265:39: Invalid projection: Type of\n  e\nis not known; cannot resolve projection `2`",
+      "268:48: Invalid field `map`: The environment does not contain `Function.map`, so it is not possible to project the field `map` from an expression\n  fun e => ?m.4 = u\nof type `?m.2 → Prop`",
+      "268:39: Invalid projection: Type of\n  e\nis not known; cannot resolve projection `1`",
+      "277:29: Invalid field `findIndex`: The environment does not contain `List.findIndex`, so it is not possible to project the field `findIndex` from an expression\n  in_deg\nof type `List Nat`",
+      "281:27: Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression\n  remaining\nof type `List Nat`",
+      "283:23: Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression\n  remaining\nof type `List Nat`",
+      "285:57: Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression\n  remaining\nof type `List Nat`",
+      "273:10: fail to show termination for\n  Contract.kahn_order.step\nwith errors\nfailed to infer structural recursion:\nNot considering parameter n of Contract.kahn_order.step:\n  it is unchanged in the recursive calls\nNot considering parameter deduped of Contract.kahn_order.step:\n  it is unchanged in the recursive calls\nCannot use parameter remaining:\n  failed to eliminate recursive application\n    kahn_order.step n deduped (remaining.eraseIdx i) updated (acc ++ [v])\nCannot use parameter in_deg:\n  failed to eliminate recursive application\n    kahn_order.step n deduped (remaining.eraseIdx i) updated (acc ++ [v])\nCannot use parameter acc:\n  failed to eliminate recursive application\n    kahn_order.step n deduped (remaining.eraseIdx i) updated (acc ++ [v])\n\n\nCould not find a decreasing measure.\nThe basic measures relate at each recursive call as follows:\n(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)\n            #1 #2 acc\n1) 286:8-56  ?  ?   ?\n\n#1: remaining\n#2: in_deg\n\nPlease use `termination_by` to specify a decreasing measure.",
+      "290:56: Invalid field `toList`: The environment does not contain `List.toList`, so it is not possible to project the field `toList` from an expression\n  List.filter (fun v => !order.contains v) (List.range n)\nof type `List Nat`",
+      "292:60: unexpected token ','; expected '//', '}' or structInstFieldDecl",
+      "316:4: Invalid field notation: Field projection operates on types of the form `C ...` where C is a constant. The expression\n  blocked = List.filter (fun v => !order.contains v) (List.range n)\nhas type `Prop` which does not have the necessary form.",
+      "317:36: Unknown identifier `order.contains`",
+      "317:63: Unknown identifier `blocked.length`",
+      "319:8: Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided",
+      "346:6: Tactic `rfl` failed: The left-hand side\n  order\nis not definitionally equal to the right-hand side\n  []\n\ncase left\nedges : List Edge\nh : valid_input 0 edges\norder : List Nat\nblocked : sorry\n⊢ order = []",
+      "357:6: failed to synthesize\n  Decidable (valid_n 1)\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.",
+      "358:6: failed to synthesize\n  Decidable (valid_edges 1 [])\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.",
+      "361:8: failed to synthesize\n  Decidable (valid_n 2)\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.",
+      "362:8: failed to synthesize\n  Decidable (valid_edges 2 [Edge.mk 0 1, Edge.mk 1 0])\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command."
+    ],
+    "isolation": {
+      "filesystem_backend": "bubblewrap",
+      "filesystem_read_isolation": true,
+      "filesystem_write_isolation": true,
+      "inherited_file_descriptors": "stdin/stdout/stderr only",
+      "ipc_namespace": true,
+      "network_namespace": true,
+      "note": "Mount/PID/IPC containment; system runtimes and explicit read-only grants remain readable. Kernel, bubblewrap and runtime contents are trusted; no seccomp or aggregate cgroup limits.",
+      "pid_namespace": true,
+      "private_proc": true,
+      "process_group_kill_on_timeout": true,
+      "read_only_paths": [
+        "/usr",
+        "/bin",
+        "/sbin",
+        "/lib",
+        "/lib64",
+        "/etc/ld.so.cache",
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1"
+      ],
+      "resource_limits": [
+        "RLIMIT_AS",
+        "RLIMIT_CPU",
+        "RLIMIT_FSIZE",
+        "RLIMIT_CORE"
+      ],
+      "scrubbed_environment": true,
+      "staged_working_directory": true,
+      "writable_host_paths": [
+        "<stage>"
+      ]
+    },
+    "ok": false,
+    "sorry_positions": [
+      {
+        "column": 8,
+        "line": 297
+      },
+      {
+        "column": 8,
+        "line": 302
+      },
+      {
+        "column": 8,
+        "line": 324
+      },
+      {
+        "column": 8,
+        "line": 334
+      }
+    ],
+    "wall_ms": 402
+  },
+  "defeq": null,
+  "diagnostics": [
+    {
+      "claims": [],
+      "code": "CANDIDATE_BUILD_FAILURE",
+      "message": "the challenge does not elaborate: 262:59: Invalid field `contains`: The environment does not contain `Function.contains`, so it is not possible to project the field `contains` from an expression\n  fun f => f ≠ e\nof type `Edge → Prop`; 265:48: Invalid field `length`: The environment does not contain `Function.length`, so it is not possible to project the field `length` from an expression\n  fun e => ?m.4 = v\nof type `?m.2 → Prop`; 265:39: Invalid projection: Type of\n  e\nis not known; cannot resolve projection `2`; 268:48: Invalid field `map`: The environment does not contain `Function.map`, so it is not possible to project the field `map` from an expression\n  fun e => ?m.4 = u\nof type `?m.2 → Prop`; 268:39: Invalid projection: Type of\n  e\nis not known; cannot resolve projection `1`",
+      "obligations": [],
+      "severity": "blocking"
+    }
+  ]
+}

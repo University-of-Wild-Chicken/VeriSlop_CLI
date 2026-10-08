@@ -1,0 +1,635 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "O1": {
+      "acceptance_criteria": [
+        "Repeating an input edge does not change the result."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all conforming inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 367,
+          "interpretation": "Duplicate directed edges do not affect graph behavior.",
+          "origin": "explicit",
+          "start_byte": 344
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Ignore duplicate input edges when determining cycles and the returned reduction."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "A cyclic graph produces null."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        },
+        {
+          "id": "O1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all conforming inputs containing a cycle"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 400,
+          "interpretation": "Specifies cycle handling.",
+          "origin": "explicit",
+          "start_byte": 368
+        },
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 1137,
+          "interpretation": "The self-loop example illustrates a cycle that returns null.",
+          "origin": "explicit",
+          "start_byte": 929
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Return null if the directed graph contains any cycle, including a self-loop."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "An edge is returned if and only if there is no alternate u-to-v path of length at least two."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        },
+        {
+          "id": "O1",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all conforming acyclic inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 573,
+          "interpretation": "Defines which edges are retained.",
+          "origin": "explicit",
+          "start_byte": 401
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For an acyclic graph, retain an edge exactly when there is no alternate path from u to v using at least two edges."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "Reachability between every pair of vertices matches the input DAG.",
+        "No returned edge is redundant under the alternate-path criterion.",
+        "Isolated vertices are not explicitly added to the output."
+      ],
+      "dependencies": [
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O4",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "acyclic graph reduction"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 661,
+          "interpretation": "Specifies reduction correctness and vertex representation.",
+          "origin": "explicit",
+          "start_byte": 574
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The reduction preserves reachability, contains no redundant edges, and leaves isolated vertices implicit."
+    },
+    "O5": {
+      "acceptance_criteria": [
+        "The result is a list of unique [u,v] pairs in sorted order.",
+        "The output structure and ordering match the specification."
+      ],
+      "dependencies": [
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "acyclic graph output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 573,
+          "interpretation": "Requires sorted unique edge pairs.",
+          "origin": "explicit",
+          "start_byte": 401
+        },
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 927,
+          "interpretation": "Requires the specified result structure and ordering.",
+          "origin": "explicit",
+          "start_byte": 862
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Return retained edges as sorted unique [u,v] pairs, preserving the specified output structure and exact ordering."
+    },
+    "O6": {
+      "acceptance_criteria": [
+        "The implementation uses only standard-library facilities.",
+        "The function performs no external I/O, file reads, network access, or printing.",
+        "The function retains no state across calls."
+      ],
+      "dependencies": [],
+      "id": "O6",
+      "kind": "resource_constraint",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "implementation and all calls"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 155,
+          "interpretation": "Restricts dependencies.",
+          "origin": "explicit",
+          "start_byte": 118
+        },
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 228,
+          "interpretation": "Prohibits file and network access, printing, and cross-call state.",
+          "origin": "explicit",
+          "start_byte": 156
+        },
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 787,
+          "interpretation": "Reiterates the library and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 740
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Use only the Python standard library; do not perform external I/O, read files, use the network, print, or retain state across calls."
+    },
+    "O7": {
+      "acceptance_criteria": [
+        "The first example returns [[0,1],[1,2]].",
+        "The second example returns null."
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O5",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "the two supplied public examples"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+          "document_ref": "prompt.txt",
+          "end_byte": 1137,
+          "interpretation": "Provides two required input/output examples.",
+          "origin": "explicit",
+          "start_byte": 929
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For the supplied examples, return [[0,1],[1,2]] for the three-vertex graph with a duplicate [0,2] edge, and null for the one-vertex self-loop graph."
+    }
+  },
+  "roots": {
+    "interpretation_root": "sha256:1c9178016595d45388625f8de48353c6456f5faa261d3dff83366b7fde653c55"
+  },
+  "schema_version": "0.1"
+}

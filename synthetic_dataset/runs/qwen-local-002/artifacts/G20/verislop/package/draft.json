@@ -1,0 +1,1152 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None identified.",
+    "entities": "The main entity is the solve function, which processes a list of events and returns a structured result.",
+    "error_semantics": "Not explicitly specified, but the function should handle invalid inputs gracefully (though the spec says all inputs conform).",
+    "explicit_non_goals": "Not explicitly specified, but the function should not perform any operations outside the specified scope.",
+    "invariants": "The first arrival for each sequence is authoritative, and applied events are remembered for duplicate/conflict detection.",
+    "liveness_properties": "Not explicitly specified, but the function must terminate for any valid input.",
+    "postconditions": "The function returns a dictionary with 'results', 'next', 'total', and 'pending' fields, each with specific structures and values.",
+    "preconditions": "The input must conform to the specified structure: a dictionary with an 'events' key, where each event has 'seq' and 'delta' keys.",
+    "resource_constraints": "Not explicitly specified, but the function should be efficient enough to handle reasonable input sizes.",
+    "safety_properties": "The function must not perform I/O, network operations, printing, or retain state across calls."
+  },
+  "entities": [],
+  "error_semantics": [],
+  "explicit_non_goals": [],
+  "invariants": [
+    {
+      "acceptance_criteria": [
+        "If an event with seq S arrives first, its delta is stored as the authoritative delta for S.",
+        "Subsequent events with seq S are compared to this stored delta."
+      ],
+      "dependencies": [],
+      "id": "O6",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 458,
+          "interpretation": "Defines the authority rule for sequence numbers.",
+          "origin": "explicit",
+          "start_byte": 393
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The first arrival for each sequence number is permanently authoritative; subsequent arrivals with the same sequence number are checked against this first arrival."
+    },
+    {
+      "acceptance_criteria": [
+        "Even after an event is applied, its sequence number and delta are retained for future duplicate/conflict checks."
+      ],
+      "dependencies": [],
+      "id": "O11",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 892,
+          "interpretation": "Specifies that applied events are not forgotten.",
+          "origin": "explicit",
+          "start_byte": 826
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Applied events remain remembered for duplicate/conflict detection."
+    }
+  ],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "The return value is a dictionary with exactly the keys 'results', 'next', 'total', 'pending'.",
+        "The return value is JSON-serializable."
+      ],
+      "dependencies": [],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 790,
+          "interpretation": "Defines the structure of the return value.",
+          "origin": "explicit",
+          "start_byte": 755
+        },
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 298,
+          "interpretation": "Specifies the type constraint on the return value.",
+          "origin": "explicit",
+          "start_byte": 269
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function solve(data) returns a JSON-serializable object with keys 'results', 'next', 'total', and 'pending'."
+    },
+    {
+      "acceptance_criteria": [
+        "len(results) == len(events).",
+        "Each element is one of the four specified status strings."
+      ],
+      "dependencies": [],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 523,
+          "interpretation": "Defines two of the status strings.",
+          "origin": "explicit",
+          "start_byte": 459
+        },
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 754,
+          "interpretation": "Defines the other two status strings.",
+          "origin": "explicit",
+          "start_byte": 665
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'results' field is a list of strings where each element is 'applied', 'buffered', 'duplicate', or 'conflict', corresponding to the input events in order."
+    },
+    {
+      "acceptance_criteria": [
+        "next is an integer.",
+        "next reflects the contiguous prefix of applied events starting from 1."
+      ],
+      "dependencies": [],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 392,
+          "interpretation": "Defines the initial value of next.",
+          "origin": "explicit",
+          "start_byte": 371
+        },
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 663,
+          "interpretation": "Defines how next is updated.",
+          "origin": "explicit",
+          "start_byte": 579
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'next' field is an integer representing the next expected sequence number after processing all events."
+    },
+    {
+      "acceptance_criteria": [
+        "total is an integer.",
+        "total equals the sum of deltas for all events that were 'applied'."
+      ],
+      "dependencies": [],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 392,
+          "interpretation": "Defines the initial value of total.",
+          "origin": "explicit",
+          "start_byte": 371
+        },
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 663,
+          "interpretation": "Implies total is updated when events are applied.",
+          "origin": "explicit",
+          "start_byte": 579
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'total' field is an integer representing the sum of deltas of all applied events."
+    },
+    {
+      "acceptance_criteria": [
+        "pending is a list of lists, each containing two integers.",
+        "The list is sorted by the first element (seq).",
+        "pending contains exactly the events that are buffered but not applied."
+      ],
+      "dependencies": [],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 824,
+          "interpretation": "Defines the structure and sorting of the pending field.",
+          "origin": "explicit",
+          "start_byte": 792
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'pending' field is a list of [seq, delta] pairs for events that are buffered but not yet applied, sorted by seq."
+    },
+    {
+      "acceptance_criteria": [
+        "If seq S was seen before with delta D, and a new event with seq S and delta D arrives, the result is 'duplicate'.",
+        "The state (total, next, pending) is not modified by this event."
+      ],
+      "dependencies": [
+        {
+          "id": "O6",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 495,
+          "interpretation": "Defines the behavior for identical repeats.",
+          "origin": "explicit",
+          "start_byte": 459
+        },
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 545,
+          "interpretation": "Specifies that no state is modified for duplicates.",
+          "origin": "explicit",
+          "start_byte": 525
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If an event with a sequence number that has already been seen arrives with the same delta, the result is 'duplicate' and no state change occurs."
+    },
+    {
+      "acceptance_criteria": [
+        "If seq S was seen before with delta D, and a new event with seq S and delta D' (D' != D) arrives, the result is 'conflict'.",
+        "The state (total, next, pending) is not modified by this event."
+      ],
+      "dependencies": [
+        {
+          "id": "O6",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O8",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 523,
+          "interpretation": "Defines the behavior for unequal repeats.",
+          "origin": "explicit",
+          "start_byte": 497
+        },
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 545,
+          "interpretation": "Specifies that no state is modified for conflicts.",
+          "origin": "explicit",
+          "start_byte": 525
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If an event with a sequence number that has already been seen arrives with a different delta, the result is 'conflict' and no state change occurs."
+    },
+    {
+      "acceptance_criteria": [
+        "New events are added to the buffer.",
+        "After buffering, the system checks for contiguous sequences starting at 'next'.",
+        "All contiguous events are applied, updating 'next' and 'total'."
+      ],
+      "dependencies": [],
+      "id": "O9",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 664,
+          "interpretation": "Defines the buffering and flushing logic.",
+          "origin": "explicit",
+          "start_byte": 547
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "A new arrival (first time for its sequence) is buffered, and then all contiguous buffered events starting at 'next' are applied, incrementing 'next' and updating 'total'."
+    },
+    {
+      "acceptance_criteria": [
+        "If the event's sequence number is part of the contiguous prefix applied in the flush, the result is 'applied'.",
+        "Otherwise, the result is 'buffered'."
+      ],
+      "dependencies": [
+        {
+          "id": "O9",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O10",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 754,
+          "interpretation": "Defines the result status for new arrivals.",
+          "origin": "explicit",
+          "start_byte": 665
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The result for a new arrival is 'applied' if its sequence number was consumed by the flush, otherwise 'buffered'."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "data is a dictionary with an 'events' key.",
+        "Each element in 'events' is a dictionary with 'seq' and 'delta' keys.",
+        "'seq' is a positive integer.",
+        "'delta' is an integer."
+      ],
+      "dependencies": [],
+      "id": "O13",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 370,
+          "interpretation": "Defines the input structure and constraints.",
+          "origin": "explicit",
+          "start_byte": 300
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input 'data' is a JSON value with an 'events' key, where each event is a dictionary with 'seq' and 'delta' keys, 'seq' is a positive integer, and 'delta' is an integer."
+    }
+  ],
+  "request_ref": "prompt.txt",
+  "resource_constraints": [],
+  "safety_properties": [
+    {
+      "acceptance_criteria": [
+        "No file I/O operations are performed.",
+        "No network operations are performed.",
+        "No print statements are executed.",
+        "No global state is retained between calls to solve()."
+      ],
+      "dependencies": [],
+      "id": "O12",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+          "document_ref": "prompt.txt",
+          "end_byte": 226,
+          "interpretation": "Specifies the safety constraints on the function.",
+          "origin": "explicit",
+          "start_byte": 154
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function does not read files, use the network, print, or retain state across calls."
+    }
+  ],
+  "schema_version": "0.1"
+}

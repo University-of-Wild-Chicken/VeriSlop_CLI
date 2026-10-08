@@ -1,0 +1,122 @@
+{
+  "campaign_id": "rc-0002-20261008T121823Z-69b01b",
+  "checkpoint": "release",
+  "config": {
+    "agents": {
+      "author": {
+        "context_window_tokens": 32768,
+        "max_output_tokens": 8192,
+        "model_identity": {
+          "mode": "pinned",
+          "model_digest_sha256": "283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036",
+          "resolved_model": "aix-qwen3.8:27b-ud-q3_k_xl"
+        },
+        "model_ref": "aix-qwen3.8:27b-ud-q3_k_xl",
+        "provider": "local",
+        "tool_profile": "candidate_writer"
+      },
+      "critic": {
+        "context_window_tokens": 32768,
+        "max_output_tokens": 8192,
+        "model_identity": {
+          "mode": "pinned",
+          "model_digest_sha256": "283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036",
+          "resolved_model": "aix-qwen3.8:27b-ud-q3_k_xl"
+        },
+        "model_ref": "aix-qwen3.8:27b-ud-q3_k_xl",
+        "provider": "local",
+        "tool_profile": "review_readonly"
+      }
+    },
+    "bridge_tier": 0,
+    "endpoint": "test_campaign",
+    "providers": {
+      "local": {
+        "adapter": "ollama",
+        "api_family": "ollama_chat",
+        "concurrency": 1,
+        "endpoint_profile": "ollama-local",
+        "request_timeout_seconds": null
+      }
+    },
+    "release": {
+      "require_all_review_tiers": true,
+      "require_mechanical_pass": true,
+      "require_requested_bridge_tier": true
+    },
+    "review": {
+      "budgets": {
+        "max_calls_per_instance": 24,
+        "max_provider_retries": 0,
+        "max_repair_rounds": 2,
+        "max_total_tokens": 524288,
+        "max_wall_seconds_per_tier": 0
+      },
+      "checkpoints": [
+        "formal_contract",
+        "release"
+      ],
+      "require_fixed_model_snapshot": true,
+      "restart_after_repair": "first_tier",
+      "review_tiers": [
+        {
+          "consensus": {
+            "blocking_findings_veto": true,
+            "max_abstentions": 0,
+            "max_soft_rejects": 0,
+            "mode": "unanimous",
+            "require_all_responses": true
+          },
+          "id": "R0",
+          "reviewers": [
+            {
+              "agent": "critic",
+              "count": 1,
+              "focus": "counterexamples"
+            }
+          ]
+        }
+      ]
+    },
+    "roles": {
+      "formalizer": "author",
+      "implementer": "author",
+      "interpreter": "author",
+      "prover": "author",
+      "repairer": "author"
+    },
+    "schema_version": "0.1"
+  },
+  "review_target_root": "sha256:0943c6853836c0b378370c362218d62f79d20f27f4f42f8d87a36acf84e49859",
+  "schema_version": "0.1",
+  "target_components": {
+    "adapter_versions": "0.1.0",
+    "agent_profiles": {
+      "critic": {
+        "context_window_tokens": 32768,
+        "max_output_tokens": 8192,
+        "model_identity": {
+          "mode": "pinned",
+          "model_digest_sha256": "283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036",
+          "resolved_model": "aix-qwen3.8:27b-ud-q3_k_xl"
+        },
+        "model_ref": "aix-qwen3.8:27b-ud-q3_k_xl",
+        "provider": "local",
+        "tool_profile": "review_readonly"
+      }
+    },
+    "candidate_root": "sha256:a29cd7a52dfb62ce7fb658bc87dce12da5bbed8e8c5f186d85d1dcb8f99eef22",
+    "checkpoint": "release",
+    "evidence_package_root": "sha256:1b967ee17ffacac25001659560f641b3aa15e268dccd3247b76a3589918bbf57",
+    "packet": "sha256:4f56bcd2580b8cd7c93242c84b998d251638cd43cb4770298897de1405be4b66",
+    "prompt_template": "sha256:f050067879cf44a78a948229f4a38f1e4d83b5a641b20324fa72743791747b86",
+    "public_claims": {
+      "claims": "sha256:05aacefb22a683678036fc7a88a1d5aa187bc0bd067f223f5d4570ec3f6af03a",
+      "implementation_claims": "sha256:a5964c37936c612c48efda187b70576b80331e023d434ba8a6dd6ba1e671383d"
+    },
+    "resolved_models": {
+      "critic": "aix-qwen3.8:27b-ud-q3_k_xl"
+    },
+    "review_config": "sha256:79f0f312bee20bc5a63ae32cc1b0069a1b08748cf1dea93f2f12852efb2107ec"
+  }
+}

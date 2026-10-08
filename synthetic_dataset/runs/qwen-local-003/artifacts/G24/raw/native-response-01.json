@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-10-08T02:58:54.32411845Z",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 407,
+  "eval_duration": 7513873000,
+  "load_duration": 451544,
+  "message": {
+    "content": "{\"files\":{\"solution.py\":\"import heapq\\n\\ndef solve(data):\\n    flows = data.get('flows', [])\\n    n = len(flows)\\n    if n == 0:\\n        return {'order': [], 'rounds': 0}\\n\\n    # Initialize state\\n    # Each flow: [quantum, jobs_list, deficit, next_job_index]\\n    state = []\\n    for i, f in enumerate(flows):\\n        state.append({\\n            'quantum': f['quantum'],\\n            'jobs': f['jobs'],\\n            'deficit': 0,\\n            'next': 0\\n        })\\n\\n    order = []\\n    rounds = 0\\n    total_jobs = sum(len(f['jobs']) for f in flows)\\n    emitted = 0\\n\\n    while emitted < total_jobs:\\n        rounds += 1\\n        # Visit flows in ascending index order\\n        for i in range(n):\\n            s = state[i]\\n            if s['next'] >= len(s['jobs']):\\n                # Empty flow resets deficit to zero\\n                s['deficit'] = 0\\n                continue\\n            \\n            # Nonempty flow adds its quantum\\n            s['deficit'] += s['quantum']\\n            \\n            # Emit as many consecutive head packets as deficit covers\\n            while s['next'] < len(s['jobs']):\\n                job_size = s['jobs'][s['next']]\\n                if s['deficit'] >= job_size:\\n                    s['deficit'] -= job_size\\n                    order.append([i, s['next']])\\n                    s['next'] += 1\\n                    emitted += 1\\n                else:\\n                    # Never skip an oversized head packet\\n                    break\\n\\n    return {'order': order, 'rounds': rounds}\"}}",
+    "role": "assistant"
+  },
+  "model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "prompt_eval_cached_count": 0,
+  "prompt_eval_count": 409,
+  "prompt_eval_duration": 274814000,
+  "total_duration": 8066089718
+}

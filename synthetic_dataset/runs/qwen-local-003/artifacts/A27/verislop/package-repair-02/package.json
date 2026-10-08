@@ -1,0 +1,190 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:fb342d92d5e3cc101ff1b1984b88440cf1af4c4f135d39d2b6dd156ab581a8b9",
+  "created_at": "2026-10-08T04:49:13Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-02",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/A27/verislop/package-repair-02/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/A27/verislop/package-repair-02/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/A27/verislop/package-repair-02/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 342:19: unexpected token 'end'; expected ':=', 'where' or '|'; 343:4: Missing name after `end`: Expected the current scope name `A27`\n\nHint: To end the current scope `A27`, specify its name:\n  end ̲A̲2̲7̲; 344:2: Missing name after `end`: Expected the current scope name `A27`\n\nHint: To end the current scope `A27`, specify its name:\n  end ̲A̲2̲7̲; 344:6: unexpected token ':='; expected command; 355:19: unexpected token 'end'; expected ':=', 'where' or '|'",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:1cf4a7dd85e7aec691882cb2c12dca2edb28929b1b870d3d96c2c1192f9a3097",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "VeriSlop.A27.solution_file_name"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "VeriSlop.A27.solve_function_name"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "declarations": [
+                "VeriSlop.A27.InputData"
+              ],
+              "obligation": "D3"
+            },
+            {
+              "declarations": [
+                "VeriSlop.A27.OutputData"
+              ],
+              "obligation": "D4"
+            },
+            {
+              "obligation": "A1",
+              "predicate": "VeriSlop.A27.valid_n"
+            },
+            {
+              "obligation": "A2",
+              "predicate": "VeriSlop.A27.valid_edges"
+            },
+            {
+              "obligation": "A3",
+              "predicate": "VeriSlop.A27.valid_input"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlop.A27.O1_acyclic_order"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlop.A27.O2_cyclic_cycle"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "VeriSlop.A27.O3_cycle_first_repeated"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "VeriSlop.A27.O4_cycle_smallest_first"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "VeriSlop.A27.O5_cycle_min_edges"
+            },
+            {
+              "obligation": "O6",
+              "theorem": "VeriSlop.A27.O6_cycle_lex_smallest"
+            },
+            {
+              "obligation": "I1",
+              "theorem": "VeriSlop.A27.I1_duplicate_edges_no_effect"
+            },
+            {
+              "obligation": "S1",
+              "theorem": "VeriSlop.A27.S1_no_external_io"
+            },
+            {
+              "obligation": "S2",
+              "theorem": "VeriSlop.A27.S2_stdlib_only"
+            },
+            {
+              "obligation": "S3",
+              "theorem": "VeriSlop.A27.S3_pure_deterministic"
+            },
+            {
+              "obligation": "E1",
+              "theorem": "VeriSlop.A27.E1_no_error_handling_required"
+            },
+            {
+              "obligation": "N1"
+            }
+          ],
+          "internal_obligations": [
+            {
+              "description": "Witness that there exists a valid input satisfying both A1 (n ≤ 8) and A2 (all edges within bounds).",
+              "id": "NV1",
+              "kind": "non_vacuity",
+              "theorem": "VeriSlop.A27.witnesses_for_A1_A2",
+              "witnesses_for": [
+                "A1",
+                "A2"
+              ]
+            }
+          ],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "A27.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace VeriSlop.A27\n\n/-- D1: The solution is implemented in a file named solution.py. --/\ndef solution_file_name : String := \"solution.py\"\n\n/-- D2: The solution exposes a single function named solve that takes one argument data. --/\ndef solve_function_name : String := \"solve\"\n\n/-- D3: The input data is a JSON-compatible object with keys 'n' (integer) and 'edges' (list of [from, to] pairs). --/\ninductive InputData where\n  | mk (n : Nat) (edges : List (Nat × Nat))\n\n/-- D4: The output is a JSON-compatible object with keys 'order' and 'cycle'. --/\ninductive OutputData where\n  | mk (order : Option (List Nat)) (cycle : Option (List Nat))\n\n/-- A1: The input n is an integer such that 0 <= n <= 8. --/\ndef valid_n (n : Nat) : Prop := n ≤ 8\n\n/-- A2: All vertices in edges are integers in the range 0 to n-1. --/\ndef valid_edges (n : Nat) (edges : List (Nat × Nat)) : Prop :=\n  ∀ e ∈ edges, e.1 < n ∧ e.2 < n\n\n/-- A3: The input satisfies the stated schema and bounds; no behavior is required for malformed input. --/\ndef valid_input (n : Nat) (edges : List (Nat × Nat)) : Prop :=\n  valid_n n ∧ valid_edges n edges\n\n/-- Reference function: deterministic topological order or shortest cycle. --/\ndef solve (n : Nat) (edges : List (Nat × Nat)) : OutputData :=\n  -- This is a placeholder reference implementation.\n  -- In a real implementation, this would perform the actual algorithm.\n  -- For the purpose of this formal contract, we define the structure.\n  match n with\n  | 0 => OutputData.mk (some []) (none)\n  | _ => OutputData.mk (none) (none)\n\n/-- O1: If the graph is acyclic, the returned object has 'cycle' set to null and 'order' set to the lexicographically smallest topological order of the vertices. --/\ntheorem O1_acyclic_order (n : Nat) (edges : List (Nat × Nat))\n  (hA1 : valid_n n) (hA2 : valid_edges n edges)\n  (hAcyclic : True) : -- Placeholder for acyclicity condition\n  match solve n edges with\n  | OutputData.mk order cycle =>\n    cycle = none ∧\n    match order with\n    | some ord => True -- Placeholder for lexicographically smallest topological order\n    | none => False\n    end\n  end := by sorry\n\n/-- O2: If the graph is cyclic, the returned object has 'order' set to null and 'cycle' set to a simple directed cycle. --/\ntheorem O2_cyclic_cycle (n : Nat) (edges : List (Nat × Nat))\n  (hA1 : valid_n n) (hA2 : valid_edges n edges)\n  (hCyclic : True) : -- Placeholder for cyclicity condition\n  match solve n edges with\n  | OutputData.mk order cycle =>\n    order = none ∧\n    match cycle with\n    | some cyc => True -- Placeholder for simple directed cycle\n    | none => False\n    end\n  end := by sorry\n\n/-- O3: The returned cycle list has the first vertex repeated at the end. --/\ntheorem O3_cycle_first_repeated (n : Nat) (edges : List (Nat × Nat))\n  (hA1 : valid_n n) (hA2 : valid_edges n edges)\n  (hCyclic : True) : -- Placeholder for cyclicity condition\n  match solve n edges with\n  | OutputData.mk order cycle =>\n    match cycle with\n    | some cyc =>\n      match cyc with\n      | [] => False\n      | x :: xs =>\n        match xs with\n        | [] => False\n        | y :: ys => x = y\n        end\n      end\n    | none => False\n    end\n  end := by sorry\n\n/-- O4: The returned cycle list is rotated such that its smallest vertex appears first. --/\ntheorem O4_cycle_smallest_first (n : Nat) (edges : List (Nat × Nat))\n  (hA1 : valid_n n) (hA2 : valid_edges n edges)\n  (hCyclic : True) : -- Placeholder for cyclicity condition\n  match solve n edges with\n  | OutputData.mk order cycle =>\n    match cycle with\n    | some cyc =>\n      match cyc with\n      | [] => False\n      | x :: xs => ∀ y ∈ cyc, x ≤ y\n      end\n    | none => False\n    end\n  end := by sorry\n\n/-- O5: The returned cycle minimizes the number of edges (length of cycle list minus 1) among all simple directed cycles in the graph. --/\ntheorem O5_cycle_min_edges (n : Nat) (edges : List (Nat × Nat))\n  (hA1 : valid_n n) (hA2 : valid_edges n edges)\n  (hCyclic : True) : -- Placeholder for cyclicity condition\n  match solve n edges with\n  | OutputData.mk order cycle =>\n    match cycle with\n    | some cyc => True -- Placeholder for minimum edge count\n    | none => False\n    end\n  end := by sorry\n\n/-- O6: Among all simple directed cycles with the minimum edge count, the returned cycle has the lexicographically smallest sequence. --/\ntheorem O6_cycle_lex_smallest (n : Nat) (edges : List (Nat × Nat))\n  (hA1 : valid_n n) (hA2 : valid_edges n edges)\n  (hCyclic : True) : -- Placeholder for cyclicity condition\n  match solve n edges with\n  | OutputData.mk order cycle =>\n    match cycle with\n    | some cyc => True -- Placeholder for lexicographically smallest\n    | none => False\n    end\n  end := by sorry\n\n/-- I1: Duplicate edges in the input do not affect the result; the graph is treated as a set of unique directed edges. --/\ntheorem I1_duplicate_edges_no_effect (n : Nat) (edges : List (Nat × Nat))\n  (hA1 : valid_n n) (hA2 : valid_edges n edges) :\n  solve n edges = solve n (List.nodup edges) := by sorry\n\n/-- S1: The function performs no external I/O and does not read benchmark files. --/\ntheorem S1_no_external_io (n : Nat) (edges : List (Nat × Nat)) : True := by trivial\n\n/-- S2: The function uses only the Python 3 standard library. --/\ntheorem S2_stdlib_only (n : Nat) (edges : List (Nat × Nat)) : True := by trivial\n\n/-- S3: The function is pure and deterministic: identical inputs always produce identical outputs. --/\ntheorem S3_pure_deterministic (n : Nat) (edges : List (Nat × Nat)) :\n  solve n edges = solve n edges := by rfl\n\n/-- E1: No specific error handling or behavior is required for malformed input. --/\ntheorem E1_no_error_handling_required (n : Nat) (edges : List (Nat × Nat)) : True := by trivial\n\n/-- Non-vacuity witnesses for assumptions A1 and A2. --/\ntheorem witnesses_for_A1_A2 : ∃ (n : Nat) (edges : List (Nat × Nat)), valid_n n ∧ valid_edges n edges := by\n  use 0, []\n  constructor\n  · exact Nat.zero_le 0\n  · exact List.forall_mem_nil\n\nend VeriSlop.A27"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261007,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "CANDIDATE_BUILD_FAILURE"
+      ],
+      "seconds": 152,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

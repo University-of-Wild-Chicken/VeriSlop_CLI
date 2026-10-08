@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-10-08T06:10:55.614697272Z",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 470,
+  "eval_duration": 8740638000,
+  "load_duration": 515154,
+  "message": {
+    "content": "{\"files\":{\"solution.py\":\"def solve(data):\\n    stock = dict(data.get(\\\"stock\\\", {}))\\n    events = data.get(\\\"events\\\", [])\\n\\n    results = []\\n    status = {}\\n    reserved = {}\\n\\n    for ev in events:\\n        op = ev.get(\\\"op\\\")\\n        if op == \\\"reserve\\\":\\n            eid = ev.get(\\\"id\\\")\\n            items = ev.get(\\\"items\\\", {})\\n            if eid in reserved:\\n                results.append(\\\"exists\\\")\\n                continue\\n            # Check availability for all items\\n            ok = True\\n            for k, q in items.items():\\n                if stock.get(k, 0) < q:\\n                    ok = False\\n                    break\\n            if not ok:\\n                results.append(\\\"insufficient\\\")\\n                continue\\n            # Atomically subtract\\n            for k, q in items.items():\\n                stock[k] = stock.get(k, 0) - q\\n            reserved[eid] = dict(items)\\n            status[eid] = \\\"reserved\\\"\\n            results.append(\\\"reserved\\\")\\n        elif op == \\\"commit\\\":\\n            eid = ev.get(\\\"id\\\")\\n            if eid not in reserved:\\n                results.append(\\\"unknown\\\")\\n                continue\\n            # Consume permanently: reserved items are already subtracted from stock\\n            del reserved[eid]\\n            status[eid] = \\\"committed\\\"\\n            results.append(\\\"committed\\\")\\n        elif op == \\\"cancel\\\":\\n            eid = ev.get(\\\"id\\\")\\n            if eid not in reserved:\\n                results.append(\\\"unknown\\\")\\n                continue\\n            # Restore all reserved items\\n            for k, q in reserved[eid].items():\\n                stock[k] = stock.get(k, 0) + q\\n            del reserved[eid]\\n            status[eid] = \\\"cancelled\\\"\\n            results.append(\\\"cancelled\\\")\\n        else:\\n            # Unknown op: ignore (should not happen per spec)\\n            continue\\n\\n    return {\\n        \\\"results\\\": results,\\n        \\\"available\\\": stock,\\n        \\\"status\\\": status\\n    }\"}\n}",
+    "role": "assistant"
+  },
+  "model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "prompt_eval_cached_count": 0,
+  "prompt_eval_count": 574,
+  "prompt_eval_duration": 382091000,
+  "total_duration": 9409897869
+}

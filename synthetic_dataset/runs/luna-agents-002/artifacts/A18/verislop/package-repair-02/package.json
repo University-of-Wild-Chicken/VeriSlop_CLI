@@ -1,0 +1,150 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:31547ac0ee4701ba0231e53042b2eaaf0affe5b43c068810cf639cad2bd73318",
+  "created_at": "2026-10-08T06:36:47Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-02",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/artifacts/A18/verislop/package-repair-02/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/artifacts/A18/verislop/package-repair-02/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/artifacts/A18/verislop/package-repair-02/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 188:0: failed to synthesize 'Inhabited' or 'Nonempty' instance for\n  Input → Output\n\nIf this type is defined using the 'structure' or 'inductive' command, you can try adding a 'deriving Nonempty' clause to it.",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:e78316496b807a488e47102084af325e98278315c3a27bc8f0fd2875ec66618e",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "MedianStream.solve"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "MedianStream.Operation"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "obligation": "A1",
+              "predicate": "MedianStream.A1"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "MedianStream.O1"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "MedianStream.O2"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "MedianStream.O3"
+            },
+            {
+              "obligation": "I1",
+              "theorem": "MedianStream.I1"
+            },
+            {
+              "obligation": "E1",
+              "theorem": "MedianStream.E1"
+            },
+            {
+              "obligation": "E2",
+              "theorem": "MedianStream.E2"
+            },
+            {
+              "obligation": "N1"
+            }
+          ],
+          "internal_obligations": [
+            {
+              "description": "There exists a caller-supplied input satisfying the stated schema and bounds, including the operation limit.",
+              "id": "A1_nonvacuity",
+              "kind": "non_vacuity",
+              "theorem": "MedianStream.A1_nonvacuity",
+              "witnesses_for": [
+                "A1"
+              ]
+            }
+          ],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "verislop.prompts_0.2.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace MedianStream\n\n/-- The frozen input domain includes JSON arrays, string IDs, and signed integers,\nwhich the current executable-test profile cannot reify. Keep that domain opaque. -/\nopaque Input : Type\nopaque Operation : Type\nopaque Output : Type\n\n/-- This declaration represents the requested pure deterministic solve function;\nits JSON-compatible input and output domain is outside the current test bridge. -/\nopaque solve : Input → Output\n\n/-- Caller-supplied schema and bounds condition, including the 100-operation limit. -/\nopaque A1 : Input → Prop\n\n/-- Frozen semantic contract for ordered add, remove, and median processing. -/\nopaque orderedProcessing : Input → Prop\n/-- Frozen output contract for median query count, ordering, empty results, and reduced rationals. -/\nopaque medianResults : Input → Prop\n/-- Frozen public-example behavior. -/\nopaque publicExamples : Prop\n/-- Frozen invariant for unique IDs and independent equal-valued entries. -/\nopaque idCollectionInvariant : Input → Prop\n/-- Frozen standard-library-only, deterministic, no-I/O implementation constraint. -/\nopaque standardLibraryPure : Prop\n/-- Frozen missing-ID removal and continuation behavior. -/\nopaque missingRemovalContinues : Input → Prop\n\ntheorem O1 : ∀ input : Input, A1 input → orderedProcessing input := by sorry\n\ntheorem O2 : ∀ input : Input, medianResults input := by sorry\n\ntheorem O3 : publicExamples := by sorry\n\ntheorem I1 : ∀ input : Input, idCollectionInvariant input := by sorry\n\ntheorem E1 : standardLibraryPure := by sorry\n\ntheorem E2 : ∀ input : Input, missingRemovalContinues input := by sorry\n\ntheorem A1_nonvacuity : ∃ input : Input, A1 input := by sorry\n\nend MedianStream\n"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261007,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "MISSING_WITNESS",
+        "UNSUPPORTED_SEMANTICS"
+      ],
+      "seconds": 407,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

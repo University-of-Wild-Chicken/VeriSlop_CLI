@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_g33_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:3fbc8c9cec46a9ab421f0632361a8902d1695c8b0d5db20256867a67c7eaf496",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:08cd6caf8a9a91f0eaf5aec5ace70e1f54d3900b4bb5f395aea9becb2b7edf35",
+  "text": "{\"files\":{\"solution.py\":\"import heapq\\n\\n\\ndef solve(data):\\n    events = data[\\\"events\\\"]\\n    n = len(events)\\n    relations = [[None] * n for _ in range(n)]\\n    edges = [[] for _ in range(n)]\\n    indegree = [0] * n\\n\\n    for i in range(n):\\n        a = events[i][\\\"clock\\\"]\\n        for j in range(n):\\n            b = events[j][\\\"clock\\\"]\\n            less = all(x <= y for x, y in zip(a, b))\\n            greater = all(x >= y for x, y in zip(a, b))\\n            if less and greater:\\n                relation = \\\"equal\\\"\\n            elif less:\\n                relation = \\\"before\\\"\\n                edges[i].append(j)\\n                indegree[j] += 1\\n            elif greater:\\n                relation = \\\"after\\\"\\n            else:\\n                relation = \\\"concurrent\\\"\\n            relations[i][j] = relation\\n\\n    eligible = [(event[\\\"id\\\"], i) for i, event in enumerate(events) if indegree[i] == 0]\\n    heapq.heapify(eligible)\\n    order = []\\n    while eligible:\\n        event_id, i = heapq.heappop(eligible)\\n        order.append(event_id)\\n        for j in edges[i]:\\n            indegree[j] -= 1\\n            if indegree[j] == 0:\\n                heapq.heappush(eligible, (events[j][\\\"id\\\"], j))\\n\\n    return {\\\"order\\\": order, \\\"relations\\\": relations}\\n\"} }",
+  "transport": "collaboration"
+}

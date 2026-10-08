@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-10-08T03:16:02.484137745Z",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 275,
+  "eval_duration": 5146320000,
+  "load_duration": 477135,
+  "message": {
+    "content": "{\"files\":{\"solution.py\":\"import json\\n\\ndef solve(data):\\n    values = data[\\\"values\\\"]\\n    n = len(values)\\n    if n == 0:\\n        return {\\\"difference\\\": 0, \\\"left_indices\\\": []}\\n\\n    # Enumerate all subsets of indices (0..2^n - 1)\\n    # For each subset, compute left sum and right sum\\n    # We want to minimize |left_sum - right_sum|, then lexicographically minimize the sorted left indices\\n    \\n    best_diff = None\\n    best_left = None\\n    \\n    for mask in range(1 << n):\\n        left_sum = 0\\n        left_indices = []\\n        for i in range(n):\\n            if mask & (1 << i):\\n                left_sum += values[i]\\n                left_indices.append(i)\\n        right_sum = sum(values) - left_sum\\n        diff = abs(left_sum - right_sum)\\n        \\n        if best_diff is None or diff < best_diff or (diff == best_diff and left_indices < best_left):\\n            best_diff = diff\\n            best_left = left_indices\\n    \\n    return {\\\"difference\\\": best_diff, \\\"left_indices\\\": best_left}\\n\"}\n}",
+    "role": "assistant"
+  },
+  "model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "prompt_eval_cached_count": 0,
+  "prompt_eval_count": 335,
+  "prompt_eval_duration": 217094000,
+  "total_duration": 5550708996
+}

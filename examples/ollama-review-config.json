@@ -1,0 +1,90 @@
+{
+  "schema_version": "0.1",
+  "bridge_tier": 2,
+  "endpoint": "restricted_source",
+  "providers": {
+    "local": {
+      "adapter": "ollama",
+      "api_family": "ollama_chat",
+      "endpoint_profile": "ollama-local",
+      "concurrency": 1,
+      "request_timeout_seconds": 120
+    }
+  },
+  "agents": {
+    "local-author": {
+      "provider": "local",
+      "model_ref": "env:OLLAMA_MODEL",
+      "tool_profile": "candidate_writer",
+      "max_output_tokens": 8192
+    },
+    "local-critic": {
+      "provider": "local",
+      "model_ref": "env:OLLAMA_MODEL",
+      "tool_profile": "review_readonly",
+      "max_output_tokens": 8192
+    }
+  },
+  "roles": {
+    "interpreter": "local-author",
+    "formalizer": "local-author",
+    "prover": "local-author",
+    "implementer": "local-author",
+    "repairer": "local-author"
+  },
+  "review": {
+    "checkpoints": [
+      "formal_contract",
+      "release"
+    ],
+    "restart_after_repair": "first_tier",
+    "budgets": {
+      "max_repair_rounds": 3,
+      "max_provider_retries": 2,
+      "max_calls_per_instance": 8,
+      "max_total_tokens": 200000,
+      "max_wall_seconds_per_tier": 900
+    },
+    "review_tiers": [
+      {
+        "id": "R0",
+        "reviewers": [
+          {
+            "agent": "local-critic",
+            "count": 2,
+            "focus": "counterexamples"
+          }
+        ],
+        "consensus": {
+          "mode": "unanimous",
+          "require_all_responses": true,
+          "max_soft_rejects": 0,
+          "max_abstentions": 0,
+          "blocking_findings_veto": true
+        }
+      },
+      {
+        "id": "R1",
+        "reviewers": [
+          {
+            "agent": "local-critic",
+            "count": 1,
+            "focus": "formalization_and_correspondence"
+          }
+        ],
+        "consensus": {
+          "mode": "unanimous",
+          "require_all_responses": true,
+          "max_soft_rejects": 0,
+          "max_abstentions": 0,
+          "blocking_findings_veto": true
+        }
+      }
+    ]
+  },
+  "release": {
+    "require_mechanical_pass": true,
+    "require_all_review_tiers": true,
+    "require_requested_bridge_tier": true
+  }
+}

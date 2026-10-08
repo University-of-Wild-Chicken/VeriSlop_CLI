@@ -1,0 +1,1875 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "A1": {
+      "acceptance_criteria": [
+        "data is a JSON object with exactly keys 'labels' and 'prefix'",
+        "data['labels'] is a list of strings",
+        "data['prefix'] is a string"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/A1@sha256:bec50db1a42ef5cde0a5924d874d381c0b966581b4f5b96bf24940ea776c247f",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.valid_input",
+        "reification_evidence_ref": "reification:A1@sha256:f8dcd0b61b65544a2fe21d1be913ed716fbfdae0a91bdaaa523386bd2a7a91d2",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:b72b7cabfd8db72989b422ddda16b7161d55d094f5375ae4b3eef5e05be04a37",
+        "statement_hash": "sha256:13eda2cce6c09e011727e276eeadc86ac9bc512da7b445608ab8f7ef1d84f915"
+      },
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at function invocation, by the caller providing data that conforms to the stated schema",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-8b4bc29abca017597f42e79fef82073b"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at function invocation, by the caller providing data that conforms to the stated schema",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-76b2f22ad78e70c5e6f4254b67a1d007"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input validation"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at function invocation, by the caller providing data that conforms to the stated schema",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at function invocation, by the caller providing data that conforms to the stated schema",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-b236e70b347fca1d029a75175a50e2c3"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "input validation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 139,
+          "interpretation": "input schema constraint",
+          "origin": "explicit",
+          "start_byte": 70
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 207,
+          "interpretation": "field type constraints",
+          "origin": "explicit",
+          "start_byte": 140
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 766,
+          "interpretation": "scope exclusion implies schema conformance is assumed",
+          "origin": "explicit",
+          "start_byte": 677
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "The input data conforms to the stated schema: a JSON object with exactly the fields labels (list of Unicode strings) and prefix (Unicode string)."
+    },
+    "D1": {
+      "acceptance_criteria": [
+        "A Python function named solve exists and accepts one parameter named data"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D5",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/D1@sha256:9ddac8d9220ac0ff418986a5faee98e0fb6a9c0b9059dcfb761777bdeef909f3",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve",
+        "reification_evidence_ref": "reification:D1@sha256:19e022bf6c5c00ff5f2e19c5d0fe1ae55626252395f563ef96bb542eebc88a90",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:3358212bcd60561c6c8d8406385f0c89217374e4df2175f1fe83629e0a3b79b3",
+        "statement_hash": "sha256:36ef58b4b61d6dbf8f54a8ef98e7e0499eccbc7e6d7b9b937dc1bf063513241d"
+      },
+      "id": "D1",
+      "implementation_refs": [
+        "verislop_ast.py#solve@sha256:3b1dee1be27eb80cd906a76991aedeb8916a688421597fb1095a2c51a252f4cd"
+      ],
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-b9af0c993022f41e432841c1e0390959"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-e2d6b99bca1a5ccf26795276093e981b"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:adf1e1b3feaf15338c73266f24ec943c98d841863cfd3e19af0ef88a7bef2519",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-8f0136891d30805999da67d9cc486722"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "function signature"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-390e6cb7ab46d7f732b63c8ddbf250ff"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9bef7ea4257a84a248451f28f4df60355039a54ddb98f9e7649851996a1f08b5",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-6fc045a4408dfc6edcf0dd01e2d89834"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "function signature"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 69,
+          "interpretation": "function name, language, and parameter",
+          "origin": "explicit",
+          "start_byte": 0
+        }
+      ],
+      "state": "LINKED",
+      "statement": "The function is named solve, takes a single argument data, and is implemented in Python."
+    },
+    "D2": {
+      "acceptance_criteria": [
+        "data is a JSON object",
+        "data contains exactly the keys 'labels' and 'prefix'"
+      ],
+      "dependencies": [
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/D2@sha256:c1f920c9158feae6fb70abc258df6b023e033ace47d42249337b16daf4ed6f75",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Input",
+        "reification_evidence_ref": "reification:D2@sha256:306d413da8e971a86c2760efb06bd73240706280bdd561393fbc45e8d7d92f8c",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:cdef8168c9b729c5a652e2060accf987311a8e5f93555f2ea67c548aea8e09b6",
+        "statement_hash": "sha256:d3c8cbfdfb5fdfba2baee0805d5a0de95bc7faafdff4e6c2ffde71924ad96b83"
+      },
+      "id": "D2",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-a85579e425e6a831cc141bcf7c9ee0e5"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "the accepted statement depends on no implementation symbol",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-1d71dad8f2f23c4ec8a4912f8a14c61b"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input schema"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "the accepted statement depends on no implementation symbol",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-d65ae4941ae5f9246163bf21681825cf"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input schema"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 139,
+          "interpretation": "input object structure",
+          "origin": "explicit",
+          "start_byte": 70
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "The input data is a JSON object with exactly the fields labels and prefix."
+    },
+    "D3": {
+      "acceptance_criteria": [
+        "data['labels'] is a list of strings",
+        "data['prefix'] is a string"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D2",
+          "relation": "refines"
+        }
+      ],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/D3@sha256:2059dc8347fc4980f364fca890ed895e04a2d7985e8501df5016b6dc6f753d11",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Input",
+        "reification_evidence_ref": "reification:D3@sha256:1aa1446937abd154b22b4572e3a802cd3083558b5ad92b28824747ea689aad15",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:cdef8168c9b729c5a652e2060accf987311a8e5f93555f2ea67c548aea8e09b6",
+        "statement_hash": "sha256:a731ba53616321ad754c260dd6a120b359acca3278846dc45999ff369677355e"
+      },
+      "id": "D3",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-34d4275f6ea2130a89661f06da2f431b"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "the accepted statement depends on no implementation symbol",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-d4542025d2fb94c425cbfed8797dace2"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input field types"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "the accepted statement depends on no implementation symbol",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-6d4c121d08d9ce67f55c22bbcdc7f8a2"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input field types"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 207,
+          "interpretation": "field types",
+          "origin": "explicit",
+          "start_byte": 140
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "The field labels is a list of Unicode strings and the field prefix is a Unicode string."
+    },
+    "D4": {
+      "acceptance_criteria": [
+        "The return value is a JSON object",
+        "The return value contains exactly the keys 'labels' and 'count'"
+      ],
+      "dependencies": [
+        {
+          "id": "D5",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/D4@sha256:eb018077c9805f0aabf6228c05ac528352ad919d4ee54a015a8e8593d31bcde1",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Output",
+        "reification_evidence_ref": "reification:D4@sha256:186fe28d06a0eea6117ce37b5135cec568cf6218f290381c3ba66d3988759e75",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:39b8f8ec95677473c178cba40f19b1d5667776743f774c9ab06ab423459a7bc5",
+        "statement_hash": "sha256:4e02c8cb1f03a4e355efe1b8b1f2d094aaba7e34cb08615aaaba4710c8654af0"
+      },
+      "id": "D4",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-3973155c666f24ae81fbb5026632da16"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "the accepted statement depends on no implementation symbol",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-7fc5eb8607a9c492152c52dca48cc1bf"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output schema"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "the accepted statement depends on no implementation symbol",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-82bf115e939e3a32821ccf454e6ff556"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "output schema"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 433,
+          "interpretation": "output object structure",
+          "origin": "explicit",
+          "start_byte": 371
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "The output is a JSON object with exactly the fields labels and count."
+    },
+    "D5": {
+      "acceptance_criteria": [
+        "output['labels'] is a list",
+        "output['count'] equals len(output['labels'])"
+      ],
+      "dependencies": [
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "refines"
+        }
+      ],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/D5@sha256:d9341cf96213f07ade9ff8b3c5b3776b31a179ab6fc3afe3b154e557e6887485",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Output",
+        "reification_evidence_ref": "reification:D5@sha256:9949947985097d84c9d5d5a1480dd402a803f9e0c57ab1388d3b3904fc262c18",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:39b8f8ec95677473c178cba40f19b1d5667776743f774c9ab06ab423459a7bc5",
+        "statement_hash": "sha256:fdf82226c3d3e4b350b2e795b50db49b8037de9515357a0f8000db26de08da7c"
+      },
+      "id": "D5",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-b02a4428cc9232d9d7b6123fc69bb42f"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "the accepted statement depends on no implementation symbol",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-6ec1dbafa755cba952564a53a41b4195"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output field semantics"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "the accepted statement depends on no implementation symbol",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-6346f58a6fe9093c57cf57360bccc00f"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "output field semantics"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 487,
+          "interpretation": "output field definitions",
+          "origin": "explicit",
+          "start_byte": 434
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "The output field labels is the resulting list and the output field count is its length."
+    },
+    "N1": {
+      "acceptance_criteria": [
+        "No obligation to validate or handle malformed inputs beyond the stated schema"
+      ],
+      "dependencies": [],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/N1@sha256:5399758458c7cd7c29aa20dfaa87c7e877b6a7ece35e33e17f27e0942dc5b9f5",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Registry.N1",
+        "reification_evidence_ref": "reification:N1@sha256:3c511d24e7c641bed04986efa9beb4ed21625e9fb12a3b086b8e40244f13390c",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:b1a465e514b8a3c90fb59dc42c014ae7dd3f9666f93e97651cf73d4b112d54dd",
+        "statement_hash": "sha256:e1cf5caadf52f87267c684c43bb57c455d0501d135f7a4f4eeea38fc8513dd65"
+      },
+      "id": "N1",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-527f75ed2a09e03e53b987ff89c018bd"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-ad51a7e37e759da71e46d244cafd1462"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input validation beyond schema"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-c531ac127543d9aee8e2efb2fb0d4776"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "input validation beyond schema"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 766,
+          "interpretation": "scope exclusion for out-of-schema inputs",
+          "origin": "explicit",
+          "start_byte": 677
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "Handling inputs outside the stated schema is outside the scope of this task."
+    },
+    "N2": {
+      "acceptance_criteria": [
+        "No obligation to handle environmental effects"
+      ],
+      "dependencies": [],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/N2@sha256:f4f998befb1467966f4369afab30d21ea67cbad885bfa9cdee7eff174fe00c6d",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Registry.N2",
+        "reification_evidence_ref": "reification:N2@sha256:35651dc7e1615c1cd4e387ea0629357f9927d41344d9959a5554d0b6fbb7b106",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:b1a465e514b8a3c90fb59dc42c014ae7dd3f9666f93e97651cf73d4b112d54dd",
+        "statement_hash": "sha256:af6293b216b53c212cb12aca6925ee939fe7401e2a324ccecd2edf210f3a7383"
+      },
+      "id": "N2",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-a639bf4748f3414706d3bd84f797328e"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-f7fe6e8482844e979eb9621c8758e8c3"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "environmental effects"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-33dbc6588d9b1c8d799f8424904b4e3a"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "environmental effects"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 766,
+          "interpretation": "scope exclusion for environmental effects",
+          "origin": "explicit",
+          "start_byte": 677
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "Handling environmental effects is outside the scope of this task."
+    },
+    "O1": {
+      "acceptance_criteria": [
+        "For every label in input['labels'], if label != '', it appears in output['labels'] at the same relative position among non-empty labels",
+        "No label equal to '' appears in output['labels']",
+        "Duplicates in input['labels'] are preserved in output['labels']"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D5",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O1@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "reification_evidence_ref": "reification:O1@sha256:5ca9d7a098b7d622c299c60e870866d86dd58eb7fe9b7b6f69080c01d024cce8",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:a28c1d90dd95624ce8516c00395fd9973c3ed40e9c961446d04dca795ac2d6d3",
+        "statement_hash": "sha256:45f4a40ad20f98b0cc2751bbf252b697718cac095ab52e21005af9d3a8fd1bb5"
+      },
+      "id": "O1",
+      "implementation_refs": [
+        "verislop_ast.py#solve@sha256:3b1dee1be27eb80cd906a76991aedeb8916a688421597fb1095a2c51a252f4cd"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-4af23ff6f3b43590768783ea0abe6874"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:c37aabc91fcff772805fb70a1eb98054361b0ddc49f2bf9fcf6018b6958ac40f",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-8e23a980d0ba99f648a224cc50cd2e6a"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-82fe8f35c45a2e6d4bc3f7172c067359"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:adf1e1b3feaf15338c73266f24ec943c98d841863cfd3e19af0ef88a7bef2519",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-fc49975e6940af55d5817df46199cacf"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "label filtering and ordering"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-c57eed10cc500d9c08e878055a8cf15a"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9bef7ea4257a84a248451f28f4df60355039a54ddb98f9e7649851996a1f08b5",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-09811fbd8aedd76375a3e999cfebd26c"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-4ab997004319df5d78d4fc1b65649b64"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:6b827499610a4b1f6815b69bc2588fac9ca8d3c80b0a364795ebc8949296c629",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite sampling of the target artifact; not a proof of the universal statement"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-26b2f713619f5086c7f272b65e7f48ec"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "label filtering and ordering"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 260,
+          "interpretation": "filtering rule",
+          "origin": "explicit",
+          "start_byte": 208
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 370,
+          "interpretation": "ordering and duplication preservation",
+          "origin": "explicit",
+          "start_byte": 331
+        }
+      ],
+      "state": "TESTED",
+      "statement": "The output labels list contains exactly the input labels that are not the empty string, in their original order, with duplicates preserved."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "For each index i in output['labels'], output['labels'][i] == input['prefix'] + original_label_i",
+        "Where original_label_i is the i-th non-empty label from input['labels'] in original order"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D5",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "O1",
+          "relation": "refines"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O2@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "reification_evidence_ref": "reification:O2@sha256:5ca9d7a098b7d622c299c60e870866d86dd58eb7fe9b7b6f69080c01d024cce8",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:a28c1d90dd95624ce8516c00395fd9973c3ed40e9c961446d04dca795ac2d6d3",
+        "statement_hash": "sha256:45f4a40ad20f98b0cc2751bbf252b697718cac095ab52e21005af9d3a8fd1bb5"
+      },
+      "id": "O2",
+      "implementation_refs": [
+        "verislop_ast.py#solve@sha256:3b1dee1be27eb80cd906a76991aedeb8916a688421597fb1095a2c51a252f4cd"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-f5aec7a18391120fbe63eaefe54859b4"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:c37aabc91fcff772805fb70a1eb98054361b0ddc49f2bf9fcf6018b6958ac40f",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-c0cfa6dc37e15c9b395abcb21658a661"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-38ce3bd0571fd9ae5a36c4754221977d"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:adf1e1b3feaf15338c73266f24ec943c98d841863cfd3e19af0ef88a7bef2519",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-fe7dc87b14c9a81ff6a2fc527fa42e0f"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "label transformation"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-ec196dc3d16f48cac4b31eab9c2e09e6"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9bef7ea4257a84a248451f28f4df60355039a54ddb98f9e7649851996a1f08b5",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-4a2de314df2d859b0f3274a6cbf54367"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-4f326939b3fe62ae0c766909d9c64c87"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:6b827499610a4b1f6815b69bc2588fac9ca8d3c80b0a364795ebc8949296c629",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite sampling of the target artifact; not a proof of the universal statement"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-fd93139e6e7177a613c6a108e2a04308"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "label transformation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 330,
+          "interpretation": "concatenation rule",
+          "origin": "explicit",
+          "start_byte": 261
+        }
+      ],
+      "state": "TESTED",
+      "statement": "Each element in the output labels list is the concatenation of the input prefix followed by the corresponding non-empty input label."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "No whitespace is trimmed from any label or prefix",
+        "No Unicode normalization (e.g., NFC, NFD) is applied to any label or prefix",
+        "Combining characters are preserved as-is"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D5",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "O2",
+          "relation": "refines"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O3@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "reification_evidence_ref": "reification:O3@sha256:5ca9d7a098b7d622c299c60e870866d86dd58eb7fe9b7b6f69080c01d024cce8",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:a28c1d90dd95624ce8516c00395fd9973c3ed40e9c961446d04dca795ac2d6d3",
+        "statement_hash": "sha256:45f4a40ad20f98b0cc2751bbf252b697718cac095ab52e21005af9d3a8fd1bb5"
+      },
+      "id": "O3",
+      "implementation_refs": [
+        "verislop_ast.py#solve@sha256:3b1dee1be27eb80cd906a76991aedeb8916a688421597fb1095a2c51a252f4cd"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-06c15a3de3224af1b56d30027f3daebe"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:c37aabc91fcff772805fb70a1eb98054361b0ddc49f2bf9fcf6018b6958ac40f",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-7eaa274c6ec7f570584188dfb6c73f7f"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-5c97530c20a48adcf3a17049e7efc6e0"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:adf1e1b3feaf15338c73266f24ec943c98d841863cfd3e19af0ef88a7bef2519",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-0b7ea539277d501d9fe1e936013366e9"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "Unicode preservation"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-fc85b80bb5cf7ae1804fe9c5c8f65263"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9bef7ea4257a84a248451f28f4df60355039a54ddb98f9e7649851996a1f08b5",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-2b7de919a3fbdc9182603319508dba4f"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-a411fa9043ae822db1c4e3527a432dd2"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:6b827499610a4b1f6815b69bc2588fac9ca8d3c80b0a364795ebc8949296c629",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite sampling of the target artifact; not a proof of the universal statement"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-6e2953b486ce650a2ae30a9fcff77709"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "Unicode preservation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 593,
+          "interpretation": "exact Unicode preservation",
+          "origin": "explicit",
+          "start_byte": 563
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 651,
+          "interpretation": "prohibited transformations",
+          "origin": "explicit",
+          "start_byte": 594
+        }
+      ],
+      "state": "TESTED",
+      "statement": "Unicode text in the output labels is preserved exactly, without trimming whitespace or normalizing combining characters."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "If all input labels are empty strings, output['labels'] == []",
+        "If all input labels are empty strings, output['count'] == 0"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D5",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "O1",
+          "relation": "refines"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O4@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "reification_evidence_ref": "reification:O4@sha256:5ca9d7a098b7d622c299c60e870866d86dd58eb7fe9b7b6f69080c01d024cce8",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:a28c1d90dd95624ce8516c00395fd9973c3ed40e9c961446d04dca795ac2d6d3",
+        "statement_hash": "sha256:45f4a40ad20f98b0cc2751bbf252b697718cac095ab52e21005af9d3a8fd1bb5"
+      },
+      "id": "O4",
+      "implementation_refs": [
+        "verislop_ast.py#solve@sha256:3b1dee1be27eb80cd906a76991aedeb8916a688421597fb1095a2c51a252f4cd"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-92943d39608d536f02f33ad06f14eeaf"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:c37aabc91fcff772805fb70a1eb98054361b0ddc49f2bf9fcf6018b6958ac40f",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-b02cc95a0d0aa71dca6678116fb5f820"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-20ac955c4029136f83fd570645986b7a"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:adf1e1b3feaf15338c73266f24ec943c98d841863cfd3e19af0ef88a7bef2519",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-c897659ec38db8477a907eddecb68af2"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "empty result case"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-6d09f985fa53b6c99f8a8aa6fd7bbb6c"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9bef7ea4257a84a248451f28f4df60355039a54ddb98f9e7649851996a1f08b5",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-2a5b54978cae555f897eb56edb14cb53"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-f0bbfa150c7d84f0f59c91649e00578d"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:6b827499610a4b1f6815b69bc2588fac9ca8d3c80b0a364795ebc8949296c629",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite sampling of the target artifact; not a proof of the universal statement"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-fac81a145c45a58c5c1aa379c10d2fc1"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "empty result case"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 562,
+          "interpretation": "empty result specification",
+          "origin": "explicit",
+          "start_byte": 488
+        }
+      ],
+      "state": "TESTED",
+      "statement": "If the input labels list contains only empty strings (or is empty), the output labels is an empty list and count is zero."
+    },
+    "O5": {
+      "acceptance_criteria": [
+        "If input['prefix'] == '', then for each i, output['labels'][i] == original_label_i"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D5",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "O2",
+          "relation": "refines"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O5@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "reification_evidence_ref": "reification:O5@sha256:5ca9d7a098b7d622c299c60e870866d86dd58eb7fe9b7b6f69080c01d024cce8",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:a28c1d90dd95624ce8516c00395fd9973c3ed40e9c961446d04dca795ac2d6d3",
+        "statement_hash": "sha256:45f4a40ad20f98b0cc2751bbf252b697718cac095ab52e21005af9d3a8fd1bb5"
+      },
+      "id": "O5",
+      "implementation_refs": [
+        "verislop_ast.py#solve@sha256:3b1dee1be27eb80cd906a76991aedeb8916a688421597fb1095a2c51a252f4cd"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-efc945d01df5d36d0d4ebec8c4e0de20"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:c37aabc91fcff772805fb70a1eb98054361b0ddc49f2bf9fcf6018b6958ac40f",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-8f65f1a32d906ca8ef227e901342205d"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-36b5fdbb4a32cf8c36836bb622ac3cdf"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:adf1e1b3feaf15338c73266f24ec943c98d841863cfd3e19af0ef88a7bef2519",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-01b55a4a295f51bd4452ef2805692cc2"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "empty prefix case"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-25ee0734b3885ee12c2f2b714f3635ea"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9bef7ea4257a84a248451f28f4df60355039a54ddb98f9e7649851996a1f08b5",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-68a9dc5b1c8d849d1e10a3026c533b9f"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-abf727b3eb96e990e190fa17b04e2063"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:6b827499610a4b1f6815b69bc2588fac9ca8d3c80b0a364795ebc8949296c629",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite sampling of the target artifact; not a proof of the universal statement"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-e708faf93821ca99602f17c547c03752"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "empty prefix case"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 676,
+          "interpretation": "empty prefix allowance",
+          "origin": "explicit",
+          "start_byte": 652
+        }
+      ],
+      "state": "TESTED",
+      "statement": "The prefix may be an empty string, and in that case each output label equals the corresponding non-empty input label unchanged."
+    },
+    "witness_A1": {
+      "acceptance_criteria": [
+        "Prove the existential theorem with concrete witnesses extractable by bounded kernel head-normalisation."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/witness_A1@sha256:7d14c356071c48822463f2f15ad01b093c0e6229f6e41d83e273dbe7f57594d2",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.witness_A1",
+        "reification_evidence_ref": "reification:witness_A1@sha256:17dd2e635b25134e8fcea4fbeb8c1f2fc9dae3ed3a641c8f8fbb2f825d598f00",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:ef07a85a0bde8a246b37e39fa9d1d21a813d4c537ca3add35e8c9769c5dbe34b",
+        "statement_hash": "sha256:fa01e8a5e8894a53ba69b75893af4d3a954c10e190418bc3d3dbc66063afb4ab"
+      },
+      "id": "witness_A1",
+      "kind": "non_vacuity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "non-vacuity is a contract-level witness obligation, not an implementation claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-4ae71260bef6ab6e587d433993c6be10"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "non-vacuity is a contract-level witness obligation, not an implementation claim",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-90921af7c8cd9d158dabea012080da99"
+          ],
+          "outcome": "PASS",
+          "reason": "derived by registered formalization rule verislop.non-vacuity/0.1",
+          "scope": [
+            "derived provenance (registered rule verislop.non-vacuity/0.1); not user-stated, not proof"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "non-vacuity is a contract-level witness obligation, not an implementation claim",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-36b4a168c60b783a466f6fb9e6f06a6a"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "non-vacuity is a contract-level witness obligation, not an implementation claim",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-ae1fa193ded37fd06c4e491e80046580"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+            "certificate sha256:7cf0849f22f541c8b7722ee45f74e1b204fa4b0e82b7313986228414bfe37570",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "input validation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 139,
+          "interpretation": "derived by registered rule verislop.non-vacuity/0.1 from assumption A1",
+          "origin": "inferred",
+          "start_byte": 70
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 207,
+          "interpretation": "derived by registered rule verislop.non-vacuity/0.1 from assumption A1",
+          "origin": "inferred",
+          "start_byte": 140
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 766,
+          "interpretation": "derived by registered rule verislop.non-vacuity/0.1 from assumption A1",
+          "origin": "inferred",
+          "start_byte": 677
+        }
+      ],
+      "state": "PROVED",
+      "statement": "Non-vacuity: The empty Input record satisfies the valid_input predicate. (witnesses A1)"
+    }
+  },
+  "roots": {
+    "closure_root": "sha256:c37aabc91fcff772805fb70a1eb98054361b0ddc49f2bf9fcf6018b6958ac40f",
+    "contract_input_root": "sha256:850c31ef098ac489c812efdbe5b674e3bdc6d6a12c41364fad36b2ed50a094b9",
+    "implementation_root": "sha256:adf1e1b3feaf15338c73266f24ec943c98d841863cfd3e19af0ef88a7bef2519",
+    "interpretation_root": "sha256:8977077cd9daa4e1335c2c5ccd1c8b92f68cca067a0ec516fca0a8b04d8db5ee",
+    "link_root": "sha256:9bef7ea4257a84a248451f28f4df60355039a54ddb98f9e7649851996a1f08b5",
+    "test_root": "sha256:6b827499610a4b1f6815b69bc2588fac9ca8d3c80b0a364795ebc8949296c629"
+  },
+  "schema_version": "0.1"
+}

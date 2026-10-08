@@ -1,0 +1,672 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "none",
+    "entities": "solution.py, solve(data), event IDs, clocks, order, and relations",
+    "error_semantics": "none stated for conforming inputs",
+    "explicit_non_goals": "none stated",
+    "invariants": "Pure deterministic behavior with no retained cross-call state",
+    "liveness_properties": "none stated",
+    "postconditions": "Classify every ordered event pair, return the input-order square relation matrix and canonical topological order, and handle empty input as specified",
+    "preconditions": "Inputs conform to the stated specification",
+    "resource_constraints": "Clock length is 1..5; no performance bound stated",
+    "safety_properties": "Use only the standard library and perform no external I/O, file reads, network use, or printing"
+  },
+  "entities": [],
+  "error_semantics": [],
+  "explicit_non_goals": [],
+  "invariants": [],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "Every ordered pair is classified according to the specified componentwise relation",
+        "The relation strings are equal, before, after, or concurrent"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "G1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all event pairs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 584,
+          "interpretation": "Defines the relation for every ordered pair",
+          "origin": "explicit",
+          "start_byte": 419
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each input-position pair i,j, report equal when the clocks are identical; before when every component of i is at most the corresponding component of j and at least one is strictly smaller; after for the reverse; otherwise report concurrent."
+    },
+    {
+      "acceptance_criteria": [
+        "The returned object has order and relations",
+        "relations has one row and column per event",
+        "Matrix rows and columns follow input order"
+      ],
+      "dependencies": [
+        {
+          "id": "G1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "G2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 667,
+          "interpretation": "Specifies the output fields and relation matrix structure",
+          "origin": "explicit",
+          "start_byte": 585
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Return an object with order and relations; relations is a square matrix indexed in input order containing the specified relation strings."
+    },
+    {
+      "acceptance_criteria": [
+        "Every strict before relation is respected in order",
+        "At each step the smallest eligible ID is chosen",
+        "ID lexicographic order determines choices"
+      ],
+      "dependencies": [
+        {
+          "id": "G1",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "G3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 839,
+          "interpretation": "Defines the canonical topological ordering",
+          "origin": "explicit",
+          "start_byte": 668
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "order is the lexicographically smallest ID topological ordering of every strict before relation, formed by repeatedly choosing the smallest eligible ID rather than ordering by clock sum or lexicographic clock."
+    },
+    {
+      "acceptance_criteria": [
+        "Equal-clock pairs do not create a precedence requirement"
+      ],
+      "dependencies": [
+        {
+          "id": "G3",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "G4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "pairs with equal clocks"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 872,
+          "interpretation": "Excludes precedence constraints between equal clocks",
+          "origin": "explicit",
+          "start_byte": 840
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Equal clocks impose no ordering constraint on order."
+    },
+    {
+      "acceptance_criteria": [
+        "For empty events, order is [] and relations is []"
+      ],
+      "dependencies": [
+        {
+          "id": "G2",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "G3",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "G5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "empty events"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 910,
+          "interpretation": "Specifies the empty-input output",
+          "origin": "explicit",
+          "start_byte": 873
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "When events is empty, return empty arrays for order and relations."
+    },
+    {
+      "acceptance_criteria": [
+        "The first public example returns the stated order and relation matrix",
+        "The second public example returns order [\"a\",\"z\"] and a 2-by-2 matrix of equal relations"
+      ],
+      "dependencies": [
+        {
+          "id": "G2",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "G3",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "G6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all inputs, including public examples"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 1176,
+          "interpretation": "Requires fidelity to the output structure and ordering",
+          "origin": "explicit",
+          "start_byte": 1111
+        },
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 1672,
+          "interpretation": "Provides required input/output examples",
+          "origin": "explicit",
+          "start_byte": 1178
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Preserve the specified input/output structure and exact ordering, including the outputs shown in the public examples."
+    }
+  ],
+  "preconditions": [],
+  "request_ref": "prompt.txt",
+  "resource_constraints": [],
+  "safety_properties": [
+    {
+      "acceptance_criteria": [
+        "Repeated calls with the same input produce the same result",
+        "No file or network access, printing, or external I/O occurs",
+        "No state is retained across calls",
+        "No non-standard-library dependency is used"
+      ],
+      "dependencies": [],
+      "id": "S1",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "module and function behavior"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 159,
+          "interpretation": "Restricts dependencies",
+          "origin": "explicit",
+          "start_byte": 122
+        },
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 232,
+          "interpretation": "Prohibits specified I/O and persistent state",
+          "origin": "explicit",
+          "start_byte": 160
+        },
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 988,
+          "interpretation": "Requires purity and determinism",
+          "origin": "explicit",
+          "start_byte": 912
+        },
+        {
+          "document_hash": "sha256:9af3301ff9dcc8be65b4739ea2deeb13f808ee38774771c40786e9b4ca301d54",
+          "document_ref": "prompt.txt",
+          "end_byte": 1036,
+          "interpretation": "Reiterates dependency and I/O constraints",
+          "origin": "explicit",
+          "start_byte": 989
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Use only the Python standard library; do not read files, use the network, print, perform external I/O, or retain state across calls. The function is pure and deterministic."
+    }
+  ],
+  "schema_version": "0.1"
+}

@@ -1,0 +1,17 @@
+{
+  "agent": "author",
+  "attempts": 1,
+  "error": null,
+  "instance": "raw/1",
+  "model_digest_sha256": null,
+  "purpose": "raw-coding",
+  "request_id": "/root/luna_benchmark_restart/luna002_d06_raw_0001",
+  "requested_model": "gpt-6-luna",
+  "response": "{\"files\":{\"solution.py\":\"def solve(data):\\n    lines = list(data[\\\"lines\\\"])\\n    for index, operation in enumerate(data[\\\"operations\\\"]):\\n        at = operation[\\\"at\\\"]\\n        if isinstance(at, bool) or not isinstance(at, int) or at < 0 or at > len(lines):\\n            return {\\\"error\\\": \\\"range\\\", \\\"operation\\\": index}\\n\\n        remove = operation.get(\\\"remove\\\", [])\\n        insert = operation.get(\\\"insert\\\", [])\\n        end = at + len(remove)\\n        if end > len(lines) or lines[at:end] != remove:\\n            return {\\\"error\\\": \\\"context\\\", \\\"operation\\\": index}\\n\\n        lines[at:end] = insert\\n\\n    return {\\\"lines\\\": lines}\\n\"} }",
+  "returned_model": null,
+  "system": "You are a software engineering coding agent. Implement the entire requested task in Python 3. Return only one JSON object {\"files\":{\"solution.py\":\"<complete source>\"}}. Do not return explanations, tests or placeholders. Define solve(data) exactly as requested.",
+  "system_sha256": "sha256:ccc6fddc279d6fc98153d8f9bf6a8ef5763a9a0dedaeb66acb6618b7c3cdbacb",
+  "user": "Software engineering task D06: Transactional contextual line splices\n\nImplement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {lines:[strings],operations:[{at,remove:[strings],insert:[strings]}]}. Apply operations sequentially to a private line-array copy; at is an integer boundary in the current array. at outside 0..current length or a boolean returns {error:'range',operation:index}. Otherwise require the full remove sequence to equal current lines starting at at; mismatch or running past EOF returns {error:'context',operation:index}. Replace that sequence with insert. Empty remove inserts; at==length can append. On first failure return only the error, publishing no partial lines. On success return {lines:[strings]}. Lines are opaque strings and may be empty or contain newline characters.\n\nImplement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.\n\nPublic examples (additional held-out cases will be scored):\n[{\"input\": {\"lines\": [\"a\", \"b\"], \"operations\": [{\"at\": 1, \"insert\": [\"x\", \"y\"], \"remove\": [\"b\"]}, {\"at\": 2, \"insert\": [], \"remove\": [\"y\"]}]}, \"output\": {\"lines\": [\"a\", \"x\"]}}, {\"input\": {\"lines\": [\"a\"], \"operations\": [{\"at\": 1, \"insert\": [], \"remove\": [\"b\"]}]}, \"output\": {\"error\": \"context\", \"operation\": 0}}]\n",
+  "user_sha256": "sha256:bf67faba86c397dbe61c7c0d6e3abeb0a056662ee14e68420195a70ca4b91771",
+  "wall_ms": 144401
+}

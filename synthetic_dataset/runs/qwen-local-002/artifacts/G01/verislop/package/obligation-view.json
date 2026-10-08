@@ -1,0 +1,1339 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "A1": {
+      "acceptance_criteria": [
+        "data contains key 'n'",
+        "data contains key 'edges'"
+      ],
+      "dependencies": [],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-16c89244201d4e1533c84cac04d7b616"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-830ea862644d2e28726bcc42eaeb7107"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 317,
+          "interpretation": "Specifies the input structure.",
+          "origin": "explicit",
+          "start_byte": 302
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input data is a JSON-compatible object with keys 'n' and 'edges'."
+    },
+    "A2": {
+      "acceptance_criteria": [
+        "data['n'] is an integer",
+        "0 <= data['n'] <= 10"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "A2",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-b196c2bef31d83be30bf0c44b0df92a2"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-3f553ac2e1dc7cb1da55cbbdf482feac"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 326,
+          "interpretation": "Specifies the valid range for n.",
+          "origin": "explicit",
+          "start_byte": 319
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "n is an integer in the range 0..10."
+    },
+    "A3": {
+      "acceptance_criteria": [
+        "data['edges'] is a list",
+        "each edge is a list of two integers",
+        "0 <= u < n and 0 <= v < n for all edges"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "A3",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-d3d55a63c3006846b68144a25a6ed54d"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-879d8ef8f6b5af4784cb6b7703bb9995"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 374,
+          "interpretation": "Specifies the structure and valid range for edges.",
+          "origin": "explicit",
+          "start_byte": 328
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "edges is a list of directed edges [u, v] where u and v are integers in 0..n-1."
+    },
+    "A4": {
+      "acceptance_criteria": [
+        "No validation of input structure is required beyond the specified types and ranges."
+      ],
+      "dependencies": [],
+      "id": "A4",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-c86dbc86a2e3003f874e75c9ad7d180f"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-b55b020f1e5a8ebcaeb2ae567420c4ce"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by Caller and discharged at Input validation (implicit)",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 269,
+          "interpretation": "Guarantees input validity, removing need for defensive parsing of malformed structures.",
+          "origin": "explicit",
+          "start_byte": 229
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "All inputs conform to the specification."
+    },
+    "D1": {
+      "acceptance_criteria": [
+        "solution.py exists and imports successfully",
+        "solution.py defines a callable named solve"
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-450a40c7386d6bf8aa9083f1efd9fd22"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-a42c035da04538f2c8f8a8b2fc54b320"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solution.py"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "solution.py"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 117,
+          "interpretation": "Defines the required module and function signature.",
+          "origin": "explicit",
+          "start_byte": 78
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "A Python 3 module solution.py must define a function solve(data)."
+    },
+    "O1": {
+      "acceptance_criteria": [
+        "Return value is a dict",
+        "Return value has key 'order'",
+        "Return value has key 'blocked'"
+      ],
+      "dependencies": [],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-9c9175a50b14354deea18e38aaca9f56"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-4a098327e77384f2e3207294b64f41b9"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 528,
+          "interpretation": "Specifies the output structure.",
+          "origin": "explicit",
+          "start_byte": 484
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function returns a JSON-compatible object with keys 'order' and 'blocked'."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "order is a list of integers",
+        "order follows Kahn's algorithm with min-heap selection",
+        "Vertices in order are unique"
+      ],
+      "dependencies": [
+        {
+          "id": "A3",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-d46569163ce0369c3a45d97fce8563ee"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-7194bb8fb4dc38d42d1b45afa31ec3cf"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 483,
+          "interpretation": "Specifies the algorithm and tie-breaking rule.",
+          "origin": "explicit",
+          "start_byte": 404
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'order' list contains vertices in the canonical Kahn's algorithm order, always choosing the smallest currently zero-indegree vertex."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "blocked is a list of integers",
+        "blocked is sorted in ascending order",
+        "set(order) union set(blocked) equals set(range(n))",
+        "order and blocked are disjoint"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-50eff65c67681f46900411955915872e"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-24964d03e3ef36dd7d37328454a9e5bf"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 639,
+          "interpretation": "Defines blocked as the remaining vertices after Kahn's algorithm, sorted.",
+          "origin": "explicit",
+          "start_byte": 536
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'blocked' list contains the sorted complement of 'order', including cycle vertices and their blocked descendants."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "Duplicate edges do not affect indegree counts or adjacency lists"
+      ],
+      "dependencies": [
+        {
+          "id": "A3",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-9cfd29d9c06870dc2dafd6ccc99cb1a9"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-93bc03afa42fd34246a3d543e4e58618"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 403,
+          "interpretation": "Requires deduplication of edges.",
+          "origin": "explicit",
+          "start_byte": 375
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Repeated edges are treated as a single edge."
+    },
+    "O5": {
+      "acceptance_criteria": [
+        "A vertex with a self-loop is included in 'blocked'"
+      ],
+      "dependencies": [
+        {
+          "id": "A3",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-3ffdd7260c8355bcd9cb874c415aa5c9"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-6e16ca854bfeb26cbda5b8babcdc598e"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 662,
+          "interpretation": "Clarifies that self-loops prevent a vertex from having zero indegree.",
+          "origin": "explicit",
+          "start_byte": 640
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Self-loops are treated as cycles."
+    },
+    "O6": {
+      "acceptance_criteria": [
+        "If n=0, return {'order': [], 'blocked': []}"
+      ],
+      "dependencies": [
+        {
+          "id": "A2",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-29e34c9caf38b4985f8873f232627337"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-5fd510134ed7930a365ed6d6940932e3"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 699,
+          "interpretation": "Specifies behavior for n=0.",
+          "origin": "explicit",
+          "start_byte": 663
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "An empty graph (n=0) returns two empty lists."
+    },
+    "S1": {
+      "acceptance_criteria": [
+        "No imports from non-standard libraries"
+      ],
+      "dependencies": [],
+      "id": "S1",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-8463ad277be66c3587dc5b69de130963"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-f2c0126b078e6ce5cfbf257c9f1f5d6b"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solution.py"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 155,
+          "interpretation": "Restricts imports to stdlib.",
+          "origin": "explicit",
+          "start_byte": 118
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function uses only the Python standard library."
+    },
+    "S2": {
+      "acceptance_criteria": [
+        "No file I/O operations",
+        "No network operations",
+        "No print statements",
+        "No global mutable state modified by solve"
+      ],
+      "dependencies": [],
+      "id": "S2",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-5f9c6a0bbc2d67d5a841b64bc58c7d13"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-4cc66cd162454b96bcf94e9e301774bb"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 228,
+          "interpretation": "Restricts side effects and statefulness.",
+          "origin": "explicit",
+          "start_byte": 156
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function does not read files, use the network, print, or retain state across calls."
+    },
+    "S3": {
+      "acceptance_criteria": [
+        "Same input always produces same output",
+        "No side effects"
+      ],
+      "dependencies": [],
+      "id": "S3",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-cc6b0cc62afea3a86f196a6219c2adba"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-369ea3111580ab45eb14e434ede85b0a"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 761,
+          "interpretation": "Requires purity and determinism.",
+          "origin": "explicit",
+          "start_byte": 701
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function is pure and deterministic."
+    },
+    "S4": {
+      "acceptance_criteria": [
+        "Input is JSON-compatible",
+        "Output is JSON-serializable"
+      ],
+      "dependencies": [],
+      "id": "S4",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-c9ad19a6b5a1ffec51e6ff940759ea1b"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: CANDIDATE_BUILD_FAILURE",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-fa093c6be6a94a904481c64b2a9577ec"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+          "document_ref": "prompt.txt",
+          "end_byte": 899,
+          "interpretation": "Specifies data interchange format.",
+          "origin": "explicit",
+          "start_byte": 826
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function receives a JSON value and returns a JSON-serializable value."
+    }
+  },
+  "roots": {
+    "contract_candidate_root": "sha256:075129693d854a57004f6bc6a6921a3648c668931577f432901f5c781718543d",
+    "interpretation_root": "sha256:8972d56bb2fcdd51db6a0a5687f0ec71bec0179b43dc3e0bb255b7fcf498c4d5"
+  },
+  "schema_version": "0.1"
+}

@@ -384,13 +384,29 @@ class Env:
         if not rep.get("ok"):
             env.diagnostics.append(Diagnostic("KERNEL_REJECTION", f"{phase}: kernel replay rejected the module: {rep.get('error')}"))
             return env
-        for c in export.get("constants", []):
+        exported = export.get("constants", [])
+        skipped = {name_str(n) for n in rep.get("not_replayed_unsafe_or_partial", [])}
+        replayed = {name_str(c["name"]): c for c in exported
+                    if c.get("kind") != "missing_after_replay"
+                    and "export_error" not in c}
+        for c in exported:
             n = name_str(c["name"])
             if "export_error" in c:
                 env.diagnostics.append(Diagnostic("UNSUPPORTED_SEMANTICS", f"{phase}: declaration {n} could not be exported: {c['export_error']}"))
                 continue
             if c.get("kind") == "missing_after_replay":
-                env.diagnostics.append(Diagnostic("KERNEL_REJECTION", f"{phase}: declaration {n} is missing after kernel replay"))
+                if c.get("replay_exclusion") != "runtime_auxiliary":
+                    env.diagnostics.append(Diagnostic("KERNEL_REJECTION", f"{phase}: declaration {n} is missing after kernel replay"))
+                else:
+                    parent = name_str(c.get("replayed_parent", []))
+                    p = replayed.get(parent, {})
+                    if (n not in skipped or c.get("omitted_kind") != "definition"
+                            or c.get("safety") not in {"unsafe", "partial"}
+                            or n != parent + "._unsafe_rec" or p.get("kind") != "definition"
+                            or p.get("safety") != "safe"):
+                        env.diagnostics.append(Diagnostic("KERNEL_REJECTION", f"{phase}: invalid omitted runtime auxiliary {n}"))
+                # Quarantined executable companions are not semantic declarations. A binding,
+                # theorem root or definition depending on one cannot gain acceptance here.
                 continue
             env.decls[n] = c
             env.hashes[n] = decl_hash(c)
@@ -496,7 +512,9 @@ def analyze(env: Env, records: list[dict[str, Any]], formalization: dict[str, An
         for n in bnames.get(r["id"], []):
             roots.add(n)
             roots |= constants(decls[n]["type"])
-    profile_json, notes = reify.derive_profile(formalization["profile_id"], decls, env.hashes, roots)
+    explicit_declarations = {n for r in active for n in reg_by_id[r["id"]]["bindings"]}
+    profile_json, notes = reify.derive_profile(formalization["profile_id"], decls, env.hashes, roots,
+                                             explicit_declarations=explicit_declarations)
     profile = dsl.Profile.from_json(profile_json)
     profile_hash = canonical.digest_json(profile_json)
     pred_owner = {}
@@ -513,6 +531,12 @@ def analyze(env: Env, records: list[dict[str, Any]], formalization: dict[str, An
         names = bnames.get(oid, [])
         sem_roots = set(names) | {n for x in names for n in constants(decls[x]["type"])}
         clos = closure(sem_roots, decls)
+        # A record's full constructor/projection registry is part of its semantic identity,
+        # including fields that a particular theorem does not project. Acceptance must freeze
+        # those definitions as well as the hashes already recorded in the derived profile.
+        record_family = {n for rec in profile.records.values() if rec["lean_decl"] in clos
+                         for n in [rec["lean_constructor"], *(f["lean_projection"] for f in rec["fields"])]}
+        clos |= closure(record_family, decls)
         for n in clos:
             c = decls[n]
             if c["safety"] != "safe":
@@ -556,7 +580,7 @@ def analyze(env: Env, records: list[dict[str, Any]], formalization: dict[str, An
                         "a formalization must not quietly weaken a guarantee", obligations=[oid]))
             st["hypotheses"] = hyps
             if formula is not None:
-                pkg = dsl.make_package(formula, profile.profile_id)
+                pkg = dsl.make_package(formula, profile.profile_id, encoding=profile.encoding)
                 if not dsl.round_trip_ok(pkg, profile):
                     diags.append(Diagnostic("IR_REIFICATION_MISMATCH", f"{phase}: DSL round trip failed for {oid}", obligations=[oid]))
                 st.update({
@@ -564,7 +588,7 @@ def analyze(env: Env, records: list[dict[str, Any]], formalization: dict[str, An
                     "formula_package": pkg,
                     "display": dsl.render(formula),
                     "statement_hash": reify.statement_hash(
-                        encoding=dsl.ENCODING, profile_id=profile.profile_id, profile_hash=profile_hash,
+                        encoding=profile.encoding, profile_id=profile.profile_id, profile_hash=profile_hash,
                         toolchain=toolchain_pin, payload=formula, referenced=referenced),
                 })
                 requests.append({"id": oid, "theorem": decls[thm]["name"], "expr": reify.denote_formula(formula, profile)})

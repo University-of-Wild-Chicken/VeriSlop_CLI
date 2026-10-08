@@ -1,0 +1,17 @@
+{
+  "agent": "author",
+  "attempts": 1,
+  "error": null,
+  "instance": "raw/1",
+  "model_digest_sha256": null,
+  "purpose": "raw-coding",
+  "request_id": "/root/luna_benchmark_restart/luna002_a29_raw_0001",
+  "requested_model": "gpt-6-luna",
+  "response": "{\"files\":{\"solution.py\":\"import heapq\\n\\n\\ndef solve(data):\\n    n = data[\\\"n\\\"]\\n    source = data[\\\"source\\\"]\\n    target = data[\\\"target\\\"]\\n    graph = [[] for _ in range(n)]\\n    for u, v, weight in data[\\\"edges\\\"]:\\n        graph[u].append((v, weight))\\n\\n    distances = [[] for _ in range(n)]\\n    distances[source].append(0)\\n    queue = [(0, source)]\\n\\n    while queue:\\n        distance, vertex = heapq.heappop(queue)\\n        if distance not in distances[vertex]:\\n            continue\\n\\n        for neighbor, weight in graph[vertex]:\\n            candidate = distance + weight\\n            known = distances[neighbor]\\n            if candidate in known:\\n                continue\\n            if len(known) < 2 or candidate < known[-1]:\\n                known.append(candidate)\\n                known.sort()\\n                if len(known) > 2:\\n                    known.pop()\\n                heapq.heappush(queue, (candidate, neighbor))\\n\\n    return distances[target][1] if len(distances[target]) >= 2 else None\\n\"}}",
+  "returned_model": null,
+  "system": "You are a software engineering coding agent. Implement the entire requested task in Python 3. Return only one JSON object {\"files\":{\"solution.py\":\"<complete source>\"}}. Do not return explanations, tests or placeholders. Define solve(data) exactly as requested.",
+  "system_sha256": "sha256:ccc6fddc279d6fc98153d8f9bf6a8ef5763a9a0dedaeb66acb6618b7c3cdbacb",
+  "user": "Software engineering task A29: Second distinct shortest walk distance\n\nImplement solution.py with a single solve(data) function. data and the return value must be JSON-compatible. Use Python 3 standard library only; perform no external I/O and do not read benchmark files. All supplied inputs satisfy the stated schema and bounds; no behavior is required for malformed input. Input {n,edges:[[from,to,positive_weight],...],source,target}, 1<=n<=30 directed vertices, <=100 edges including parallel edges. Walks may revisit vertices. Return the second smallest DISTINCT total weight among all source-to-target walks, or null if fewer than two weights exist. When source==target the empty walk counts with weight zero; equal-cost routes do not create a second distance.\n\nImplement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.\n\nPublic examples (additional held-out cases will be scored):\n[{\"input\": {\"edges\": [[0, 1, 1], [1, 2, 1], [0, 2, 2], [1, 1, 1]], \"n\": 3, \"source\": 0, \"target\": 2}, \"output\": 3}, {\"input\": {\"edges\": [[0, 0, 4]], \"n\": 1, \"source\": 0, \"target\": 0}, \"output\": 4}]\n",
+  "user_sha256": "sha256:e6b61b6ba16174a156fc1916e1f50bfe477bf9a39ae4678139d26a61731ee7bc",
+  "wall_ms": 29033
+}

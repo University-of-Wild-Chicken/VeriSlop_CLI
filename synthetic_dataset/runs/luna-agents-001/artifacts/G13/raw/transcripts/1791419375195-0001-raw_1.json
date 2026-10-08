@@ -1,0 +1,17 @@
+{
+  "agent": "author",
+  "attempts": 1,
+  "error": null,
+  "instance": "raw/1",
+  "model_digest_sha256": null,
+  "purpose": "raw-coding",
+  "request_id": "/root/luna_controller/pair_0002/g13_raw_req0001_luna",
+  "requested_model": "gpt-6-luna",
+  "response": "{\"files\":{\"solution.py\":\"def solve(data):\\n    n = data[\\\"n\\\"]\\n    edges = sorted({(u, v) for u, v in data[\\\"edges\\\"]})\\n    adjacency = [0] * n\\n\\n    for u, v in edges:\\n        adjacency[u] |= 1 << v\\n\\n    # Compute reachability and detect cycles, including self-loops.\\n    reach = adjacency[:]\\n    for k in range(n):\\n        bit_k = 1 << k\\n        for i in range(n):\\n            if reach[i] & bit_k:\\n                reach[i] |= reach[k]\\n\\n    if any(reach[i] & (1 << i) for i in range(n)):\\n        return None\\n\\n    reduced = []\\n    for u, v in edges:\\n        # An alternate path must begin with a neighbor other than v.\\n        if not any(w != v and (reach[w] & (1 << v))\\n                   for w in range(n) if adjacency[u] & (1 << w)):\\n            reduced.append([u, v])\\n\\n    return reduced\"}}",
+  "returned_model": null,
+  "system": "You are a software engineering coding agent. Implement the entire requested task in Python 3. Return only one JSON object {\"files\":{\"solution.py\":\"<complete source>\"}}. Do not return explanations, tests or placeholders. Define solve(data) exactly as requested.",
+  "system_sha256": "sha256:ccc6fddc279d6fc98153d8f9bf6a8ef5763a9a0dedaeb66acb6618b7c3cdbacb",
+  "user": "Software engineering task G13: Transitive reduction with global cycle checks\n\nImplement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {n,edges}, n=0..10, directed [u,v]; duplicates are ignored. Return null if any cycle exists. Otherwise return sorted unique edges [u,v] retained by the DAG transitive reduction: retain an edge exactly when there is no alternate u-to-v path using at least two edges. Preserve reachability, include no redundant edges, and keep isolated vertices implicit.\n\nImplement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.\n\nPublic examples (additional held-out cases will be scored):\n[{\"input\": {\"edges\": [[0, 1], [1, 2], [0, 2], [0, 2]], \"n\": 3}, \"output\": [[0, 1], [1, 2]]}, {\"input\": {\"edges\": [[0, 0]], \"n\": 1}, \"output\": null}]\n",
+  "user_sha256": "sha256:d9ffbe195e7582ce4fee029278ddebc04fa35cd60b96dbc8b4d1c44bf029adf9",
+  "wall_ms": 22274
+}

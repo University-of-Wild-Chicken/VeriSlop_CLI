@@ -1,0 +1,178 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "created_at": "2026-10-08T07:31:32Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-02",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/D12/verislop/package-repair-02/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/D12/verislop/package-repair-02/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/D12/verislop/package-repair-02/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 328:40: unexpected token 'end'; expected ')'; 328:41: Missing name after `end`: Expected the current scope name `D12`\n\nHint: To end the current scope `D12`, specify its name:\n  end ̲D̲1̲2̲; 328:45: unexpected token ':'; expected command; 334:29: unexpected token 'end'; expected '_' or identifier; 334:29: Invalid name after `end`: Expected `D12`, but found `total`\n\nNote: The current scopes are `VeriSlop.D12`",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:129765a3b09e87eaeac2921d031b61e0c8572e5d904cfcbf4db3660ba3de21f6",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "VeriSlop.D12.solution_file_name"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D12.solve_function_name"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D12.solve_is_pure"
+              ],
+              "obligation": "D3"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D12.implementation_language"
+              ],
+              "obligation": "D4"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D12.input_structure_description"
+              ],
+              "obligation": "D5"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D12.output_is_json_compatible"
+              ],
+              "obligation": "D6"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D12.uses_stdlib_only",
+                "VeriSlop.D12.no_external_io"
+              ],
+              "obligation": "D7"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlop.D12.O1_count_validation_error"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlop.D12.O2_zero_count_removal"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "VeriSlop.D12.O3_adjacent_merge"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "VeriSlop.D12.O4_structural_equality"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "VeriSlop.D12.O5_output_runs_field"
+            },
+            {
+              "obligation": "O6",
+              "theorem": "VeriSlop.D12.O6_output_length_field"
+            },
+            {
+              "obligation": "O7",
+              "theorem": "VeriSlop.D12.O7_output_slice_field"
+            },
+            {
+              "obligation": "O8",
+              "theorem": "VeriSlop.D12.O8_start_clamping"
+            },
+            {
+              "obligation": "O9",
+              "theorem": "VeriSlop.D12.O9_end_clamping"
+            },
+            {
+              "obligation": "O10",
+              "theorem": "VeriSlop.D12.O10_empty_slice_condition"
+            },
+            {
+              "obligation": "O12",
+              "theorem": "VeriSlop.D12.O12_order_preservation"
+            },
+            {
+              "obligation": "O11",
+              "theorem": "VeriSlop.D12.O11_no_full_expansion"
+            }
+          ],
+          "internal_obligations": [],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "D12.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace VeriSlop.D12\n\n/-- D1: The solution is implemented in a file named solution.py. --/\ndef solution_file_name : String := \"solution.py\"\n\n/-- D2: The solution exposes a function named solve that takes a single argument data. --/\ndef solve_function_name : String := \"solve\"\n\n/-- D3: The function solve is pure and deterministic. --/\ndef solve_is_pure : Bool := true\n\n/-- D4: The function is implemented in Python 3. --/\ndef implementation_language : String := \"python3\"\n\n/-- D5: The input data is a JSON-compatible Python value with structure {runs:[{count:JSON,value:JSON}],start:int,end:int}. --/\ndef input_structure_description : String := \"{runs:[{count:JSON,value:JSON}],start:int,end:int}\"\n\n/-- D6: The output is a JSON-compatible Python value. --/\ndef output_is_json_compatible : Bool := true\n\n/-- D7: The implementation uses only the Python standard library and performs no external I/O. --/\ndef uses_stdlib_only : Bool := true\n\ndef no_external_io : Bool := true\n\n/-- O1: If the first run's count is not an integer (where boolean is considered invalid) or is negative, the function returns {error:'count',run:index} where index is the 0-based index of that run. --/\ntheorem O1_count_validation_error : ∀ (count : Bool), count → (∃ (result : Bool), result) := by sorry\n\n/-- O2: Zero-count runs are removed from the normalized runs list. --/\ntheorem O2_zero_count_removal : ∀ (count : Nat), count = 0 → (∃ (removed : Bool), removed) := by sorry\n\n/-- O3: Adjacent runs with structurally equal values are merged into a single run with summed counts, preserving the original value. --/\ntheorem O3_adjacent_merge : ∀ (c1 c2 : Nat), c1 > 0 → c2 > 0 → (∃ (merged_count : Nat), merged_count = c1 + c2) := by sorry\n\n/-- O4: Structural equality for merging treats booleans as distinct from numbers and ignores object key order. --/\ntheorem O4_structural_equality : (∃ (distinct : Bool), distinct) := by sorry\n\n/-- O5: The output includes a 'runs' field containing the normalized runs. --/\ntheorem O5_output_runs_field : (∃ (has_runs : Bool), has_runs) := by sorry\n\n/-- O6: The output includes a 'length' field equal to the sum of counts in the normalized runs. --/\ntheorem O6_output_length_field : ∀ (total : Nat), (∃ (length : Nat), length = total) := by sorry\n\n/-- O7: The output includes a 'slice' field containing the expanded half-open interval [start, end) of the normalized stream. --/\ntheorem O7_output_slice_field : ∀ (start end : Nat), (∃ (slice_len : Nat), slice_len ≤ 100) := by sorry\n\n/-- O8: The requested start endpoint is clamped to 0 if it is below zero. --/\ntheorem O8_start_clamping : ∀ (start : Nat), (∃ (effective_start : Nat), effective_start = start) := by sorry\n\n/-- O9: The requested end endpoint is clamped to the total length if it is above the total length. --/\ntheorem O9_end_clamping : ∀ (end total : Nat), (∃ (effective_end : Nat), effective_end ≤ total) := by sorry\n\n/-- O10: If the effective end is less than or equal to the effective start, the slice is empty. --/\ntheorem O10_empty_slice_condition : ∀ (start end : Nat), end ≤ start → (∃ (slice_len : Nat), slice_len = 0) := by sorry\n\n/-- O12: The output preserves the specified input/output structure and exact ordering of runs and slice elements. --/\ntheorem O12_order_preservation : (∃ (preserved : Bool), preserved) := by sorry\n\n/-- O11: The implementation must not expand the stream outside the requested slice, even if counts are huge. --/\ntheorem O11_no_full_expansion : ∀ (total : Nat), (∃ (max_slice : Nat), max_slice = 100) := by sorry\n\nend VeriSlop.D12"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261007,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

@@ -1,0 +1,670 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "none stated",
+    "entities": "Input object, input rows, output object and output rows are declared.",
+    "error_semantics": "none stated",
+    "explicit_non_goals": "Out-of-schema inputs and environmental effects are outside scope.",
+    "invariants": "Exact arbitrary-precision signed integer arithmetic and exact Unicode preservation are specified.",
+    "liveness_properties": "none stated",
+    "postconditions": "Exact filtering, stable order and duplicates, output projection, aggregates and empty-result values are specified.",
+    "preconditions": "No caller assumptions stated; the request defines the supported schema and excludes inputs outside it from scope.",
+    "resource_constraints": "none stated",
+    "safety_properties": "none stated"
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "Input and output have exactly the stated fields",
+        "Input row and output row objects have exactly the stated fields"
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P02-row-projection.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input and output shapes"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 153,
+          "interpretation": "input object shape",
+          "origin": "explicit",
+          "start_byte": 85
+        },
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 346,
+          "interpretation": "input row shape and field types",
+          "origin": "explicit",
+          "start_byte": 183
+        },
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 558,
+          "interpretation": "output object shape",
+          "origin": "explicit",
+          "start_byte": 491
+        },
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 668,
+          "interpretation": "output row shape",
+          "origin": "explicit",
+          "start_byte": 559
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input is a JSON object with fields rows and minimum; rows contains objects with fields tag, amount and enabled. The output is a JSON object with fields rows, total and count, whose row objects have fields tag and amount."
+    }
+  ],
+  "error_semantics": [],
+  "explicit_non_goals": [
+    {
+      "acceptance_criteria": [
+        "No behavior for out-of-schema inputs or environmental effects is required by this request"
+      ],
+      "dependencies": [],
+      "id": "N1",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P02-row-projection.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "out-of-schema inputs and environmental effects"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 1094,
+          "interpretation": "stated scope exclusion",
+          "origin": "explicit",
+          "start_byte": 1005
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Inputs outside the stated schema and environmental effects are outside this task's scope."
+    }
+  ],
+  "invariants": [
+    {
+      "acceptance_criteria": [
+        "Integer comparisons and sums are exact, without fixed-width overflow or rounding"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O4",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O5",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P02-row-projection.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "amount comparisons and total calculation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 908,
+          "interpretation": "numeric semantics",
+          "origin": "explicit",
+          "start_byte": 842
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Arithmetic uses exact arbitrary-precision signed integer arithmetic."
+    }
+  ],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "A row is retained if and only if enabled is true and amount >= minimum"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P02-row-projection.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all inputs satisfying the stated schema"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 450,
+          "interpretation": "row selection rule",
+          "origin": "explicit",
+          "start_byte": 347
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The result retains exactly those input rows whose enabled field is true and whose amount is greater than or equal to minimum."
+    },
+    {
+      "acceptance_criteria": [
+        "Retained rows appear in input order",
+        "Every qualifying occurrence is retained, including duplicates"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P02-row-projection.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "retained rows"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 490,
+          "interpretation": "ordering and multiplicity",
+          "origin": "explicit",
+          "start_byte": 451
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Retained rows preserve their original order and duplicates."
+    },
+    {
+      "acceptance_criteria": [
+        "Output rows contain exactly tag and amount",
+        "Each output tag and amount equals the corresponding retained input value",
+        "Unicode strings remain unchanged, including empty strings, whitespace and combining characters"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "O1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P02-row-projection.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output rows"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 668,
+          "interpretation": "output projection and value preservation",
+          "origin": "explicit",
+          "start_byte": 559
+        },
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 1004,
+          "interpretation": "exact Unicode preservation",
+          "origin": "explicit",
+          "start_byte": 909
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Each output row has exactly tag and amount, copied without alteration from its retained input row; Unicode strings are preserved exactly, including empty strings, whitespace and combining characters."
+    },
+    {
+      "acceptance_criteria": [
+        "total equals the sum of retained amounts",
+        "count equals the number of retained rows",
+        "For an empty result, rows is [], total is 0 and count is 0"
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P02-row-projection.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all results, including empty results"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 747,
+          "interpretation": "aggregate definitions",
+          "origin": "explicit",
+          "start_byte": 669
+        },
+        {
+          "document_hash": "sha256:f24a391c9fb1c31e0d6fbfa13527bcb28a855696a85bdb7b7f2b70830b1acdfa",
+          "document_ref": "data-pipelines/P02-row-projection.txt",
+          "end_byte": 841,
+          "interpretation": "empty-result values",
+          "origin": "explicit",
+          "start_byte": 748
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "total is the sum of retained amounts and count is the number of retained rows; when no rows are retained, rows is empty, total is zero and count is zero."
+    }
+  ],
+  "preconditions": [],
+  "request_ref": "data-pipelines/P02-row-projection.txt",
+  "resource_constraints": [],
+  "safety_properties": [],
+  "schema_version": "0.1"
+}

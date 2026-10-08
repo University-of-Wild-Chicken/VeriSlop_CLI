@@ -1,0 +1,69 @@
+==> [verify] frozen closure: clean builds, determinism, provenance
+    [verify] isolated clean build A
+    [verify] isolated clean build B
+{
+  "artifacts": {
+    "obligation_view": "obligation-view.json",
+    "report": "report.json"
+  },
+  "asserts_closure_verified": false,
+  "command": "verify",
+  "diagnostics": [
+    {
+      "claims": [
+        "TESTED:O1@1"
+      ],
+      "code": "TEST_FAILURE",
+      "message": "TESTED:O1@1: FAIL — blocked: TEST_FAILURE",
+      "obligations": [
+        "O1"
+      ],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "TESTED:O3@1"
+      ],
+      "code": "TEST_FAILURE",
+      "message": "TESTED:O3@1: FAIL — blocked: TEST_FAILURE",
+      "obligations": [
+        "O3"
+      ],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "TESTED:O4@1"
+      ],
+      "code": "TEST_FAILURE",
+      "message": "TESTED:O4@1: FAIL — blocked: TEST_FAILURE",
+      "obligations": [
+        "O4"
+      ],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "REVIEW_REJECTED",
+      "message": "release review final decision: CHANGES_REQUESTED",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "CLOSURE:provenance"
+      ],
+      "code": "STALE_OR_UNBOUND_EVIDENCE",
+      "message": "CLOSURE:provenance: FAIL — verifier blocked the claim",
+      "obligations": [],
+      "severity": "blocking"
+    }
+  ],
+  "gate": "closure VERIFIED under the declared trust boundary",
+  "status": "BLOCKED",
+  "summary": {
+    "closure_root": "sha256:ab01757b189507493e247b29c2aadcd6910f094b2bdeac0fc5d9ae7cc8077a7d",
+    "qualified_result": "BLOCKED (REVIEW_REJECTED, STALE_OR_UNBOUND_EVIDENCE, TEST_FAILURE); no verification success",
+    "terminal_status": "BLOCKED"
+  }
+}

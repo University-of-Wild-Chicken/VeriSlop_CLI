@@ -73,6 +73,8 @@ def load_candidate_dir(path: Path) -> tuple[bytes, dict[str, Any]]:
 def validate_candidate(form: Any, records: list[dict[str, Any]]) -> list[Diagnostic]:
     diags = schemas.require_valid("formalization-candidate", form, "formalization candidate")
     if diags:
+        if isinstance(form, dict) and isinstance(form.get("error"), str):
+            diags.insert(0, Diagnostic("INVALID_CANDIDATE", form["error"]))
         return diags
     by_id = {r["id"]: r for r in records}
     seen: set[str] = set()
@@ -131,9 +133,12 @@ def contract_claims(records: list[dict[str, Any]], ledger: dict[str, Any]) -> li
 
 
 def attempt(tc: leanbridge.Toolchain, pol: dict[str, Any], records: list[dict[str, Any]], source: bytes,
-            form: dict[str, Any], events: EventSink) -> dict[str, Any]:
+            form: dict[str, Any], events: EventSink, frontend: Any = None) -> dict[str, Any]:
     """One statement-check attempt. Returns a dict with diagnostics and, on success, artifacts."""
     out: dict[str, Any] = {"diagnostics": []}
+    if frontend is not None and (frontend.source != source or frontend.formalization != form):
+        out["diagnostics"].append(Diagnostic("IR_REIFICATION_MISMATCH", "typed compiler artifacts changed before statement checking"))
+        return out
     active = [r for r in records if not r["blocked_by"]]
     registry = contract.registry_lean(active, contract.binding_names(form))
     composed, imports, problems = contract.compose_challenge(source, registry)
@@ -154,6 +159,17 @@ def attempt(tc: leanbridge.Toolchain, pol: dict[str, Any], records: list[dict[st
         if not comp.ok:
             out["diagnostics"].append(Diagnostic("CANDIDATE_BUILD_FAILURE", "the challenge does not elaborate: " + "; ".join(comp.errors[:5])))
             return out
+        if frontend is not None:
+            from .formal_frontend import kernel_audit_requests
+            requests = kernel_audit_requests(frontend)
+            events.emit("progress", "formalize", f"kernel audit of {len(requests)} typed-proposal denotations")
+            resp = leanbridge.run_kernel_tool(tc, comp.olean, {"defeq": requests},
+                                             timeout=pol["kernel_timeout_seconds"], memory_mb=pol["memory_mb"],
+                                             require_network_isolation=pol["require_network_isolation"])
+            out["frontend_defeq"] = resp.get("defeq", [])
+            out["diagnostics"].extend(contract.defeq_diagnostics(resp, "typed formalizer compiler"))
+            if any(d.severity in ("blocking", "infrastructure") for d in out["diagnostics"]):
+                return out
         events.emit("progress", "formalize", "kernel replay and export of the challenge")
         export = leanbridge.run_kernel_tool(tc, comp.olean, {"export": True, "axioms": True},
                                             timeout=pol["kernel_timeout_seconds"], memory_mb=pol["memory_mb"],
@@ -193,6 +209,90 @@ def _records(draft: dict[str, Any], ledger: dict[str, Any], form: dict[str, Any]
     return recs
 
 
+def _structurally_trivial(formula: Any) -> bool:
+    """Recognize a few output-independent tautologies without unfolding definitions.
+
+    This is proposal readiness, not a complete tautology or NL-equivalence checker.
+    In particular, ``solve x = primitive_pipeline x`` remains meaningful even when
+    Lean can prove it by reflexivity after unfolding the model definition.
+    """
+    if not isinstance(formula, dict):
+        return False
+    tag = formula.get("tag")
+    if tag == "true":
+        return True
+    if tag in ("eq", "iff"):
+        return formula.get("left") == formula.get("right")
+    if tag == "forall":
+        return _structurally_trivial(formula.get("body"))
+    if tag == "and":
+        return _structurally_trivial(formula.get("left")) and _structurally_trivial(formula.get("right"))
+    if tag == "or":
+        return _structurally_trivial(formula.get("left")) or _structurally_trivial(formula.get("right"))
+    if tag == "implies":
+        return (formula.get("left") == formula.get("right")
+                or formula.get("left") == {"tag": "false"}
+                or _structurally_trivial(formula.get("right")))
+    return tag == "not" and formula.get("body") == {"tag": "false"}
+
+
+def executable_readiness(records: list[dict[str, Any]], analysis: contract.Analysis,
+                         requested: dict[str, Any]) -> list[Diagnostic]:
+    """Repair opaque agent proposals before freezing a requested Python campaign.
+
+    This is candidate selection, not a relaxation of acceptance or a source rewrite.
+    Explicit candidates and standalone formalization retain opaque Lean support.
+    Applicability and implementation-symbol coverage match the later claim inventory.
+    """
+    if not requested or requested.get("target") not in (None, "python"):
+        return []
+    from .capabilities import normalize_endpoint
+
+    tier = requested.get("tier") if requested.get("tier") is not None else 0
+    if tier not in (0, 1):
+        return []
+    endpoint = normalize_endpoint(requested.get("endpoint"), tier)
+    if requested.get("require_state") != "TESTED" and endpoint != "test_campaign":
+        return []
+    declarations = {s["lean_decl"] for s in (analysis.profile or {}).get("symbols", {}).values()}
+    diags = []
+    for rec in records:
+        oid = rec["id"]
+        if not rec["required"] or rec["blocked_by"] or not applicability(rec)["TESTED"][0]:
+            continue
+        statement = analysis.statements[oid]
+        if not declarations.intersection(statement["semantic_closure"]):
+            diags.append(Diagnostic(
+                "INVALID_CANDIDATE",
+                f"{oid}: the requested Python TESTED/test_campaign needs an executable guarantee about an "
+                "admitted implementation symbol, but this candidate has no such symbol in its semantic closure. "
+                "Repair the exact previous source and binding manifest to model the requested operation and "
+                "its observable behavior faithfully. A constant True predicate, reflexive input equality or "
+                "unbound opaque predicate cannot substitute for the requested behavior. Do not weaken, remove "
+                "or make this guarantee optional. If the domain cannot be represented, report that capability gap.",
+                obligations=[oid], details={"representation": statement["representation"],
+                                           "missing_implementation_symbol": True, "requested": requested}))
+        if statement["representation"] == "contract_dsl":
+            if _structurally_trivial(statement.get("formula_package", {}).get("formula")):
+                diags.append(Diagnostic(
+                    "INVALID_CANDIDATE", f"{oid}: this executable guarantee is structurally tautological and "
+                    "cannot constrain an implementation. State the requested observable result against fixed "
+                    "primitives, retaining all guards and requirements; do not compare an expression with itself.",
+                    obligations=[oid], details={"structurally_trivial_guarantee": True}))
+            continue
+        reason = statement.get("opaque_reason") or "the accepted expression is outside the executable contract DSL"
+        diags.append(Diagnostic(
+            "INVALID_CANDIDATE",
+            f"{oid}: the requested Python TESTED/test_campaign needs an executable contract_dsl statement, "
+            f"but this candidate reifies as {statement['representation']}: {reason}. Repair the exact previous source and binding "
+            "manifest with a faithful equivalent statement in the supported DSL; preserve every requirement, "
+            "quantifier, branch guard and dependency. Do not weaken, remove or make this guarantee optional. "
+            "For an inline conditional value, equivalent guarded branch implications may avoid the unsupported term.",
+            obligations=[oid], details={"representation": statement["representation"], "opaque_reason": reason,
+                                       "requested": requested}))
+    return diags
+
+
 def run(
     pkg: Package,
     events: EventSink,
@@ -203,6 +303,8 @@ def run(
     policy_name: str = "strict",
     agent: Callable[[dict[str, Any]], tuple[bytes, dict[str, Any]]] | None = None,
     max_attempts: int = 3,
+    recovery_feedback: list[str] | None = None,
+    previous_candidate: dict[str, Any] | None = None,
 ) -> StageResult:
     pol = policymod.get(policy_name)
     if draft_path is not None:
@@ -242,10 +344,12 @@ def run(
         return result
 
     tc = leanbridge.resolve_toolchain(leanbridge.DEFAULT_TOOLCHAIN)
-    feedback: list[str] = []
+    feedback: list[str] = list(recovery_feedback or [])
+    prior_candidate = previous_candidate
     last: dict[str, Any] = {}
     form: dict[str, Any] | None = None
     records: list[dict[str, Any]] = []
+    candidate_origin: dict[str, Any] | None = None
     attempts = 1 if candidate else max(1, max_attempts)
     source_kind = "candidate_dir" if candidate else "agent"
     for n in range(attempts):
@@ -253,33 +357,61 @@ def run(
             source, form = load_candidate_dir(candidate)
         elif agent:
             records = _records(draft, ledger, None)
-            source, form = agent({"draft": draft, "ledger": ledger, "records": records, "feedback": feedback, "attempt": n + 1})
+            source, form = agent({"draft": draft, "ledger": ledger, "records": records, "feedback": feedback,
+                                  "attempt": n + 1, "previous_candidate": prior_candidate,
+                                  "requested": dict(pkg.meta().get("requested", {}))})
+            candidate_origin = getattr(agent, "last_origin", None)
         else:
             raise UsageError("no formalizer available: configure a `formalizer` role with --config, or pass --candidate DIR")
         events.emit("candidate_proposal", "formalize", f"formalization candidate (attempt {n + 1})", details={"source": source_kind})
         records = _records(draft, ledger, form)
-        cdiags = validate_candidate(form, records)
+        # This exact pair is the agent transport's rejected-response placeholder,
+        # not a proposed legacy binding manifest. Preserve its real parse/type
+        # diagnostic without suggesting irrelevant schema fields in repair feedback.
+        rejected_response = (candidate is None and agent is not None
+            and source == b"-- unparseable formalizer response\n"
+            and isinstance(form, dict) and set(form) == {"error"}
+            and isinstance(form["error"], str)
+            and form["error"].startswith("unparseable formalizer response: "))
+        cdiags = ([Diagnostic("INVALID_CANDIDATE", form["error"])] if rejected_response
+                  else validate_candidate(form, records))
         if cdiags:
             last = {"diagnostics": cdiags}
         else:
-            last = attempt(tc, pol, records, source, form, events)
+            frontend = getattr(agent, "last_compiled", None) if candidate is None else None
+            last = (attempt(tc, pol, records, source, form, events, frontend=frontend) if frontend is not None
+                    else attempt(tc, pol, records, source, form, events))
+        if candidate is None and not any(d.severity in ("blocking", "infrastructure") for d in last["diagnostics"]):
+            last["diagnostics"].extend(executable_readiness(records, last["analysis"], pkg.meta().get("requested", {})))
         if not any(d.severity in ("blocking", "infrastructure") for d in last["diagnostics"]):
             break
         feedback = [d.message for d in last["diagnostics"] if d.severity != "warning"]
+        prior_candidate = {"lean_source": source.decode("utf-8"), "formalization": form}
+        if candidate_origin is not None:
+            prior_candidate["typed_proposal"] = candidate_origin["proposal"]
         if any(d.severity == "infrastructure" for d in last["diagnostics"]):
             break
 
     diags: list[Diagnostic] = last["diagnostics"]
     ok = not any(d.severity in ("blocking", "infrastructure") for d in diags)
     cand_dir = pkg.path("contract") / "candidate"
+    # Keep the generator's exact input separately from the supervisor-composed registry.
+    # Recovery in a new package must not accidentally resubmit the generated registry.
+    fsutil.atomic_write(cand_dir / "proposal.lean", source)
     if "composed" in last:
         fsutil.atomic_write(cand_dir / "Contract.lean", last["composed"])
     if isinstance(form, dict):
         fsutil.write_json(cand_dir / "formalization.json", form)
+    for name in ("typed-proposal.json", "compiler-origin.json"):
+        (cand_dir / name).unlink(missing_ok=True)
+    if candidate_origin is not None:
+        fsutil.write_json(cand_dir / "typed-proposal.json", candidate_origin["proposal"])
+        fsutil.write_json(cand_dir / "compiler-origin.json", candidate_origin["receipt"])
     fsutil.write_json(cand_dir / "statement-check.json", {
         "diagnostics": [d.to_json() for d in diags],
         "compile": last.get("compile"),
         "defeq": last.get("defeq"),
+        "frontend_defeq": last.get("frontend_defeq"),
     }, pretty=True)
     result.artifacts["candidate"] = pkg.rel(cand_dir)
 

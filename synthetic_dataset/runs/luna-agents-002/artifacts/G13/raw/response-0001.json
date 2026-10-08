@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_g13_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:996048d644bfff00e6ba2183a5db5ea3e2ff038c661d70e436b904475f7e853b",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:748cfe89b2d0d4e64cc244a05e58773f7a68e7d49aefc7d1050578df8f2f3a4f",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    n = data[\\\"n\\\"]\\n    edges = sorted({(u, v) for u, v in data[\\\"edges\\\"]})\\n\\n    adjacency = [[] for _ in range(n)]\\n    indegree = [0] * n\\n    for u, v in edges:\\n        adjacency[u].append(v)\\n        indegree[v] += 1\\n\\n    # A DAG has a topological ordering containing every vertex.\\n    queue = [vertex for vertex in range(n) if indegree[vertex] == 0]\\n    index = 0\\n    visited = 0\\n    while index < len(queue):\\n        u = queue[index]\\n        index += 1\\n        visited += 1\\n        for v in adjacency[u]:\\n            indegree[v] -= 1\\n            if indegree[v] == 0:\\n                queue.append(v)\\n    if visited != n:\\n        return None\\n\\n    reduced = []\\n    for omitted_u, omitted_v in edges:\\n        stack = [omitted_u]\\n        seen = {omitted_u}\\n        while stack:\\n            u = stack.pop()\\n            for v in adjacency[u]:\\n                if u == omitted_u and v == omitted_v:\\n                    continue\\n                if v == omitted_v:\\n                    reduced.append([omitted_u, omitted_v])\\n                    stack.clear()\\n                    break\\n                if v not in seen:\\n                    seen.add(v)\\n                    stack.append(v)\\n\\n    return reduced\"}}",
+  "transport": "collaboration"
+}

@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_g32_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:33d62fca02806059e60e9434855816b36279c7fe0a2d81081513b3cdfc7a0a7c",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:8bb5aa7686ae2c7b923f39dff8218109558e76d049783bb15c7fefe332c25e94",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    base = data[\\\"base\\\"]\\n    local = data[\\\"local\\\"]\\n    remote = data[\\\"remote\\\"]\\n    absent = object()\\n\\n    def encoded(value):\\n        if value is absent:\\n            return {\\\"present\\\": False}\\n        return {\\\"present\\\": True, \\\"value\\\": value}\\n\\n    merged = {}\\n    conflicts = []\\n\\n    for key in sorted(set(base) | set(local) | set(remote)):\\n        b = base.get(key, absent)\\n        l = local.get(key, absent)\\n        r = remote.get(key, absent)\\n\\n        if l == r:\\n            chosen = l\\n        elif l == b:\\n            chosen = r\\n        elif r == b:\\n            chosen = l\\n        else:\\n            conflicts.append({\\n                \\\"key\\\": key,\\n                \\\"base\\\": encoded(b),\\n                \\\"local\\\": encoded(l),\\n                \\\"remote\\\": encoded(r),\\n            })\\n            continue\\n\\n        if chosen is not absent:\\n            merged[key] = chosen\\n\\n    return {\\\"merged\\\": merged, \\\"conflicts\\\": conflicts}\\n\"}}",
+  "transport": "collaboration"
+}

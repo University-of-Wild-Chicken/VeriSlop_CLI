@@ -1,0 +1,158 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:ec67cada23df7530584f5ab15dfb795428757d3bc18715e0391fffc741a36cc2",
+  "created_at": "2026-10-08T09:50:31Z",
+  "recovery_root": "p01-numeric-batch",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "p01-numeric-batch-repair-01",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/examples/proof-of-concept/data-pipelines/qwen-config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-002/P01-numeric-batch/runs/p01-numeric-batch-repair-01/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-002/P01-numeric-batch/runs/p01-numeric-batch-repair-01/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-002/P01-numeric-batch/runs/p01-numeric-batch-repair-01/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 232:19: expected line break or token; 239:8: expected token; 243:8: expected token; 247:15: expected token; 247:14: Invalid field notation: Identifier or numeral expected",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:fe263ce5c858aa218121635e852eeb8743648b22727b1268c2cf57628f178024",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "VeriSlop.Contract.solve"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "VeriSlop.Contract.Input"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "declarations": [
+                "VeriSlop.Contract.Input"
+              ],
+              "obligation": "D3"
+            },
+            {
+              "declarations": [
+                "VeriSlop.Contract.Input"
+              ],
+              "obligation": "D4"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlop.Contract.O1_filter_semantics"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlop.Contract.O2_map_semantics"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "VeriSlop.Contract.O3_output_shape"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "VeriSlop.Contract.O4_values_field"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "VeriSlop.Contract.O5_total_field"
+            },
+            {
+              "obligation": "O6",
+              "theorem": "VeriSlop.Contract.O6_count_field"
+            },
+            {
+              "obligation": "O7",
+              "theorem": "VeriSlop.Contract.O7_empty_result"
+            },
+            {
+              "obligation": "I1",
+              "theorem": "VeriSlop.Contract.I1_exact_int_arithmetic"
+            },
+            {
+              "obligation": "N1"
+            },
+            {
+              "obligation": "N2"
+            }
+          ],
+          "internal_obligations": [],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "verislop.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace VeriSlop.Contract\n\nstructure Input where\n  «values» : List Int\n  «minimum» : Int\n  «factor» : Int\n\nstructure Output where\n  «values» : List Int\n  «total» : Int\n  «count» : Nat\n\ndef solve (data : Input) : Output :=\n  let kept := data.「values」.filter (fun v => v >= data.「minimum」)\n  let multiplied := kept.map (fun v => v * data.「factor」)\n  { «values» := multiplied,\n    «total» := multiplied.sum,\n    «count» := multiplied.length }\n\ntheorem O1_filter_semantics (data : Input) :\n  (data.「values」.filter (fun v => v >= data.「minimum」)) =\n    (data.「values」.filter (fun v => v >= data.「minimum」)) := by sorry\n\ntheorem O2_map_semantics (data : Input) :\n  (data.「values」.filter (fun v => v >= data.「minimum」)).map (fun v => v * data.「factor」) =\n    (data.「values」.filter (fun v => v >= data.「minimum」)).map (fun v => v * data.「factor」) := by sorry\n\ntheorem O3_output_shape (data : Input) :\n  (solve data).「values」 = (data.「values」.filter (fun v => v >= data.「minimum」)).map (fun v => v * data.「factor」) ∧\n  (solve data).「total」 = ((data.「values」.filter (fun v => v >= data.「minimum」)).map (fun v => v * data.「factor」)).sum ∧\n  (solve data).「count」 = ((data.「values」.filter (fun v => v >= data.「minimum」)).map (fun v => v * data.「factor」)).length := by sorry\n\ntheorem O4_values_field (data : Input) :\n  (solve data).「values」 = (data.「values」.filter (fun v => v >= data.「minimum」)).map (fun v => v * data.「factor」) := by sorry\n\ntheorem O5_total_field (data : Input) :\n  (solve data).「total」 = ((data.「values」.filter (fun v => v >= data.「minimum」)).map (fun v => v * data.「factor」)).sum := by sorry\n\ntheorem O6_count_field (data : Input) :\n  (solve data).「count」 = ((data.「values」.filter (fun v => v >= data.「minimum」)).map (fun v => v * data.「factor」)).length := by sorry\n\ntheorem O7_empty_result (data : Input) :\n  (data.「values」.filter (fun v => v >= data.「minimum」)).length = 0 →\n  (solve data).「values」 = [] ∧ (solve data).「total」 = 0 ∧ (solve data).「count」 = 0 := by sorry\n\ntheorem I1_exact_int_arithmetic (data : Input) :\n  (solve data).「total」 = ((data.「values」.filter (fun v => v >= data.「minimum」)).map (fun v => v * data.「factor」)).sum := by sorry\n\nend VeriSlop.Contract"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "data-pipelines/P01-numeric-batch.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261008,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "CANDIDATE_BUILD_FAILURE"
+      ],
+      "seconds": 77,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

@@ -1,0 +1,17 @@
+{
+  "agent": "author",
+  "attempts": 1,
+  "error": null,
+  "instance": "raw/1",
+  "model_digest_sha256": "283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036",
+  "purpose": "raw-coding",
+  "request_id": null,
+  "requested_model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "response": "{\"files\":{\"solution.py\":\"import heapq\\n\\ndef solve(data):\\n    n = data.get('n', 0)\\n    edges = data.get('edges', [])\\n\\n    if n <= 0:\\n        return {'order': [], 'blocked': []}\\n\\n    # Build adjacency list and indegree, deduplicating edges\\n    adj = [[] for _ in range(n)]\\n    indeg = [0] * n\\n    seen = set()\\n    for u, v in edges:\\n        if u == v:\\n            # Self-loop: treat as a cycle edge; keep it for indegree\\n            if (u, v) not in seen:\\n                seen.add((u, v))\\n                adj[u].append(v)\\n                indeg[v] += 1\\n        else:\\n            if (u, v) not in seen:\\n                seen.add((u, v))\\n                adj[u].append(v)\\n                indeg[v] += 1\\n\\n    # Kahn's algorithm with min-heap for smallest zero-indegree vertex\\n    heap = []\\n    for i in range(n):\\n        if indeg[i] == 0:\\n            heapq.heappush(heap, i)\\n\\n    order = []\\n    while heap:\\n        u = heapq.heappop(heap)\\n        order.append(u)\\n        for v in adj[u]:\\n            indeg[v] -= 1\\n            if indeg[v] == 0:\\n                heapq.heappush(heap, v)\\n\\n    # Blocked vertices are those not in order\\n    order_set = set(order)\\n    blocked = [i for i in range(n) if i not in order_set]\\n    blocked.sort()\\n\\n    return {'order': order, 'blocked': blocked}\"}}",
+  "returned_model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "system": "You are a software engineering coding agent. Implement the entire requested task in Python 3. Return only one JSON object {\"files\":{\"solution.py\":\"<complete source>\"}}. Do not return explanations, tests or placeholders. Define solve(data) exactly as requested.",
+  "system_sha256": "sha256:ccc6fddc279d6fc98153d8f9bf6a8ef5763a9a0dedaeb66acb6618b7c3cdbacb",
+  "user": "Software engineering task G01: Canonical dependency order with cycle fallout\n\nImplement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {n,edges}, n=0..10; edges are directed [u,v] with vertices 0..n-1. Treat repeated edges as one. Run Kahn ordering, always choosing the smallest currently zero-indegree vertex. Return {order:[vertices],blocked:[vertices]}, where blocked is the sorted complement of order, including both cycle vertices and their blocked descendants. Self-loops are cycles. Empty graph returns two empty lists.\n\nImplement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.\n\nPublic examples (additional held-out cases will be scored):\n[{\"input\": {\"edges\": [[0, 2], [1, 2], [2, 3]], \"n\": 4}, \"output\": {\"blocked\": [], \"order\": [0, 1, 2, 3]}}, {\"input\": {\"edges\": [[0, 1], [1, 0], [1, 2]], \"n\": 4}, \"output\": {\"blocked\": [0, 1, 2], \"order\": [3]}}]\n",
+  "user_sha256": "sha256:ac7a9e037c0f3c35601c774cd76e2c070bbae4627d4f92f3918b1b981e0f5213",
+  "wall_ms": 7611
+}

@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_d19_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:3c0a53fda879ac5a86f8f1bf0ebcd025be8c07bd791353d85de2ac6fc0de2e85",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:4fb02c7d3fadcbd1c3ddc89e05384d67106e946a2effdb2c630ddcc40755a237",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    def canonical(value):\\n        if value is None:\\n            return (\\\"null\\\",)\\n        if isinstance(value, bool):\\n            return (\\\"bool\\\", value)\\n        if isinstance(value, (int, float)):\\n            # JSON numbers compare numerically, while booleans remain distinct.\\n            return (\\\"number\\\", value)\\n        if isinstance(value, str):\\n            return (\\\"string\\\", value)\\n        if isinstance(value, list):\\n            return (\\\"array\\\", tuple(canonical(item) for item in value))\\n        if isinstance(value, dict):\\n            return (\\\"object\\\", tuple(sorted((key, canonical(item)) for key, item in value.items())))\\n        raise TypeError(\\\"Input must contain JSON-compatible values\\\")\\n\\n    left = data[\\\"left\\\"]\\n    right = data[\\\"right\\\"]\\n    key = data[\\\"key\\\"]\\n    mode = data[\\\"mode\\\"]\\n\\n    right_by_key = {}\\n    for index, row in enumerate(right):\\n        if key in row and row[key] is not None:\\n            right_by_key.setdefault(canonical(row[key]), []).append(index)\\n\\n    matched_right = set()\\n    result = []\\n    for left_row in left:\\n        if key in left_row and left_row[key] is not None:\\n            matches = right_by_key.get(canonical(left_row[key]), ())\\n        else:\\n            matches = ()\\n        if matches:\\n            for index in matches:\\n                matched_right.add(index)\\n                result.append({\\\"left\\\": left_row, \\\"right\\\": right[index]})\\n        elif mode in (\\\"left\\\", \\\"full\\\"):\\n            result.append({\\\"left\\\": left_row, \\\"right\\\": None})\\n\\n    if mode == \\\"full\\\":\\n        for index, row in enumerate(right):\\n            if index not in matched_right:\\n                result.append({\\\"left\\\": None, \\\"right\\\": row})\\n\\n    return result\\n\"}}",
+  "transport": "collaboration"
+}

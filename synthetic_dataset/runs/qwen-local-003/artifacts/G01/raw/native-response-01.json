@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-10-08T05:01:29.964705739Z",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 394,
+  "eval_duration": 7272275000,
+  "load_duration": 484375,
+  "message": {
+    "content": "{\"files\":{\"solution.py\":\"import heapq\\n\\ndef solve(data):\\n    n = data.get('n', 0)\\n    edges = data.get('edges', [])\\n\\n    if n <= 0:\\n        return {'order': [], 'blocked': []}\\n\\n    # Build adjacency list and indegree, deduplicating edges\\n    adj = [[] for _ in range(n)]\\n    indeg = [0] * n\\n    seen = set()\\n    for u, v in edges:\\n        if u == v:\\n            # Self-loop: treat as a cycle edge; keep it for indegree\\n            if (u, v) not in seen:\\n                seen.add((u, v))\\n                adj[u].append(v)\\n                indeg[v] += 1\\n        else:\\n            if (u, v) not in seen:\\n                seen.add((u, v))\\n                adj[u].append(v)\\n                indeg[v] += 1\\n\\n    # Kahn's algorithm with min-heap for smallest zero-indegree vertex\\n    heap = []\\n    for i in range(n):\\n        if indeg[i] == 0:\\n            heapq.heappush(heap, i)\\n\\n    order = []\\n    while heap:\\n        u = heapq.heappop(heap)\\n        order.append(u)\\n        for v in adj[u]:\\n            indeg[v] -= 1\\n            if indeg[v] == 0:\\n                heapq.heappush(heap, v)\\n\\n    # Blocked vertices are those not in order\\n    order_set = set(order)\\n    blocked = [i for i in range(n) if i not in order_set]\\n    blocked.sort()\\n\\n    return {'order': order, 'blocked': blocked}\"}}",
+    "role": "assistant"
+  },
+  "model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "prompt_eval_cached_count": 0,
+  "prompt_eval_count": 388,
+  "prompt_eval_duration": 234420000,
+  "total_duration": 7608684042
+}

@@ -1,0 +1,118 @@
+==> [review] adversarial review at checkpoint release
+    [review] tier R0: 1 reviewer(s) in parallel
+{
+  "artifacts": {
+    "consensus_certificate": "reviews/rc-0003-20261008T075455Z-962622/consensus-certificate.json"
+  },
+  "asserts_closure_verified": false,
+  "command": "review",
+  "diagnostics": [
+    {
+      "claims": [],
+      "code": "REVIEW_REJECTED",
+      "details": {
+        "findings": [
+          {
+            "counterexample": {
+              "assignment": [
+                {
+                  "int": "0"
+                },
+                {
+                  "int": "0"
+                }
+              ],
+              "kind": "target_case",
+              "obligation_id": "O1"
+            },
+            "disposition": "CONFIRMED",
+            "expected": "(\"ok\", 0) or (\"ok\", 0)",
+            "finding": "R0/critic#1:F1",
+            "obligations": [
+              "O1",
+              "O3",
+              "O4"
+            ],
+            "replay": {
+              "probe_hash": "sha256:bef107161f96ffe89b9ccef77d10168dc12c30526cafe210968be0b86f1484b8",
+              "receipt_hash": "sha256:165148e449b53755015e7ce7b55a6fbcff84376821214bc36f93cc6e74f9ade8",
+              "receipt_ref": "reviews/rc-0003-20261008T075455Z-962622/counterexamples/R0_critic#1/1.json",
+              "status": "CONFIRMED"
+            },
+            "severity": "blocking",
+            "statement": "The Python implementation uses `if amount < balance` instead of `if amount <= balance`, causing the function to return an error when amount equals balance, violating the requirement that the function returns (\"ok\", balance - amount) when amount <= balance.",
+            "tier": "R0",
+            "trigger": "reserve(0, 0) or reserve(1, 1)"
+          },
+          {
+            "counterexample": {
+              "assignment": [
+                {
+                  "int": "0"
+                }
+              ],
+              "kind": "target_case",
+              "obligation_id": "O3"
+            },
+            "disposition": "CONFIRMED",
+            "expected": null,
+            "finding": "R0/critic#1:__probe_2",
+            "obligations": [
+              "O3"
+            ],
+            "replay": {
+              "probe_hash": "sha256:4ec89a12e1d6a7bd4054ee483b2f4d14d8b913630c803f11f651589d89538e30",
+              "receipt_hash": "sha256:9aed25f354ab42826dfcc9bba9e19f7dee7060697c46f1aaf4555fbc6286d619",
+              "receipt_ref": "reviews/rc-0003-20261008T075455Z-962622/counterexamples/R0_critic#1/2.json",
+              "status": "CONFIRMED"
+            },
+            "severity": "blocking",
+            "statement": "The registered replay confirmed this concrete probe violates its scoped claim",
+            "tier": "R0",
+            "trigger": null
+          },
+          {
+            "counterexample": {
+              "assignment": [
+                {
+                  "int": "1"
+                },
+                {
+                  "int": "1"
+                }
+              ],
+              "kind": "target_case",
+              "obligation_id": "O4"
+            },
+            "disposition": "CONFIRMED",
+            "expected": null,
+            "finding": "R0/critic#1:__probe_3",
+            "obligations": [
+              "O4"
+            ],
+            "replay": {
+              "probe_hash": "sha256:dbbf838484ae29d1179dcabde8c47f875afd788fe4cee70d7184b07b91ce867c",
+              "receipt_hash": "sha256:3e63705d183946f841a18f68177a5b16c620ed4dc83ea2ed521f2be4e5a660ca",
+              "receipt_ref": "reviews/rc-0003-20261008T075455Z-962622/counterexamples/R0_critic#1/3.json",
+              "status": "CONFIRMED"
+            },
+            "severity": "blocking",
+            "statement": "The registered replay confirmed this concrete probe violates its scoped claim",
+            "tier": "R0",
+            "trigger": null
+          }
+        ]
+      },
+      "message": "tier R0: changes requested (required mechanical failure veto: TESTED:O1@1, TESTED:O3@1, TESTED:O4@1; unresolved blocking findings veto: R0/critic#1:F1, R0/critic#1:__probe_2, R0/critic#1:__probe_3)",
+      "obligations": [],
+      "severity": "blocking"
+    }
+  ],
+  "gate": "every configured review tier accepted the same release candidate",
+  "status": "BLOCKED",
+  "summary": {
+    "campaign": "rc-0003-20261008T075455Z-962622",
+    "final": "CHANGES_REQUESTED",
+    "repair_rounds": 0
+  }
+}

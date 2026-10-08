@@ -1,0 +1,118 @@
+{
+  "campaign_id": "rc-0001-20261008T051740Z-167771",
+  "checkpoint": "formal_contract",
+  "config": {
+    "agents": {
+      "author": {
+        "max_output_tokens": 8192,
+        "model_identity": {
+          "mode": "pinned",
+          "model_digest_sha256": "283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036",
+          "resolved_model": "aix-qwen3.8:27b-ud-q3_k_xl"
+        },
+        "model_ref": "aix-qwen3.8:27b-ud-q3_k_xl",
+        "provider": "local",
+        "tool_profile": "candidate_writer"
+      },
+      "critic": {
+        "max_output_tokens": 8192,
+        "model_identity": {
+          "mode": "pinned",
+          "model_digest_sha256": "283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036",
+          "resolved_model": "aix-qwen3.8:27b-ud-q3_k_xl"
+        },
+        "model_ref": "aix-qwen3.8:27b-ud-q3_k_xl",
+        "provider": "local",
+        "tool_profile": "review_readonly"
+      }
+    },
+    "bridge_tier": 0,
+    "endpoint": "test_campaign",
+    "providers": {
+      "local": {
+        "adapter": "ollama",
+        "api_family": "ollama_chat",
+        "concurrency": 1,
+        "endpoint_profile": "ollama-local",
+        "request_timeout_seconds": null
+      }
+    },
+    "release": {
+      "require_all_review_tiers": true,
+      "require_mechanical_pass": true,
+      "require_requested_bridge_tier": true
+    },
+    "review": {
+      "budgets": {
+        "max_calls_per_instance": 16,
+        "max_provider_retries": 0,
+        "max_repair_rounds": 2,
+        "max_total_tokens": 1000000,
+        "max_wall_seconds_per_tier": 0
+      },
+      "checkpoints": [
+        "formal_contract",
+        "release"
+      ],
+      "require_fixed_model_snapshot": true,
+      "restart_after_repair": "first_tier",
+      "review_tiers": [
+        {
+          "consensus": {
+            "blocking_findings_veto": true,
+            "max_abstentions": 0,
+            "max_soft_rejects": 0,
+            "mode": "unanimous",
+            "require_all_responses": true
+          },
+          "id": "R0",
+          "reviewers": [
+            {
+              "agent": "critic",
+              "count": 1,
+              "focus": "counterexamples"
+            }
+          ]
+        }
+      ]
+    },
+    "roles": {
+      "formalizer": "author",
+      "implementer": "author",
+      "interpreter": "author",
+      "prover": "author",
+      "repairer": "author"
+    },
+    "schema_version": "0.1"
+  },
+  "review_target_root": "sha256:22c2519083a442e4756a3e7c353c6dfe4867b3ee38a89458c73c82be83af7ac5",
+  "schema_version": "0.1",
+  "target_components": {
+    "adapter_versions": "0.1.0",
+    "agent_profiles": {
+      "critic": {
+        "max_output_tokens": 8192,
+        "model_identity": {
+          "mode": "pinned",
+          "model_digest_sha256": "283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036",
+          "resolved_model": "aix-qwen3.8:27b-ud-q3_k_xl"
+        },
+        "model_ref": "aix-qwen3.8:27b-ud-q3_k_xl",
+        "provider": "local",
+        "tool_profile": "review_readonly"
+      }
+    },
+    "candidate_root": "sha256:0b72ac3b18f9ca9cba36b4d2f68b6de0d6a05573f7aeb631d03c69d3a497a36a",
+    "checkpoint": "formal_contract",
+    "evidence_package_root": "sha256:e16a2719063345d218f68efd5960d1afb8af67f4f488f9aec30862e1ed2edb12",
+    "packet": "sha256:433946a6a33ef82ba52c08331570322b03bfa9f12b59e792c08bbb5ceabfb4c9",
+    "prompt_template": "sha256:6b28b530b6b08847f357a16150657f0392ce6fdf2584106934f3b6c6036ff622",
+    "public_claims": {
+      "claims": "sha256:e4f83c0a3f5c7a21342538151575be102392d44e2bbdd929fdf47924864412d9"
+    },
+    "resolved_models": {
+      "critic": "aix-qwen3.8:27b-ud-q3_k_xl"
+    },
+    "review_config": "sha256:c19bbcbe298d9153cffc2021dddd11ab3b4d98183d2f6961c02928e64c1022c0"
+  }
+}

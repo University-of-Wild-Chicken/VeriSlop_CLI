@@ -1,0 +1,426 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:review-config:0.1",
+  "title": "Provider assignments and adversarial review hierarchy",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "bridge_tier": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4
+    },
+    "endpoint": {
+      "enum": [
+        "test_campaign",
+        "instrumented_runtime",
+        "restricted_source",
+        "proof_bearing_source",
+        "extracted_language",
+        "native_binary"
+      ]
+    },
+    "providers": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "adapter": {
+            "enum": [
+              "openai",
+              "anthropic",
+              "google_gemini",
+              "google_vertex",
+              "deepseek",
+              "alibaba_model_studio",
+              "zai",
+              "zhipu",
+              "moonshot",
+              "xai",
+              "meta",
+              "openai_compatible",
+              "ollama",
+              "custom"
+            ]
+          },
+          "api_family": {
+            "enum": [
+              "responses",
+              "chat_completions",
+              "anthropic_messages",
+              "gemini_generate_content",
+              "vertex_generate_content",
+              "ollama_chat",
+              "custom"
+            ]
+          },
+          "endpoint_profile": {
+            "type": "string",
+            "minLength": 1
+          },
+          "credential_ref": {
+            "type": "string",
+            "anyOf": [
+              {
+                "pattern": "^(env|keyring|secret-manager):[^\\s]+$"
+              },
+              {
+                "const": "none"
+              }
+            ]
+          },
+          "concurrency": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "request_timeout_seconds": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "adapter",
+          "api_family",
+          "endpoint_profile",
+          "concurrency",
+          "request_timeout_seconds"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "adapter": {
+                  "const": "ollama"
+                }
+              }
+            },
+            "else": {
+              "required": [
+                "credential_ref"
+              ],
+              "properties": {
+                "credential_ref": {
+                  "pattern": "^(env|keyring|secret-manager):[^\\s]+$"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "agents": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "type": "string",
+            "minLength": 1
+          },
+          "model_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "model_identity": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "mode": {
+                "const": "pinned"
+              },
+              "resolved_model": {
+                "type": "string",
+                "minLength": 1
+              },
+              "model_digest_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "mode",
+              "resolved_model"
+            ]
+          },
+          "tool_profile": {
+            "enum": [
+              "review_readonly",
+              "candidate_writer",
+              "proof_sandbox"
+            ]
+          },
+          "max_output_tokens": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "provider",
+          "model_ref",
+          "tool_profile",
+          "max_output_tokens"
+        ]
+      }
+    },
+    "roles": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interpreter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "formalizer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prover": {
+          "type": "string",
+          "minLength": 1
+        },
+        "implementer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repairer": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "interpreter",
+        "formalizer",
+        "prover",
+        "implementer",
+        "repairer"
+      ]
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "require_fixed_model_snapshot": {
+          "type": "boolean"
+        },
+        "checkpoints": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "interpretation",
+              "formal_contract",
+              "implementation",
+              "release"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "restart_after_repair": {
+          "const": "first_tier"
+        },
+        "budgets": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "max_repair_rounds": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_provider_retries": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_calls_per_instance": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max_total_tokens": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max_wall_seconds_per_tier": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "max_repair_rounds",
+            "max_provider_retries",
+            "max_calls_per_instance",
+            "max_total_tokens",
+            "max_wall_seconds_per_tier"
+          ]
+        },
+        "review_tiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reviewers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "agent": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "count": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "focus": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "agent",
+                    "count",
+                    "focus"
+                  ]
+                },
+                "minItems": 1
+              },
+              "consensus": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "unanimous",
+                      "quorum"
+                    ]
+                  },
+                  "min_accepts": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "require_all_responses": {
+                    "type": "boolean"
+                  },
+                  "max_soft_rejects": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "max_abstentions": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "blocking_findings_veto": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "mode",
+                  "require_all_responses",
+                  "max_soft_rejects",
+                  "max_abstentions",
+                  "blocking_findings_veto"
+                ],
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "mode": {
+                          "const": "quorum"
+                        }
+                      }
+                    },
+                    "then": {
+                      "required": [
+                        "min_accepts"
+                      ]
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "mode": {
+                          "const": "unanimous"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "require_all_responses": {
+                          "const": true
+                        },
+                        "max_soft_rejects": {
+                          "const": 0
+                        },
+                        "max_abstentions": {
+                          "const": 0
+                        }
+                      },
+                      "not": {
+                        "required": [
+                          "min_accepts"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "reviewers",
+              "consensus"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "checkpoints",
+        "restart_after_repair",
+        "budgets",
+        "review_tiers"
+      ]
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "require_mechanical_pass": {
+          "const": true
+        },
+        "require_all_review_tiers": {
+          "const": true
+        },
+        "require_requested_bridge_tier": {
+          "const": true
+        }
+      },
+      "required": [
+        "require_mechanical_pass",
+        "require_all_review_tiers",
+        "require_requested_bridge_tier"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "bridge_tier",
+    "endpoint",
+    "providers",
+    "agents",
+    "roles",
+    "review",
+    "release"
+  ]
+}

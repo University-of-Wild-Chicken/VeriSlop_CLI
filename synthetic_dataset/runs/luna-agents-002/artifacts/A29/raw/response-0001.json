@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_a29_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:d7b2b57c1a8c5411f1877bbcd2fe2750aafe17c956ea8d2818a10c7d1e13a96d",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:689b3cf794f011a0e4b1846c44f331e76b9b0c029a5f718d68ebdd002944cf98",
+  "text": "{\"files\":{\"solution.py\":\"import heapq\\n\\n\\ndef solve(data):\\n    n = data[\\\"n\\\"]\\n    source = data[\\\"source\\\"]\\n    target = data[\\\"target\\\"]\\n    graph = [[] for _ in range(n)]\\n    for u, v, weight in data[\\\"edges\\\"]:\\n        graph[u].append((v, weight))\\n\\n    distances = [[] for _ in range(n)]\\n    distances[source].append(0)\\n    queue = [(0, source)]\\n\\n    while queue:\\n        distance, vertex = heapq.heappop(queue)\\n        if distance not in distances[vertex]:\\n            continue\\n\\n        for neighbor, weight in graph[vertex]:\\n            candidate = distance + weight\\n            known = distances[neighbor]\\n            if candidate in known:\\n                continue\\n            if len(known) < 2 or candidate < known[-1]:\\n                known.append(candidate)\\n                known.sort()\\n                if len(known) > 2:\\n                    known.pop()\\n                heapq.heappush(queue, (candidate, neighbor))\\n\\n    return distances[target][1] if len(distances[target]) >= 2 else None\\n\"}}",
+  "transport": "collaboration"
+}

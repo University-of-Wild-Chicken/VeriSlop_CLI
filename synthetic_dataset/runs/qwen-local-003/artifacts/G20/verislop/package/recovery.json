@@ -1,0 +1,801 @@
+{
+  "active_package": "package-repair-02",
+  "active_status": "BLOCKED",
+  "budget_policy": {
+    "ref": "recovery-policy/decision-0001.json",
+    "sha256": "sha256:72730797f9f5464f67430f0adbf9d6ae3a60f4700a67ddc0f4dd433c03990340"
+  },
+  "format": "verislop.strict-recovery/0.1",
+  "max_repair_rounds": 2,
+  "root_package": "package",
+  "root_run_id": "package",
+  "rounds": [
+    {
+      "diagnostics": [
+        {
+          "claims": [],
+          "code": "CANDIDATE_BUILD_FAILURE",
+          "message": "the challenge does not elaborate: 211:28: Invalid field `sort`: The environment does not contain `List.sort`, so it is not possible to project the field `sort` from an expression\n  buffer\nof type `List (Nat × Int)`; 225:16: fail to show termination for\n  VeriSlop.G20.solve.process.flush\nwith errors\nfailed to infer structural recursion:\nNot considering parameter s of VeriSlop.G20.solve.process.flush:\n  it is unchanged in the recursive calls\nCannot use parameter total':\n  the type Int does not have a `.brecOn` recursor\nCannot use parameter next':\n  failed to eliminate recursive application\n    solve.process.flush s (total' + nd) (next' + 1) buffer''' flushed'\nCannot use parameter buffer'':\n  failed to eliminate recursive application\n    solve.process.flush s (total' + nd) (next' + 1) buffer''' flushed'\nCannot use parameter flushed:\n  the type Bool does not have a `.brecOn` recursor\n\n\nCould not find a decreasing measure.\nThe basic measures relate at each recursive call as follows:\n(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)\n             #1 next' #2 #3\n1) 230:12-62  ?     ?  ?  ≤\n\n#1: total'\n#2: buffer''\n#3: flushed\n\nPlease use `termination_by` to specify a decreasing measure.; 241:72: failed to synthesize instance of type class\n  OfNat Output 1\nnumerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is\n  Output\ndue to the absence of the instance above\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; 241:107: failed to synthesize instance of type class\n  OfNat Output 0\nnumerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is\n  Output\ndue to the absence of the instance above\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; 241:48: invalid {...} notation, expected type is not known",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "VERIFIER_NOT_RUN",
+          "message": "no frozen challenge; run `verislop formalize` first",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "VERIFIER_NOT_RUN",
+          "message": "the implementation phase has not started (no frozen implementation claims)",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:endpoint"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:endpoint is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:provenance"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:provenance is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:clean-builds"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:clean-builds is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:determinism"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:determinism is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "REVIEW_NOT_RUN",
+          "message": "review checkpoint formal_contract is configured as a release gate but has not run",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "REVIEW_NOT_RUN",
+          "message": "review checkpoint release is configured as a release gate but has not run",
+          "obligations": [],
+          "severity": "blocking"
+        }
+      ],
+      "lineage_hash": "sha256:15e6d5ec3074ca3dd525d04cb4962f6e0e4cd9a934f490c87a8092f8007b27b5",
+      "package": "package-repair-01",
+      "parent_package": "package",
+      "parent_snapshot": {
+        "manifest": {
+          "case_collisions": "rejected",
+          "entries": [
+            {
+              "path": "agents/transcripts/1791435969604-0001-interpreter_1.json",
+              "sha256": "sha256:291d9861f05212ea5d1113d1bba904fa0de0ecf40cd9e88fb0c6506788bbafa5",
+              "size": 27653
+            },
+            {
+              "path": "agents/transcripts/1791435990590-0001-formalizer_1.json",
+              "sha256": "sha256:018bfee86396359497d0b06b230da0c43c25da04561a0187de985adac721f14e",
+              "size": 20540
+            },
+            {
+              "path": "agents/transcripts/1791436014235-0002-formalizer_2.json",
+              "sha256": "sha256:ce9c59436b1fadfccdd7310351bbc220ade7e202bf5435d08538f83a52644689",
+              "size": 25336
+            },
+            {
+              "path": "agents/transcripts/1791436038485-0003-formalizer_3.json",
+              "sha256": "sha256:c8bdc5cc1467baa8b396ea385bc30421f109d8ebdbd736b2e01f6f30430c5e84",
+              "size": 26896
+            },
+            {
+              "path": "closure/review-config.json",
+              "sha256": "sha256:88cb443fb5bdf05c78d10a49e2a45557a5e14a0263e55a94213d8a26626f3938",
+              "size": 2167
+            },
+            {
+              "path": "contract/candidate/Contract.lean",
+              "sha256": "sha256:efe7121af7b840fc6387d2112c8e001ecb64b35e04711b1f1d1548893da9ea76",
+              "size": 14010
+            },
+            {
+              "path": "contract/candidate/formalization.json",
+              "sha256": "sha256:890d020f59a44062318e900d3f33bcaf01b58d9a363ca5c05c3979f7b405a98c",
+              "size": 910
+            },
+            {
+              "path": "contract/candidate/proposal.lean",
+              "sha256": "sha256:ec40043e16d0cc675c0073ac8d671dcfdb92e38a64d821dd6ab17a7b00fb814a",
+              "size": 2802
+            },
+            {
+              "path": "contract/candidate/statement-check.json",
+              "sha256": "sha256:628d001154acfed06978e48d14cf7f81f119b7c0a8225c3b37dfc9ac50a9a0c6",
+              "size": 5846
+            },
+            {
+              "path": "draft.json",
+              "sha256": "sha256:c5a865e391cfde51cb6de94aa7de31ecde2ead6553fe7efd5de4c78b12d36a38",
+              "size": 32647
+            },
+            {
+              "path": "evidence/ev-28a7c3e250e30377528116de07b8e731.json",
+              "sha256": "sha256:74d5166588a048b8ad7712c5aaacfcdfbf53ba5c9fdaa720e58222fa888a3d31",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-4f1fc83bfcbe13aeeb2ece7a571f2630.json",
+              "sha256": "sha256:e028f0d3f5103fc400212e04ae26c0ddaee9ad7d07d795bf5d3ab199d2d6dac3",
+              "size": 1041
+            },
+            {
+              "path": "evidence/ev-500f6d1dd11e6434baae2bbe2eae67c5.json",
+              "sha256": "sha256:654cd85df3bb021b3191f6b1a18f2bc191aee71c8148e4fe01f40b0d2a609457",
+              "size": 1042
+            },
+            {
+              "path": "evidence/ev-57c7f3b9840a396264b9c70240fd38d8.json",
+              "sha256": "sha256:0983e4482a8423a6537930b1abb230d41df4fa8a5b032b1e0a1e53c9b014a3f3",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-60b1c063e67ddc9b992ddbdc73a29773.json",
+              "sha256": "sha256:ba443e3d8cce1484a69b913989cf8dd5af21f296a860c0612a5a1b9e17ddb9e1",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-60c8a6f379b9a45caea4b7bb8dbb5454.json",
+              "sha256": "sha256:4fc6de4027c88328e7e977a3fdfd45c046a17f77499a89dfe550a40991d1102b",
+              "size": 1059
+            },
+            {
+              "path": "evidence/ev-612a2aeb553f33c3d444ccab7cf6b625.json",
+              "sha256": "sha256:9cf54e018293996cc0881caca8f33dd7a3062ae1f4fc756b93f9157721031970",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-63aea4b3c8130ced48517f6fda585b3e.json",
+              "sha256": "sha256:1a3b44885072afa096f4fcdd79eb0eec0244443a49d25f56d077b99d697b7cdb",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-64184cbe8d3cb68025d9f7b9f56b0764.json",
+              "sha256": "sha256:69d7e9f0fee7e3854bdb9c3b731569d1327ff5fca45856c0f496d9330feaf015",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-6664d974e1aebd7da68c78d714a64200.json",
+              "sha256": "sha256:ae0b7f2b28434f81bd99e7166ea5085d5a25105f70a9b4663d5e3926a011106c",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-7342f75f321cf77128d3446390ce3785.json",
+              "sha256": "sha256:2824939e6af902d44c0a023140bab369d637fe0cb75a2a69abe4832e287301b8",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-7d75684bfdf26296ffb3daca4be136d6.json",
+              "sha256": "sha256:e3cb72ed9748cc95fb4894a83c4fa20240005ba50e12e9be9cb4880633a6fea4",
+              "size": 1057
+            },
+            {
+              "path": "evidence/ev-a405aeb076807205dab1af80b646df4d.json",
+              "sha256": "sha256:e4032ba45d0675ce5927ba4dd9016136efc694236b7f2c62692c9ef72ffd48bd",
+              "size": 1042
+            },
+            {
+              "path": "evidence/ev-b4b0dfea297b6fcc49ca53dfc1fc9da2.json",
+              "sha256": "sha256:28bd91837575b8fee8af4b284cfabe50ee3400a1ffb785c321a489179029f696",
+              "size": 1057
+            },
+            {
+              "path": "evidence/ev-bcd9f7ab1a6ce7a13667fb989dd39274.json",
+              "sha256": "sha256:c09e3a5de44f0d4a7c2924d480f8316fae3ce412c82803bf071f8f16add3ae30",
+              "size": 1037
+            },
+            {
+              "path": "evidence/ev-c17a45775ddc706890797760d3d6d53d.json",
+              "sha256": "sha256:5d519046d57f7b94439ac88a4681a6bb626ae8f85cbbfc2d8d6f3a654f5f44ad",
+              "size": 1062
+            },
+            {
+              "path": "evidence/ev-c8e2267b463996a2f2481882cf8fe4c7.json",
+              "sha256": "sha256:b496a143b9ed1584944cd3c8b31c051f520e94efcab479635e5c99a8ac420b77",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-c9398e0b2df09013b1770906d07e9862.json",
+              "sha256": "sha256:59ee525b63e161f1e41b0149b46aa81b4550e2c951841912268341ebbfd5187d",
+              "size": 1041
+            },
+            {
+              "path": "evidence/ev-e00e328a10b5f89d1b16ba294cc9f239.json",
+              "sha256": "sha256:5fdc0c9a78a6a146fb1e294b3c154f789ff7926931a1c459b10d6447d7ddcb0c",
+              "size": 1040
+            },
+            {
+              "path": "evidence/ev-e15d142b47c2edccb57e69e40fb8291d.json",
+              "sha256": "sha256:7c641e3e287a699813c7cc987b8453a8af579e11852513cf0ab012a3e246f5d0",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-ed426f2d4e48138917ef4972c48f3d26.json",
+              "sha256": "sha256:141e8fa804986d63db60e12bdd75163ea139860124c05fce8fdeb869007a1866",
+              "size": 1101
+            },
+            {
+              "path": "evidence/ev-f15ad8d3e4da0a54f79558d361b9268b.json",
+              "sha256": "sha256:1fb52855ebdf82f9bc37e968de325a2fdf0dd3dfb0dc897e7ef1ce4b18c19406",
+              "size": 1260
+            },
+            {
+              "path": "evidence/ev-fc83a1682e9443fe1520278aa5bdf152.json",
+              "sha256": "sha256:76f9c86d1e7073d2e5d17f7885ba39db52187157949de6d02edcc91d4384a2a3",
+              "size": 1046
+            },
+            {
+              "path": "evidence/raw/009f6840519fb332b6b2c6b2fe1a038c21a8ab9b3d9641676ec8754ba28b4ef2.json",
+              "sha256": "sha256:009f6840519fb332b6b2c6b2fe1a038c21a8ab9b3d9641676ec8754ba28b4ef2",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/0e5a13b51ddafb9677bef862ac3fe70623053bd1a3cd4da1b4be00e48bd5f263.json",
+              "sha256": "sha256:0e5a13b51ddafb9677bef862ac3fe70623053bd1a3cd4da1b4be00e48bd5f263",
+              "size": 330
+            },
+            {
+              "path": "evidence/raw/168b3b99d18c00f4fafcd556b81913b8d0b1645e65027b714f2ca4226df3f96e.json",
+              "sha256": "sha256:168b3b99d18c00f4fafcd556b81913b8d0b1645e65027b714f2ca4226df3f96e",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/21084b7767774c5d7ab86336c9a039224981a4d9e467f8baaaba4a39ca8b4670.json",
+              "sha256": "sha256:21084b7767774c5d7ab86336c9a039224981a4d9e467f8baaaba4a39ca8b4670",
+              "size": 330
+            },
+            {
+              "path": "evidence/raw/22a51e19ebf374e98d4ac19e400c7d1ca75b008b5160785bbf1a0c3dec3d7fbd.json",
+              "sha256": "sha256:22a51e19ebf374e98d4ac19e400c7d1ca75b008b5160785bbf1a0c3dec3d7fbd",
+              "size": 427
+            },
+            {
+              "path": "evidence/raw/3d10552e68b74ffb7007f947cf28b9eb0bbe5a7726ffd63d8dcc55eba923de0b.json",
+              "sha256": "sha256:3d10552e68b74ffb7007f947cf28b9eb0bbe5a7726ffd63d8dcc55eba923de0b",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/545cefee356d888aa0a68a318cd2268831a5c251f11a26435faa69b5396a5bfb.json",
+              "sha256": "sha256:545cefee356d888aa0a68a318cd2268831a5c251f11a26435faa69b5396a5bfb",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/5681cf3739e7eb9e247d2a2c39233d16d6842d0434342b238f40e6b3a0f783c5.json",
+              "sha256": "sha256:5681cf3739e7eb9e247d2a2c39233d16d6842d0434342b238f40e6b3a0f783c5",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/5a77b54a46d00780805cf3dac955ba6faedcf487d422f7cf29acbca4a830e774.json",
+              "sha256": "sha256:5a77b54a46d00780805cf3dac955ba6faedcf487d422f7cf29acbca4a830e774",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/6d30f7123afeefd8242d77df5e7907aafbd0ad88e555677d4ed78d51b58d4646.json",
+              "sha256": "sha256:6d30f7123afeefd8242d77df5e7907aafbd0ad88e555677d4ed78d51b58d4646",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/7f8cc8ed4c1513f98a64f529146befbebdb3b4918e1d76895f4459595b78aa7f.json",
+              "sha256": "sha256:7f8cc8ed4c1513f98a64f529146befbebdb3b4918e1d76895f4459595b78aa7f",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/92c63d9acbfd2db1b18a8635fef07276a20de5b8a4907e0b8931f4ab1acdfb45.json",
+              "sha256": "sha256:92c63d9acbfd2db1b18a8635fef07276a20de5b8a4907e0b8931f4ab1acdfb45",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/aa9366b70e6a5922f9bc90de5834cad072cadb0240502e9e8decbcdb15004320.json",
+              "sha256": "sha256:aa9366b70e6a5922f9bc90de5834cad072cadb0240502e9e8decbcdb15004320",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/b1adaea502d5b8e53b1198f0970637a81ce865678bf2e8253cd4879d44f97f35.json",
+              "sha256": "sha256:b1adaea502d5b8e53b1198f0970637a81ce865678bf2e8253cd4879d44f97f35",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/c327687208e6ce512351d2fbfc62d65c37f7824a36586b84d369e93477c12be9.json",
+              "sha256": "sha256:c327687208e6ce512351d2fbfc62d65c37f7824a36586b84d369e93477c12be9",
+              "size": 330
+            },
+            {
+              "path": "evidence/raw/c61c0b8705cffc309e34e9b193dfd72e4b7e7b787b2d9d44d9809a1a663949ae.json",
+              "sha256": "sha256:c61c0b8705cffc309e34e9b193dfd72e4b7e7b787b2d9d44d9809a1a663949ae",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/cadc2a2eebce6856f9065b85a747cb5912dd0bca15b8fa5ab9ceb308b0c870c2.json",
+              "sha256": "sha256:cadc2a2eebce6856f9065b85a747cb5912dd0bca15b8fa5ab9ceb308b0c870c2",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/e98fa76025b742a3d448565508570b6070b366d4de7c6fd1fafbfcbcf33b2a49.json",
+              "sha256": "sha256:e98fa76025b742a3d448565508570b6070b366d4de7c6fd1fafbfcbcf33b2a49",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/ecb4c1a4c33111420d078664f4d0cf4eb97412e9e59fa8e3cc33a75f7314b4d4.json",
+              "sha256": "sha256:ecb4c1a4c33111420d078664f4d0cf4eb97412e9e59fa8e3cc33a75f7314b4d4",
+              "size": 392
+            },
+            {
+              "path": "evidence/raw/ecbe51daa043db4a0cac3ddec7e832f2bd3ee85831a4f65ba924ba27dc853c4c.json",
+              "sha256": "sha256:ecbe51daa043db4a0cac3ddec7e832f2bd3ee85831a4f65ba924ba27dc853c4c",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/ef98b9b1deb9fb05613272ed9f67d9e0ca2f3ccb808f886791a2ba390b8e50fb.json",
+              "sha256": "sha256:ef98b9b1deb9fb05613272ed9f67d9e0ca2f3ccb808f886791a2ba390b8e50fb",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/f809e53de97b4e030050360b38c660a610b02c900e3542b241a3d7dbf7622b83.json",
+              "sha256": "sha256:f809e53de97b4e030050360b38c660a610b02c900e3542b241a3d7dbf7622b83",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/f8bf550d0a3c36972eccf8f375962a6822739caf4b5be8c0ad8f116005477826.json",
+              "sha256": "sha256:f8bf550d0a3c36972eccf8f375962a6822739caf4b5be8c0ad8f116005477826",
+              "size": 2298
+            },
+            {
+              "path": "interpretation.json",
+              "sha256": "sha256:75ea16b238296d4440302e8d1d3c9ed77081e3041372cacd3fec444053ed7c21",
+              "size": 3185
+            },
+            {
+              "path": "request/prompt.txt",
+              "sha256": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+              "size": 1589
+            },
+            {
+              "path": "request/request.json",
+              "sha256": "sha256:0ba6756a62d4db26acf3f2affb7efe886eb00e75030f20883b88b54a42b794f4",
+              "size": 282
+            },
+            {
+              "path": "request/routing.json",
+              "sha256": "sha256:38f1bfce63ef77dcdfe79fb751644f6003890174e0fb57decbccd4af7c7e3b8a",
+              "size": 2244
+            }
+          ],
+          "format": "verislop.manifest/0.1",
+          "newline_policy": "bytes-exact",
+          "symlinks": "rejected"
+        },
+        "root": "sha256:302363f527d4342f50d9a1c7ad179c60f9ba2a141fba67e8aee6663f2cddddaa"
+      },
+      "rejected_stage": "formalize",
+      "round": 1
+    },
+    {
+      "diagnostics": [
+        {
+          "claims": [],
+          "code": "CANDIDATE_BUILD_FAILURE",
+          "message": "the challenge does not elaborate: 211:31: Invalid field `sort`: The environment does not contain `List.sort`, so it is not possible to project the field `sort` from an expression\n  buffer\nof type `List (Nat × Int)`; 225:19: fail to show termination for\n  VeriSlop.G20.solve.process.flush\nwith errors\nfailed to infer structural recursion:\nNot considering parameter s of VeriSlop.G20.solve.process.flush:\n  it is unchanged in the recursive calls\nCannot use parameter total':\n  the type Int does not have a `.brecOn` recursor\nCannot use parameter next':\n  failed to eliminate recursive application\n    solve.process.flush s (total' + nd) (next' + 1) buffer''' flushed'\nCannot use parameter buffer'':\n  failed to eliminate recursive application\n    solve.process.flush s (total' + nd) (next' + 1) buffer''' flushed'\nCannot use parameter flushed:\n  the type Bool does not have a `.brecOn` recursor\n\n\nCould not find a decreasing measure.\nThe basic measures relate at each recursive call as follows:\n(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)\n             #1 next' #2 #3\n1) 230:18-68  ?     ?  ?  ≤\n\n#1: total'\n#2: buffer''\n#3: flushed\n\nPlease use `termination_by` to specify a decreasing measure.; 241:72: failed to synthesize instance of type class\n  OfNat Output 1\nnumerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is\n  Output\ndue to the absence of the instance above\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; 241:107: failed to synthesize instance of type class\n  OfNat Output 0\nnumerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is\n  Output\ndue to the absence of the instance above\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; 241:48: invalid {...} notation, expected type is not known",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "VERIFIER_NOT_RUN",
+          "message": "no frozen challenge; run `verislop formalize` first",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "VERIFIER_NOT_RUN",
+          "message": "the implementation phase has not started (no frozen implementation claims)",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:endpoint"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:endpoint is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:provenance"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:provenance is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:clean-builds"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:clean-builds is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:determinism"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:determinism is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "REVIEW_NOT_RUN",
+          "message": "review checkpoint formal_contract is configured as a release gate but has not run",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "REVIEW_NOT_RUN",
+          "message": "review checkpoint release is configured as a release gate but has not run",
+          "obligations": [],
+          "severity": "blocking"
+        }
+      ],
+      "lineage_hash": "sha256:b7bba26dbde504d57720c5a5664eb3f2bc10effeffcf7de16b025cf624329594",
+      "package": "package-repair-02",
+      "parent_package": "package-repair-01",
+      "parent_snapshot": {
+        "manifest": {
+          "case_collisions": "rejected",
+          "entries": [
+            {
+              "path": "agents/transcripts/1791436063272-0001-formalizer_1.json",
+              "sha256": "sha256:725f9f9e526e2923d841633d8b0adb161ab204946d1c9caec28faadef6887b7f",
+              "size": 28575
+            },
+            {
+              "path": "agents/transcripts/1791436090885-0002-formalizer_2.json",
+              "sha256": "sha256:a194d1e597aad4f56ea24ca00e5507fe1c83929fc1e3eb3b5824afc2a9b332f9",
+              "size": 28197
+            },
+            {
+              "path": "agents/transcripts/1791436118578-0003-formalizer_3.json",
+              "sha256": "sha256:a6f5b02601a106b28d03ea183fea18e4c18203ecd73f4dce52c6f25b23e9aa29",
+              "size": 28293
+            },
+            {
+              "path": "closure/review-config.json",
+              "sha256": "sha256:88cb443fb5bdf05c78d10a49e2a45557a5e14a0263e55a94213d8a26626f3938",
+              "size": 2167
+            },
+            {
+              "path": "contract/candidate/Contract.lean",
+              "sha256": "sha256:d96fdf3a3846cad6084728967fca0cc7e88242251e17a0e7785e5f4fdcf6ec98",
+              "size": 14106
+            },
+            {
+              "path": "contract/candidate/formalization.json",
+              "sha256": "sha256:890d020f59a44062318e900d3f33bcaf01b58d9a363ca5c05c3979f7b405a98c",
+              "size": 910
+            },
+            {
+              "path": "contract/candidate/proposal.lean",
+              "sha256": "sha256:d642b029717844bdb9a9489e9881f3b2ebe05c952222feca023bb453f986ab47",
+              "size": 2898
+            },
+            {
+              "path": "contract/candidate/statement-check.json",
+              "sha256": "sha256:1e45bd1822c3781858b5209db9e6a15c988dd0d3c48ba38f90a422cbe1651b2d",
+              "size": 5846
+            },
+            {
+              "path": "draft.json",
+              "sha256": "sha256:c5a865e391cfde51cb6de94aa7de31ecde2ead6553fe7efd5de4c78b12d36a38",
+              "size": 32647
+            },
+            {
+              "path": "evidence/ev-08425eff99927ced3c8e926dda1466d8.json",
+              "sha256": "sha256:81f8d78c67bf7e4261b1427ff5a688962e4a9ece8fc622aa8af91d8e924ffa6e",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-0e423df56ea90c2eecad39c999e90759.json",
+              "sha256": "sha256:6f6dfdf33fd4c60c3ad76bdbfd6fb36c6be4e60cc7228bcef4e81eca9420198e",
+              "size": 1051
+            },
+            {
+              "path": "evidence/ev-1d9e70b876d47b564a4c6fbe34bd0ff0.json",
+              "sha256": "sha256:430711c5f5b08ee2ffc95f702f32013599c686b15bb819aeb986ad73350330c3",
+              "size": 1069
+            },
+            {
+              "path": "evidence/ev-272a79080b60882dfd979029d842f8aa.json",
+              "sha256": "sha256:56517a4d9f0b1bbe54a8c76b685eaa7dceb2aea32bbe516083da7054a33ba85f",
+              "size": 1067
+            },
+            {
+              "path": "evidence/ev-29724fc4311ade208220129df7c01d3a.json",
+              "sha256": "sha256:ee2a1c2d4d574914ab02e2800480d04d68b3ee106832147c08561dd9b9415b24",
+              "size": 1072
+            },
+            {
+              "path": "evidence/ev-4d06ea5dd2e6b3af37181d579c8d59bd.json",
+              "sha256": "sha256:c312d20339c837155e4a736721428ca7415cb65d843bd1e61651c63a4e66cc69",
+              "size": 1056
+            },
+            {
+              "path": "evidence/ev-6a882f3f57ccd5571ddb895006bc1024.json",
+              "sha256": "sha256:23528cc78e5df834bf0102a6bc7e3b956bceb3ec5f3eb8877a1d10461266bb00",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-724c89a82d5af3e622fca74fd7aad228.json",
+              "sha256": "sha256:7ef439b9912e5ff4675ccf12bb59fc5520ebfef959f11fafdbcaabfd99b5b912",
+              "size": 1047
+            },
+            {
+              "path": "evidence/ev-74c16294bf830828e8507340b1aba465.json",
+              "sha256": "sha256:1504f9109459bd94807646f53667da56faa1aa82cc874e6ad4968e77630b6732",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-7a6754a19dec9ef2fc5b0ad76255ce0d.json",
+              "sha256": "sha256:a0efb01fccd21fe66e0bf8bcc6e14c376e7b52cac6ce6eecec52c61fe23b91fc",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-813925f93e31382ef8a3c3f73d4d4926.json",
+              "sha256": "sha256:541a127ef298ba7e6519881292c078feeed9410e6d3116736bba120263467d75",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-81d3f9f3e5599e44f22d81d1edb941bf.json",
+              "sha256": "sha256:3d2465a68132a052c0925d564f65fbb8c833c61a2badf19c55284ee3b6016e6c",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-81efd905472c3e3854a70fa2870dd6c1.json",
+              "sha256": "sha256:d22f8370a6b59338d6a57348cdd9cd0e0812d4e9fc91de90ea0691b20123ba34",
+              "size": 1050
+            },
+            {
+              "path": "evidence/ev-a2b42c1e136d3524e0fe7202d48743b1.json",
+              "sha256": "sha256:9adca09a4f42ba0591174c9067d1958419d6a6ba3e7872667a3f5b3a830c7565",
+              "size": 1111
+            },
+            {
+              "path": "evidence/ev-a91058eaf7c4ab220f18afec7d9ad2c2.json",
+              "sha256": "sha256:e33517fa68764e2e2f255d8161fd20c0fa93225c075f1774af36a71897e34233",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-a93ba24305291ad3b4ad91292bf516a8.json",
+              "sha256": "sha256:6abfa3137c02bf531b5b9a2c5bd19c9aa21afe149301cc4c1c0b7dd0569cac04",
+              "size": 1052
+            },
+            {
+              "path": "evidence/ev-aebae5300f3ef800982aec690d205c4a.json",
+              "sha256": "sha256:5a588ad4e7ba2bb56130ea10a9aa6b1b9c4180ca51ad59f1336e721f40e5be05",
+              "size": 1052
+            },
+            {
+              "path": "evidence/ev-b0f5cbd51ae54f890255bd9fb40e896c.json",
+              "sha256": "sha256:54235aa94281df8aeb3936241a804dda18fcb2e8b93fe9d6492c7075a8d3ae24",
+              "size": 1067
+            },
+            {
+              "path": "evidence/ev-c45d6dfbb3364caf4a36026bce93d101.json",
+              "sha256": "sha256:c0f8f011513d6f6b296bad621e7c7b0c7a79c8dfe7245fc989a0fc9000405041",
+              "size": 1051
+            },
+            {
+              "path": "evidence/ev-e7a2633a496f85e6351fce7a87330186.json",
+              "sha256": "sha256:44150d48f2899f0214cb8e45cf66fe552d0da563bf2920a646a8457b53c3799b",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-f212a3ae778393a85edf3b1e830b1b0b.json",
+              "sha256": "sha256:86861c6fab7995aa8f6886e3ac5163d42691799c815b6fe258e118bdb6e36ae1",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-f4b3f6521f19b0668212647494d0207d.json",
+              "sha256": "sha256:016c9f59866de767b9588514e71845743a9b006dfa722cd938e1614d0cc44d9f",
+              "size": 1270
+            },
+            {
+              "path": "evidence/ev-f64b14bf44bfa56e8f8a4276f72cd98d.json",
+              "sha256": "sha256:7511d8a6fef804e88105793dde1a2b01282550862068fc0b5689d53a96629df6",
+              "size": 1270
+            },
+            {
+              "path": "evidence/raw/2ab91f0adcbcaefa9c90d46b4d16227322c5848fb1a2981e96c769eb316406e0.json",
+              "sha256": "sha256:2ab91f0adcbcaefa9c90d46b4d16227322c5848fb1a2981e96c769eb316406e0",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/3d4381c1d2aaa1a4d81326e17b7f8e7d848d8ef392071abd0806b853c3391577.json",
+              "sha256": "sha256:3d4381c1d2aaa1a4d81326e17b7f8e7d848d8ef392071abd0806b853c3391577",
+              "size": 681
+            },
+            {
+              "path": "evidence/raw/4ec2dc14efad815a4b72764d2bf2fa7642031683e9321d5ad7bf54c72f44870a.json",
+              "sha256": "sha256:4ec2dc14efad815a4b72764d2bf2fa7642031683e9321d5ad7bf54c72f44870a",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/5e0227881a9867d7401f362c108718ca7a1dc2075e99ea6d49e590454781385d.json",
+              "sha256": "sha256:5e0227881a9867d7401f362c108718ca7a1dc2075e99ea6d49e590454781385d",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/650d25099385d774bd24c1bca5ae714ebcc911db4d7803ed0ad7b026aa716ad7.json",
+              "sha256": "sha256:650d25099385d774bd24c1bca5ae714ebcc911db4d7803ed0ad7b026aa716ad7",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/691381b7ada2e568afdbf6844db9dcdd8a22f46466e5f0a2a5447e77c001f81c.json",
+              "sha256": "sha256:691381b7ada2e568afdbf6844db9dcdd8a22f46466e5f0a2a5447e77c001f81c",
+              "size": 330
+            },
+            {
+              "path": "evidence/raw/6dcbec3545984426a6523a8e1719ad7074b9aa993595255bd30d2ee111b5a597.json",
+              "sha256": "sha256:6dcbec3545984426a6523a8e1719ad7074b9aa993595255bd30d2ee111b5a597",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/75e4df2425960b4e0a8d5c112214a5f6a49b5106fb5c58ff692e197ecfa29fed.json",
+              "sha256": "sha256:75e4df2425960b4e0a8d5c112214a5f6a49b5106fb5c58ff692e197ecfa29fed",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/77e93a3ad9298380924809257a0d5be6906fda044be6e4b131f04b0b318196af.json",
+              "sha256": "sha256:77e93a3ad9298380924809257a0d5be6906fda044be6e4b131f04b0b318196af",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/7a4b86d0b20a14b54c2f67c8ddc5c09b2cb1b91aa0059f60a2c90f6792cf6a11.json",
+              "sha256": "sha256:7a4b86d0b20a14b54c2f67c8ddc5c09b2cb1b91aa0059f60a2c90f6792cf6a11",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/8c03377834044c0ece2e6a1f69a8ad51de7b240ad9bf83740c3e4dddd12ca7b2.json",
+              "sha256": "sha256:8c03377834044c0ece2e6a1f69a8ad51de7b240ad9bf83740c3e4dddd12ca7b2",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/a22d306f295a9e2e2e8e8522a517311f69d4dc304a8a5d81d49d4780e79587ec.json",
+              "sha256": "sha256:a22d306f295a9e2e2e8e8522a517311f69d4dc304a8a5d81d49d4780e79587ec",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/aabd121c288cfaaeca0a9b74f0a806a37a089c0f02e8ed0fa1208afa3dc9b525.json",
+              "sha256": "sha256:aabd121c288cfaaeca0a9b74f0a806a37a089c0f02e8ed0fa1208afa3dc9b525",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/ac0bc7758f6b940c8f588b4c65aadc4158c3ecedfa519f5d6fdac7fb0020a972.json",
+              "sha256": "sha256:ac0bc7758f6b940c8f588b4c65aadc4158c3ecedfa519f5d6fdac7fb0020a972",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/b1c7f01f83c1f1c536de10d140572d3164bbfa098439c346331d33e3d63cc425.json",
+              "sha256": "sha256:b1c7f01f83c1f1c536de10d140572d3164bbfa098439c346331d33e3d63cc425",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/bfb5230e6f5c10ec85ce918228ffb4bd82dcaa876f9d97972398ffd9a4489c6e.json",
+              "sha256": "sha256:bfb5230e6f5c10ec85ce918228ffb4bd82dcaa876f9d97972398ffd9a4489c6e",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/c5076f104ed0b3f5f699a2ff7c01e782e783d7896459bd4409722f26f9f46c37.json",
+              "sha256": "sha256:c5076f104ed0b3f5f699a2ff7c01e782e783d7896459bd4409722f26f9f46c37",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/d6124226c83946ead56716a2d1c9ee996e4727a80723f85343015539d4606dda.json",
+              "sha256": "sha256:d6124226c83946ead56716a2d1c9ee996e4727a80723f85343015539d4606dda",
+              "size": 330
+            },
+            {
+              "path": "evidence/raw/dc4872e348e5bba0e5414095930855151d4515cfdd4e448945c1b5f124d56b99.json",
+              "sha256": "sha256:dc4872e348e5bba0e5414095930855151d4515cfdd4e448945c1b5f124d56b99",
+              "size": 329
+            },
+            {
+              "path": "evidence/raw/e942256fe8fdf341bedae7c9c6c11c71dd43ba1a65e91f73d7872253f59e5c37.json",
+              "sha256": "sha256:e942256fe8fdf341bedae7c9c6c11c71dd43ba1a65e91f73d7872253f59e5c37",
+              "size": 2298
+            },
+            {
+              "path": "evidence/raw/eb004e973680d602800e2bd40c4eaaab41c499fa4f0bae77f852d953e4841c93.json",
+              "sha256": "sha256:eb004e973680d602800e2bd40c4eaaab41c499fa4f0bae77f852d953e4841c93",
+              "size": 330
+            },
+            {
+              "path": "evidence/raw/f50364b72140a2cb6ccc8c163fda8b03200c5749a663191711e8ca5214ea40cb.json",
+              "sha256": "sha256:f50364b72140a2cb6ccc8c163fda8b03200c5749a663191711e8ca5214ea40cb",
+              "size": 392
+            },
+            {
+              "path": "evidence/raw/f627d48e248ac5d066315dce29bdbf92f1fd5d7aaea367df62856d9f9b6c618f.json",
+              "sha256": "sha256:f627d48e248ac5d066315dce29bdbf92f1fd5d7aaea367df62856d9f9b6c618f",
+              "size": 2298
+            },
+            {
+              "path": "interpretation.json",
+              "sha256": "sha256:75ea16b238296d4440302e8d1d3c9ed77081e3041372cacd3fec444053ed7c21",
+              "size": 3185
+            },
+            {
+              "path": "recovery-context.json",
+              "sha256": "sha256:0dbe4fe6f22660c9981d2be2df42d1c09f3c911b9d9d8bf49d59f89c6d8f4c2b",
+              "size": 6771
+            },
+            {
+              "path": "recovery-lineage.json",
+              "sha256": "sha256:15e6d5ec3074ca3dd525d04cb4962f6e0e4cd9a934f490c87a8092f8007b27b5",
+              "size": 11424
+            },
+            {
+              "path": "request/prompt.txt",
+              "sha256": "sha256:66c5b8ff690566e7754955ba678d42a3f6c08a667ec52e2f6518f5d4763c09bb",
+              "size": 1589
+            },
+            {
+              "path": "request/request.json",
+              "sha256": "sha256:0ba6756a62d4db26acf3f2affb7efe886eb00e75030f20883b88b54a42b794f4",
+              "size": 282
+            },
+            {
+              "path": "request/routing.json",
+              "sha256": "sha256:38f1bfce63ef77dcdfe79fb751644f6003890174e0fb57decbccd4af7c7e3b8a",
+              "size": 2244
+            }
+          ],
+          "format": "verislop.manifest/0.1",
+          "newline_policy": "bytes-exact",
+          "symlinks": "rejected"
+        },
+        "root": "sha256:a4392b7e12bda3a5e609364b8a3bf35d6d73b020a9c00337939592611deab869"
+      },
+      "rejected_stage": "formalize",
+      "round": 2
+    }
+  ]
+}

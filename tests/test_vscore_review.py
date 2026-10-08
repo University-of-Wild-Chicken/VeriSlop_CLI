@@ -12,6 +12,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from helpers import EX, MockLLM, TempDir, codes, copy_pkg, mock_config, run_cli, unanimous
+from test_providers_review import review_packet
 from verislop import canonical, inspection, review, review_projection as projection, schemas
 from verislop.backends import vscore_closure, vscore_release
 from verislop.bridges.manifest import InvalidPackage
@@ -244,7 +245,7 @@ class VSCoreReviewIntegration(unittest.TestCase):
         cls.tmp = TempDir()
         cls.verdict = "ACCEPT"
         def handler(system, user, model):
-            packet, _ = json.JSONDecoder().raw_decode(user.split("\n", 1)[1].lstrip())
+            packet = review_packet(user)
             claim_id = packet["counterexample_policy"]["mechanical_claim_ids"][0]
             search = {"method": "bounded mechanical probes", "attempted_cases": 1,
                       "probes": [{"kind": "mechanical_failure", "claim_id": claim_id}],

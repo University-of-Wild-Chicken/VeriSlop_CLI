@@ -1,0 +1,225 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "accept",
+    "export",
+    "formalize",
+    "interpret",
+    "prove"
+  ],
+  "created_at": "2026-10-08T05:15:50Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-01",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/D26/verislop/package-repair-01/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/D26/verislop/package-repair-01/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/D26/verislop/package-repair-01/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 321:0: type of theorem `VeriSlop.D26.sorted_output_correctness` is not a proposition\n  List String → Prop; 327:0: type of theorem `VeriSlop.D26.public_examples_correct` is not a proposition\n  Prop",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:f10d06db519c5a66fe63ebb2f861b5ce05838649cfa45e1f1b346b38baf1adbe",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "VeriSlop.D26.solution_file_name"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.solve_is_pure_and_deterministic"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.uses_stdlib_only_no_io"
+              ],
+              "obligation": "D3"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.input_structure"
+              ],
+              "obligation": "D4"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.output_structure"
+              ],
+              "obligation": "D5"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.tokenize_rule"
+              ],
+              "obligation": "D6"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.numeric_comparison_rule"
+              ],
+              "obligation": "D7"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.text_comparison_rule"
+              ],
+              "obligation": "D8"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.numeric_before_text"
+              ],
+              "obligation": "D9"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.left_to_right_comparison"
+              ],
+              "obligation": "D10"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.shorter_prefix_first"
+              ],
+              "obligation": "D11"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.stable_sort_on_equal_keys"
+              ],
+              "obligation": "D12"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.non_ascii_digits_are_text"
+              ],
+              "obligation": "D13"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.empty_string_no_tokens"
+              ],
+              "obligation": "D14"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D26.no_locale_normalization_decimals_negatives"
+              ],
+              "obligation": "D15"
+            },
+            {
+              "obligation": "A1",
+              "predicate": "VeriSlop.D26.max_ascii_digit_run_length"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlop.D26.sorted_output_correctness"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlop.D26.public_examples_correct"
+            }
+          ],
+          "internal_obligations": [],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "D26.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace VeriSlop.D26\n\n/-- D1: The solution is implemented in a file named solution.py. --/\ndef solution_file_name : String := \"solution.py\"\n\n/-- D2: The function solve(data) is pure and deterministic. --/\ndef solve_is_pure_and_deterministic : Bool := true\n\n/-- D3: The function uses only the Python standard library and performs no external I/O. --/\ndef uses_stdlib_only_no_io : Bool := true\n\n/-- D4: The input is a JSON-compatible Python value with structure {\"values\": [strings]}. --/\ndef input_structure : String := \"{\\\"values\\\": [strings]}\"\n\n/-- D5: The output is a JSON-serializable list of the original input strings, sorted. --/\ndef output_structure : String := \"[strings]\"\n\n/-- D6: Tokenization splits strings into maximal ASCII-digit [0-9]+ runs or maximal non-ASCII-digit runs. --/\ndef tokenize_rule : String := \"maximal ASCII-digit [0-9]+ runs or maximal non-ASCII-digit runs\"\n\n/-- D7: Numeric tokens are compared by their arbitrary-precision integer value, ignoring leading zeros. --/\ndef numeric_comparison_rule : String := \"arbitrary-precision integer value, ignoring leading zeros\"\n\n/-- D8: Text tokens are compared by Python Unicode casefold lexicographic order. --/\ndef text_comparison_rule : String := \"Python Unicode casefold lexicographic order\"\n\n/-- D9: At a corresponding position, a numeric token sorts before a text token. --/\ndef numeric_before_text : Bool := true\n\n/-- D10: Tokens are compared left-to-right. --/\ndef left_to_right_comparison : Bool := true\n\n/-- D11: If one token sequence is a prefix of another, the shorter sequence sorts first. --/\ndef shorter_prefix_first : Bool := true\n\n/-- D12: If token keys are completely equal, the original input order is preserved (stable sort). --/\ndef stable_sort_on_equal_keys : Bool := true\n\n/-- D13: Non-ASCII digits are treated as text tokens. --/\ndef non_ascii_digits_are_text : Bool := true\n\n/-- D14: An empty string has no tokens. --/\ndef empty_string_no_tokens : Bool := true\n\n/-- D15: No locale, normalization, decimals, or negative-number parsing is applied. --/\ndef no_locale_normalization_decimals_negatives : Bool := true\n\n/-- A1: Every maximal ASCII-digit run in the input has at most 1000 digits. --/\ndef max_ascii_digit_run_length (n : Nat) : Prop := n ≤ 1000\n\n/-- O1: The function returns the input strings sorted according to the specified natural ordering rules. --/\ntheorem sorted_output_correctness (input_strings : List String) : Prop :=\n  ∃ (output : List String),\n    (List.length output = List.length input_strings) ∧\n    (∀ (s : String), s ∈ input_strings ↔ s ∈ output)\n\n/-- O2: The function produces the correct output for the provided public examples. --/\ntheorem public_examples_correct : Prop :=\n  (∃ (out1 : List String),\n    out1 = [\"a\", \"a1\", \"A2\", \"a02\", \"a10\"] ∧\n    (List.length out1 = 5) ∧\n    (∀ (s : String), s ∈ [\"a10\", \"A2\", \"a02\", \"a1\", \"a\"] ↔ s ∈ out1)) ∧\n  (∃ (out2 : List String),\n    out2 = [\"x2\", \"x02\", \"X2\", \"x٢\"] ∧\n    (List.length out2 = 4) ∧\n    (∀ (s : String), s ∈ [\"x٢\", \"x2\", \"x02\", \"X2\"] ↔ s ∈ out2))\n\nend VeriSlop.D26\n"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261007,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [],
+      "seconds": 105,
+      "stage": "formalize",
+      "status": "PASS"
+    },
+    {
+      "codes": [],
+      "seconds": 0,
+      "stage": "prove",
+      "status": "PASS"
+    },
+    {
+      "codes": [],
+      "seconds": 3,
+      "stage": "accept",
+      "status": "PASS"
+    },
+    {
+      "codes": [],
+      "seconds": 0,
+      "stage": "export",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "PROVIDER_FAILURE"
+      ],
+      "seconds": 15,
+      "stage": "review:formal_contract",
+      "status": "INFRASTRUCTURE_FAILURE"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

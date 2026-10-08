@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-10-08T06:00:18.43874256Z",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 484,
+  "eval_duration": 9036390000,
+  "load_duration": 473125,
+  "message": {
+    "content": "{\"files\":{\"solution.py\":\"def solve(data):\\n    ttl = data[\\\"ttl\\\"]\\n    events = data[\\\"events\\\"]\\n\\n    last_token = 0\\n    lease = None  # dict with owner, token, expires\\n    results = []\\n\\n    for ev in events:\\n        at = ev[\\\"at\\\"]\\n        # Expire lease if necessary before processing event\\n        if lease is not None and lease[\\\"expires\\\"] <= at:\\n            lease = None\\n\\n        op = ev[\\\"op\\\"]\\n        if op == \\\"acquire\\\":\\n            owner = ev[\\\"owner\\\"]\\n            if lease is None:\\n                last_token += 1\\n                lease = {\\n                    \\\"owner\\\": owner,\\n                    \\\"token\\\": last_token,\\n                    \\\"expires\\\": at + ttl\\n                }\\n                results.append({\\\"ok\\\": True, \\\"token\\\": last_token})\\n            else:\\n                if lease[\\\"owner\\\"] == owner:\\n                    # Same live owner: succeed with same token, no expiry extension\\n                    results.append({\\\"ok\\\": True, \\\"token\\\": lease[\\\"token\\\"]})\\n                else:\\n                    results.append({\\\"ok\\\": False, \\\"token\\\": None})\\n        elif op == \\\"renew\\\":\\n            owner = ev[\\\"owner\\\"]\\n            token = ev[\\\"token\\\"]\\n            if lease is not None and lease[\\\"owner\\\"] == owner and lease[\\\"token\\\"] == token:\\n                lease[\\\"expires\\\"] = at + ttl\\n                results.append(True)\\n            else:\\n                results.append(False)\\n        elif op == \\\"release\\\":\\n            owner = ev[\\\"owner\\\"]\\n            token = ev[\\\"token\\\"]\\n            if lease is not None and lease[\\\"owner\\\"] == owner and lease[\\\"token\\\"] == token:\\n                lease = None\\n                results.append(True)\\n            else:\\n                results.append(False)\\n        else:\\n            # Unknown op; per spec inputs conform, but keep safe\\n            results.append(False)\\n\\n    return {\\n        \\\"results\\\": results,\\n        \\\"lease\\\": lease,\\n        \\\"last_token\\\": last_token\\n    }\"}\n}",
+    "role": "assistant"
+  },
+  "model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "prompt_eval_cached_count": 0,
+  "prompt_eval_count": 662,
+  "prompt_eval_duration": 391439000,
+  "total_duration": 9503880508
+}

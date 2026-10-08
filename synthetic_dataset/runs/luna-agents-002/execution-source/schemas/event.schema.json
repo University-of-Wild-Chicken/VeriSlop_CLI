@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:event:0.1",
+  "title": "Progress event (JSON Lines); events carry no authority over lifecycle outcomes",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "seq": { "type": "integer", "minimum": 1 },
+    "time": { "type": "string", "minLength": 1 },
+    "type": {
+      "enum": ["run_started", "stage_started", "stage_finished", "progress", "candidate_proposal",
+               "verifier_decision", "review_decision", "diagnostic", "run_finished"]
+    },
+    "phase": { "type": "string", "minLength": 1 },
+    "message": { "type": "string" },
+    "obligation_id": { "type": "string" },
+    "milestone": { "type": "string" },
+    "outcome": { "type": "string" },
+    "evidence_ref": { "type": "string" },
+    "code": { "type": "string" },
+    "details": { "type": "object" }
+  },
+  "required": ["schema_version", "run_id", "seq", "time", "type", "phase"]
+}

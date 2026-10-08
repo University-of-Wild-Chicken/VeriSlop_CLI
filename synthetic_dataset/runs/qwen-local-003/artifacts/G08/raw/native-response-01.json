@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-10-08T05:24:51.681480298Z",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 638,
+  "eval_duration": 11954908000,
+  "load_duration": 497055,
+  "message": {
+    "content": "{\"files\":{\"solution.py\":\"from collections import deque\\n\\ndef solve(data):\\n    n = data[\\\"n\\\"]\\n    source = data[\\\"source\\\"]\\n    sink = data[\\\"sink\\\"]\\n    edges = data[\\\"edges\\\"]\\n\\n    # Build capacity matrix; parallel edges add capacities\\n    cap = [[0] * n for _ in range(n)]\\n    for u, v, c in edges:\\n        if 0 <= u < n and 0 <= v < n:\\n            cap[u][v] += c\\n\\n    # Residual graph: residual[u][v] = cap[u][v] - flow[u][v]\\n    # We maintain residual directly; reverse residual is residual[v][u]\\n    residual = [row[:] for row in cap]\\n\\n    def bfs_path():\\n        # BFS from source to sink in residual graph, visiting neighbors in increasing order\\n        parent = [-1] * n\\n        parent[source] = source\\n        q = deque([source])\\n        while q:\\n            u = q.popleft()\\n            if u == sink:\\n                break\\n            for v in range(n):\\n                if residual[u][v] > 0 and parent[v] == -1:\\n                    parent[v] = u\\n                    if v == sink:\\n                        break\\n                    q.append(v)\\n        if parent[sink] == -1:\\n            return None\\n        # Reconstruct path\\n        path = []\\n        v = sink\\n        while v != source:\\n            path.append(v)\\n            v = parent[v]\\n        path.append(source)\\n        path.reverse()\\n        return path\\n\\n    flow = 0\\n    while True:\\n        path = bfs_path()\\n        if path is None:\\n            break\\n        # Find bottleneck\\n        bottleneck = float('inf')\\n        for i in range(len(path) - 1):\\n            u = path[i]\\n            v = path[i + 1]\\n            bottleneck = min(bottleneck, residual[u][v])\\n        # Augment\\n        for i in range(len(path) - 1):\\n            u = path[i]\\n            v = path[i + 1]\\n            residual[u][v] -= bottleneck\\n            residual[v][u] += bottleneck\\n        flow += bottleneck\\n\\n    # Find reachable vertices from source in final residual graph\\n    reachable = [False] * n\\n    reachable[source] = True\\n    q = deque([source])\\n    while q:\\n        u = q.popleft()\\n        for v in range(n):\\n            if residual[u][v] > 0 and not reachable[v]:\\n                reachable[v] = True\\n                q.append(v)\\n\\n    reachable_list = sorted([i for i in range(n) if reachable[i]])\\n\\n    return {\\\"flow\\\": flow, \\\"reachable\\\": reachable_list}\\n\"}}",
+    "role": "assistant"
+  },
+  "model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "prompt_eval_cached_count": 0,
+  "prompt_eval_count": 458,
+  "prompt_eval_duration": 285962000,
+  "total_duration": 12353262128
+}

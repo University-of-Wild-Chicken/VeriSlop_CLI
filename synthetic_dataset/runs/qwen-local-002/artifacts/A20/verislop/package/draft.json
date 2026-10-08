@@ -1,0 +1,391 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None identified that affect correctness or boundary conditions.",
+    "entities": "The primary entity is the solve function in solution.py.",
+    "error_semantics": "No behavior is required for malformed input.",
+    "explicit_non_goals": "Handling of malformed input is excluded.",
+    "invariants": "Purity, determinism, and standard library usage are maintained.",
+    "liveness_properties": "None explicitly required beyond termination implied by finite input.",
+    "postconditions": "The output is the exact lexicographic rank as an integer.",
+    "preconditions": "Input schema is defined as a JSON object with a 'word' key.",
+    "resource_constraints": "Input length is bounded by 60, ensuring finite computation.",
+    "safety_properties": "No external I/O is performed."
+  },
+  "entities": [],
+  "error_semantics": [],
+  "explicit_non_goals": [],
+  "invariants": [
+    {
+      "acceptance_criteria": [
+        "Calling solve with the same input always yields the same output.",
+        "No global state is modified."
+      ],
+      "dependencies": [],
+      "id": "O4",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:00c2452039b634933e291bf8dba1418c38ee4e540065670ba9037530649baa5d",
+          "document_ref": "prompt.txt",
+          "end_byte": 710,
+          "interpretation": "Defines purity and determinism constraints.",
+          "origin": "explicit",
+          "start_byte": 634
+        },
+        {
+          "document_hash": "sha256:00c2452039b634933e291bf8dba1418c38ee4e540065670ba9037530649baa5d",
+          "document_ref": "prompt.txt",
+          "end_byte": 740,
+          "interpretation": "Restricts dependencies.",
+          "origin": "explicit",
+          "start_byte": 711
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function is pure and deterministic, using only the Python 3 standard library."
+    }
+  ],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "For input {\"word\": \"baa\"}, the function returns 2.",
+        "For input {\"word\": \"\"}, the function returns 0.",
+        "The returned value is a JSON-serializable integer.",
+        "The calculation uses exact arbitrary-precision integers, not floating-point approximations."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        },
+        {
+          "id": "A2",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:00c2452039b634933e291bf8dba1418c38ee4e540065670ba9037530649baa5d",
+          "document_ref": "prompt.txt",
+          "end_byte": 516,
+          "interpretation": "Defines the core computational requirement.",
+          "origin": "explicit",
+          "start_byte": 426
+        },
+        {
+          "document_hash": "sha256:00c2452039b634933e291bf8dba1418c38ee4e540065670ba9037530649baa5d",
+          "document_ref": "prompt.txt",
+          "end_byte": 605,
+          "interpretation": "Specifies the numeric precision requirement.",
+          "origin": "explicit",
+          "start_byte": 557
+        },
+        {
+          "document_hash": "sha256:00c2452039b634933e291bf8dba1418c38ee4e540065670ba9037530649baa5d",
+          "document_ref": "prompt.txt",
+          "end_byte": 632,
+          "interpretation": "Defines the base case for empty input.",
+          "origin": "explicit",
+          "start_byte": 607
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function solve(data) returns the zero-based lexicographic rank of the input word among distinct permutations of its multiset, computed using exact arbitrary-precision integer arithmetic."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "The function expects the input structure {\"word\": \"...\"}."
+      ],
+      "dependencies": [],
+      "id": "O2",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "solution.py",
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:00c2452039b634933e291bf8dba1418c38ee4e540065670ba9037530649baa5d",
+          "document_ref": "prompt.txt",
+          "end_byte": 425,
+          "interpretation": "Defines the input schema and bounds.",
+          "origin": "explicit",
+          "start_byte": 374
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input data is a JSON-compatible object containing a key 'word' with an ASCII lowercase string value of length <= 60."
+    }
+  ],
+  "request_ref": "prompt.txt",
+  "resource_constraints": [],
+  "safety_properties": [
+    {
+      "acceptance_criteria": [
+        "No file system access or network calls are made during execution."
+      ],
+      "dependencies": [],
+      "id": "O3",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:00c2452039b634933e291bf8dba1418c38ee4e540065670ba9037530649baa5d",
+          "document_ref": "prompt.txt",
+          "end_byte": 269,
+          "interpretation": "Restricts side effects and resource access.",
+          "origin": "explicit",
+          "start_byte": 214
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The implementation performs no external I/O and does not read benchmark files."
+    }
+  ],
+  "schema_version": "0.1"
+}

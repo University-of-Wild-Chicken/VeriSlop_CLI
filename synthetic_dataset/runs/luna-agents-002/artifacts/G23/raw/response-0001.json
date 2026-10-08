@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_g23_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:45a453cee9b549b86ae789fe4e58df140e18afa99c9ff215e55ee3cf9ac71494",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:a214d445b3343a5a8d5a34baf1e8d8a78a509eed4b56d54d8fda25cf57ed3457",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    capacity = data[\\\"capacity\\\"]\\n    period = data[\\\"period\\\"]\\n    rate = data[\\\"rate\\\"]\\n    requests = data[\\\"requests\\\"]\\n\\n    limit = capacity * period\\n    balance = limit\\n    previous_time = 0\\n    accepted = []\\n    balances = []\\n\\n    for at, amount in requests:\\n        balance = min(limit, balance + (at - previous_time) * rate)\\n        previous_time = at\\n\\n        cost = amount * period\\n        if balance >= cost:\\n            balance -= cost\\n            accepted.append(True)\\n        else:\\n            accepted.append(False)\\n        balances.append(balance)\\n\\n    return {\\\"accepted\\\": accepted, \\\"balances\\\": balances, \\\"denominator\\\": period}\\n\"} }",
+  "transport": "collaboration"
+}

@@ -1,11 +1,17 @@
 # Generalizing VSCore: grammar and formal contract
 
-Status: **design proposal**, language `vscore/0.2`, profile `pure-data/0.2`.
-The registered implementation remains `vscore/0.1`. This document, the
-[surface EBNF](../grammar/vscore-0.2.ebnf), the [examples](../examples/vscore-grammar/README.md),
-and the [Lean feature model](../formal/VSCoreGrammarModel.lean) enable no new CLI capability.
+Status: **implemented authoring and standalone source admission**, language `vscore/0.2`,
+profile `pure-data/0.2`. The [surface EBNF](../grammar/vscore-0.2.ebnf) is implemented by the
+Python authoring frontend; the [normative Lean modules](../verislop/lean/VSCore2.lean) decode
+and admit its delivered canonical JSON. `vscore check` reconstructs that AST from replayed
+Lean definitions and requires two identical clean builds.
 
-The proposed language is a pure, monomorphic, first-order core. It generalizes the current
+The accepted-contract bridge still supports only `vscore/0.1`. Source admission assigns no
+obligation milestone, `TESTED` campaign result or `END_TO_END_VERIFIED` claim. The
+[examples](../examples/vscore-grammar/README.md) and
+[Lean feature design model](../formal/VSCoreGrammarModel.lean) remain separate from those gates.
+
+The language is a pure, monomorphic, first-order core. It generalizes the current
 expression tree through data composition, helper composition and finite iteration. Each
 extension has its own admission rules and proof obligations. Unrestricted recursion,
 mutable state, external effects and concurrency belong to later semantic profiles.
@@ -22,15 +28,31 @@ well-formed declarations, exhaustive matches, admissible features and acyclic de
 A bridge additionally needs exact accepted reference correspondence and obligation transport.
 These judgments have distinct evidence.
 
-The first implementation should keep canonical core JSON as the delivered source, with a
-new closed `vscore-json/0.2` decoder in Lean. The surface language can initially be an
-authoring frontend whose output is that delivered JSON. Certifying the original `.vsc` text
-requires a registered exact-byte surface parser and elaboration edge as described below.
-Every certificate states which artifact is its endpoint.
+Canonical core JSON is the delivered source, interpreted by the closed `vscore-json/0.2`
+decoder in Lean. The surface language is an authoring frontend whose output is that delivered
+JSON. Certifying the original `.vsc` text requires a registered exact-byte surface parser and elaboration edge as described below.
+The standalone source report names its exact scope and excludes the original surface text.
+
+```bash
+bin/verislop vscore compile --source examples/vscore-grammar/pure-data.vsc \
+  --out /tmp/pure-data.vscore.json
+bin/verislop vscore parse --source /tmp/pure-data.vscore.json       # advisory host check
+bin/verislop vscore check --source /tmp/pure-data.vscore.json \
+  --out /tmp/pure-data-source-check                            # new output directory
+```
+
+`compile` and `parse` explicitly report `authoritative: false`. `check` binds the exact
+JSON bytes, supplied enum registry, registered library/checker hashes and pinned toolchain;
+it checks parsing and admission equations in both builds, audits/replays their environments,
+and reconstructs `implementation-ir.json`. Its `report.json` establishes source admission
+only. The output directory must be new. Use `--profile PATH` to supply an enumeration
+registry in the established authoring format, such as
+`{"enums":{"Color":{"constructors":["red","blue"]}}}`. Without that flag, the CLI uses
+the selected package's accepted profile when available, otherwise an empty enum registry.
 
 ## 2. Surface grammar
 
-The complete EBNF is in [vscore-0.2.ebnf](../grammar/vscore-0.2.ebnf). Its central productions are:
+The implemented surface EBNF is in [vscore-0.2.ebnf](../grammar/vscore-0.2.ebnf). Its central productions are:
 
 ```ebnf
 program = header, { type-declaration }, { helper-declaration },
@@ -71,9 +93,12 @@ entry total(xs: List(Nat)) -> Nat {
   path interpretation. Bare `x` and `@"x"` resolve to the same ID.
 - Names are nonempty and at most 128 bytes. Natural literals are `0` or `[1-9][0-9]*`,
   at most 1024 digits. There are no signs, leading zeros, decimals or exponents.
-- Resource limits for source bytes, tokens, nodes, declaration count, nesting depth,
-  elaboration and proof checking are frozen in the semantic profile. A budget failure
-  leaves verification incomplete; it never becomes a successful source-level result.
+- The host authoring frontend bounds source bytes at 1 MiB, names at 128 bytes, naturals
+  at 1024 digits, declarations at 1024, expression nodes at 65536 and nesting at 256.
+  Canonical decoding retains the 1 MiB/depth-256 limits. The standalone kernel source
+  checker additionally limits delivered JSON to 16 KiB and uses the strict policy's build
+  limits. A budget failure leaves verification incomplete; it never becomes a successful
+  source-level result.
 
 Bare `p.left` means field projection. The single opaque ID `p.left` is written `@"p.left"`.
 There is no implicit application: `call helper(...)` is a first-order helper call, while
@@ -134,15 +159,17 @@ Op ::= add | sub | mul | lt | le | eq | and | or
 Variant branch arities come from the checked declaration; a supplied arity is never trusted.
 Projection resolves its record identity from the receiver's type. Constructors carry nominal
 identity, so structurally identical declarations remain distinct types. Existing enumerations
-come from the accepted registry; the program cannot redeclare their constructors.
+come from the supplied registry (or the selected package's accepted profile); the program
+cannot redeclare their constructors.
 Values are finite trees. A typing relation checks field identities, payloads and homogeneous
 list spines; raw malformed values are not admitted arguments. Empty option/list value types
 come from the checked interface, while expression constructors carry their explicit type
 annotations. The standalone Lean feature model abstracts field/branch IDs by resolved order;
 it is not yet the normative core AST, value typing or evaluator.
 
-The wire format must have exact, closed fields for every tag and preserve this constructor
-structure. Retain the existing canonical discipline: ASCII JSON, no whitespace, no escapes,
+The [wire schema](../schemas/vscore-source-v2.schema.json) supplies exact, closed fields
+for every tag; the normative [Lean decoder](../verislop/lean/VSCore2/Decode.lean) preserves
+this constructor structure. The canonical discipline is ASCII JSON, no whitespace, no escapes,
 sorted unique object keys, no trailing bytes, natural literals as decimal strings, and JSON
 indices restricted to canonical nonnegative integers at most `2^53 - 1`. Declarations,
 parameters, fields, constructor payloads, branches and argument lists use arrays whose order
@@ -153,7 +180,9 @@ are resolved against the complete checked registry. Record initializers and vari
 must occur in declaration order; the checker rejects reorderings, omissions and duplicates.
 This avoids silently changing evaluation order during normalization. Header identifiers,
 closed JSON shapes and source budgets are part of the versioned decoder specification.
-The new wire schema and Lean decoder remain implementation work.
+The program has exactly `declarations`, `entries`, `helpers`, `language` and `profile` keys.
+Record fields, variant payloads/branches and helper arguments are ordered arrays.
+`none`/`nil` nodes use `element_type`; both fold nodes use `source`, `initial` and `step`.
 
 ## 4. Static admission
 
@@ -162,7 +191,7 @@ and a local type context `Γ`. Program admission is:
 
 ```text
 Admitted(P, profile) :=
-  WellFormedDeclarations(P, acceptedRegistry)
+  WellFormedDeclarations(P, suppliedEnumRegistry)
   ∧ TypeChecks(P)
   ∧ AcyclicNominalDependencies(P)
   ∧ AcyclicHelperCalls(P)
@@ -175,7 +204,7 @@ annotations, data declarations, unused helpers and all branches. Candidate featu
 are advisory. A `List(Nat)` parameter requires `list` even when its body returns `0`.
 
 The initial feature names are `base`, `nominalData`, `option`, `list`, `acyclicCalls`,
-`listFold`, `natFold`. The proposed `pure-data/0.2` profile contains all seven. `base` retains
+`listFold`, `natFold`. The implemented `pure-data/0.2` profile contains all seven. `base` retains
 the existing scalar/enumeration/Result fragment. Features are permissions; a permission
 for calls does not prove the call graph acyclic. Every feature's checker and semantics must
 be registered before admission. The [Lean design model](../formal/VSCoreGrammarModel.lean)
@@ -267,10 +296,20 @@ Evaluate the list/count expression first and the initial expression second, once
 The list traversal follows its original immutable spine, even if the accumulator contains
 lists. Nat iteration visits exactly `0 .. n-1`. Nested folds are allowed.
 
-An evaluator construction can use induction on checked helper rank, structural expression
-recursion and the list/Nat recursors. Each helper call descends in rank; each fold recursor
-descends on its finite spine/count. Establish totality for well-typed values explicitly.
-Host fuel or timeout is a verifier budget, not the semantic definition of a successful fold.
+The checker resolves nominal declarations and helpers in dependency order, rejecting a
+pass that makes no progress. It compiles accepted expressions into intrinsically typed Lean
+functions `Env Γ → Denote τ`. Helper calls invoke previously resolved functions; finite list
+and Nat folds use Lean's total recursors. Checker budgets are derived from the expression/type
+size. Execution does not use evaluator fuel or turn budget exhaustion into a source value.
+
+`evalEntry` first checks the program and decodes arguments against the compiled entry
+signature. Its boundary faults are `invalidProgram`, `unknownEntry` and `invalidArguments`.
+The latter covers incorrect arity and malformed values. Typed, successfully decoded arguments
+execute the total function and produce an encoded result. The normative module proves
+`evalCheckedEntry_sound`, `checkProgram_sound` and `evalEntry_deterministic`. The
+`checkProgram_source_sound` theorem additionally connects the compiled entry and encoded
+result back to its actual source declaration/result type; the structural value comparison
+module proves `valueEq_eq_true` and provides a lawful equality instance.
 
 `Result.error` is an ordinary typed source value. Parse failures, type errors, unknown
 entries, arity faults, unsupported capabilities and infrastructure failures are separate
@@ -279,15 +318,17 @@ does not establish wall-clock time, physical memory bounds or arithmetic bit com
 
 ## 6. Formal obligations and accepted-artifact authority
 
-The following are required proof targets for the new registered profile. They are not proved
-by this grammar proposal:
+The source gate proves `ExactCoreBytes` and `CheckedProgram` for each checked artifact.
+The normative library supplies progress/preservation for checker-produced entries and typed
+decoded arguments, plus determinism. `EntryRefinement` below remains a required future bridge
+proof; standalone source admission does not establish it.
 
 ```text
 ExactCoreBytes:
-  parseCore exactDeliveredBytes = ok rawProgram
+  VSCore2.parseSource exactDeliveredBytes = ok rawProgram
 
 CheckedProgram:
-  checkProgram acceptedRegistry profile rawProgram = ok checkedProgram
+  VSCore2.checkProgram suppliedEnumRegistry rawProgram = ok entrySignatures
 
 CheckerSound:
   Checked(P) ∧ TypedArguments(P, entry, args)
@@ -301,8 +342,11 @@ EntryRefinement:
     evalEntry(P, entry, encodeArgs(x)) = ok(encodeResult(reference(x)))
 ```
 
-The evaluator's Lean termination check and `CheckerSound` must cover folds and helper calls;
-an equation conditional on fuel being sufficient does not discharge totality.
+The intrinsic evaluator's Lean termination/type checks cover folds and helper calls.
+`checkProgram_compiled` derives existence of a compiled program from the successful checker
+equation. `CheckerSound` requires `ArgsTyped` for that exact checker-produced entry; arbitrary
+raw argument values remain outside this premise. These model results do not prove host
+execution, compiler correctness, physical resource bounds or a contract refinement.
 
 If the delivered artifact is surface text, add exact equations and frontend preservation:
 
@@ -319,9 +363,13 @@ alone cannot establish the original text's meaning.
 
 ### Conservative embedding of 0.1
 
-Define constructor-wise embeddings `embedTy`, `embedValue`, `embedExpr`, `embedProgram`.
-The embedded program has no nominal declarations or helpers and maps its old entries to new
-entries. Reuse its exact accepted enum registry. New version identifiers are explicit.
+The [transport module](../verislop/lean/VSCore2/Transport.lean) implements constructor-wise
+`embedTy`, `embedValue`, `embedExpr`, `embedEntry` and `embedProgram`. It proves type/value/
+expression erasure round trips and injectivity, and that embedded programs have no new
+nominal declarations or helpers. New version identifiers are explicit.
+
+These are **syntactic embedding laws**. The following typing/evaluator correspondence targets
+remain unproved; their statements must reuse the same enum registry:
 
 ```text
 Typed₁(Γ, e, τ) → Typed₂(map embedTy Γ, embedExpr(e), embedTy(τ))
@@ -356,16 +404,20 @@ Restricting the interface to a subset requires an explicit accepted boundary and
 semantics. Syntax does not enlarge the accepted contract DSL or create test oracles for opaque
 terms. Every exact accepted obligation still needs a mechanically derived transfer theorem.
 
-After Lean acceptance, reify `checkedProgram`, signatures, declarations, profile and feature
-requirements from the replayed Lean artifact into normalized implementation IR. Bind this
-IR to the exact source, decoder/checker/semantics/adapter identities, accepted contract root,
-proof environment and endpoint. Downstream agents receive that reconstructed artifact.
-Candidate AST/JSON and reviewer agreement supply no lifecycle milestone by themselves.
+The implemented source checker reifies `rawProgram`, signatures and the supplied enum
+profile from replayed Lean definitions; declarations and helpers are part of that accepted
+AST. It derives feature requirements from the complete reconstructed AST rather than a
+candidate feature list. The resulting normalized implementation IR binds its source hash and
+frozen source-check root. It does not reconstruct executable Lean closures or bind an accepted
+contract root, refinement theorem or obligation transfer. Those additional bindings belong to
+the future registered 0.2 bridge. Candidate AST/JSON and reviewer agreement supply no lifecycle
+milestone by themselves.
 
 ## 7. Concrete design checks
 
 The [ordering examples](../examples/vscore-grammar/ordering.vsc) give exact expected values.
-These additional examples expose errors a future checker or reviewer must reproduce:
+These additional examples expose errors the implemented frontend/checker and reviewers
+must reproduce:
 
 ```text
 // Syntax rejection: chained comparison has no production.
@@ -409,22 +461,31 @@ incorrect variant payload arities, missing branches and undecoded quoted IDs.
 A review rejection must identify exact bytes/AST nodes, the violated rule or exact accepted
 predicate, and a reproducible checker failure or input with expected/actual output. Speculation
 about a parser's reliability is not a counterexample. A bounded search without a counterexample
-does not prove the grammar, checker or semantics sound. These fixtures are design checks;
-they do not assign `TESTED` to a generated implementation.
+does not prove the grammar, checker or semantics sound. The finite frontend and kernel
+conformance tests check concrete rejection cases and expected evaluation results; they do not
+assign `TESTED` to a generated implementation or prove the Python frontend correct.
 
 ## 8. Implementation sequence and later profiles
 
-1. Freeze the 0.2 closed AST schema and feature/profile registry. Add exact Lean decoding,
-   negative fixtures and conservative 0.1 embedding proofs. Keep new capabilities disabled.
-2. Add records/variants/options/lists, static rules and a total evaluator. Prove progress,
-   preservation and determinism. First admit them internally with existing scalar entry
-   representations; aggregate entry ports require their additional registry/adapter proofs.
-3. Add helper resolution, supervisor-derived DAG checking and ranked evaluation; then add
-   finite list/Nat folds with the binding and iteration fixtures above. Prove the respective
-   soundness extensions before registering these features.
-4. Add the surface parser/elaborator and preservation theorems if `.vsc` is to be a certified
-   delivery format. Reconstruct IR from the accepted core artifact and run complete closure
-   builds under the new semantic identity. A VSCore campaign backend remains separate work.
+Implemented: closed 0.2 AST/schema; exact Lean canonical decoding; static checking of nominal
+and helper dependency DAGs; intrinsically typed records/variants/options/lists and finite folds;
+progress/preservation and determinism; Python surface authoring; accepted-AST reconstruction
+and two isolated source-check builds; syntactic 0.1 embedding round trips. Finite tests include
+malformed bytes, dead-branch recursion, binder order, declaration/branch order, arithmetic above
+`2^64` and structural equality of nested data.
+
+The next registered bridge milestone must:
+
+1. Bind exact accepted reference symbols and source entries, construct scalar/enumeration/
+   Result adapters, prove input coverage and extensional refinement, and derive/verify each
+   covered accepted obligation's transport statement.
+2. Prove the full 0.1 typing/evaluator embedding correspondence above. Aggregate contract
+   entry ports additionally need their accepted registry and representation/transport laws.
+3. Bind all contract, source, statement and environment identities into frozen bridge/closure
+   evidence. Register the new backend only after the full gate and rejection suite work;
+   source admission alone must not enable obligation milestones or `END_TO_END_VERIFIED`.
+4. Add exact surface parsing/elaboration and preservation proofs if `.vsc` is to become a
+   certified endpoint. A VSCore `TESTED` campaign backend remains separate work.
 
 Later profiles can extend the grammar through separately checked constructs: well-founded
 recursion with explicit measures; local state and loops with state/trace semantics, invariants
@@ -433,7 +494,8 @@ and fairness assumptions. Machine integers, allocation and cost primitives need 
 and resource semantics. A `while` syntax or a supplied invariant alone does not justify adding
 any of these features to `pure-data/0.2`.
 
-Tier 2 certifies the declared restricted-source semantics. Tier 3 still needs its lowering
+The registered Tier 2 bridge for `vscore/0.1` certifies its declared restricted-source
+semantics; standalone 0.2 admission supplies no implementation assurance tier. Tier 3 needs its lowering
 correspondence for every admitted constructor, call and fold; Tier 4 needs its machine and
 environment chain. The existing [Tiers 2–4 specification](tier-2-4.md) continues to govern those
 endpoints. Unsupported features or endpoints produce explicit capability failure throughout

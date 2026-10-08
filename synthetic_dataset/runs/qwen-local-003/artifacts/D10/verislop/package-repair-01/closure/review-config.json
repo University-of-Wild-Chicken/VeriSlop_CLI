@@ -1,0 +1,84 @@
+{
+  "agents": {
+    "author": {
+      "max_output_tokens": 8192,
+      "model_identity": {
+        "mode": "pinned",
+        "model_digest_sha256": "283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036",
+        "resolved_model": "aix-qwen3.8:27b-ud-q3_k_xl"
+      },
+      "model_ref": "aix-qwen3.8:27b-ud-q3_k_xl",
+      "provider": "local",
+      "tool_profile": "candidate_writer"
+    },
+    "critic": {
+      "max_output_tokens": 8192,
+      "model_identity": {
+        "mode": "pinned",
+        "model_digest_sha256": "283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036",
+        "resolved_model": "aix-qwen3.8:27b-ud-q3_k_xl"
+      },
+      "model_ref": "aix-qwen3.8:27b-ud-q3_k_xl",
+      "provider": "local",
+      "tool_profile": "review_readonly"
+    }
+  },
+  "bridge_tier": 0,
+  "endpoint": "test_campaign",
+  "providers": {
+    "local": {
+      "adapter": "ollama",
+      "api_family": "ollama_chat",
+      "concurrency": 1,
+      "endpoint_profile": "ollama-local",
+      "request_timeout_seconds": null
+    }
+  },
+  "release": {
+    "require_all_review_tiers": true,
+    "require_mechanical_pass": true,
+    "require_requested_bridge_tier": true
+  },
+  "review": {
+    "budgets": {
+      "max_calls_per_instance": 16,
+      "max_provider_retries": 0,
+      "max_repair_rounds": 2,
+      "max_total_tokens": 1000000,
+      "max_wall_seconds_per_tier": 0
+    },
+    "checkpoints": [
+      "formal_contract",
+      "release"
+    ],
+    "require_fixed_model_snapshot": true,
+    "restart_after_repair": "first_tier",
+    "review_tiers": [
+      {
+        "consensus": {
+          "blocking_findings_veto": true,
+          "max_abstentions": 0,
+          "max_soft_rejects": 0,
+          "mode": "unanimous",
+          "require_all_responses": true
+        },
+        "id": "R0",
+        "reviewers": [
+          {
+            "agent": "critic",
+            "count": 1,
+            "focus": "counterexamples"
+          }
+        ]
+      }
+    ]
+  },
+  "roles": {
+    "formalizer": "author",
+    "implementer": "author",
+    "interpreter": "author",
+    "prover": "author",
+    "repairer": "author"
+  },
+  "schema_version": "0.1"
+}

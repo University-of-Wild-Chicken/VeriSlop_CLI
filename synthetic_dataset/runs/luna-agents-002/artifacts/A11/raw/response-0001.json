@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_a11_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:04d51ad77787f2b0f4384113de00b70b8c5b365bb16d8e76850f17a58b223af6",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:f509372c8a162beb99c08d335315e4babc63fb7cff7645e5602b52022404b007",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    values = data[\\\"values\\\"]\\n    total = sum(values)\\n    best_difference = None\\n    best_indices = None\\n\\n    for mask in range(1 << len(values)):\\n        left_sum = 0\\n        indices = []\\n        for i, value in enumerate(values):\\n            if mask & (1 << i):\\n                left_sum += value\\n                indices.append(i)\\n        difference = abs(total - 2 * left_sum)\\n        if (best_difference is None or difference < best_difference or\\n                (difference == best_difference and indices < best_indices)):\\n            best_difference = difference\\n            best_indices = indices\\n\\n    return {\\\"difference\\\": best_difference, \\\"left_indices\\\": best_indices}\\n\"}}",
+  "transport": "collaboration"
+}

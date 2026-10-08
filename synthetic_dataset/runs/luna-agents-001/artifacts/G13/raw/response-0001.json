@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_controller/pair_0002/g13_raw_req0001_luna",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:996048d644bfff00e6ba2183a5db5ea3e2ff038c661d70e436b904475f7e853b",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:748cfe89b2d0d4e64cc244a05e58773f7a68e7d49aefc7d1050578df8f2f3a4f",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    n = data[\\\"n\\\"]\\n    edges = sorted({(u, v) for u, v in data[\\\"edges\\\"]})\\n    adjacency = [0] * n\\n\\n    for u, v in edges:\\n        adjacency[u] |= 1 << v\\n\\n    # Compute reachability and detect cycles, including self-loops.\\n    reach = adjacency[:]\\n    for k in range(n):\\n        bit_k = 1 << k\\n        for i in range(n):\\n            if reach[i] & bit_k:\\n                reach[i] |= reach[k]\\n\\n    if any(reach[i] & (1 << i) for i in range(n)):\\n        return None\\n\\n    reduced = []\\n    for u, v in edges:\\n        # An alternate path must begin with a neighbor other than v.\\n        if not any(w != v and (reach[w] & (1 << v))\\n                   for w in range(n) if adjacency[u] & (1 << w)):\\n            reduced.append([u, v])\\n\\n    return reduced\"}}",
+  "transport": "collaboration"
+}

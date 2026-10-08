@@ -266,7 +266,7 @@ class S06S07ExportIntegrity(unittest.TestCase):
 class S08Opaque(unittest.TestCase):
     def test_opaque_statement_gets_no_fabricated_oracle(self):
         o18 = json.loads(json.dumps(canonical.load_file(EX / "draft.json")["postconditions"][0]))
-        o18.update({"id": "O18", "statement": "A successful output, read as an integer, equals input + 1."})
+        o18.update({"id": "O18", "statement": "A successful output bitwise XOR one equals input plus one bitwise XOR one."})
 
         def edit_draft(d):
             d["postconditions"].append(o18)
@@ -276,15 +276,17 @@ class S08Opaque(unittest.TestCase):
             l["clauses"][2]["refs"] = ["O17", "O18"]
             return l
 
-        thm = ("\ntheorem success_as_int (limit input output : Nat) (h : increment limit input = .ok output) :\n"
-               "    (output : Int) = (input : Int) + 1 := by\n  sorry\n\nend VeriSlop.BoundedIncrement")
+        # Int is now an admitted data sort. XOR remains outside the executable DSL,
+        # so this fixture tests opaque theorem handling without changing target profiles.
+        thm = ("\ntheorem success_xor_one (limit input output : Nat) (h : increment limit input = .ok output) :\n"
+               "    Nat.xor output 1 = Nat.xor (input + 1) 1 := by\n  sorry\n\nend VeriSlop.BoundedIncrement")
         form = formalization_variant(TMP.path, "s08-form",
                                      lean_edit=lambda s: s.replace("\nend VeriSlop.BoundedIncrement", thm),
-                                     form_edit=lambda f: {**f, "bindings": f["bindings"] + [{"obligation": "O18", "theorem": "VeriSlop.BoundedIncrement.success_as_int"}]})
+                                     form_edit=lambda f: {**f, "bindings": f["bindings"] + [{"obligation": "O18", "theorem": "VeriSlop.BoundedIncrement.success_xor_one"}]})
         proof = TMP.path / "s08-proof.lean"
         proof.write_text(BOUNDED.replace("\ninductive ObligationKind where",
-                                         "\ntheorem success_as_int (limit input output : Nat) (h : increment limit input = .ok output) :\n"
-                                         "    (output : Int) = (input : Int) + 1 := by\n  have := success_is_successor limit input output h\n  omega\n"
+                                         "\ntheorem success_xor_one (limit input output : Nat) (h : increment limit input = .ok output) :\n"
+                                         "    Nat.xor output 1 = Nat.xor (input + 1) 1 := by\n  exact congrArg (fun n => Nat.xor n 1) (success_is_successor limit input output h)\n"
                                          "\ninductive ObligationKind where"))
         pkg = TMP.path / "s08"
         res = build(pkg, "verify", draft=json_variant(TMP.path, EX / "draft.json", "s08-draft.json", edit_draft),

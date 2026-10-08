@@ -1,0 +1,595 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "O1": {
+      "acceptance_criteria": [
+        "The return value is JSON-serializable.",
+        "If successful, the return value is a dictionary with key 'lines' mapping to a list of strings.",
+        "If failed, the return value is a dictionary with keys 'error' (string) and 'operation' (integer)."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bf67faba86c397dbe61c7c0d6e3abeb0a056662ee14e68420195a70ca4b91771",
+          "document_ref": "prompt.txt",
+          "end_byte": 836,
+          "interpretation": "Defines the two possible return structures.",
+          "origin": "explicit",
+          "start_byte": 731
+        },
+        {
+          "document_hash": "sha256:bf67faba86c397dbe61c7c0d6e3abeb0a056662ee14e68420195a70ca4b91771",
+          "document_ref": "prompt.txt",
+          "end_byte": 1109,
+          "interpretation": "Confirms the type constraint on the return value.",
+          "origin": "explicit",
+          "start_byte": 1036
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function solve(data) returns a JSON-serializable value that is either a success object {lines: [strings]} or an error object {error: string, operation: integer}."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "The 'operation' field in the error object corresponds to the index of the first operation that failed.",
+        "The return value does not contain a 'lines' key if an error occurs."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bf67faba86c397dbe61c7c0d6e3abeb0a056662ee14e68420195a70ca4b91771",
+          "document_ref": "prompt.txt",
+          "end_byte": 799,
+          "interpretation": "Specifies atomicity of the operation sequence.",
+          "origin": "explicit",
+          "start_byte": 731
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If any operation fails, the function returns the error object for the first failing operation and does not modify the output lines to reflect any subsequent operations or partial application of the failing operation."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "Boolean values for 'at' are treated as invalid (range error).",
+        "Negative integers are treated as invalid (range error).",
+        "Integers greater than current_length are treated as invalid (range error)."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bf67faba86c397dbe61c7c0d6e3abeb0a056662ee14e68420195a70ca4b91771",
+          "document_ref": "prompt.txt",
+          "end_byte": 496,
+          "interpretation": "Defines the range validation logic.",
+          "origin": "explicit",
+          "start_byte": 414
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each operation i, if the 'at' value is not an integer in the range [0, current_length] (inclusive), the function returns {error: 'range', operation: i}."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "A mismatch in any element of the remove sequence triggers a context error.",
+        "If len(remove) > current_length - at, a context error is triggered."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bf67faba86c397dbe61c7c0d6e3abeb0a056662ee14e68420195a70ca4b91771",
+          "document_ref": "prompt.txt",
+          "end_byte": 650,
+          "interpretation": "Defines the context validation logic.",
+          "origin": "explicit",
+          "start_byte": 497
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each operation i, if 'at' is valid, the function checks if the 'remove' sequence exactly matches the lines in the current array starting at index 'at'. If the 'remove' sequence is longer than the remaining lines or does not match, the function returns {error: 'context', operation: i}."
+    },
+    "O5": {
+      "acceptance_criteria": [
+        "The final lines reflect all operations in order.",
+        "An empty 'remove' sequence results in insertion at 'at'.",
+        "An 'at' equal to the current length results in appending the 'insert' sequence."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bf67faba86c397dbe61c7c0d6e3abeb0a056662ee14e68420195a70ca4b91771",
+          "document_ref": "prompt.txt",
+          "end_byte": 730,
+          "interpretation": "Defines the transformation logic for valid operations.",
+          "origin": "explicit",
+          "start_byte": 651
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If all operations are valid, the function returns {lines: [strings]} where the lines are the result of sequentially applying each operation: removing the 'remove' sequence at 'at' and inserting the 'insert' sequence at 'at'."
+    },
+    "O6": {
+      "acceptance_criteria": [
+        "The input 'data' dictionary's 'lines' list remains unchanged after the function call."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O6",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bf67faba86c397dbe61c7c0d6e3abeb0a056662ee14e68420195a70ca4b91771",
+          "document_ref": "prompt.txt",
+          "end_byte": 364,
+          "interpretation": "Requires isolation of state.",
+          "origin": "explicit",
+          "start_byte": 306
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function operates on a private copy of the input lines array, ensuring the original input data is not modified."
+    },
+    "O7": {
+      "acceptance_criteria": [
+        "Calling solve(data) multiple times with the same data yields the same result.",
+        "No file, network, or system calls are made."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O7",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:bf67faba86c397dbe61c7c0d6e3abeb0a056662ee14e68420195a70ca4b91771",
+          "document_ref": "prompt.txt",
+          "end_byte": 1035,
+          "interpretation": "Defines purity and dependency constraints.",
+          "origin": "explicit",
+          "start_byte": 911
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function is pure and deterministic, using only the Python standard library and no external I/O."
+    }
+  },
+  "roots": {
+    "interpretation_root": "sha256:14b842ecded783c1c578f3f610fc98bd7e9e6eb708934763893ec781b3ee8542"
+  },
+  "schema_version": "0.1"
+}

@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_g24_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:c17513d3e9c1f3d3f5964c462fa92c247ffe7173bd96e593fd8946e52b7240b0",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:abc153f1c6d122838ab349b3f7de7b48e9505b91d4d29d530d7c76e4aa1b75ea",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    flows = data[\\\"flows\\\"]\\n    deficits = [0] * len(flows)\\n    positions = [0] * len(flows)\\n    order = []\\n    rounds = 0\\n\\n    while any(positions[i] < len(flow[\\\"jobs\\\"]) for i, flow in enumerate(flows)):\\n        rounds += 1\\n        for i, flow in enumerate(flows):\\n            jobs = flow[\\\"jobs\\\"]\\n            if positions[i] >= len(jobs):\\n                deficits[i] = 0\\n                continue\\n            deficits[i] += flow[\\\"quantum\\\"]\\n            while positions[i] < len(jobs) and jobs[positions[i]] <= deficits[i]:\\n                order.append([i, positions[i]])\\n                deficits[i] -= jobs[positions[i]]\\n                positions[i] += 1\\n\\n    return {\\\"order\\\": order, \\\"rounds\\\": rounds}\\n\"}}",
+  "transport": "collaboration"
+}

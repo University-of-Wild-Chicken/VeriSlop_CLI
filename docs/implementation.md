@@ -205,6 +205,81 @@ For Tier 2, the complete builds and comparison slots are backend-specific: exact
 
 Verifier crashes or unavailable toolchains give `INFRASTRUCTURE_FAILURE` (exit 3), with earlier evidence preserved. `run` orchestrates every stage, always writes a report, records cancellation as an incomplete run (exit 130), and `resume` re-verifies the frozen roots before continuing.
 
+### Strict contract recovery
+
+An agent's rejected proposal is repair feedback. Interpretation repair carries the
+exact previous JSON, clause manifest and validator errors. Formalization repair
+carries the exact previous Lean source/binding proposal, actual obligation IDs and
+checker diagnostics. The frozen request and interpretation remain the requirements;
+repair cannot invent assumptions, remove obligations or lower the requested tier.
+For an agent-generated Python campaign, required guarantees that mention an
+implementation symbol must reify into the executable contract DSL before freezing.
+An opaque proposal receives its exact unsupported term and a bounded opportunity
+to express the same requirement faithfully in that DSL. Explicit candidates and
+standalone proof-only formalization retain opaque Lean support; no test oracle is
+fabricated for them.
+
+Python implementation agents receive the complete accepted semantic profile and
+hash-checked expression packages referenced by the reconstructed accepted IR,
+including actual IDs, dependencies and formal provenance. Rendered prose is
+commentary. Missing or mismatched packages stop dispatch before the model call.
+The binding manifest names the exact profile key separately from its Lean
+declaration and lists its argument sorts, arity and eligible obligation IDs.
+Generated Python proposals receive up to three bounded corrections for malformed
+JSON, invalid binding schemas, missing required symbols and structural linker
+errors. Correction includes the exact previous response and diagnostics. These
+checks inspect source without executing it or assigning milestones; a valid
+proposal still must pass materialization, linking, testing and release review.
+Infrastructure failures and altered accepted artifacts do not enter this loop.
+
+When an agent-generated frozen contract fails proof or acceptance, `run.py` and
+`recovery.py` can restart formalization in a new sibling package named
+`<original>-repair-NN`. Only the exact request, routing, interpretation and recorded
+attachments are copied and mechanically revalidated. No proof, acceptance, exported
+IR, implementation, test, review or closure evidence transfers. All downstream gates
+run again. The original failed package retains its own report and frozen artifacts.
+
+`recovery.json` links each round to immutable `recovery-lineage.json` and
+`recovery-context.json` artifacts. These bind the unchanged interpretation root,
+copied input hashes, retained parent artifact inventory and exact repair feedback.
+The command result names the active package separately from the original package.
+Resume validates the complete chain before following it and never resets consumed
+rounds. The default total restart budget comes from configured `max_repair_rounds`;
+`run` and `resume` accept an explicit `--repair-rounds 0..8` override.
+The selected bound lives in immutable `recovery-policy/decision-NNNN.json` files.
+An explicit resume override adds a linked decision; mutable journal metadata cannot
+raise that bound. Journals predating these policy bindings are blocked rather than
+treated as authorization to spend more rounds.
+
+Automatic restarts require agent generation. Explicit contract/proof candidates,
+input or claim mutation, unsupported required semantics/capabilities, unresolved
+interpretation, inadmissible axioms and infrastructure failures do not trigger
+contract rewriting. Advisory profile warnings do not veto correction of an actual
+contract defect. Formal-contract review can restart only after the complete
+consensus and registered receipts are rechecked and a current formal claim failure
+is independently confirmed. Speculation, malformed votes, unsupported semantic
+probes and interpretation omissions do not authorize contract rewriting.
+Exhausting the finite budget preserves a blocked result. Kernel,
+test and byte-binding checks retain their existing limits when model-generation
+deadlines are disabled.
+
+The 2026-10-07 local Qwen alignment control (`difference-v6`) completed the strict
+Tier 0 `test_campaign` workflow with no hand-authored candidate inputs and no
+model-generation deadline. Its first proposal used an opaque inline conditional;
+exact checker feedback elicited a supported second proposal before freezing.
+Lean proved all four guarantees, the reconstructed IR drove Python generation,
+each guarantee passed 32 effective cases, both required review checkpoints
+accepted independently replayed probes, and both clean builds passed. An external
+mathematical oracle also passed 144 cases, including inputs above `2^64`.
+The result is **TESTED assurance**, with no `END_TO_END_VERIFIED` claim.
+
+The combined alignment regression suite passed 107 tests, including real Lean
+recovery from an unprovable frozen reference to a fresh corrected package.
+Local artifacts, source hashes, native transcripts, earlier blocked controls and
+the final record are retained under `.verislop/alignment/native-qwen/`;
+`alignment-summary.json` indexes them. These functional controls do not alter the
+stopped synthetic benchmark scores or establish performance on general JSON tasks.
+
 ## 7. Providers and review
 
 - **Configuration and auth.** `providers/config.py` checks role, agent, provider and endpoint profile consistency, capability support and quorum arithmetic. `auth.py` stores secrets in the OS keyring (`secret-tool`), in env or secret-manager references, or in an explicit 0600 file store (`secret-manager:verislop-file/<id>`).
@@ -213,6 +288,8 @@ Verifier crashes or unavailable toolchains give `INFRASTRUCTURE_FAILURE` (exit 3
 - **Review coordinator** (`review.py`):
   - Builds a checkpoint-scoped packet and a `review_target_root`. The root covers the candidate root, evidence package, claims, redacted config, agent profiles, resolved models, prompt template and adapter version. Credentials and ballots are excluded.
   - Runs each tier's slots in parallel. Every ballot must construct concrete probes. `review_counterexamples.py` independently replays them; confirmed violations override a reported ACCEPT, and an unreproduced rejection or unresolved replay becomes ABSTAIN. Technical blocking findings require confirmation; required mechanical failures still veto.
+  - Corrects malformed ballot protocols in the same slot against the same packet, with the exact prior response and validator diagnostics. Three total protocol attempts are capped by the per-instance call budget and are independent of transport retries. Attempts are retained; provider/model identity failures do not enter protocol correction and a confirmed rejection is never retried away.
+  - Publishes closed probe templates and checkpoint-specific decision scope before the packet and in correction feedback. Formal-contract review covers current interpretation/formalization/type/proof claims; future Python artifacts belong to later stages. Valid abstentions remain unchanged. Python target probes receive exact tagged-value syntax and universal-binder arity/sorts from hash-checked accepted expression packages, with examples labelled as syntax rather than search evidence.
   - Escalates tier by tier; bounded repair (implementation/release checkpoints) restarts at the first tier with a new root.
   - Runs configured interpretation and implementation reviews in the Python one-command workflow as well as formal-contract and release reviews. Earlier checkpoint identities exclude future stage artifacts; implementation identity covers its accepted contract, exact source and link bindings, so creating a test campaign preserves an unchanged implementation vote.
   - Writes v0.2 ballots and immutable replay receipts. `review tally` and the release gate reconstruct searches from raw responses, validate exact input bindings, re-execute probes and derive the effective votes before counting them. Historical v0.1 ballots cannot satisfy this new policy.
@@ -225,7 +302,7 @@ For VSCore, `mechanical_status` records the current checked fact independently o
 - Only the bounded first-order fragment is reifiable. Universe-polymorphic statements remain outside the executable DSL; opaque accepted statements have no generated oracle or monitor. Non-toolchain imports (e.g. Mathlib) remain rejected.
 - The toolchain's own compiled data is trusted as pinned, not replayed. Its imported closure hashes `.olean` and all loaded module/private/IR sidecars. Candidate modules are always replayed from their full private data.
 - Bubblewrap confines reads and writes to the stage and explicitly mounted read-only runtimes/toolchain, with private PID/IPC/UTS namespaces, `/proc` and `/dev`, network isolation, rlimits and a scrubbed environment. It requires Linux, bubblewrap and usable namespaces, otherwise candidate execution fails closed. Cleanup never chmods candidate-created links; hostile directory permissions can instead cause a safe cleanup failure and leave a temporary stage for removal. Mounted runtime contents, bubblewrap and the kernel remain trusted; no seccomp filtering or aggregate cgroup limits are provided.
-- Provider adapters and agent prompt templates remain untested against live services and models. The opt-in probe enables a narrow inference check with user credentials; automated tests use loopback mocks. Meta Muse and Qwen/DashScope still require user-supplied endpoint profiles.
+- Remote provider adapters remain untested against real services. Local Ollama/Qwen has been exercised through actual strict-pipeline functional controls; these do not establish general model reliability or corpus performance. Automated provider regressions use loopback mocks. Meta Muse and Qwen/DashScope still require user-supplied endpoint profiles.
 - Author/reviewer separation and provider-diversity constraints are not configurable, because the configuration schema has no field for them. Review v0.2 requires every instance to construct a closed probe and uses a registered replay checker before deciding its effective vote. The current checker supports exact Python target cases, registered mechanical failures and structural request-span omissions; semantic natural-language fidelity and VSCore behavioral replay remain unsupported. See [the concrete-counterexample protocol](adversarial-counterexamples.md).
 - Review supports the initial ballot round only. Reconciliation rounds (`round > 1`, `supersedes_ballot_ref`) are recorded fields but not yet driven. Per-provider data policies beyond "only the packet is sent" are not configurable, because the configuration schema has no field for them.
 - Legacy Python coverage of scenario 17's clean-build-failure branch remains oriented around input mutation. Tier 2 separately exercises the build wall-time failure bound and rejects failed-build or missing-output observations in retained executions.

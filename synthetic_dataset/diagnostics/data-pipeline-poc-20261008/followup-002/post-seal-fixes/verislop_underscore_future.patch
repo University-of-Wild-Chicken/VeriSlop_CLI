@@ -1,0 +1,198 @@
+--- a/verislop/reify.py
++++ b/verislop/reify.py
+@@ -120,7 +120,7 @@
+ 
+ 
+ def derive_profile(profile_id: str, decls: dict[str, dict[str, Any]], decl_hashes: dict[str, str],
+-                   roots: set[str]) -> tuple[dict[str, Any], list[str]]:
++                   roots: set[str], *, explicit_declarations: set[str] | None = None) -> tuple[dict[str, Any], list[str]]:
+     """Register module declarations reachable from obligation statements and bound declarations.
+ 
+     Returns (profile JSON, notes). Auxiliary declarations that no statement reaches are not
+@@ -130,7 +130,34 @@
+ 
+     all_decls = decls
+     reach = closure(roots, decls)
+-    decls = {n: c for n, c in decls.items() if n in reach and not any(str(x).startswith("_") for x in n.split("."))}
++    # Names beginning with an underscore can be explicit public API declarations.
++    # Only exact names decoded from the checked obligation registry may override
++    # the auxiliary-name filter; a candidate proposal is never consulted here.
++    selected = {n for n in (explicit_declarations or set()) if n in reach
++                and not n.startswith("_private.")
++                and not any(str(x).startswith("_vs_") for x in n.split("."))}
++    pending = list(selected)
++    scanned = set()
++    from .exprjson import constants
++    while pending:
++        n = pending.pop()
++        if n in scanned:
++            continue
++        scanned.add(n)
++        c = all_decls[n]
++        # Carrier declarations are discovered from actual accepted type ASTs.
++        # Their constructors give the field types of nested records/enums.
++        related = {r for r in constants(c["type"]) if r in reach
++                   and all_decls[r].get("kind") == "inductive"}
++        if c.get("kind") == "inductive":
++            related |= {name_str(r) for r in c["inductive"]["ctors"]}
++        for r in related:
++            if (r in reach and r not in selected and not r.startswith("_private.")
++                    and not any(str(x).startswith("_vs_") for x in r.split("."))):
++                selected.add(r)
++                pending.append(r)
++    decls = {n: c for n, c in decls.items() if n in reach and
++             (n in selected or not any(str(x).startswith("_") for x in n.split(".")))}
+     notes: list[str] = []
+     enums: dict[str, dict[str, Any]] = {}
+     enum_decl: dict[str, str] = {}
+--- a/verislop/contract.py
++++ b/verislop/contract.py
+@@ -512,7 +512,9 @@
+         for n in bnames.get(r["id"], []):
+             roots.add(n)
+             roots |= constants(decls[n]["type"])
+-    profile_json, notes = reify.derive_profile(formalization["profile_id"], decls, env.hashes, roots)
++    explicit_declarations = {n for r in active for n in reg_by_id[r["id"]]["bindings"]}
++    profile_json, notes = reify.derive_profile(formalization["profile_id"], decls, env.hashes, roots,
++                                             explicit_declarations=explicit_declarations)
+     profile = dsl.Profile.from_json(profile_json)
+     profile_hash = canonical.digest_json(profile_json)
+     pred_owner = {}
+--- /dev/null
++++ b/tests/test_bound_underscore_declarations.py
+@@ -0,0 +1,135 @@
++"""Registry-bound underscore names survive accepted-AST profile reconstruction."""
++from __future__ import annotations
++
++import sys
++import unittest
++from pathlib import Path
++
++sys.path.insert(0, str(Path(__file__).resolve().parent))
++from helpers import TempDir
++from verislop import contract, dsl, leanbridge, policy, reify
++from verislop.exprjson import constants
++
++SOURCE = b'''import Std
++namespace _Domain
++inductive _Mode where
++  | _off
++  | _on
++structure _Row where
++  _field : Int
++  mode : _Mode
++structure _Input where
++  rows : List _Row
++private def hidden (x : Int) : Int := -x
++def _helper (x : Int) : Int := hidden x
++def _negate (x : Int) : Int := _helper x
++def solve (i : _Input) : List Int := i.rows.map fun r => r._field
++def _vs_internal (x : Int) : Int := x
++def _unused (x : Int) : Int := x + 7
++theorem negation_contract (x : Int) : _negate x = -x := rfl
++theorem rows_contract (i : _Input) : solve i = i.rows.map (fun r => r._field) := rfl
++theorem helper_contract (x : Int) : _helper x = -x := rfl
++theorem internal_contract (x : Int) : _vs_internal x = x := rfl
++end _Domain
++namespace Ordinary
++structure Row where
++  _field : Int
++def solve (r : Row) : Int := r._field
++theorem field_contract (r : Row) : solve r = r._field := rfl
++end Ordinary
++'''
++
++
++class BoundUnderscoreDeclarationsTests(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):
++        cls.tmp = TempDir()
++        cls.tc = leanbridge.resolve_toolchain()
++        cls.compiled = leanbridge.compile_module(cls.tc, SOURCE, cls.tmp.path / "underscore")
++        if not cls.compiled.ok or cls.compiled.sorry_positions:
++            raise AssertionError((cls.compiled.errors, cls.compiled.sorry_positions))
++        exported = leanbridge.run_kernel_tool(cls.tc, cls.compiled.olean, {"export": True, "axioms": True})
++        cls.env = contract.Env.from_export(exported, policy.get("strict"), "underscore regression")
++        if cls.env.diagnostics:
++            raise AssertionError(cls.env.diagnostics)
++        cls.explicit = {"_Domain._negate", "_Domain._Input", "_Domain.solve", "Ordinary.Row", "Ordinary.solve"}
++        cls.theorems = {"_Domain.negation_contract", "_Domain.rows_contract", "Ordinary.field_contract"}
++        cls.roots = cls.explicit | cls.theorems
++        for name in tuple(cls.roots):
++            cls.roots |= constants(cls.env.decls[name]["type"])
++        cls.raw, cls.notes = reify.derive_profile("underscore.v0_2", cls.env.decls, cls.env.hashes, cls.roots,
++                                                explicit_declarations=cls.explicit)
++        cls.profile = dsl.Profile.from_json(cls.raw)
++
++    @classmethod
++    def tearDownClass(cls):
++        cls.tmp.cleanup()
++
++    def test_bound_functions_namespaces_and_nested_carrier_names_are_preserved(self):
++        self.assertEqual({"_negate", "_Domain.solve", "Ordinary.solve"}, set(self.profile.symbols))
++        self.assertEqual({"_Input", "_Row", "Row"}, set(self.profile.records))
++        self.assertEqual({"_Mode"}, set(self.profile.enums))
++        self.assertEqual(["_off", "_on"], self.profile.enums["_Mode"]["constructors"])
++        self.assertEqual("_field", self.profile.records["_Row"]["fields"][0]["name"])
++        for record in self.profile.records.values():
++            self.assertEqual(self.env.hashes[record["lean_decl"]], record["decl_hash"])
++            self.assertEqual(self.env.hashes[record["lean_constructor"]], record["constructor_hash"])
++            for field in record["fields"]:
++                self.assertEqual(self.env.hashes[field["lean_projection"]], field["projection_hash"])
++        for symbol in self.profile.symbols.values():
++            self.assertEqual(self.env.hashes[symbol["lean_decl"]], symbol["decl_hash"])
++
++    def test_actual_theorem_types_reify_and_pass_kernel_denotation_checks(self):
++        requests = []
++        for name in sorted(self.theorems):
++            row = self.env.decls[name]
++            formula, why, _ = reify.reify_formula(row["type"], self.profile, self.env.decls)
++            self.assertIsNotNone(formula, (name, why))
++            package = dsl.make_package(formula, self.profile.profile_id, encoding=self.profile.encoding)
++            self.assertTrue(dsl.round_trip_ok(package, self.profile))
++            requests.append({"id": name, "theorem": row["name"],
++                             "expr": reify.denote_formula(formula, self.profile)})
++        results = leanbridge.run_kernel_tool(self.tc, self.compiled.olean, {"defeq": requests})["defeq"]
++        self.assertEqual(3, len(results))
++        for result in results:
++            self.assertEqual({"ok": True, "typechecks": True, "defeq": True}, result["result"], result)
++
++    def test_unbound_helpers_stay_excluded_even_as_direct_theorem_type_roots(self):
++        name = "_Domain.helper_contract"
++        roots = self.roots | {name} | constants(self.env.decls[name]["type"])
++        raw, _ = reify.derive_profile("underscore.v0_2", self.env.decls, self.env.hashes, roots,
++                                     explicit_declarations=self.explicit)
++        self.assertNotIn("_helper", raw["symbols"])
++        formula, why, _ = reify.reify_formula(self.env.decls[name]["type"], dsl.Profile.from_json(raw), self.env.decls)
++        self.assertIsNone(formula)
++        self.assertIn("not registered", why)
++
++    def test_private_and_reserved_internal_definitions_are_not_implementation_symbols(self):
++        private_names = {name for name in self.env.decls if name.startswith("_private.") and name.endswith(".hidden")}
++        self.assertTrue(private_names)
++        internal_names = {"_Domain._vs_internal"}
++        names = private_names | internal_names
++        raw, _ = reify.derive_profile("underscore.v0_2", self.env.decls, self.env.hashes, self.roots | names,
++                                     explicit_declarations=self.explicit | names)
++        self.assertFalse({symbol["lean_decl"] for symbol in raw["symbols"].values()} & names)
++
++    def test_default_keeps_legacy_auxiliary_exclusion_and_ordinary_underscore_fields(self):
++        raw, _ = reify.derive_profile("underscore.v0_2", self.env.decls, self.env.hashes, self.roots)
++        self.assertNotIn("_negate", raw["symbols"])
++        self.assertNotIn("_Input", raw.get("records", {}))
++        self.assertEqual("_field", raw["records"]["Row"]["fields"][0]["name"])
++        formula, why, _ = reify.reify_formula(self.env.decls["_Domain.negation_contract"]["type"],
++                                             dsl.Profile.from_json(raw), self.env.decls)
++        self.assertIsNone(formula)
++        self.assertIn("not registered", why)
++
++    def test_unreachable_or_absent_names_do_not_invent_profile_entries(self):
++        raw, _ = reify.derive_profile("underscore.v0_2", self.env.decls, self.env.hashes, self.roots,
++                                     explicit_declarations=self.explicit | {"_Domain._unused", "_Domain._absent"})
++        self.assertNotIn("_unused", raw["symbols"])
++        self.assertNotIn("_absent", raw["symbols"])
++        self.assertEqual(self.raw, raw)
++
++
++if __name__ == "__main__":
++    unittest.main()

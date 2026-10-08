@@ -1,0 +1,148 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:cad0b07577666fb666ddfce8d68bb5ce336daaa77ce189871505a69721a35469",
+  "created_at": "2026-10-08T07:20:37Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-02",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/artifacts/G23/verislop/package-repair-02/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/artifacts/G23/verislop/package-repair-02/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/luna-agents-002/artifacts/G23/verislop/package-repair-02/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 187:0: failed to synthesize 'Inhabited' or 'Nonempty' instance for\n  Input → Output\n\nIf this type is defined using the 'structure' or 'inductive' command, you can try adding a 'deriving Nonempty' clause to it.",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:09328da51f86c31085be96e9590b1e8adecf838b49bbf9c3da5219af33db5c04",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "VeriSlop.solve"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "obligation": "A1",
+              "predicate": "VeriSlop.A1"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlop.O1"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlop.O2"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "VeriSlop.O4"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "VeriSlop.O5"
+            },
+            {
+              "obligation": "O7",
+              "theorem": "VeriSlop.O7"
+            },
+            {
+              "obligation": "O8",
+              "theorem": "VeriSlop.O8"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "VeriSlop.O3"
+            },
+            {
+              "obligation": "O6",
+              "theorem": "VeriSlop.O6"
+            }
+          ],
+          "internal_obligations": [
+            {
+              "description": "Requires an input satisfying the frozen structure and value constraints; JSON objects and request collections are outside the executable profile, so this faithful domain remains opaque.",
+              "id": "A1_nonvacuity",
+              "kind": "non_vacuity",
+              "theorem": "VeriSlop.A1_nonvacuous",
+              "witnesses_for": [
+                "A1"
+              ]
+            }
+          ],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "verislop.prompts-0.2.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace VeriSlop\n\n/-- Faithful JSON input domain; JSON values and request collections are outside the executable profile. -/\nopaque Input : Type\n/-- Faithful JSON output domain; JSON objects and collections are outside the executable profile. -/\nopaque Output : Type\n\n/-- Required pure solver declaration, with its faithful collection semantics outside the executable profile. -/\nopaque solve : Input → Output\n\n/-- Inputs conform to the specified fields, types, and value constraints. -/\nopaque A1 : Input → Prop\nopaque outputStructureAndOrdering : Input → Output → Prop\nopaque acceptanceCorrect : Input → Output → Prop\nopaque scaledBalancesCorrect : Input → Output → Prop\nopaque failedRequestRetainsRefilled : Input → Output → Prop\nopaque jsonSerializable : Output → Prop\nopaque publicExamplesMatch : Prop\nopaque exactScaledInvariant : Input → Output → Prop\nopaque pythonStandardLibraryAndNoIO : Prop\n\ntheorem O1 (x : Input) (h : A1 x) : outputStructureAndOrdering x (solve x) := by sorry\ntheorem O2 (x : Input) (h : A1 x) : acceptanceCorrect x (solve x) := by sorry\ntheorem O4 (x : Input) (h : A1 x) : scaledBalancesCorrect x (solve x) := by sorry\ntheorem O5 (x : Input) (h : A1 x) : failedRequestRetainsRefilled x (solve x) := by sorry\ntheorem O7 (x : Input) : jsonSerializable (solve x) := by sorry\ntheorem O8 : publicExamplesMatch := by sorry\ntheorem O3 (x : Input) (h : A1 x) : exactScaledInvariant x (solve x) := by sorry\ntheorem O6 : pythonStandardLibraryAndNoIO := by sorry\n\ntheorem A1_nonvacuous : ∃ x : Input, A1 x := by sorry\n\nend VeriSlop"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261007,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "KERNEL_REJECTION"
+      ],
+      "seconds": 452,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

@@ -1,0 +1,14 @@
+{
+  "agent": "author",
+  "format": "verislop.collaboration-request/0.1",
+  "instance": "raw/1",
+  "max_response_bytes": 1048576,
+  "output_token_limit_enforced": false,
+  "purpose": "raw-coding",
+  "request_id": "0001",
+  "requested_max_output_tokens": 8192,
+  "requested_model": "gpt-6-luna",
+  "system": "You are a software engineering coding agent. Implement the entire requested task in Python 3. Return only one JSON object {\"files\":{\"solution.py\":\"<complete source>\"}}. Do not return explanations, tests or placeholders. Define solve(data) exactly as requested.",
+  "transport": "collaboration",
+  "user": "Software engineering task G05: Bridge detection in an undirected multigraph\n\nImplement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {n,edges}, n=0..10; undirected edges [u,v] may be repeated or self-loops. The edge ID is its zero-based position in the input. Return sorted edge IDs whose individual removal increases the number of connected components of the entire graph. Count isolated vertices. Parallel edges are distinct, and self-loops are never bridges.\n\nImplement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.\n\nPublic examples (additional held-out cases will be scored):\n[{\"input\": {\"edges\": [[0, 1], [0, 1], [1, 2], [2, 2]], \"n\": 4}, \"output\": [2]}, {\"input\": {\"edges\": [], \"n\": 3}, \"output\": []}]\n"
+}

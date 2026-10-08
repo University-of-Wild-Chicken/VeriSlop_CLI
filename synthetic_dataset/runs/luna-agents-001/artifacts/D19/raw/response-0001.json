@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_controller/d19_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:3c0a53fda879ac5a86f8f1bf0ebcd025be8c07bd791353d85de2ac6fc0de2e85",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:4fb02c7d3fadcbd1c3ddc89e05384d67106e946a2effdb2c630ddcc40755a237",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    key_name = data[\\\"key\\\"]\\n    left_rows = data[\\\"left\\\"]\\n    right_rows = data[\\\"right\\\"]\\n    mode = data[\\\"mode\\\"]\\n\\n    def freeze(value):\\n        if value is None:\\n            return (\\\"null\\\",)\\n        if isinstance(value, bool):\\n            return (\\\"bool\\\", value)\\n        if isinstance(value, (int, float)):\\n            return (\\\"number\\\", value)\\n        if isinstance(value, str):\\n            return (\\\"string\\\", value)\\n        if isinstance(value, list):\\n            return (\\\"array\\\", tuple(freeze(item) for item in value))\\n        if isinstance(value, dict):\\n            return (\\\"object\\\", frozenset((name, freeze(item)) for name, item in value.items()))\\n        raise TypeError(\\\"Unsupported JSON value\\\")\\n\\n    right_by_key = {}\\n    for index, row in enumerate(right_rows):\\n        value = row.get(key_name)\\n        if value is not None:\\n            right_by_key.setdefault(freeze(value), []).append(index)\\n\\n    matched_right = [False] * len(right_rows)\\n    result = []\\n\\n    for left_row in left_rows:\\n        value = left_row.get(key_name)\\n        matches = right_by_key.get(freeze(value), []) if value is not None else []\\n        if matches:\\n            for index in matches:\\n                matched_right[index] = True\\n                result.append({\\\"left\\\": left_row, \\\"right\\\": right_rows[index]})\\n        elif mode in (\\\"left\\\", \\\"full\\\"):\\n            result.append({\\\"left\\\": left_row, \\\"right\\\": None})\\n\\n    if mode == \\\"full\\\":\\n        for index, right_row in enumerate(right_rows):\\n            if not matched_right[index]:\\n                result.append({\\\"left\\\": None, \\\"right\\\": right_row})\\n\\n    return result\\n\"}}",
+  "transport": "collaboration"
+}

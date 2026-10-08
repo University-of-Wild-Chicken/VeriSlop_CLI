@@ -1,0 +1,476 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "G1": {
+      "acceptance_criteria": [
+        "The first event for a key establishes its state",
+        "A later event replaces the state only when its revision is greater",
+        "An equal or lower revision event is ignored regardless of operation"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "G1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all input events, grouped by key"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 348,
+          "interpretation": "Requires sequential processing in the supplied order.",
+          "origin": "explicit",
+          "start_byte": 325
+        },
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 386,
+          "interpretation": "Defines the initial state for each key.",
+          "origin": "explicit",
+          "start_byte": 349
+        },
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 450,
+          "interpretation": "Defines the replacement condition.",
+          "origin": "explicit",
+          "start_byte": 387
+        },
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 520,
+          "interpretation": "Defines ignored events regardless of operation.",
+          "origin": "explicit",
+          "start_byte": 451
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Process events in input order. The first event for each key establishes its state; a later event replaces that state only when its revision is strictly greater. Equal or lower revision events are ignored, even if the operation differs."
+    },
+    "G2": {
+      "acceptance_criteria": [
+        "A winning delete appears in tombstones with its revision",
+        "A later put with an equal or lower revision is ignored and does not produce an item"
+      ],
+      "dependencies": [
+        {
+          "id": "G1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "G2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "keys whose current operation is delete"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 587,
+          "interpretation": "Requires retaining delete revisions and applying the revision rule to later puts.",
+          "origin": "explicit",
+          "start_byte": 521
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "A winning delete retains its revision as a tombstone, preventing stale puts from resurrecting the key."
+    },
+    "G3": {
+      "acceptance_criteria": [
+        "The result has the specified items, tombstones, and ignored structure",
+        "Items and tombstones are each sorted by key",
+        "Ignored indices are in ascending input order",
+        "Put values are preserved, including null"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "G1",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "G2",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "G3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "returned value"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 762,
+          "interpretation": "Specifies result contents and ordering.",
+          "origin": "explicit",
+          "start_byte": 588
+        },
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 1651,
+          "interpretation": "Examples confirm stale-event ignoring, preservation of a null value, and ignoring an equal-revision event with a different operation.",
+          "origin": "explicit",
+          "start_byte": 1087
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Return an object with items, tombstones, and ignored arrays. Each current put state yields an item containing key, revision, and value; each current delete state yields a tombstone containing key and revision; ignored contains the original indices of ignored events. Sort items and tombstones independently by key and ignored indices in ascending input order."
+    },
+    "G4": {
+      "acceptance_criteria": [
+        "The result depends only on the input value",
+        "The function uses only the standard library",
+        "The function performs no external I/O"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "G4",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve(data)"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 227,
+          "interpretation": "Constrains dependencies and side effects.",
+          "origin": "explicit",
+          "start_byte": 177
+        },
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 897,
+          "interpretation": "Requires purity and deterministic behavior.",
+          "origin": "explicit",
+          "start_byte": 821
+        },
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 945,
+          "interpretation": "Repeats the implementation constraints.",
+          "origin": "explicit",
+          "start_byte": 898
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function is pure and deterministic, uses only the Python standard library, and performs no external I/O."
+    },
+    "N1": {
+      "acceptance_criteria": [
+        "The reducer does not compact its state",
+        "Revision values are compared without arithmetic"
+      ],
+      "dependencies": [],
+      "id": "N1",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "reducer behavior"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:df7c1a9f4909147335d4b9a522f0c6f50395920538e95c17758abafee2e257cb",
+          "document_ref": "prompt.txt",
+          "end_byte": 819,
+          "interpretation": "Explicitly excludes compaction and revision arithmetic.",
+          "origin": "explicit",
+          "start_byte": 782
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Do not perform compaction or revision arithmetic."
+    }
+  },
+  "roots": {
+    "interpretation_root": "sha256:ac44a10b57024e487491576db985d17b938d63fdcb137b13cb5cc5477320766d"
+  },
+  "schema_version": "0.1"
+}

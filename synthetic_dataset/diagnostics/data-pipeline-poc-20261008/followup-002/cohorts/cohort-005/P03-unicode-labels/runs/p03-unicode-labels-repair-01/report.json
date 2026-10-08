@@ -1,0 +1,890 @@
+{
+  "artifact_kind": "run_report",
+  "artifacts": {
+    "certificate": "accepted/acceptance.json",
+    "evidence": "evidence/",
+    "obligation_view": "obligation-view.json",
+    "report": "report.json"
+  },
+  "axioms": {
+    "I1": [],
+    "O1": [],
+    "O2": [],
+    "O3": [],
+    "O4": [],
+    "O5": []
+  },
+  "blocking_reasons": [
+    {
+      "claims": [],
+      "code": "VERIFIER_NOT_RUN",
+      "message": "no accepted IR; run `verislop export` first",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "VERIFIER_NOT_RUN",
+      "message": "the implementation phase has not started (no frozen implementation claims)",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "PROVED:O1@1"
+      ],
+      "code": "PROOF_UNRESOLVED",
+      "message": "PROVED:O1@1: FAIL — blocked: PROOF_UNRESOLVED",
+      "obligations": [
+        "O1"
+      ],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "CLOSURE:endpoint"
+      ],
+      "code": "ORPHAN_CLAIM",
+      "message": "required finalization claim CLOSURE:endpoint is absent or invalid",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "CLOSURE:provenance"
+      ],
+      "code": "ORPHAN_CLAIM",
+      "message": "required finalization claim CLOSURE:provenance is absent or invalid",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "CLOSURE:determinism"
+      ],
+      "code": "ORPHAN_CLAIM",
+      "message": "required finalization claim CLOSURE:determinism is absent or invalid",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [
+        "CLOSURE:clean-builds"
+      ],
+      "code": "ORPHAN_CLAIM",
+      "message": "required finalization claim CLOSURE:clean-builds is absent or invalid",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "REVIEW_NOT_RUN",
+      "message": "review checkpoint formal_contract is configured as a release gate but has not run",
+      "obligations": [],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "REVIEW_NOT_RUN",
+      "message": "review checkpoint release is configured as a release gate but has not run",
+      "obligations": [],
+      "severity": "blocking"
+    }
+  ],
+  "bridge_preparations": [],
+  "builds": [],
+  "counts": {
+    "milestones": {
+      "END_TO_END_VERIFIED": {
+        "NOT_APPLICABLE": 5,
+        "PENDING": 6
+      },
+      "FORMALIZED": {
+        "PASS": 11
+      },
+      "IMPLEMENTED": {
+        "NOT_APPLICABLE": 2,
+        "PENDING": 9
+      },
+      "INTERPRETED": {
+        "PASS": 11
+      },
+      "LINKED": {
+        "NOT_APPLICABLE": 2,
+        "PENDING": 9
+      },
+      "PROVED": {
+        "FAIL": 1,
+        "NOT_APPLICABLE": 5,
+        "PASS": 5
+      },
+      "TESTED": {
+        "NOT_APPLICABLE": 5,
+        "PENDING": 6
+      },
+      "TYPECHECKED": {
+        "PASS": 11
+      }
+    },
+    "obligations": 11,
+    "required_obligations": 11
+  },
+  "determinism": {
+    "compared": [],
+    "excluded_nondeterministic_fields": [
+      "recorded_at",
+      "time",
+      "wall_ms",
+      "frozen_at",
+      "staged candidate module path"
+    ],
+    "mismatches": []
+  },
+  "endpoint": {
+    "end_to_end_eligible": false,
+    "established": null,
+    "requested": "test_campaign",
+    "statement": "No END_TO_END_VERIFIED claim: Tiers 0 and 1 are ineligible; the endpoint is the recorded test campaign or monitored runtime."
+  },
+  "generated_by": {
+    "verifier": "verislop.closure",
+    "verifier_hash": "sha256:c5609bc8712a86a2e0cab57feef269e929c121bcc6e0b7cd04c7329b21f76b2d",
+    "verislop_version": "0.1.0"
+  },
+  "hypotheses": {
+    "I1": [],
+    "O1": [],
+    "O2": [],
+    "O3": [],
+    "O4": [],
+    "O5": []
+  },
+  "infrastructure_errors": [],
+  "mappings": [],
+  "obligations": {
+    "A1": {
+      "blocking": [],
+      "end_to_end": "NOT_APPLICABLE: assumption is supplied by caller and discharged at function invocation, by the caller providing a prefix that may be an empty string",
+      "implementation_assurance": "no implementation claim (assumption is supplied by caller and discharged at function invocation, by the caller providing a prefix that may be an empty string)",
+      "kind": "precondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "assumption: no proposition proved (an assumption is a hypothesis; it is not proved by the theorems that use it)",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED"
+      ],
+      "revision": 1,
+      "role": "assumption",
+      "state": "TYPECHECKED",
+      "weakest_required_bridge": "none"
+    },
+    "D1": {
+      "blocking": [],
+      "end_to_end": "NOT_APPLICABLE: declarations carry no end-to-end correctness claim",
+      "implementation_assurance": "IMPLEMENTED PENDING, LINKED PENDING, TESTED NOT_APPLICABLE",
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PENDING",
+        "INTERPRETED": "PASS",
+        "LINKED": "PENDING",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "declaration: no proposition proved (a declaration carries no proposition to prove)",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED"
+      ],
+      "revision": 1,
+      "role": "declaration",
+      "state": "TYPECHECKED",
+      "weakest_required_bridge": "Tier 0 (None)"
+    },
+    "D2": {
+      "blocking": [],
+      "end_to_end": "NOT_APPLICABLE: declarations carry no end-to-end correctness claim",
+      "implementation_assurance": "IMPLEMENTED PENDING, LINKED PENDING, TESTED NOT_APPLICABLE",
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PENDING",
+        "INTERPRETED": "PASS",
+        "LINKED": "PENDING",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "declaration: no proposition proved (a declaration carries no proposition to prove)",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED"
+      ],
+      "revision": 1,
+      "role": "declaration",
+      "state": "TYPECHECKED",
+      "weakest_required_bridge": "Tier 0 (None)"
+    },
+    "D3": {
+      "blocking": [],
+      "end_to_end": "NOT_APPLICABLE: declarations carry no end-to-end correctness claim",
+      "implementation_assurance": "IMPLEMENTED PENDING, LINKED PENDING, TESTED NOT_APPLICABLE",
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PENDING",
+        "INTERPRETED": "PASS",
+        "LINKED": "PENDING",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "declaration: no proposition proved (a declaration carries no proposition to prove)",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED"
+      ],
+      "revision": 1,
+      "role": "declaration",
+      "state": "TYPECHECKED",
+      "weakest_required_bridge": "Tier 0 (None)"
+    },
+    "I1": {
+      "blocking": [],
+      "end_to_end": "PENDING: no frozen claim authorizes evidence for this milestone",
+      "implementation_assurance": "IMPLEMENTED PENDING, LINKED PENDING, TESTED PENDING",
+      "kind": "invariant",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PENDING",
+        "INTERPRETED": "PASS",
+        "LINKED": "PENDING",
+        "PROVED": "PASS",
+        "TESTED": "PENDING",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "PROVED PASS: Lean reference-model theorem ? (axioms: none; hypotheses: none); proves the model, not the implementation",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED",
+        "PROVED"
+      ],
+      "revision": 1,
+      "role": "guarantee",
+      "state": "PROVED",
+      "weakest_required_bridge": "Tier 0 (None)"
+    },
+    "N1": {
+      "blocking": [],
+      "end_to_end": "NOT_APPLICABLE: an explicit exclusion is retained as metadata and prohibits stronger claims",
+      "implementation_assurance": "no implementation claim (an explicit exclusion is retained as metadata and prohibits stronger claims)",
+      "kind": "explicit_non_goal",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "exclusion: no proposition proved (an explicit exclusion is retained as metadata and prohibits stronger claims)",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED"
+      ],
+      "revision": 1,
+      "role": "exclusion",
+      "state": "TYPECHECKED",
+      "weakest_required_bridge": "none"
+    },
+    "O1": {
+      "blocking": [
+        "PROOF_UNRESOLVED"
+      ],
+      "end_to_end": "PENDING: no frozen claim authorizes evidence for this milestone",
+      "implementation_assurance": "IMPLEMENTED PENDING, LINKED PENDING, TESTED PENDING",
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PENDING",
+        "INTERPRETED": "PASS",
+        "LINKED": "PENDING",
+        "PROVED": "FAIL",
+        "TESTED": "PENDING",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "PROVED FAIL: Lean reference-model theorem ? (axioms: none; hypotheses: none); proves the model, not the implementation",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED",
+        "PROVED"
+      ],
+      "revision": 1,
+      "role": "guarantee",
+      "state": "TYPECHECKED",
+      "weakest_required_bridge": "Tier 0 (None)"
+    },
+    "O2": {
+      "blocking": [],
+      "end_to_end": "PENDING: no frozen claim authorizes evidence for this milestone",
+      "implementation_assurance": "IMPLEMENTED PENDING, LINKED PENDING, TESTED PENDING",
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PENDING",
+        "INTERPRETED": "PASS",
+        "LINKED": "PENDING",
+        "PROVED": "PASS",
+        "TESTED": "PENDING",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "PROVED PASS: Lean reference-model theorem ? (axioms: none; hypotheses: none); proves the model, not the implementation",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED",
+        "PROVED"
+      ],
+      "revision": 1,
+      "role": "guarantee",
+      "state": "PROVED",
+      "weakest_required_bridge": "Tier 0 (None)"
+    },
+    "O3": {
+      "blocking": [],
+      "end_to_end": "PENDING: no frozen claim authorizes evidence for this milestone",
+      "implementation_assurance": "IMPLEMENTED PENDING, LINKED PENDING, TESTED PENDING",
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PENDING",
+        "INTERPRETED": "PASS",
+        "LINKED": "PENDING",
+        "PROVED": "PASS",
+        "TESTED": "PENDING",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "PROVED PASS: Lean reference-model theorem ? (axioms: none; hypotheses: none); proves the model, not the implementation",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED",
+        "PROVED"
+      ],
+      "revision": 1,
+      "role": "guarantee",
+      "state": "PROVED",
+      "weakest_required_bridge": "Tier 0 (None)"
+    },
+    "O4": {
+      "blocking": [],
+      "end_to_end": "PENDING: no frozen claim authorizes evidence for this milestone",
+      "implementation_assurance": "IMPLEMENTED PENDING, LINKED PENDING, TESTED PENDING",
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PENDING",
+        "INTERPRETED": "PASS",
+        "LINKED": "PENDING",
+        "PROVED": "PASS",
+        "TESTED": "PENDING",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "PROVED PASS: Lean reference-model theorem ? (axioms: none; hypotheses: none); proves the model, not the implementation",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED",
+        "PROVED"
+      ],
+      "revision": 1,
+      "role": "guarantee",
+      "state": "PROVED",
+      "weakest_required_bridge": "Tier 0 (None)"
+    },
+    "O5": {
+      "blocking": [],
+      "end_to_end": "PENDING: no frozen claim authorizes evidence for this milestone",
+      "implementation_assurance": "IMPLEMENTED PENDING, LINKED PENDING, TESTED PENDING",
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PENDING",
+        "INTERPRETED": "PASS",
+        "LINKED": "PENDING",
+        "PROVED": "PASS",
+        "TESTED": "PENDING",
+        "TYPECHECKED": "PASS"
+      },
+      "proof_boundary": "PROVED PASS: Lean reference-model theorem ? (axioms: none; hypotheses: none); proves the model, not the implementation",
+      "required": true,
+      "required_milestones": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED",
+        "PROVED"
+      ],
+      "revision": 1,
+      "role": "guarantee",
+      "state": "PROVED",
+      "weakest_required_bridge": "Tier 0 (None)"
+    }
+  },
+  "provenance": [
+    {
+      "claim_id": "INTERPRETED:D1@1",
+      "evidence": [
+        "evidence:ev-cb5756eac84007aa3a899153cb0606c9"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:D1@1",
+      "evidence": [
+        "evidence:ev-cb8427e7f1d15eb1459c0753f1363152"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:D1@1",
+      "evidence": [
+        "evidence:ev-b4f6c3fe9fd383c31ae24ae51e893566"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:D2@1",
+      "evidence": [
+        "evidence:ev-2f3c06bb8f3801399862a820c71a4649"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:D2@1",
+      "evidence": [
+        "evidence:ev-a5e765b6abdef9111ae8d5492197bcb0"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:D2@1",
+      "evidence": [
+        "evidence:ev-886e39e9460209882113ab8fb1b26b37"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:D3@1",
+      "evidence": [
+        "evidence:ev-cd2ef80373416b3321c5e182bb2cbf2c"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:D3@1",
+      "evidence": [
+        "evidence:ev-c18a125da8e758e18981d01f4e50bf9e"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:D3@1",
+      "evidence": [
+        "evidence:ev-bb21f52aec798ef473a2e46b7a0e5d12"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:A1@1",
+      "evidence": [
+        "evidence:ev-681f543552b80c9e876ba715698f9415"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:A1@1",
+      "evidence": [
+        "evidence:ev-138da803ad29b3d544207830d5a271f9"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:A1@1",
+      "evidence": [
+        "evidence:ev-1bdc9ebeb202ae6ea76f337a0a0bebf0"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:O1@1",
+      "evidence": [
+        "evidence:ev-d1dd93eab432518852b28917d8385e3c"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:O1@1",
+      "evidence": [
+        "evidence:ev-c7c88fb7998436c67fd6852e21c85f3f"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:O1@1",
+      "evidence": [
+        "evidence:ev-d7810d5e6c231bd867d38872244d9859"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "PROVED:O1@1",
+      "evidence": [
+        "evidence:ev-9124ee9a33c0a04217ec18b653a044f6"
+      ],
+      "outcome": "FAIL",
+      "reason": "blocked: PROOF_UNRESOLVED",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:O2@1",
+      "evidence": [
+        "evidence:ev-ca2ec5c67ac78694666c3e9bd06b8b3c"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:O2@1",
+      "evidence": [
+        "evidence:ev-9eb4f5754296cd8dfa5290a0aeb6797b"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:O2@1",
+      "evidence": [
+        "evidence:ev-1108309e30d5d25e5ef5dea6f8e9757c"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "PROVED:O2@1",
+      "evidence": [
+        "evidence:ev-a28dd958d6dc7fb3599b4843d38cf51f"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:O3@1",
+      "evidence": [
+        "evidence:ev-9d6b23ec0378233e449cdf59a6843a47"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:O3@1",
+      "evidence": [
+        "evidence:ev-c9e7ee42d81a1d936489a180abf45e1a"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:O3@1",
+      "evidence": [
+        "evidence:ev-5c2957642d5194bdb76f04105615ede9"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "PROVED:O3@1",
+      "evidence": [
+        "evidence:ev-6e9bbb24f10f6b44a4afe174aec6a0e3"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:O4@1",
+      "evidence": [
+        "evidence:ev-db315ead657b76605eba14936d4e4b8a"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:O4@1",
+      "evidence": [
+        "evidence:ev-5b980ca720128ab216a84fb2f70d0498"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:O4@1",
+      "evidence": [
+        "evidence:ev-10b2a06dc2944334ccd30d5c8aaec1d9"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "PROVED:O4@1",
+      "evidence": [
+        "evidence:ev-c19d362e30a78f7d0e0af224557453ac"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:O5@1",
+      "evidence": [
+        "evidence:ev-b07c3e8acae129b70b3c6f907fa169fd"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:O5@1",
+      "evidence": [
+        "evidence:ev-19191887381466ed7a8fa2ed60ee777a"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:O5@1",
+      "evidence": [
+        "evidence:ev-77dc1206dcb4b4dd45f8cb17ad177b79"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "PROVED:O5@1",
+      "evidence": [
+        "evidence:ev-82339d290d184b1ded6b13001c482ca8"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:I1@1",
+      "evidence": [
+        "evidence:ev-fb9f256f1b3e5530a117ab1fbac8be49"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:I1@1",
+      "evidence": [
+        "evidence:ev-f6bb6b57c4b5187e70a73a027a0363c7"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:I1@1",
+      "evidence": [
+        "evidence:ev-dc67433765857a3ee3c6ec0ee69b7b92"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "PROVED:I1@1",
+      "evidence": [
+        "evidence:ev-018660eed719aa2d3c8146bfa6f4e30d"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    },
+    {
+      "claim_id": "INTERPRETED:N1@1",
+      "evidence": [
+        "evidence:ev-835baa7adfa5161fc3f79711eb13323c"
+      ],
+      "outcome": "PASS",
+      "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+      "verifier": "verislop.interpretation-recorder"
+    },
+    {
+      "claim_id": "FORMALIZED:N1@1",
+      "evidence": [
+        "evidence:ev-be69f921742cf3776260aa6e8ae8dce0"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.formal-statement-checker",
+      "verifier": "verislop.formal-statement-checker"
+    },
+    {
+      "claim_id": "TYPECHECKED:N1@1",
+      "evidence": [
+        "evidence:ev-444df99d549b1c6bbfcd2ec2a4f56163"
+      ],
+      "outcome": "PASS",
+      "reason": "registered evidence from verislop.lean-acceptance",
+      "verifier": "verislop.lean-acceptance"
+    }
+  ],
+  "qualified_result": "BLOCKED (ORPHAN_CLAIM, PROOF_UNRESOLVED, REVIEW_NOT_RUN, VERIFIER_NOT_RUN); no verification success",
+  "request": {
+    "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+    "request_ref": "data-pipelines/P03-unicode-labels.txt",
+    "routing": {
+      "classifier": "none (mode=software bypasses classification)",
+      "decision": "SOFTWARE",
+      "routing_result": "OBLIGATION_PIPELINE"
+    }
+  },
+  "review": {
+    "checkpoints": {
+      "formal_contract": "REVIEW_NOT_RUN",
+      "release": "REVIEW_NOT_RUN"
+    },
+    "configured": true
+  },
+  "roots": {
+    "accepted_ir": null,
+    "certificate": "sha256:5830a0cec05d1d10d7d3f78915bb455a6e4e4e5e87fc25814a32fd53177a2034",
+    "closure_input_root": null,
+    "contract_input_root": "sha256:742e24d6127180b742203f347f0f0a30c7929d718d03ac65dc3223adc95e53b2",
+    "implementation_root": null,
+    "interpretation_root": "sha256:b554f674e290154d2d1ac0c165cfd02d3f1bc4a73ae15df5beb4d9fb721df0d7",
+    "link_root": null,
+    "test_root": null
+  },
+  "run_id": "p03-unicode-labels-repair-01",
+  "schema_version": "0.1",
+  "surfaces": {
+    "excluded": [
+      "N1: Handling of inputs outside the stated schema and environmental effects are outside the scope of this task.",
+      "machine-code, compiler, runtime and hardware behaviour (no Tier 4 claim)",
+      "behaviour on inputs outside the serialization profile",
+      "physical time, memory and resource bounds unless stated as obligations"
+    ],
+    "trusted": [
+      "Lean 4 kernel and elaborator of the pinned toolchain, with its toolchain .olean files",
+      "VeriSlop kernel tool (replay driver, exporter, axiom walker, witness extractor)",
+      "VeriSlop launcher, bubblewrap and Linux namespace confinement; explicitly mounted runtime roots remain readable",
+      "VeriSlop reifier, DSL denotation builder and canonical serializer (round trip checked per value)",
+      "closure orchestration, manifest canonicalisation and hashing",
+      "logical axioms permitted by the acceptance policy (actual use listed per theorem)",
+      "mechanical clause segmentation verislop.segment/0.1",
+      "natural-language interpretation of the request (a recorded semantic assumption, not proved)",
+      "operating system and hardware"
+    ],
+    "verified": [
+      "Lean kernel replay of every declaration of the accepted module",
+      "statement and definition identity against the frozen challenge",
+      "transitive axiom audit per theorem from the replayed environment",
+      "DSL denotation definitional equality and round trip for reified statements",
+      "concrete non-vacuity witnesses read from accepted proof terms"
+    ]
+  },
+  "terminal_status": "BLOCKED",
+  "tier": {
+    "endpoint": null,
+    "requested": 0,
+    "requested_endpoint": "test_campaign",
+    "require_state": "TESTED",
+    "target": "python",
+    "tier_default_applied": false
+  },
+  "warnings": [],
+  "witnesses": {}
+}

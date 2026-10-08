@@ -1,0 +1,151 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:e9ac500ed108185b3924e7a0395477a2c21b853d563c725fcfae8a63f98475b1",
+  "created_at": "2026-10-08T10:01:07Z",
+  "recovery_root": "p03-unicode-labels",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "p03-unicode-labels-repair-02",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/examples/proof-of-concept/data-pipelines/qwen-config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-002/P03-unicode-labels/runs/p03-unicode-labels-repair-02/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-002/P03-unicode-labels/runs/p03-unicode-labels-repair-02/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-002/P03-unicode-labels/runs/p03-unicode-labels-repair-02/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 191:33: expected line break or token; 198:15: expected token; 198:14: Invalid field notation: Identifier or numeral expected; 201:15: expected token; 201:14: Invalid field notation: Identifier or numeral expected",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:5177d7e2c16a06bea9d63b33bef0d9fe10cf704d60368bb21ed84e5d72e7deb8",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "VeriSlop.Contract.solve"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "VeriSlop.Contract.Input"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "declarations": [
+                "VeriSlop.Contract.Input"
+              ],
+              "obligation": "D3"
+            },
+            {
+              "obligation": "A1",
+              "predicate": "VeriSlop.Contract.valid_input"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlop.Contract.O1_output_shape"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlop.Contract.O2_labels_transform"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "VeriSlop.Contract.O3_count_equals_length"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "VeriSlop.Contract.O4_empty_result"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "VeriSlop.Contract.O5_unicode_preserved"
+            },
+            {
+              "obligation": "N1"
+            }
+          ],
+          "internal_obligations": [
+            {
+              "description": "Witness that the input schema (labels : List String, prefix : String) is satisfiable.",
+              "id": "NV_A1",
+              "kind": "non_vacuity",
+              "theorem": "VeriSlop.Contract.witnesses_for_A1",
+              "witnesses_for": [
+                "A1"
+              ]
+            }
+          ],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "verislop.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace VeriSlop.Contract\n\nstructure Input where\n  «labels» : List String\n  «prefix» : String\n\nstructure Output where\n  «labels» : List String\n  «count» : Nat\n\ndef solve (data : Input) : Output :=\n  let kept : List String := data.「labels」.filter (fun s => !s.isEmpty)\n  let mapped : List String := kept.map (fun s => data.「prefix」 ++ s)\n  { 「labels」 := mapped, 「count」 := mapped.length }\n\ndef valid_input (data : Input) : Prop := True\n\ntheorem O1_output_shape (data : Input) (hA1 : valid_input data) :\n  (solve data).「count」 = (solve data).「labels」.length := by sorry\n\ntheorem O2_labels_transform (data : Input) (hA1 : valid_input data) :\n  (solve data).「labels」 = (data.「labels」.filter (fun s => !s.isEmpty)).map (fun s => data.「prefix」 ++ s) := by sorry\n\ntheorem O3_count_equals_length (data : Input) :\n  (solve data).「count」 = (solve data).「labels」.length := by sorry\n\ntheorem O4_empty_result (data : Input) :\n  (data.「labels」.filter (fun s => !s.isEmpty)).length = 0 →\n    (solve data).「labels」 = [] ∧ (solve data).「count」 = 0 := by sorry\n\ntheorem O5_unicode_preserved (data : Input) (hA1 : valid_input data) :\n  ∀ (s : String), s ∈ data.「labels」 → s ≠ \"\" → (data.「prefix」 ++ s) ∈ (solve data).「labels」 := by sorry\n\ntheorem witnesses_for_A1 : ∃ (data : Input), valid_input data := by sorry\n\nend VeriSlop.Contract"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "data-pipelines/P03-unicode-labels.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261008,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "CANDIDATE_BUILD_FAILURE"
+      ],
+      "seconds": 48,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

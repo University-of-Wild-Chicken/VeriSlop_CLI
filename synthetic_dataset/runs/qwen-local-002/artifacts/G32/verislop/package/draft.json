@@ -1,0 +1,719 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None identified that affect correctness or formal boundary.",
+    "entities": "Defined the solve function in solution.py.",
+    "error_semantics": "None explicitly required; inputs are assumed to conform to the specification.",
+    "explicit_non_goals": "None explicitly stated.",
+    "invariants": "None explicitly required beyond the merge logic.",
+    "liveness_properties": "None explicitly required.",
+    "postconditions": "Defined the output structure, merge logic, handling of absence and conflicts, and conflict encoding.",
+    "preconditions": "Defined the input structure and value types.",
+    "resource_constraints": "None explicitly required beyond standard library usage.",
+    "safety_properties": "Defined restrictions on I/O, state, and recursion."
+  },
+  "entities": [],
+  "error_semantics": [],
+  "explicit_non_goals": [],
+  "invariants": [],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "The return value is a dict with exactly the keys 'merged' and 'conflicts'.",
+        "'merged' is a dict.",
+        "'conflicts' is a list."
+      ],
+      "dependencies": [
+        {
+          "id": "O1",
+          "relation": "refines"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:5b5211a6b39de6b4b523c596b302e9d2f3ffd5ea90e16d4d410de09782696d01",
+          "document_ref": "prompt.txt",
+          "end_byte": 640,
+          "interpretation": "Specifies the top-level structure of the output.",
+          "origin": "explicit",
+          "start_byte": 614
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function returns a JSON object with keys 'merged' and 'conflicts'."
+    },
+    {
+      "acceptance_criteria": [
+        "The function iterates over the union of keys from base, local, and remote.",
+        "Equality checks are performed as specified.",
+        "The chosen value for 'merged' follows the specified precedence."
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "merge_logic"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:5b5211a6b39de6b4b523c596b302e9d2f3ffd5ea90e16d4d410de09782696d01",
+          "document_ref": "prompt.txt",
+          "end_byte": 579,
+          "interpretation": "Defines the three-way merge algorithm.",
+          "origin": "explicit",
+          "start_byte": 430
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each key in the union of keys in base, local, and remote, the merge logic is applied: if local value equals remote value, choose that value; else if local value equals base value, choose remote value; else if remote value equals base value, choose local value; otherwise, it is a conflict."
+    },
+    {
+      "acceptance_criteria": [
+        "Keys that resolve to absence are not present in the 'merged' dict.",
+        "Keys that resolve to a value (including null) are present in the 'merged' dict."
+      ],
+      "dependencies": [
+        {
+          "id": "O4",
+          "relation": "refines"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "merge_logic",
+        "merged"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:5b5211a6b39de6b4b523c596b302e9d2f3ffd5ea90e16d4d410de09782696d01",
+          "document_ref": "prompt.txt",
+          "end_byte": 613,
+          "interpretation": "Specifies how absence is handled in the merged output.",
+          "origin": "explicit",
+          "start_byte": 580
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If a key is chosen as 'absence' (i.e., the value is not present in the chosen source), the key is deleted from the 'merged' object."
+    },
+    {
+      "acceptance_criteria": [
+        "Any key listed in 'conflicts' is not present in 'merged'."
+      ],
+      "dependencies": [
+        {
+          "id": "O4",
+          "relation": "refines"
+        }
+      ],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "merged",
+        "conflicts"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:5b5211a6b39de6b4b523c596b302e9d2f3ffd5ea90e16d4d410de09782696d01",
+          "document_ref": "prompt.txt",
+          "end_byte": 680,
+          "interpretation": "Specifies the exclusion of conflicted keys from the merged result.",
+          "origin": "explicit",
+          "start_byte": 641
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Conflicted keys are absent from the 'merged' object."
+    },
+    {
+      "acceptance_criteria": [
+        "The 'conflicts' list is sorted by the 'key' field.",
+        "Each conflict object has keys 'key', 'base', 'local', 'remote'.",
+        "Each of 'base', 'local', 'remote' is a dict with 'present' boolean and optional 'value'.",
+        "Absence is encoded as {present: false}.",
+        "Presence (including null) is encoded as {present: true, value: v}."
+      ],
+      "dependencies": [
+        {
+          "id": "O4",
+          "relation": "refines"
+        }
+      ],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "conflicts"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:5b5211a6b39de6b4b523c596b302e9d2f3ffd5ea90e16d4d410de09782696d01",
+          "document_ref": "prompt.txt",
+          "end_byte": 847,
+          "interpretation": "Specifies the structure, sorting, and encoding of conflict entries.",
+          "origin": "explicit",
+          "start_byte": 681
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The 'conflicts' list is sorted by key, and each element is an object with keys 'key', 'base', 'local', 'remote'. Each value in these objects is encoded as {present: false} for absence or {present: true, value: v} for presence, including null."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "The function assumes data is a dict with keys 'base', 'local', 'remote'.",
+        "Each of base, local, remote is a dict mapping ASCII strings to int, str, or None."
+      ],
+      "dependencies": [],
+      "id": "O2",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by its declared supplier and discharged at an obligation outside this contract",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "input"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:5b5211a6b39de6b4b523c596b302e9d2f3ffd5ea90e16d4d410de09782696d01",
+          "document_ref": "prompt.txt",
+          "end_byte": 398,
+          "interpretation": "Specifies the structure and value types of the input.",
+          "origin": "explicit",
+          "start_byte": 313
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input data is a JSON object with keys 'base', 'local', and 'remote', where each value is an object mapping ASCII string keys to integer, string, or null values."
+    }
+  ],
+  "request_ref": "prompt.txt",
+  "resource_constraints": [],
+  "safety_properties": [
+    {
+      "acceptance_criteria": [
+        "No file I/O operations are performed.",
+        "No network operations are performed.",
+        "No print statements are executed.",
+        "The function is pure and does not modify global state."
+      ],
+      "dependencies": [],
+      "id": "O8",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:5b5211a6b39de6b4b523c596b302e9d2f3ffd5ea90e16d4d410de09782696d01",
+          "document_ref": "prompt.txt",
+          "end_byte": 239,
+          "interpretation": "Specifies safety constraints on the implementation.",
+          "origin": "explicit",
+          "start_byte": 167
+        },
+        {
+          "document_hash": "sha256:5b5211a6b39de6b4b523c596b302e9d2f3ffd5ea90e16d4d410de09782696d01",
+          "document_ref": "prompt.txt",
+          "end_byte": 1050,
+          "interpretation": "Reiterates the restriction on I/O.",
+          "origin": "explicit",
+          "start_byte": 1003
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function does not read files, use the network, print, or retain state across calls."
+    },
+    {
+      "acceptance_criteria": [
+        "The function does not attempt to merge nested objects.",
+        "Values are treated as atomic scalars (int, str, null)."
+      ],
+      "dependencies": [],
+      "id": "O9",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "merge_logic"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:5b5211a6b39de6b4b523c596b302e9d2f3ffd5ea90e16d4d410de09782696d01",
+          "document_ref": "prompt.txt",
+          "end_byte": 924,
+          "interpretation": "Specifies that merging is shallow and values are scalar.",
+          "origin": "explicit",
+          "start_byte": 848
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function does not recursively merge; object values are only the specified scalar types."
+    }
+  ],
+  "schema_version": "0.1"
+}

@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_d21_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:45a4b56fdf696966c57137fa4f7d8d02cd0ce8ff74b51032b17e1db6c80eddf9",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:5b1272baff7fe0e5bc53f5513a410f43c770b8ee3d3058b7e50f16c1fa11cd58",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    events = data[\\\"events\\\"]\\n    start = data[\\\"start\\\"]\\n    end = data[\\\"end\\\"]\\n    width = data[\\\"width\\\"]\\n    fill = data[\\\"fill\\\"]\\n\\n    groups = sorted({event[\\\"group\\\"] for event in events})\\n    buckets = list(range(start, end, width))\\n    grouped = {group: {} for group in groups}\\n\\n    for event in events:\\n        t = event[\\\"time\\\"]\\n        value = event[\\\"value\\\"]\\n        if start <= t < end and value is not None:\\n            bucket_start = start + ((t - start) // width) * width\\n            total, count = grouped[event[\\\"group\\\"]].get(bucket_start, (0, 0))\\n            grouped[event[\\\"group\\\"]][bucket_start] = (total + value, count + 1)\\n\\n    result = []\\n    for group in groups:\\n        previous = None\\n        for bucket_start in buckets:\\n            total, count = grouped[group].get(bucket_start, (0, 0))\\n            if count:\\n                value = total\\n                previous = total\\n            else:\\n                value = previous if fill == \\\"previous\\\" else None\\n            result.append({\\n                \\\"group\\\": group,\\n                \\\"start\\\": bucket_start,\\n                \\\"count\\\": count,\\n                \\\"value\\\": value,\\n            })\\n    return result\\n\"} }",
+  "transport": "collaboration"
+}

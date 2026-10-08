@@ -1,0 +1,1415 @@
+{
+  "acceptance": {
+    "gate": "accepted_and_proved",
+    "obligations": {
+      "A1": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "D1": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "D2": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "D3": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "D4": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "D5": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "N1": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "N2": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O1": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O2": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O3": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O4": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O5": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "witness_A1": {
+        "axioms": [],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": [
+          [
+            {
+              "tuple": [
+                "record",
+                "Input",
+                {
+                  "tuple": [
+                    {
+                      "tuple": []
+                    },
+                    ""
+                  ]
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    }
+  },
+  "assurance_boundary": "Lean proofs establish the reference model only; Tier 0/1 implementation evidence is testing or runtime detection, never END_TO_END_VERIFIED.",
+  "bindings": [
+    {
+      "binding_id": "B-solve",
+      "formal_declaration": {
+        "args": [
+          {
+            "record": "Input"
+          }
+        ],
+        "decl_hash": "sha256:40b9538b1aded4528f7872e4d581e780e2c27f62dabd7bb202e3a59114d6c825",
+        "lean_decl": "VeriSlopAST.solve",
+        "result": {
+          "record": "Output"
+        }
+      },
+      "implementation_object": {
+        "file": "verislop_ast.py",
+        "file_hash": "sha256:3b1dee1be27eb80cd906a76991aedeb8916a688421597fb1095a2c51a252f4cd",
+        "lineno": 1,
+        "qualname": "solve",
+        "source_hash": "sha256:3b1dee1be27eb80cd906a76991aedeb8916a688421597fb1095a2c51a252f4cd"
+      },
+      "obligations": [
+        "D1",
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "O5"
+      ],
+      "serialization_profile": "python-v0_2",
+      "symbol": "solve"
+    }
+  ],
+  "checkpoint": "release",
+  "counterexample_policy": {
+    "assignment_wire_format": {
+      "Bool": {
+        "example": {
+          "bool": true
+        },
+        "payload": "JSON boolean",
+        "tag": "bool"
+      },
+      "Enum": {
+        "payload": "registered constructor ID from the accepted enumeration",
+        "tag": "str"
+      },
+      "Int": {
+        "example": {
+          "int": "-3"
+        },
+        "payload": "string matching 0|-?[1-9][0-9]*; python-v0_2 only",
+        "tag": "int"
+      },
+      "List": {
+        "example": {
+          "list": [
+            {
+              "int": "-3"
+            },
+            {
+              "int": "0"
+            }
+          ]
+        },
+        "payload": "array of recursively tagged element values; python-v0_2 only",
+        "tag": "list"
+      },
+      "Nat": {
+        "example": {
+          "int": "3"
+        },
+        "payload": "string matching 0|[1-9][0-9]*",
+        "tag": "int"
+      },
+      "Record": {
+        "payload": "object with exactly the accepted field keys and recursively tagged values; python-v0_2 only",
+        "tag": "dict"
+      },
+      "Result": {
+        "error_example": {
+          "tuple": [
+            {
+              "str": "error"
+            },
+            {
+              "none": null
+            }
+          ]
+        },
+        "ok_example": {
+          "tuple": [
+            {
+              "str": "ok"
+            },
+            {
+              "int": "3"
+            }
+          ]
+        },
+        "payload": "two values: {str:ok} + tagged ok payload, or {str:error} + tagged error payload",
+        "tag": "tuple"
+      },
+      "String": {
+        "example": {
+          "str": "é🙂"
+        },
+        "payload": "Unicode scalar string; python-v0_2 only",
+        "tag": "str"
+      },
+      "Unit": {
+        "example": {
+          "none": null
+        },
+        "payload": "JSON null",
+        "tag": "none"
+      },
+      "examples_are": "syntax illustrations, not constructed reviewer probes or replay evidence",
+      "forbidden_examples": [
+        "left=0, right=0",
+        [
+          0,
+          0
+        ],
+        {
+          "left": 0,
+          "right": 0
+        }
+      ],
+      "limits": {
+        "max_assignment_values": 32,
+        "max_decimal_digits": 1024,
+        "max_list_items": 256,
+        "max_nodes_per_value": 4096,
+        "max_record_fields": 64,
+        "max_string_chars": 1024,
+        "max_tag_depth": 32
+      },
+      "rule": "JSON array, exactly one strict tagged value per accepted leading universal binder, outermost first"
+    },
+    "ballot_protocol": {
+      "max_attempts": 3,
+      "rule": "bounded correction of malformed JSON or invalid probe construction; same packet and reviewer slot"
+    },
+    "format": "verislop.counterexample-policy/0.3",
+    "limitations": [
+      "target_case supports only the admitted pure Python syntax and exact decidable residuals",
+      "imports, I/O, reflection, nested functions, defaults, annotations and decorators are unsupported"
+    ],
+    "max_probes": 8,
+    "mechanical_claim_ids": [
+      "INTERPRETATION:request",
+      "CLOSURE:clean-builds",
+      "CLOSURE:determinism",
+      "CLOSURE:endpoint",
+      "CLOSURE:provenance",
+      "FORMALIZED:A1@1",
+      "FORMALIZED:D1@1",
+      "FORMALIZED:D2@1",
+      "FORMALIZED:D3@1",
+      "FORMALIZED:D4@1",
+      "FORMALIZED:D5@1",
+      "FORMALIZED:N1@1",
+      "FORMALIZED:N2@1",
+      "FORMALIZED:O1@1",
+      "FORMALIZED:O2@1",
+      "FORMALIZED:O3@1",
+      "FORMALIZED:O4@1",
+      "FORMALIZED:O5@1",
+      "FORMALIZED:witness_A1@1",
+      "IMPLEMENTED:D1@1",
+      "IMPLEMENTED:O1@1",
+      "IMPLEMENTED:O2@1",
+      "IMPLEMENTED:O3@1",
+      "IMPLEMENTED:O4@1",
+      "IMPLEMENTED:O5@1",
+      "INTERPRETED:A1@1",
+      "INTERPRETED:D1@1",
+      "INTERPRETED:D2@1",
+      "INTERPRETED:D3@1",
+      "INTERPRETED:D4@1",
+      "INTERPRETED:D5@1",
+      "INTERPRETED:N1@1",
+      "INTERPRETED:N2@1",
+      "INTERPRETED:O1@1",
+      "INTERPRETED:O2@1",
+      "INTERPRETED:O3@1",
+      "INTERPRETED:O4@1",
+      "INTERPRETED:O5@1",
+      "INTERPRETED:witness_A1@1",
+      "LINKED:D1@1",
+      "LINKED:O1@1",
+      "LINKED:O2@1",
+      "LINKED:O3@1",
+      "LINKED:O4@1",
+      "LINKED:O5@1",
+      "PROVED:O1@1",
+      "PROVED:O2@1",
+      "PROVED:O3@1",
+      "PROVED:O4@1",
+      "PROVED:O5@1",
+      "PROVED:witness_A1@1",
+      "TESTED:O1@1",
+      "TESTED:O2@1",
+      "TESTED:O3@1",
+      "TESTED:O4@1",
+      "TESTED:O5@1",
+      "TYPECHECKED:A1@1",
+      "TYPECHECKED:D1@1",
+      "TYPECHECKED:D2@1",
+      "TYPECHECKED:D3@1",
+      "TYPECHECKED:D4@1",
+      "TYPECHECKED:D5@1",
+      "TYPECHECKED:N1@1",
+      "TYPECHECKED:N2@1",
+      "TYPECHECKED:O1@1",
+      "TYPECHECKED:O2@1",
+      "TYPECHECKED:O3@1",
+      "TYPECHECKED:O4@1",
+      "TYPECHECKED:O5@1",
+      "TYPECHECKED:witness_A1@1"
+    ],
+    "proposals": {
+      "mechanical_failure": {
+        "claim_id": "INTERPRETATION:request",
+        "kind": "mechanical_failure"
+      },
+      "target_case": {
+        "assignment": [
+          {
+            "int": "0"
+          }
+        ],
+        "kind": "target_case",
+        "obligation_id": "required guarantee in scope"
+      }
+    },
+    "replay_limits": {
+      "max_arithmetic_bits": 4096,
+      "max_numeral_digits": 1024,
+      "max_target_invocations": 32,
+      "seconds_per_probe": 5
+    },
+    "scope": "concrete probes and independently replayed violations; no reliability speculation",
+    "target_case_binders": {
+      "accepted_ir_sha256": "sha256:6fb47146242b44323469c4d9768413d27e6c4b99045cd762b1976e0d12ccc325",
+      "obligations": {
+        "A1": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "D1": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "D2": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "D3": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "D4": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "D5": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "N1": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "N2": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "O1": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "labels": {
+                  "list": []
+                },
+                "prefix": {
+                  "str": ""
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O1@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        },
+        "O2": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "labels": {
+                  "list": []
+                },
+                "prefix": {
+                  "str": ""
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O2@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        },
+        "O3": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "labels": {
+                  "list": []
+                },
+                "prefix": {
+                  "str": ""
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O3@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        },
+        "O4": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "labels": {
+                  "list": []
+                },
+                "prefix": {
+                  "str": ""
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O4@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        },
+        "O5": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "labels": {
+                  "list": []
+                },
+                "prefix": {
+                  "str": ""
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O5@sha256:9a3eef7cf61c242d9fc14d756096f631944466d4e8235c3e661f48056f5412b7",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        },
+        "witness_A1": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        }
+      },
+      "record_fields": {
+        "Input": [
+          {
+            "name": "labels",
+            "sort": {
+              "list": "String"
+            }
+          },
+          {
+            "name": "prefix",
+            "sort": "String"
+          }
+        ],
+        "Output": [
+          {
+            "name": "labels",
+            "sort": {
+              "list": "String"
+            }
+          },
+          {
+            "name": "count",
+            "sort": "Nat"
+          }
+        ]
+      },
+      "serialization_profile": "python-v0_2"
+    },
+    "template_scope": "closed syntax illustrations only; not constructed reviewer probes, search results or votes"
+  },
+  "evidence": [
+    "ev-01b55a4a295f51bd4452ef2805692cc2",
+    "ev-04cd92ec191c34d624bfe100522d3bd2",
+    "ev-09811fbd8aedd76375a3e999cfebd26c",
+    "ev-0b7ea539277d501d9fe1e936013366e9",
+    "ev-1d71dad8f2f23c4ec8a4912f8a14c61b",
+    "ev-20ac955c4029136f83fd570645986b7a",
+    "ev-23b1aace2e9e687a485e63e4d3950459",
+    "ev-25ee0734b3885ee12c2f2b714f3635ea",
+    "ev-26b2f713619f5086c7f272b65e7f48ec",
+    "ev-2a5b54978cae555f897eb56edb14cb53",
+    "ev-2b7de919a3fbdc9182603319508dba4f",
+    "ev-33dbc6588d9b1c8d799f8424904b4e3a",
+    "ev-34d4275f6ea2130a89661f06da2f431b",
+    "ev-36b4a168c60b783a466f6fb9e6f06a6a",
+    "ev-36b5fdbb4a32cf8c36836bb622ac3cdf",
+    "ev-38ce3bd0571fd9ae5a36c4754221977d",
+    "ev-390e6cb7ab46d7f732b63c8ddbf250ff",
+    "ev-3973155c666f24ae81fbb5026632da16",
+    "ev-3bd92e6919b708ab6592ee8887f5a266",
+    "ev-4a2de314df2d859b0f3274a6cbf54367",
+    "ev-4ab997004319df5d78d4fc1b65649b64",
+    "ev-4ae71260bef6ab6e587d433993c6be10",
+    "ev-4b06bf195ec81a07119674b4adf061be",
+    "ev-4f326939b3fe62ae0c766909d9c64c87",
+    "ev-527f75ed2a09e03e53b987ff89c018bd",
+    "ev-568be22694aff11e1723366a92cec5e8",
+    "ev-586f6a1e1b9a6fc9c91afff83ae4ad1b",
+    "ev-5c97530c20a48adcf3a17049e7efc6e0",
+    "ev-6346f58a6fe9093c57cf57360bccc00f",
+    "ev-68a9dc5b1c8d849d1e10a3026c533b9f",
+    "ev-6d09f985fa53b6c99f8a8aa6fd7bbb6c",
+    "ev-6d4c121d08d9ce67f55c22bbcdc7f8a2",
+    "ev-6e2953b486ce650a2ae30a9fcff77709",
+    "ev-6ec1dbafa755cba952564a53a41b4195",
+    "ev-6f423c2707e2b7571ea7d3f9415f6dce",
+    "ev-6fc045a4408dfc6edcf0dd01e2d89834",
+    "ev-76b2f22ad78e70c5e6f4254b67a1d007",
+    "ev-7eaa274c6ec7f570584188dfb6c73f7f",
+    "ev-7fc5eb8607a9c492152c52dca48cc1bf",
+    "ev-82bf115e939e3a32821ccf454e6ff556",
+    "ev-82e60e6ac1f83292da2388c21064aa78",
+    "ev-82fe8f35c45a2e6d4bc3f7172c067359",
+    "ev-8b4bc29abca017597f42e79fef82073b",
+    "ev-8e23a980d0ba99f648a224cc50cd2e6a",
+    "ev-8e3974475ee6a6873fa4a30b2a6b5dcd",
+    "ev-8f0136891d30805999da67d9cc486722",
+    "ev-8f65f1a32d906ca8ef227e901342205d",
+    "ev-8f9fbfd5cb8be27b0aa18e7f2c54179a",
+    "ev-90921af7c8cd9d158dabea012080da99",
+    "ev-9f3d73935ab413347b2c6b4fa51fc99e",
+    "ev-a411fa9043ae822db1c4e3527a432dd2",
+    "ev-a4ebab468fbd725fd33d01a9683e73d5",
+    "ev-a577cb79b42c7b773267805fac48271b",
+    "ev-a639bf4748f3414706d3bd84f797328e",
+    "ev-a85579e425e6a831cc141bcf7c9ee0e5",
+    "ev-abf727b3eb96e990e190fa17b04e2063",
+    "ev-ad51a7e37e759da71e46d244cafd1462",
+    "ev-ae1fa193ded37fd06c4e491e80046580",
+    "ev-b02a4428cc9232d9d7b6123fc69bb42f",
+    "ev-b02cc95a0d0aa71dca6678116fb5f820",
+    "ev-b236e70b347fca1d029a75175a50e2c3",
+    "ev-b6740aca1dae9934e15ee15866881267",
+    "ev-b69fdca19f445ec7d4fbbf6ecaaa1116",
+    "ev-b9af0c993022f41e432841c1e0390959",
+    "ev-ba7fa62aba0f8635a1b92a19faea62ef",
+    "ev-c0cfa6dc37e15c9b395abcb21658a661",
+    "ev-c531ac127543d9aee8e2efb2fb0d4776",
+    "ev-c57eed10cc500d9c08e878055a8cf15a",
+    "ev-c897659ec38db8477a907eddecb68af2",
+    "ev-d4542025d2fb94c425cbfed8797dace2",
+    "ev-d65ae4941ae5f9246163bf21681825cf",
+    "ev-e2d6b99bca1a5ccf26795276093e981b",
+    "ev-e708faf93821ca99602f17c547c03752",
+    "ev-ec196dc3d16f48cac4b31eab9c2e09e6",
+    "ev-f0bbfa150c7d84f0f59c91649e00578d",
+    "ev-f7fe6e8482844e979eb9621c8758e8c3",
+    "ev-fac81a145c45a58c5c1aa379c10d2fc1",
+    "ev-fc49975e6940af55d5817df46199cacf",
+    "ev-fc85b80bb5cf7ae1804fe9c5c8f65263",
+    "ev-fd93139e6e7177a613c6a108e2a04308",
+    "ev-fe7dc87b14c9a81ff6a2fc527fa42e0f"
+  ],
+  "formal_statements": {
+    "A1": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.valid_input",
+      "representation": "typed_metadata"
+    },
+    "D1": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve",
+      "representation": "typed_metadata"
+    },
+    "D2": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.Input",
+      "representation": "typed_metadata"
+    },
+    "D3": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.Input",
+      "representation": "typed_metadata"
+    },
+    "D4": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.Output",
+      "representation": "typed_metadata"
+    },
+    "D5": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.Output",
+      "representation": "typed_metadata"
+    },
+    "N1": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Registry.N1",
+      "representation": "typed_metadata"
+    },
+    "N2": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Registry.N2",
+      "representation": "typed_metadata"
+    },
+    "O1": {
+      "display": "∀ x0 : Input, (solve(x0).labels = list_map(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1))), fun x1 => (x0.prefix ++ x1)) ∧ solve(x0).count = list_length(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1)))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_correct",
+      "representation": "contract_dsl"
+    },
+    "O2": {
+      "display": "∀ x0 : Input, (solve(x0).labels = list_map(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1))), fun x1 => (x0.prefix ++ x1)) ∧ solve(x0).count = list_length(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1)))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_correct",
+      "representation": "contract_dsl"
+    },
+    "O3": {
+      "display": "∀ x0 : Input, (solve(x0).labels = list_map(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1))), fun x1 => (x0.prefix ++ x1)) ∧ solve(x0).count = list_length(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1)))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_correct",
+      "representation": "contract_dsl"
+    },
+    "O4": {
+      "display": "∀ x0 : Input, (solve(x0).labels = list_map(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1))), fun x1 => (x0.prefix ++ x1)) ∧ solve(x0).count = list_length(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1)))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_correct",
+      "representation": "contract_dsl"
+    },
+    "O5": {
+      "display": "∀ x0 : Input, (solve(x0).labels = list_map(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1))), fun x1 => (x0.prefix ++ x1)) ∧ solve(x0).count = list_length(list_filter(x0.labels, fun x1 => bool_not(string_is_empty(x1)))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_correct",
+      "representation": "contract_dsl"
+    },
+    "witness_A1": {
+      "display": "∃ x0 : Input, true",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.witness_A1",
+      "representation": "contract_dsl"
+    }
+  },
+  "implementation": {
+    "verislop_ast.py": "def solve(inp):\n    labels = inp[\"labels\"]\n    prefix = inp[\"prefix\"]\n    filtered = []\n    for lbl in labels:\n        if len(lbl) > 0:\n            filtered.append(lbl)\n    mapped = []\n    for lbl in filtered:\n        mapped.append(prefix + lbl)\n    return {\"labels\": mapped, \"count\": len(filtered)}\n"
+  },
+  "lean_accepted_source": {
+    "path": "accepted/source/a67b55c08f6a8b059d1f04794c6f330a29615e05c3b603183096b8609ef1e492.lean",
+    "sha256": "sha256:a67b55c08f6a8b059d1f04794c6f330a29615e05c3b603183096b8609ef1e492",
+    "text": "import Std\n\n-- BEGIN VERISLOP REGISTRY\n-- Generated by `verislop formalize`. Typed obligation metadata: an index, never evidence.\nnamespace VeriSlop.Registry\n\nstructure SourceRef where\n  documentRef : String\n  documentHash : String\n  startByte : Nat\n  endByte : Nat\n  origin : String\n  interpretation : String\n\nstructure Dependency where\n  id : String\n  relation : String\n\nstructure Entry where\n  id : String\n  revision : Nat\n  kind : String\n  role : String\n  statement : String\n  required : Bool\n  sourceRefs : List SourceRef\n  scope : List String\n  dependencies : List Dependency\n  acceptanceCriteria : List String\n  bindings : List String\n\ndef «D1» : Entry := {\n  id := \"D1\",\n  revision := 1,\n  kind := \"entity\",\n  role := \"declaration\",\n  statement := \"The function is named solve, takes a single argument data, and is implemented in Python.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 0, endByte := 69, origin := \"explicit\", interpretation := \"function name, language, and parameter\" }],\n  scope := [\"function signature\"],\n  dependencies := [],\n  acceptanceCriteria := [\"A Python function named solve exists and accepts one parameter named data\"],\n  bindings := [\"VeriSlopAST.solve\"] }\n\ndef «D2» : Entry := {\n  id := \"D2\",\n  revision := 1,\n  kind := \"entity\",\n  role := \"declaration\",\n  statement := \"The input data is a JSON object with exactly the fields labels and prefix.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 70, endByte := 139, origin := \"explicit\", interpretation := \"input object structure\" }],\n  scope := [\"input schema\"],\n  dependencies := [],\n  acceptanceCriteria := [\"data is a JSON object\", \"data contains exactly the keys 'labels' and 'prefix'\"],\n  bindings := [\"VeriSlopAST.Input\"] }\n\ndef «D3» : Entry := {\n  id := \"D3\",\n  revision := 1,\n  kind := \"entity\",\n  role := \"declaration\",\n  statement := \"The field labels is a list of Unicode strings and the field prefix is a Unicode string.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 140, endByte := 207, origin := \"explicit\", interpretation := \"field types\" }],\n  scope := [\"input field types\"],\n  dependencies := [{ id := \"D2\", relation := \"refines\" }],\n  acceptanceCriteria := [\"data['labels'] is a list of strings\", \"data['prefix'] is a string\"],\n  bindings := [\"VeriSlopAST.Input\"] }\n\ndef «D4» : Entry := {\n  id := \"D4\",\n  revision := 1,\n  kind := \"entity\",\n  role := \"declaration\",\n  statement := \"The output is a JSON object with exactly the fields labels and count.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 371, endByte := 433, origin := \"explicit\", interpretation := \"output object structure\" }],\n  scope := [\"output schema\"],\n  dependencies := [],\n  acceptanceCriteria := [\"The return value is a JSON object\", \"The return value contains exactly the keys 'labels' and 'count'\"],\n  bindings := [\"VeriSlopAST.Output\"] }\n\ndef «D5» : Entry := {\n  id := \"D5\",\n  revision := 1,\n  kind := \"entity\",\n  role := \"declaration\",\n  statement := \"The output field labels is the resulting list and the output field count is its length.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 434, endByte := 487, origin := \"explicit\", interpretation := \"output field definitions\" }],\n  scope := [\"output field semantics\"],\n  dependencies := [{ id := \"D4\", relation := \"refines\" }],\n  acceptanceCriteria := [\"output['labels'] is a list\", \"output['count'] equals len(output['labels'])\"],\n  bindings := [\"VeriSlopAST.Output\"] }\n\ndef «A1» : Entry := {\n  id := \"A1\",\n  revision := 1,\n  kind := \"precondition\",\n  role := \"assumption\",\n  statement := \"The input data conforms to the stated schema: a JSON object with exactly the fields labels (list of Unicode strings) and prefix (Unicode string).\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 70, endByte := 139, origin := \"explicit\", interpretation := \"input schema constraint\" }, { documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 140, endByte := 207, origin := \"explicit\", interpretation := \"field type constraints\" }, { documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 677, endByte := 766, origin := \"explicit\", interpretation := \"scope exclusion implies schema conformance is assumed\" }],\n  scope := [\"input validation\"],\n  dependencies := [{ id := \"D2\", relation := \"uses_definition\" }, { id := \"D3\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"data is a JSON object with exactly keys 'labels' and 'prefix'\", \"data['labels'] is a list of strings\", \"data['prefix'] is a string\"],\n  bindings := [\"VeriSlopAST.valid_input\"] }\n\ndef «O1» : Entry := {\n  id := \"O1\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"The output labels list contains exactly the input labels that are not the empty string, in their original order, with duplicates preserved.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 208, endByte := 260, origin := \"explicit\", interpretation := \"filtering rule\" }, { documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 331, endByte := 370, origin := \"explicit\", interpretation := \"ordering and duplication preservation\" }],\n  scope := [\"label filtering and ordering\"],\n  dependencies := [{ id := \"A1\", relation := \"assumes\" }, { id := \"D3\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"For every label in input['labels'], if label != '', it appears in output['labels'] at the same relative position among non-empty labels\", \"No label equal to '' appears in output['labels']\", \"Duplicates in input['labels'] are preserved in output['labels']\"],\n  bindings := [\"VeriSlopAST.solve_correct\"] }\n\ndef «O2» : Entry := {\n  id := \"O2\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"Each element in the output labels list is the concatenation of the input prefix followed by the corresponding non-empty input label.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 261, endByte := 330, origin := \"explicit\", interpretation := \"concatenation rule\" }],\n  scope := [\"label transformation\"],\n  dependencies := [{ id := \"A1\", relation := \"assumes\" }, { id := \"D3\", relation := \"uses_definition\" }, { id := \"O1\", relation := \"refines\" }],\n  acceptanceCriteria := [\"For each index i in output['labels'], output['labels'][i] == input['prefix'] + original_label_i\", \"Where original_label_i is the i-th non-empty label from input['labels'] in original order\"],\n  bindings := [\"VeriSlopAST.solve_correct\"] }\n\ndef «O3» : Entry := {\n  id := \"O3\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"Unicode text in the output labels is preserved exactly, without trimming whitespace or normalizing combining characters.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 563, endByte := 593, origin := \"explicit\", interpretation := \"exact Unicode preservation\" }, { documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 594, endByte := 651, origin := \"explicit\", interpretation := \"prohibited transformations\" }],\n  scope := [\"Unicode preservation\"],\n  dependencies := [{ id := \"A1\", relation := \"assumes\" }, { id := \"D3\", relation := \"uses_definition\" }, { id := \"O2\", relation := \"refines\" }],\n  acceptanceCriteria := [\"No whitespace is trimmed from any label or prefix\", \"No Unicode normalization (e.g., NFC, NFD) is applied to any label or prefix\", \"Combining characters are preserved as-is\"],\n  bindings := [\"VeriSlopAST.solve_correct\"] }\n\ndef «O4» : Entry := {\n  id := \"O4\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"If the input labels list contains only empty strings (or is empty), the output labels is an empty list and count is zero.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 488, endByte := 562, origin := \"explicit\", interpretation := \"empty result specification\" }],\n  scope := [\"empty result case\"],\n  dependencies := [{ id := \"A1\", relation := \"assumes\" }, { id := \"D5\", relation := \"uses_definition\" }, { id := \"O1\", relation := \"refines\" }],\n  acceptanceCriteria := [\"If all input labels are empty strings, output['labels'] == []\", \"If all input labels are empty strings, output['count'] == 0\"],\n  bindings := [\"VeriSlopAST.solve_correct\"] }\n\ndef «O5» : Entry := {\n  id := \"O5\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"The prefix may be an empty string, and in that case each output label equals the corresponding non-empty input label unchanged.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 652, endByte := 676, origin := \"explicit\", interpretation := \"empty prefix allowance\" }],\n  scope := [\"empty prefix case\"],\n  dependencies := [{ id := \"A1\", relation := \"assumes\" }, { id := \"D3\", relation := \"uses_definition\" }, { id := \"O2\", relation := \"refines\" }],\n  acceptanceCriteria := [\"If input['prefix'] == '', then for each i, output['labels'][i] == original_label_i\"],\n  bindings := [\"VeriSlopAST.solve_correct\"] }\n\ndef «N1» : Entry := {\n  id := \"N1\",\n  revision := 1,\n  kind := \"explicit_non_goal\",\n  role := \"exclusion\",\n  statement := \"Handling inputs outside the stated schema is outside the scope of this task.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 677, endByte := 766, origin := \"explicit\", interpretation := \"scope exclusion for out-of-schema inputs\" }],\n  scope := [\"input validation beyond schema\"],\n  dependencies := [],\n  acceptanceCriteria := [\"No obligation to validate or handle malformed inputs beyond the stated schema\"],\n  bindings := [] }\n\ndef «N2» : Entry := {\n  id := \"N2\",\n  revision := 1,\n  kind := \"explicit_non_goal\",\n  role := \"exclusion\",\n  statement := \"Handling environmental effects is outside the scope of this task.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 677, endByte := 766, origin := \"explicit\", interpretation := \"scope exclusion for environmental effects\" }],\n  scope := [\"environmental effects\"],\n  dependencies := [],\n  acceptanceCriteria := [\"No obligation to handle environmental effects\"],\n  bindings := [] }\n\ndef «witness_A1» : Entry := {\n  id := \"witness_A1\",\n  revision := 1,\n  kind := \"non_vacuity\",\n  role := \"guarantee\",\n  statement := \"Non-vacuity: The empty Input record satisfies the valid_input predicate. (witnesses A1)\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 70, endByte := 139, origin := \"inferred\", interpretation := \"derived by registered rule verislop.non-vacuity/0.1 from assumption A1\" }, { documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 140, endByte := 207, origin := \"inferred\", interpretation := \"derived by registered rule verislop.non-vacuity/0.1 from assumption A1\" }, { documentRef := \"data-pipelines/P03-unicode-labels.txt\", documentHash := \"sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55\", startByte := 677, endByte := 766, origin := \"inferred\", interpretation := \"derived by registered rule verislop.non-vacuity/0.1 from assumption A1\" }],\n  scope := [\"input validation\"],\n  dependencies := [{ id := \"A1\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"Prove the existential theorem with concrete witnesses extractable by bounded kernel head-normalisation.\"],\n  bindings := [\"VeriSlopAST.witness_A1\"] }\n\ndef entries : List Entry := [«D1», «D2», «D3», «D4», «D5», «A1», «O1», «O2», «O3», «O4», «O5», «N1», «N2», «witness_A1»]\n\nend VeriSlop.Registry\n-- END VERISLOP REGISTRY\n\nnamespace VeriSlopAST\nstructure «Input» where\n  «labels» : (_root_.List _root_.String)\n  «prefix» : _root_.String\nstructure «Output» where\n  «labels» : (_root_.List _root_.String)\n  «count» : _root_.Nat\ndef «solve» («_v0» : _root_.VeriSlopAST.«Input») : _root_.VeriSlopAST.«Output» := (_root_.VeriSlopAST.«Output».«mk» (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))) (@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))))\ntheorem «_vs_body_solve» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), ((_root_.VeriSlopAST.«solve» «_v0») = (_root_.VeriSlopAST.«Output».«mk» (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))) (@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))))) := by intros; rfl\n@[reducible] def «valid_input» («_v0» : _root_.VeriSlopAST.«Input») : Prop := _root_.True\ntheorem «_vs_predicate_valid_input» («_v0» : _root_.VeriSlopAST.«Input») : ((_root_.VeriSlopAST.«valid_input» «_v0») ↔ _root_.True) := by rfl\ntheorem «solve_correct» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), (((_root_.VeriSlopAST.«Output».«labels» (_root_.VeriSlopAST.«solve» «_v0»)) = (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))) ∧ ((_root_.VeriSlopAST.«Output».«count» (_root_.VeriSlopAST.«solve» «_v0»)) = (@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Bool.not (_root_.String.isEmpty «_v1»))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))))) := by first | (grind [_root_.«VeriSlopAST».«solve», _root_.«VeriSlopAST».«valid_input»]) | (simp_all [_root_.«VeriSlopAST».«solve», _root_.«VeriSlopAST».«valid_input»]; done) | (unfold _root_.«VeriSlopAST».«solve» _root_.«VeriSlopAST».«valid_input» at *; simp_all; omega) | omega | decide | sorry\ntheorem «witness_A1» : (∃ («_v0» : _root_.VeriSlopAST.«Input»), (_root_.VeriSlopAST.«valid_input» «_v0»)) := by first | (refine ⟨(_root_.«VeriSlopAST».«Input».«mk» [] \"\"), ?_⟩; simp [_root_.«VeriSlopAST».«solve», _root_.«VeriSlopAST».«valid_input»]; done) | (refine ⟨(_root_.«VeriSlopAST».«Input».«mk» [\"\"] \"x\"), ?_⟩; simp [_root_.«VeriSlopAST».«solve», _root_.«VeriSlopAST».«valid_input»]; done) | (refine ⟨(_root_.«VeriSlopAST».«Input».«mk» [] \"\"), ?_⟩; simp [_root_.«VeriSlopAST».«solve», _root_.«VeriSlopAST».«valid_input»]; done) | (refine ⟨(_root_.«VeriSlopAST».«Input».«mk» [\"\"] \"x\"), ?_⟩; simp [_root_.«VeriSlopAST».«solve», _root_.«VeriSlopAST».«valid_input»]; done) | sorry\nend VeriSlopAST\n"
+  },
+  "ledger": {
+    "ambiguities": [],
+    "artifact_kind": "interpretation",
+    "assumptions": [
+      {
+        "discharged_at": "function invocation, by the caller providing data that conforms to the stated schema",
+        "id": "A1",
+        "supplied_by": "caller"
+      }
+    ],
+    "clauses": [
+      {
+        "disposition": "obligations",
+        "end_byte": 69,
+        "refs": [
+          "D1"
+        ],
+        "start_byte": 0
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 139,
+        "refs": [
+          "D2",
+          "A1"
+        ],
+        "start_byte": 70
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 207,
+        "refs": [
+          "D3",
+          "A1"
+        ],
+        "start_byte": 140
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 260,
+        "refs": [
+          "O1"
+        ],
+        "start_byte": 208
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 330,
+        "refs": [
+          "O2"
+        ],
+        "start_byte": 261
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 370,
+        "refs": [
+          "O1"
+        ],
+        "start_byte": 331
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 433,
+        "refs": [
+          "D4"
+        ],
+        "start_byte": 371
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 487,
+        "refs": [
+          "D5"
+        ],
+        "start_byte": 434
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 562,
+        "refs": [
+          "O4"
+        ],
+        "start_byte": 488
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 593,
+        "refs": [
+          "O3"
+        ],
+        "start_byte": 563
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 651,
+        "refs": [
+          "O3"
+        ],
+        "start_byte": 594
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 676,
+        "refs": [
+          "O5"
+        ],
+        "start_byte": 652
+      },
+      {
+        "disposition": "exclusion",
+        "end_byte": 766,
+        "refs": [
+          "N1",
+          "N2"
+        ],
+        "start_byte": 677
+      }
+    ],
+    "request": {
+      "byte_length": 767,
+      "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+      "document_ref": "data-pipelines/P03-unicode-labels.txt"
+    },
+    "schema_version": "0.1",
+    "selected_defaults": []
+  },
+  "non_goals": [
+    "Handling inputs outside the stated schema is outside the scope of this task.",
+    "Handling environmental effects is outside the scope of this task."
+  ],
+  "obligations": {
+    "A1": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.valid_input",
+        "representation": "typed_metadata"
+      },
+      "kind": "precondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "assumption",
+      "statement": "The input data conforms to the stated schema: a JSON object with exactly the fields labels (list of Unicode strings) and prefix (Unicode string)."
+    },
+    "D1": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve",
+        "representation": "typed_metadata"
+      },
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "declaration",
+      "statement": "The function is named solve, takes a single argument data, and is implemented in Python."
+    },
+    "D2": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Input",
+        "representation": "typed_metadata"
+      },
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "declaration",
+      "statement": "The input data is a JSON object with exactly the fields labels and prefix."
+    },
+    "D3": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Input",
+        "representation": "typed_metadata"
+      },
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "declaration",
+      "statement": "The field labels is a list of Unicode strings and the field prefix is a Unicode string."
+    },
+    "D4": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Output",
+        "representation": "typed_metadata"
+      },
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "declaration",
+      "statement": "The output is a JSON object with exactly the fields labels and count."
+    },
+    "D5": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Output",
+        "representation": "typed_metadata"
+      },
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "declaration",
+      "statement": "The output field labels is the resulting list and the output field count is its length."
+    },
+    "N1": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Registry.N1",
+        "representation": "typed_metadata"
+      },
+      "kind": "explicit_non_goal",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "exclusion",
+      "statement": "Handling inputs outside the stated schema is outside the scope of this task."
+    },
+    "N2": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Registry.N2",
+        "representation": "typed_metadata"
+      },
+      "kind": "explicit_non_goal",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "exclusion",
+      "statement": "Handling environmental effects is outside the scope of this task."
+    },
+    "O1": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "The output labels list contains exactly the input labels that are not the empty string, in their original order, with duplicates preserved."
+    },
+    "O2": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "Each element in the output labels list is the concatenation of the input prefix followed by the corresponding non-empty input label."
+    },
+    "O3": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "Unicode text in the output labels is preserved exactly, without trimming whitespace or normalizing combining characters."
+    },
+    "O4": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "If the input labels list contains only empty strings (or is empty), the output labels is an empty list and count is zero."
+    },
+    "O5": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_correct",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "The prefix may be an empty string, and in that case each output label equals the corresponding non-empty input label unchanged."
+    },
+    "witness_A1": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.witness_A1",
+        "representation": "contract_dsl"
+      },
+      "kind": "non_vacuity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "PASS",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "Non-vacuity: The empty Input record satisfies the valid_input predicate. (witnesses A1)"
+    }
+  },
+  "request": "Implement a Python function solve(data) for a Unicode label pipeline.\nThe input is a JSON object with exactly the fields labels and prefix. labels is a list of Unicode strings and prefix is a Unicode string.\nRemove exactly the labels that are the empty string. For every remaining label, concatenate prefix followed by that label. Preserve original order and duplicates.\nReturn a JSON object with exactly the fields labels and count. labels is the resulting list and count is its length. An empty result has labels equal to an empty list and count equal to zero.\nPreserve Unicode text exactly. Do not trim whitespace or normalize combining characters. The prefix may be empty.\nInputs outside the stated schema and environmental effects are outside this task's scope.\n",
+  "scope": [
+    "A1",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "N1",
+    "N2",
+    "O1",
+    "O2",
+    "O3",
+    "O4",
+    "O5",
+    "witness_A1"
+  ],
+  "tests": {
+    "artifact_kind": "test_results",
+    "campaign": {
+      "artifact_kind": "test_campaign",
+      "boundary": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "7",
+        "8",
+        "15",
+        "16",
+        "255",
+        "256",
+        "65535",
+        "65536",
+        "2147483647",
+        "2147483648",
+        "4294967295",
+        "4294967296",
+        "9007199254740992",
+        "9223372036854775807",
+        "9223372036854775808",
+        "18446744073709551615",
+        "18446744073709551616",
+        "18446744073709551617"
+      ],
+      "boundary_probability_percent": 20,
+      "cases_per_obligation": 32,
+      "data_limits": {
+        "max_field_grid_values": 8,
+        "max_list_length": 8,
+        "max_record_grid_values": 20,
+        "max_string_length": 32,
+        "max_value_depth": 32,
+        "max_value_nodes": 4096
+      },
+      "generator": "verislop.data-sampler/0.2",
+      "grid": [
+        0,
+        1,
+        2
+      ],
+      "hint_probability_percent": 75,
+      "inner_samples": 8,
+      "max_generated_factor": 20,
+      "min_effective_cases": 20,
+      "nondeterminism_rechecks": 64,
+      "per_call_timeout_ms": 5000,
+      "random_mix": {
+        "large_bits": 70,
+        "medium_max": 10000,
+        "small_max": 32,
+        "weights": [
+          60,
+          25,
+          15
+        ]
+      },
+      "schema_version": "0.1",
+      "seed": 20261008,
+      "serialization_profile": "python-v0_2",
+      "shrink": true,
+      "signed_boundary": [
+        "-18446744073709551617",
+        "-18446744073709551616",
+        "-18446744073709551615",
+        "-9223372036854775808",
+        "-9223372036854775807",
+        "-9007199254740992",
+        "-4294967296",
+        "-4294967295",
+        "-2147483648",
+        "-2147483647",
+        "-65536",
+        "-65535",
+        "-256",
+        "-255",
+        "-16",
+        "-15",
+        "-8",
+        "-7",
+        "-3",
+        "-2",
+        "-1",
+        "0",
+        "1",
+        "2",
+        "3",
+        "7",
+        "8",
+        "15",
+        "16",
+        "255",
+        "256",
+        "65535",
+        "65536",
+        "2147483647",
+        "2147483648",
+        "4294967295",
+        "4294967296",
+        "9007199254740992",
+        "9223372036854775807",
+        "9223372036854775808",
+        "18446744073709551615",
+        "18446744073709551616",
+        "18446744073709551617"
+      ],
+      "signed_grid": [
+        "-2",
+        "-1",
+        "0",
+        "1",
+        "2",
+        "-9223372036854775808",
+        "9223372036854775808"
+      ],
+      "unicode_boundary": [
+        "",
+        "a",
+        "é",
+        "é",
+        "漢字",
+        "🙂",
+        "\u0000",
+        "\n",
+        "𝄞"
+      ]
+    },
+    "line_coverage": {
+      "verislop_ast.py": {
+        "executable": 11,
+        "executed": 11
+      }
+    },
+    "obligations": {
+      "O1": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O2": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O3": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O4": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O5": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      }
+    },
+    "schema_version": "0.1",
+    "test_root": "sha256:6b827499610a4b1f6815b69bc2588fac9ca8d3c80b0a364795ebc8949296c629"
+  }
+}

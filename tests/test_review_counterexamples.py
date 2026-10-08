@@ -92,13 +92,18 @@ class CounterexampleReplayTests(unittest.TestCase):
         good = self.probe(obligation_id="O1", assignment=[{"int": "0"}])
         self.assertEqual(rc.validate_proposal(good), [])
         for mutation in ({**good, "command": "echo forge"}, {**good, "status": "CONFIRMED"},
-                         {**good, "assignment": [{"int": "00"}]}, {**good, "assignment": [{"int": "-1"}]},
+                         {**good, "assignment": [{"int": "00"}]},
                          {**good, "assignment": [{"bool": 1}]}, {**good, "assignment": [{"none": True}]},
                          {**good, "assignment": [{"int": "0", "extra": True}]}):
             with self.subTest(proposal=mutation):
                 self.assertTrue(rc.validate_proposal(mutation))
                 with patch.object(rc, "_target", side_effect=AssertionError("invalid proposal reached execution")):
                     self.assertEqual(rc.replay(self.pkg, "implementation", mutation)["status"], "UNSUPPORTED")
+
+    def test_signed_wire_syntax_is_valid_but_negative_nat_assignment_is_unsupported(self):
+        signed = self.probe(obligation_id="O1", assignment=[{"int": "-1"}])
+        self.assertEqual([], rc.validate_proposal(signed))
+        self.assertEqual("UNSUPPORTED", self.replay_target(signed["assignment"])["status"])
 
     def test_real_target_observation_confirms_false_predicate_and_keeps_exact_bindings(self):
         result = self.replay_target([{"int": "2"}], "def f(n): return n + 1\n")

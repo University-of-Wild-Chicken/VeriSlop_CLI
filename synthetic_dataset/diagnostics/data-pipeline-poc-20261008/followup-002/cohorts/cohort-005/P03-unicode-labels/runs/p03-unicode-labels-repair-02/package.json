@@ -1,0 +1,816 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "formalize",
+    "interpret",
+    "prove"
+  ],
+  "created_at": "2026-10-08T13:18:41Z",
+  "recovery_root": "p03-unicode-labels",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "p03-unicode-labels-repair-02",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-005/execution-config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-005/P03-unicode-labels/runs/p03-unicode-labels-repair-02/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-005/P03-unicode-labels/runs/p03-unicode-labels-repair-02/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/.verislop/data-pipeline-poc/cohort-005/P03-unicode-labels/runs/p03-unicode-labels-repair-02/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "PROOF_UNRESOLVED: 1 declaration(s) still use `sorry`; obligations remain unresolved (not disproved)",
+        "PROOF_UNRESOLVED: O1: VeriSlopAST.solve_filters_empty_labels depends on sorryAx",
+        "VERIFIER_NOT_RUN: no accepted IR; run `verislop export` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "PROOF_UNRESOLVED: PROVED:O1@1: FAIL — blocked: PROOF_UNRESOLVED",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run",
+        "194:239: unexpected token ':='; expected ')', ',' or ':'",
+        "194:7: Missing cases:\n",
+        "192:542: unsolved goals\n_v0 : Input\nh : (List.filter (fun _v1 => decide ¬_v1.isEmpty = true) _v0.labels).length = 0\nh1 : List.filter (fun _v1 => decide ¬_v1.isEmpty = true) _v0.labels = []\n⊢ (solve _v0).labels = [] ∧ (solve _v0).count = 0",
+        "202:386: Tactic `rfl` failed: The left-hand side\n  {\n      labels :=\n        List.map (fun _v1 => _v0.prefix.append _v1) (List.filter (fun _v1 => decide ¬_v1.isEmpty = true) _v0.labels),\n      count := (List.filter (fun _v1 => decide ¬_v1.isEmpty = true) _v0.labels).length }.labels\nis not definitionally equal to the right-hand side\n  List.filter (fun _v1 => decide ¬_v1.isEmpty = true) _v0.labels\n\n_v0 : Input\n⊢ {\n        labels :=\n          List.map (fun _v1 => _v0.prefix.append _v1) (List.filter (fun _v1 => decide ¬_v1.isEmpty = true) _v0.labels),\n        count := (List.filter (fun _v1 => decide ¬_v1.isEmpty = true) _v0.labels).length }.labels =\n    List.filter (fun _v1 => decide ¬_v1.isEmpty = true) _v0.labels"
+      ],
+      "interpretation_root": "sha256:b554f674e290154d2d1ac0c165cfd02d3f1bc4a73ae15df5beb4d9fb721df0d7",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "obligation": "A1",
+              "predicate": "VeriSlopAST.prefix_may_be_empty"
+            },
+            {
+              "declarations": [
+                "VeriSlopAST.solve"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "VeriSlopAST.Input"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "declarations": [
+                "VeriSlopAST.Input"
+              ],
+              "obligation": "D3"
+            },
+            {
+              "obligation": "I1",
+              "theorem": "VeriSlopAST.solve_preserves_unicode"
+            },
+            {
+              "obligation": "N1"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlopAST.solve_filters_empty_labels"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlopAST.solve_concatenates_prefix"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "VeriSlopAST.solve_returns_correct_structure"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "VeriSlopAST.solve_returns_correct_structure"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "VeriSlopAST.solve_empty_result"
+            }
+          ],
+          "internal_obligations": [],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "generated.v0_2",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\nnamespace VeriSlopAST\nstructure «Input» where\n  «labels» : (_root_.List _root_.String)\n  «prefix» : _root_.String\nstructure «Output» where\n  «labels» : (_root_.List _root_.String)\n  «count» : _root_.Nat\n@[reducible] def «prefix_may_be_empty» («_v0» : _root_.VeriSlopAST.«Input») : Prop := _root_.True\ntheorem «_vs_predicate_prefix_may_be_empty» («_v0» : _root_.VeriSlopAST.«Input») : ((_root_.VeriSlopAST.«prefix_may_be_empty» «_v0») ↔ _root_.True) := by rfl\ndef «solve» («_v0» : _root_.VeriSlopAST.«Input») : _root_.VeriSlopAST.«Output» := (_root_.VeriSlopAST.«Output».«mk» (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))) (@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))))\ntheorem «_vs_body_solve» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), ((_root_.VeriSlopAST.«solve» «_v0») = (_root_.VeriSlopAST.«Output».«mk» (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))) (@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))))) := by intros; rfl\ntheorem «solve_concatenates_prefix» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), ((_root_.VeriSlopAST.«Output».«labels» (_root_.VeriSlopAST.«solve» «_v0»)) = (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))))) := by sorry\ntheorem «solve_empty_result» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), (((@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))) = (0 : _root_.Nat)) → (((_root_.VeriSlopAST.«Output».«labels» (_root_.VeriSlopAST.«solve» «_v0»)) = ([] : (_root_.List _root_.String))) ∧ ((_root_.VeriSlopAST.«Output».«count» (_root_.VeriSlopAST.«solve» «_v0»)) = (0 : _root_.Nat))))) := by sorry\ntheorem «solve_filters_empty_labels» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), ((_root_.VeriSlopAST.«Output».«labels» (_root_.VeriSlopAST.«solve» «_v0»)) = (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))) := by sorry\ntheorem «solve_preserves_unicode» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), ((_root_.VeriSlopAST.«Output».«labels» (_root_.VeriSlopAST.«solve» «_v0»)) = (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»))))) := by sorry\ntheorem «solve_returns_correct_structure» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), (((_root_.VeriSlopAST.«Output».«labels» (_root_.VeriSlopAST.«solve» «_v0»)) = (@_root_.List.map _root_.String _root_.String (fun («_v1» : _root_.String) => (_root_.String.append (_root_.VeriSlopAST.«Input».«prefix» «_v0») «_v1»)) (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))) ∧ ((_root_.VeriSlopAST.«Output».«count» (_root_.VeriSlopAST.«solve» «_v0»)) = (@_root_.List.length _root_.String (@_root_.List.filter _root_.String (fun («_v1» : _root_.String) => (_root_.Decidable.decide (¬ ((_root_.String.isEmpty «_v1») = _root_.Bool.true)))) (_root_.VeriSlopAST.«Input».«labels» «_v0»)))))) := by sorry\nend VeriSlopAST\n",
+        "typed_proposal": {
+          "encoding": "verislop.formalizer-ast/0.1",
+          "obligations": {
+            "A1": {
+              "predicate": "prefix_may_be_empty"
+            },
+            "D1": {
+              "declarations": [
+                {
+                  "kind": "symbol",
+                  "name": "solve"
+                }
+              ]
+            },
+            "D2": {
+              "declarations": [
+                {
+                  "kind": "record",
+                  "name": "Input"
+                }
+              ]
+            },
+            "D3": {
+              "declarations": [
+                {
+                  "kind": "record",
+                  "name": "Input"
+                }
+              ]
+            },
+            "I1": {
+              "theorem": "solve_preserves_unicode"
+            },
+            "N1": {},
+            "O1": {
+              "theorem": "solve_filters_empty_labels"
+            },
+            "O2": {
+              "theorem": "solve_concatenates_prefix"
+            },
+            "O3": {
+              "theorem": "solve_returns_correct_structure"
+            },
+            "O4": {
+              "theorem": "solve_returns_correct_structure"
+            },
+            "O5": {
+              "theorem": "solve_empty_result"
+            }
+          },
+          "predicates": {
+            "prefix_may_be_empty": {
+              "args": [
+                {
+                  "record": "Input"
+                }
+              ],
+              "formula": {
+                "tag": "true"
+              }
+            }
+          },
+          "records": {
+            "Input": {
+              "fields": [
+                {
+                  "name": "labels",
+                  "sort": {
+                    "list": "String"
+                  }
+                },
+                {
+                  "name": "prefix",
+                  "sort": "String"
+                }
+              ]
+            },
+            "Output": {
+              "fields": [
+                {
+                  "name": "labels",
+                  "sort": {
+                    "list": "String"
+                  }
+                },
+                {
+                  "name": "count",
+                  "sort": "Nat"
+                }
+              ]
+            }
+          },
+          "symbols": {
+            "solve": {
+              "args": [
+                {
+                  "record": "Input"
+                }
+              ],
+              "body": {
+                "fields": [
+                  {
+                    "function": {
+                      "body": {
+                        "left": {
+                          "field": "prefix",
+                          "sort": "Input",
+                          "tag": "field",
+                          "value": {
+                            "index": 1,
+                            "tag": "var"
+                          }
+                        },
+                        "right": {
+                          "index": 0,
+                          "tag": "var"
+                        },
+                        "tag": "string_append"
+                      },
+                      "sort": "String"
+                    },
+                    "tag": "list_map",
+                    "value": {
+                      "function": {
+                        "body": {
+                          "formula": {
+                            "body": {
+                              "tag": "holds",
+                              "term": {
+                                "tag": "string_is_empty",
+                                "value": {
+                                  "index": 0,
+                                  "tag": "var"
+                                }
+                              }
+                            },
+                            "tag": "not"
+                          },
+                          "tag": "decide"
+                        },
+                        "sort": "String"
+                      },
+                      "tag": "list_filter",
+                      "value": {
+                        "field": "labels",
+                        "sort": "Input",
+                        "tag": "field",
+                        "value": {
+                          "index": 0,
+                          "tag": "var"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "tag": "list_length",
+                    "value": {
+                      "function": {
+                        "body": {
+                          "formula": {
+                            "body": {
+                              "tag": "holds",
+                              "term": {
+                                "tag": "string_is_empty",
+                                "value": {
+                                  "index": 0,
+                                  "tag": "var"
+                                }
+                              }
+                            },
+                            "tag": "not"
+                          },
+                          "tag": "decide"
+                        },
+                        "sort": "String"
+                      },
+                      "tag": "list_filter",
+                      "value": {
+                        "field": "labels",
+                        "sort": "Input",
+                        "tag": "field",
+                        "value": {
+                          "index": 0,
+                          "tag": "var"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "sort": "Output",
+                "tag": "record"
+              },
+              "result": {
+                "record": "Output"
+              }
+            }
+          },
+          "theorems": {
+            "solve_concatenates_prefix": {
+              "formula": {
+                "body": {
+                  "left": {
+                    "field": "labels",
+                    "sort": "Output",
+                    "tag": "field",
+                    "value": {
+                      "args": [
+                        {
+                          "index": 0,
+                          "tag": "var"
+                        }
+                      ],
+                      "symbol": "solve",
+                      "tag": "call"
+                    }
+                  },
+                  "right": {
+                    "function": {
+                      "body": {
+                        "left": {
+                          "field": "prefix",
+                          "sort": "Input",
+                          "tag": "field",
+                          "value": {
+                            "index": 1,
+                            "tag": "var"
+                          }
+                        },
+                        "right": {
+                          "index": 0,
+                          "tag": "var"
+                        },
+                        "tag": "string_append"
+                      },
+                      "sort": "String"
+                    },
+                    "tag": "list_map",
+                    "value": {
+                      "function": {
+                        "body": {
+                          "formula": {
+                            "body": {
+                              "tag": "holds",
+                              "term": {
+                                "tag": "string_is_empty",
+                                "value": {
+                                  "index": 0,
+                                  "tag": "var"
+                                }
+                              }
+                            },
+                            "tag": "not"
+                          },
+                          "tag": "decide"
+                        },
+                        "sort": "String"
+                      },
+                      "tag": "list_filter",
+                      "value": {
+                        "field": "labels",
+                        "sort": "Input",
+                        "tag": "field",
+                        "value": {
+                          "index": 0,
+                          "tag": "var"
+                        }
+                      }
+                    }
+                  },
+                  "tag": "eq"
+                },
+                "sort": {
+                  "record": "Input"
+                },
+                "tag": "forall"
+              }
+            },
+            "solve_empty_result": {
+              "formula": {
+                "body": {
+                  "left": {
+                    "left": {
+                      "tag": "list_length",
+                      "value": {
+                        "function": {
+                          "body": {
+                            "formula": {
+                              "body": {
+                                "tag": "holds",
+                                "term": {
+                                  "tag": "string_is_empty",
+                                  "value": {
+                                    "index": 0,
+                                    "tag": "var"
+                                  }
+                                }
+                              },
+                              "tag": "not"
+                            },
+                            "tag": "decide"
+                          },
+                          "sort": "String"
+                        },
+                        "tag": "list_filter",
+                        "value": {
+                          "field": "labels",
+                          "sort": "Input",
+                          "tag": "field",
+                          "value": {
+                            "index": 0,
+                            "tag": "var"
+                          }
+                        }
+                      }
+                    },
+                    "right": {
+                      "tag": "nat",
+                      "value": "0"
+                    },
+                    "tag": "eq"
+                  },
+                  "right": {
+                    "left": {
+                      "left": {
+                        "field": "labels",
+                        "sort": "Output",
+                        "tag": "field",
+                        "value": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "tag": "var"
+                            }
+                          ],
+                          "symbol": "solve",
+                          "tag": "call"
+                        }
+                      },
+                      "right": {
+                        "element_sort": "String",
+                        "items": [],
+                        "tag": "list"
+                      },
+                      "tag": "eq"
+                    },
+                    "right": {
+                      "left": {
+                        "field": "count",
+                        "sort": "Output",
+                        "tag": "field",
+                        "value": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "tag": "var"
+                            }
+                          ],
+                          "symbol": "solve",
+                          "tag": "call"
+                        }
+                      },
+                      "right": {
+                        "tag": "nat",
+                        "value": "0"
+                      },
+                      "tag": "eq"
+                    },
+                    "tag": "and"
+                  },
+                  "tag": "implies"
+                },
+                "sort": {
+                  "record": "Input"
+                },
+                "tag": "forall"
+              }
+            },
+            "solve_filters_empty_labels": {
+              "formula": {
+                "body": {
+                  "left": {
+                    "field": "labels",
+                    "sort": "Output",
+                    "tag": "field",
+                    "value": {
+                      "args": [
+                        {
+                          "index": 0,
+                          "tag": "var"
+                        }
+                      ],
+                      "symbol": "solve",
+                      "tag": "call"
+                    }
+                  },
+                  "right": {
+                    "function": {
+                      "body": {
+                        "formula": {
+                          "body": {
+                            "tag": "holds",
+                            "term": {
+                              "tag": "string_is_empty",
+                              "value": {
+                                "index": 0,
+                                "tag": "var"
+                              }
+                            }
+                          },
+                          "tag": "not"
+                        },
+                        "tag": "decide"
+                      },
+                      "sort": "String"
+                    },
+                    "tag": "list_filter",
+                    "value": {
+                      "field": "labels",
+                      "sort": "Input",
+                      "tag": "field",
+                      "value": {
+                        "index": 0,
+                        "tag": "var"
+                      }
+                    }
+                  },
+                  "tag": "eq"
+                },
+                "sort": {
+                  "record": "Input"
+                },
+                "tag": "forall"
+              }
+            },
+            "solve_preserves_unicode": {
+              "formula": {
+                "body": {
+                  "left": {
+                    "field": "labels",
+                    "sort": "Output",
+                    "tag": "field",
+                    "value": {
+                      "args": [
+                        {
+                          "index": 0,
+                          "tag": "var"
+                        }
+                      ],
+                      "symbol": "solve",
+                      "tag": "call"
+                    }
+                  },
+                  "right": {
+                    "function": {
+                      "body": {
+                        "left": {
+                          "field": "prefix",
+                          "sort": "Input",
+                          "tag": "field",
+                          "value": {
+                            "index": 1,
+                            "tag": "var"
+                          }
+                        },
+                        "right": {
+                          "index": 0,
+                          "tag": "var"
+                        },
+                        "tag": "string_append"
+                      },
+                      "sort": "String"
+                    },
+                    "tag": "list_map",
+                    "value": {
+                      "function": {
+                        "body": {
+                          "formula": {
+                            "body": {
+                              "tag": "holds",
+                              "term": {
+                                "tag": "string_is_empty",
+                                "value": {
+                                  "index": 0,
+                                  "tag": "var"
+                                }
+                              }
+                            },
+                            "tag": "not"
+                          },
+                          "tag": "decide"
+                        },
+                        "sort": "String"
+                      },
+                      "tag": "list_filter",
+                      "value": {
+                        "field": "labels",
+                        "sort": "Input",
+                        "tag": "field",
+                        "value": {
+                          "index": 0,
+                          "tag": "var"
+                        }
+                      }
+                    }
+                  },
+                  "tag": "eq"
+                },
+                "sort": {
+                  "record": "Input"
+                },
+                "tag": "forall"
+              }
+            },
+            "solve_returns_correct_structure": {
+              "formula": {
+                "body": {
+                  "left": {
+                    "left": {
+                      "field": "labels",
+                      "sort": "Output",
+                      "tag": "field",
+                      "value": {
+                        "args": [
+                          {
+                            "index": 0,
+                            "tag": "var"
+                          }
+                        ],
+                        "symbol": "solve",
+                        "tag": "call"
+                      }
+                    },
+                    "right": {
+                      "function": {
+                        "body": {
+                          "left": {
+                            "field": "prefix",
+                            "sort": "Input",
+                            "tag": "field",
+                            "value": {
+                              "index": 1,
+                              "tag": "var"
+                            }
+                          },
+                          "right": {
+                            "index": 0,
+                            "tag": "var"
+                          },
+                          "tag": "string_append"
+                        },
+                        "sort": "String"
+                      },
+                      "tag": "list_map",
+                      "value": {
+                        "function": {
+                          "body": {
+                            "formula": {
+                              "body": {
+                                "tag": "holds",
+                                "term": {
+                                  "tag": "string_is_empty",
+                                  "value": {
+                                    "index": 0,
+                                    "tag": "var"
+                                  }
+                                }
+                              },
+                              "tag": "not"
+                            },
+                            "tag": "decide"
+                          },
+                          "sort": "String"
+                        },
+                        "tag": "list_filter",
+                        "value": {
+                          "field": "labels",
+                          "sort": "Input",
+                          "tag": "field",
+                          "value": {
+                            "index": 0,
+                            "tag": "var"
+                          }
+                        }
+                      }
+                    },
+                    "tag": "eq"
+                  },
+                  "right": {
+                    "left": {
+                      "field": "count",
+                      "sort": "Output",
+                      "tag": "field",
+                      "value": {
+                        "args": [
+                          {
+                            "index": 0,
+                            "tag": "var"
+                          }
+                        ],
+                        "symbol": "solve",
+                        "tag": "call"
+                      }
+                    },
+                    "right": {
+                      "tag": "list_length",
+                      "value": {
+                        "function": {
+                          "body": {
+                            "formula": {
+                              "body": {
+                                "tag": "holds",
+                                "term": {
+                                  "tag": "string_is_empty",
+                                  "value": {
+                                    "index": 0,
+                                    "tag": "var"
+                                  }
+                                }
+                              },
+                              "tag": "not"
+                            },
+                            "tag": "decide"
+                          },
+                          "sort": "String"
+                        },
+                        "tag": "list_filter",
+                        "value": {
+                          "field": "labels",
+                          "sort": "Input",
+                          "tag": "field",
+                          "value": {
+                            "index": 0,
+                            "tag": "var"
+                          }
+                        }
+                      }
+                    },
+                    "tag": "eq"
+                  },
+                  "tag": "and"
+                },
+                "sort": {
+                  "record": "Input"
+                },
+                "tag": "forall"
+              }
+            }
+          },
+          "witness_obligations": {}
+        }
+      },
+      "rejected_stage": "accept"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "data-pipelines/P03-unicode-labels.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261008,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [],
+      "seconds": 139,
+      "stage": "formalize",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "PROOF_UNRESOLVED"
+      ],
+      "seconds": 850,
+      "stage": "prove",
+      "status": "BLOCKED"
+    },
+    {
+      "codes": [
+        "PROOF_UNRESOLVED"
+      ],
+      "seconds": 7,
+      "stage": "accept",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

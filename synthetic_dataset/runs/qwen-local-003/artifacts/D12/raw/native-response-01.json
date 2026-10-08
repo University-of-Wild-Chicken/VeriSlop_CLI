@@ -1,0 +1,17 @@
+{
+  "created_at": "2026-10-08T07:26:14.961748302Z",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 621,
+  "eval_duration": 11535966000,
+  "load_duration": 528765,
+  "message": {
+    "content": "{\"files\":{\"solution.py\":\"import json\\n\\ndef _canonical(value):\\n    \\\"\\\"\\\"Return a canonical JSON string for structural equality (object key order ignored).\\\"\\\"\\\"\\n    return json.dumps(value, sort_keys=True, separators=(',', ':'))\\n\\ndef solve(data):\\n    runs = data.get('runs', [])\\n    start = data.get('start', 0)\\n    end = data.get('end', 0)\\n\\n    # Validate counts and collect valid runs\\n    valid_runs = []\\n    for i, run in enumerate(runs):\\n        count = run.get('count')\\n        # Reject if count is not an integer (boolean is invalid) or negative\\n        if isinstance(count, bool) or not isinstance(count, int) or count < 0:\\n            return {'error': 'count', 'run': i}\\n        value = run.get('value')\\n        valid_runs.append((count, value))\\n\\n    # Remove zero-count runs and merge adjacent runs with structurally equal values\\n    normalized = []\\n    for count, value in valid_runs:\\n        if count == 0:\\n            continue\\n        if normalized:\\n            last_count, last_value = normalized[-1]\\n            if _canonical(last_value) == _canonical(value):\\n                normalized[-1] = (last_count + count, last_value)\\n            else:\\n                normalized.append((count, value))\\n        else:\\n            normalized.append((count, value))\\n\\n    # Calculate total length\\n    total_length = sum(count for count, _ in normalized)\\n\\n    # Clamp endpoints\\n    if start < 0:\\n        start = 0\\n    if end > total_length:\\n        end = total_length\\n\\n    # If end <= start, return empty slice\\n    if end <= start:\\n        slice_result = []\\n    else:\\n        # Expand only the requested slice (length at most 100)\\n        slice_result = []\\n        pos = 0\\n        for count, value in normalized:\\n            run_start = pos\\n            run_end = pos + count\\n            if run_end <= start:\\n                pos = run_end\\n                continue\\n            if run_start >= end:\\n                break\\n            # Determine overlap with [start, end)\\n            overlap_start = max(start, run_start)\\n            overlap_end = min(end, run_end)\\n            if overlap_start < overlap_end:\\n                slice_result.extend([value] * (overlap_end - overlap_start))\\n            pos = run_end\\n\\n    # Format normalized runs for output\\n    output_runs = [{'count': count, 'value': value} for count, value in normalized]\\n\\n    return {\\n        'runs': output_runs,\\n        'length': total_length,\\n        'slice': slice_result\\n    }\"}\n}",
+    "role": "assistant"
+  },
+  "model": "aix-qwen3.8:27b-ud-q3_k_xl",
+  "prompt_eval_cached_count": 0,
+  "prompt_eval_count": 449,
+  "prompt_eval_duration": 266050000,
+  "total_duration": 11883820027
+}

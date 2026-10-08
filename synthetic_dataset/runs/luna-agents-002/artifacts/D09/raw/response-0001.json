@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_d09_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:548b5b1855e50291a913330f327b52fa979e0cf8c91480a15ff3bcefa4fd1523",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:8d254248639e538981e261819a5dbf3e14b4face321e755ff350a76cf26794dd",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    latest = {}\\n    ignored = []\\n\\n    for index, event in enumerate(data[\\\"events\\\"]):\\n        key = event[\\\"key\\\"]\\n        revision = event[\\\"revision\\\"]\\n        current = latest.get(key)\\n\\n        if current is not None and revision <= current[0]:\\n            ignored.append(index)\\n            continue\\n\\n        op = event[\\\"op\\\"]\\n        latest[key] = (revision, op, event.get(\\\"value\\\"))\\n\\n    items = []\\n    tombstones = []\\n    for key in sorted(latest):\\n        revision, op, value = latest[key]\\n        if op == \\\"put\\\":\\n            items.append({\\\"key\\\": key, \\\"revision\\\": revision, \\\"value\\\": value})\\n        else:\\n            tombstones.append({\\\"key\\\": key, \\\"revision\\\": revision})\\n\\n    return {\\\"items\\\": items, \\\"tombstones\\\": tombstones, \\\"ignored\\\": ignored}\\n\"}}",
+  "transport": "collaboration"
+}

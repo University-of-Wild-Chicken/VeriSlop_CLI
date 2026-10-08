@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:draft:0.1",
+  "title": "Non-authoritative interpreted obligation proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "artifact_kind": {
+      "const": "draft"
+    },
+    "request_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entities": {
+          "type": "string",
+          "minLength": 1
+        },
+        "preconditions": {
+          "type": "string",
+          "minLength": 1
+        },
+        "postconditions": {
+          "type": "string",
+          "minLength": 1
+        },
+        "invariants": {
+          "type": "string",
+          "minLength": 1
+        },
+        "safety_properties": {
+          "type": "string",
+          "minLength": 1
+        },
+        "liveness_properties": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resource_constraints": {
+          "type": "string",
+          "minLength": 1
+        },
+        "error_semantics": {
+          "type": "string",
+          "minLength": 1
+        },
+        "explicit_non_goals": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ambiguities": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "entities",
+        "preconditions",
+        "postconditions",
+        "invariants",
+        "safety_properties",
+        "liveness_properties",
+        "resource_constraints",
+        "error_semantics",
+        "explicit_non_goals",
+        "ambiguities"
+      ]
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "entity"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "precondition"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "postconditions": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "postcondition"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "invariant"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "safety_properties": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "safety_property"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "liveness_properties": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "liveness_property"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "resource_constraints": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "resource_constraint"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "error_semantics": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "error_semantics"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "explicit_non_goals": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "explicit_non_goal"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ambiguities": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:verislop:schema:obligation:0.1"
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "ambiguity"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "request_ref",
+    "category_review",
+    "entities",
+    "preconditions",
+    "postconditions",
+    "invariants",
+    "safety_properties",
+    "liveness_properties",
+    "resource_constraints",
+    "error_semantics",
+    "explicit_non_goals",
+    "ambiguities"
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:e96d9370deb7b1fb77d5bf3bf62a8902a71ca807059860fa19edd35c3e413e80",
+  "created_at": "2026-10-08T03:26:53Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-01",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/D09/verislop/package-repair-01/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/D09/verislop/package-repair-01/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/qwen-local-003/artifacts/D09/verislop/package-repair-01/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "counterexamples": [],
+      "feedback": [
+        "CANDIDATE_BUILD_FAILURE: the challenge does not elaborate: 285:108: unexpected token 'end'; expected term; 286:6: Missing name after `end`: Expected the current scope name `D09`\n\nHint: To end the current scope `D09`, specify its name:\n  end ̲D̲0̲9̲; 287:4: Missing name after `end`: Expected the current scope name `D09`\n\nHint: To end the current scope `D09`, specify its name:\n  end ̲D̲0̲9̲; 288:2: unexpected token 'let'; expected command",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run"
+      ],
+      "interpretation_root": "sha256:a40ed9eb5383d0e5e8e538da80bf30e17969472e1a5aa4a481aa37aefa8fe7c0",
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "declarations": [
+                "VeriSlop.D09.solve"
+              ],
+              "obligation": "D1"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D09.solve"
+              ],
+              "obligation": "D2"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D09.solve"
+              ],
+              "obligation": "D3"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D09.Event"
+              ],
+              "obligation": "D4"
+            },
+            {
+              "declarations": [
+                "VeriSlop.D09.Result"
+              ],
+              "obligation": "D5"
+            },
+            {
+              "obligation": "O1",
+              "theorem": "VeriSlop.D09.O1_process_in_input_order"
+            },
+            {
+              "obligation": "O2",
+              "theorem": "VeriSlop.D09.O2_first_event_establishes_state"
+            },
+            {
+              "obligation": "O3",
+              "theorem": "VeriSlop.D09.O3_later_event_replaces_only_if_strictly_greater"
+            },
+            {
+              "obligation": "O4",
+              "theorem": "VeriSlop.D09.O4_equal_or_lower_revision_ignored"
+            },
+            {
+              "obligation": "O5",
+              "theorem": "VeriSlop.D09.O5_delete_creates_tombstone"
+            },
+            {
+              "obligation": "O6",
+              "theorem": "VeriSlop.D09.O6_items_sorted_by_key"
+            },
+            {
+              "obligation": "O7",
+              "theorem": "VeriSlop.D09.O7_tombstones_sorted_by_key"
+            },
+            {
+              "obligation": "O8",
+              "theorem": "VeriSlop.D09.O8_ignored_sorted_ascending"
+            },
+            {
+              "obligation": "O9",
+              "theorem": "VeriSlop.D09.O9_keys_can_be_empty"
+            },
+            {
+              "obligation": "N1"
+            }
+          ],
+          "internal_obligations": [],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "D09.v0_1",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\nnamespace VeriSlop.D09\n\ninductive Op where\n  | put\n  | delete\n\ninductive Json where\n  | null\n  | bool (b : Bool)\n  | num (n : Nat)\n  | str (s : String)\n  | arr (xs : List Json)\n  | obj (xs : List (String × Json))\n\nstructure Event where\n  key : String\n  revision : Nat\n  op : Op\n  value : Json\n\nstructure Item where\n  key : String\n  revision : Nat\n  value : Json\n\nstructure Tombstone where\n  key : String\n  revision : Nat\n\nstructure Result where\n  items : List Item\n  tombstones : List Tombstone\n  ignored : List Nat\n\nstructure State where\n  rev : Nat\n  op : Op\n  value : Json\n\ndef solve (events : List Event) : Result :=\n  let rec fold (acc : List (String × State)) (ignored : List Nat) (evs : List Event) (i : Nat) : List (String × State) × List Nat :=\n    match evs with\n    | [] => (acc, ignored)\n    | e :: rest =>\n      match acc with\n      | [] => fold ([(e.key, { rev := e.revision, op := e.op, value := e.value })], ignored) rest (i + 1)\n      | (k, s) :: tail =>\n        if k = e.key then\n          if e.revision > s.rev then\n            fold ((k, { rev := e.revision, op := e.op, value := e.value }) :: tail, ignored) rest (i + 1)\n          else\n            fold (acc, ignored ++ [i]) rest (i + 1)\n        else\n          fold (acc ++ [(e.key, { rev := e.revision, op := e.op, value := e.value })], ignored) rest (i + 1)\n      end\n    end\n  let (finalAcc, finalIgnored) := fold [] [] events 0\n  let items := finalAcc.filter (fun p => p.2.op = Op.put).map (fun p => { key := p.1, revision := p.2.rev, value := p.2.value })\n  let tombstones := finalAcc.filter (fun p => p.2.op = Op.delete).map (fun p => { key := p.1, revision := p.2.rev })\n  { items := items, tombstones := tombstones, ignored := finalIgnored }\n\ntheorem O1_process_in_input_order (events : List Event) : True := by sorry\n\ntheorem O2_first_event_establishes_state (events : List Event) : True := by sorry\n\ntheorem O3_later_event_replaces_only_if_strictly_greater (events : List Event) : True := by sorry\n\ntheorem O4_equal_or_lower_revision_ignored (events : List Event) : True := by sorry\n\ntheorem O5_delete_creates_tombstone (events : List Event) : True := by sorry\n\ntheorem O6_items_sorted_by_key (events : List Event) : True := by sorry\n\ntheorem O7_tombstones_sorted_by_key (events : List Event) : True := by sorry\n\ntheorem O8_ignored_sorted_ascending (events : List Event) : True := by sorry\n\ntheorem O9_keys_can_be_empty (events : List Event) : True := by sorry\n\nend VeriSlop.D09"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261007,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "CANDIDATE_BUILD_FAILURE"
+      ],
+      "seconds": 72,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

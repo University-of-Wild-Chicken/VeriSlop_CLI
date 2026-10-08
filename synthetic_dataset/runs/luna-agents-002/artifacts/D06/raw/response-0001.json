@@ -1,0 +1,11 @@
+{
+  "agent_task_id": "/root/luna_benchmark_restart/luna002_d06_raw_0001",
+  "fork_turns": "none",
+  "model_override": "gpt-6-luna",
+  "request_id": "0001",
+  "request_sha256": "sha256:cdb8a3f7232b74ad5ef42c0197954f7d3f69e3c8548918c3a749575dcc01445f",
+  "requested_model": "gpt-6-luna",
+  "spawn_message_sha256": "sha256:f2b36685f1adb12afa7809a5f85a1956f08ba5b27ed8b2dcddbf3cfbe083a65c",
+  "text": "{\"files\":{\"solution.py\":\"def solve(data):\\n    lines = list(data[\\\"lines\\\"])\\n    for index, operation in enumerate(data[\\\"operations\\\"]):\\n        at = operation[\\\"at\\\"]\\n        if isinstance(at, bool) or not isinstance(at, int) or at < 0 or at > len(lines):\\n            return {\\\"error\\\": \\\"range\\\", \\\"operation\\\": index}\\n\\n        remove = operation.get(\\\"remove\\\", [])\\n        insert = operation.get(\\\"insert\\\", [])\\n        end = at + len(remove)\\n        if end > len(lines) or lines[at:end] != remove:\\n            return {\\\"error\\\": \\\"context\\\", \\\"operation\\\": index}\\n\\n        lines[at:end] = insert\\n\\n    return {\\\"lines\\\": lines}\\n\"} }",
+  "transport": "collaboration"
+}

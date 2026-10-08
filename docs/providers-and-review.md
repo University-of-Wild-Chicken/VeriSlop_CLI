@@ -113,7 +113,7 @@ The supervisor preserves the raw response and registered replay receipts, and re
 
 The repairer MUST NOT weaken the contract, change assumptions, reduce reviewer counts, alter the quorum, replace difficult models, lower the bridge tier, or remove evidence to pass the existing run. Such proposals are explicit configuration/interpretation revisions with new roots. No silent fallbacks to a different provider/model are allowed. A user may predeclare fallback profiles; using one updates the reviewer identity and review target/configuration and is recorded before evaluating votes.
 
-Proof search and review use finite budgets: maximum candidates, repair rounds, calls, per-call tokens, total tokens, concurrency, wall time, and optionally cost based on a pinned pricing snapshot. Unknown pricing cannot support an enforceable monetary guarantee; hard request/token limits still apply. Default retries are bounded and respect provider rate-limit guidance. Review does not spin indefinitely waiting for consensus.
+Proof search and review retain finite work budgets: maximum candidates, repair rounds, calls, per-call tokens, total tokens, and concurrency. Wall-clock deadlines are configurable and may be explicitly disabled. Cost limits may use a pinned pricing snapshot; unknown pricing cannot support an enforceable monetary guarantee. Default retries are bounded and respect provider rate-limit guidance. Disabling wall-clock deadlines does not remove attempt or token limits.
 
 A review budget exhausted with unresolved findings yields blocked review and no release acceptance. If an unavailable service or provider failure prevents required reviewers from running, the top-level run reports INFRASTRUCTURE_FAILURE when that is the reason evaluation cannot complete. If votes complete and reject the candidate, the top-level result is BLOCKED. Both categories preserve partial ballots and diagnostics.
 
@@ -157,3 +157,52 @@ This gives three lower-tier reviewers, three intermediate reviewers, and one fin
 The future implementation MUST verify: credentials never enter agent prompts/logs; incompatible region/auth profiles fail explicitly; review counts equal configured membership; malformed/missing/duplicate ballots cannot pass consensus; lower-tier rejection prevents escalation; acceptance moves to exactly the next tier; final acceptance requires every tier; late rejection triggers repair/restart; artifact changes invalidate old votes; author/reviewer separation and diversity rules are enforced when configured; budgets terminate repair loops; unavailable models do not silently substitute; and unanimous ACCEPT cannot turn a failed Lean/bridge checker into PASS.
 
 Provider-specific authentication and capability references are maintained in [provider-sources.md](provider-sources.md). Adapter compatibility tests against the pinned service/protocol are required before advertising support.
+
+## 10. Implemented Ollama support
+
+The `ollama` adapter implements the native `ollama_chat` family. Users choose their own installed models through each agent's `model_ref`, either as a literal model name/tag or an environment reference such as `env:OLLAMA_MODEL`. There is no Qwen requirement or default model, and author/reviewer agents may select different models. The AIx Qwen model below is only the local test example.
+
+The built-in `ollama-local` profile points to `http://localhost:11434` and uses `auth_scheme: "none"`. Omit `credential_ref`, or set it to `"none"`, for an unauthenticated server. Users may supply their own Ollama endpoint profiles, including HTTPS servers on another machine and fixed reverse-proxy path prefixes. The adapter appends `/api/chat` and `/api/tags` to the supplied base URL. Endpoint URLs cannot contain embedded credentials, a query or a fragment. Loopback HTTP profiles use `allow_insecure_loopback: true`; a user-chosen remote HTTP server requires `allow_insecure_http: true`. HTTPS requires no HTTP opt-in.
+
+[ollama-server-endpoint-profiles.json](../examples/ollama-server-endpoint-profiles.json) is a generic custom-server example. Replace its example URL with your server URL and pass `--endpoint-profiles` to `providers check`, `providers probe`, or a configured workflow. It explicitly overrides `ollama-local`; different servers may instead use separate named profiles/provider assignments. If your server or reverse proxy requires a bearer token, set its profile's `auth_scheme` to `"bearer"` and configure the provider's `credential_ref` using the existing environment/keyring/secret-manager mechanisms. The token is applied to catalog and inference requests. Cloud provider credential requirements are unchanged.
+
+Use [ollama-review-config.json](../examples/ollama-review-config.json) for local author/prover/implementer roles and two sequential reviewer tiers. The lower tier has two reviewer instances and the final tier one; every instance must follow the same concrete-counterexample workflow as a cloud reviewer. Change the configured counts and model references as needed. Instances of one local model are not independent model families.
+
+```bash
+export OLLAMA_MODEL='your-installed-model:tag'
+python -m verislop providers check --config examples/ollama-review-config.json
+python -m verislop providers check --config examples/ollama-review-config.json --live
+python -m verislop providers probe --config examples/ollama-review-config.json \
+  --agent local-critic --live --max-output-tokens 128
+```
+
+`check` is offline unless `--live` is supplied. Its live check lists the configured server's available model names and catalog digests under `live_check.available_models`, without inference. Select one of those names in your agent configuration. `probe` makes one bounded JSON inference per selected agent, with no retries or retained completion body. Normal broker requests use nonstreaming native chat, JSON output mode, disabled thinking, temperature zero, and the configured finite output limit. Each response still passes the downstream VeriSlop JSON/schema and correctness checks. Truncation, tool responses, an unfinished completion, or a missing model remain explicit failures.
+
+To let a model finish without a request deadline, set its provider's `request_timeout_seconds` to `null`. This explicitly passes `None` to the HTTP transport; it does not substitute a large timeout. To disable the other model-workflow deadlines, also set `review.budgets.max_wall_seconds_per_tier` to `0` and use `run --budget-seconds 0` (or `prove --budget-seconds 0`) for proof search. These controls are independent; changing only the proof-search option does not remove provider or review deadlines. Positive defaults remain unchanged. Candidate/kernel build limits, proof-attempt caps, test execution limits, call caps, and output-token caps remain in force. The explicit `providers probe` command keeps its separately documented bounded probe limit.
+
+The prover role requests a JSON object containing the complete Lean source in `lean_source`, matching native JSON-mode transport. The supervisor unwraps that string and applies the existing frozen-statement and Lean proof checks. Legacy plain or fenced Lean responses remain accepted as proposals; decoding is never evidence of proof acceptance.
+
+Before and after inference the broker reads the selected model's catalog SHA-256 digest and records it in completion metadata and transcripts. The model must be installed on the configured server; entries that forward inference to Ollama cloud are outside this adapter. The adapter never pulls, creates, or substitutes a model. A user-supplied digest pin is optional unless the review policy requires a fixed snapshot. To bind a reviewer to an exact catalog identity, supply:
+
+```json
+"model_identity": {
+  "mode": "pinned",
+  "resolved_model": "your-installed-model:tag",
+  "model_digest_sha256": "<64 lowercase hexadecimal characters>"
+}
+```
+
+The optional digest pin must match before dispatch, and the observed catalog digest must remain unchanged afterward. Ollama review ballots preserve this digest; a fixed-snapshot review policy requires the digest for Ollama models. Catalog checks detect ordinary model replacement, while the configured Ollama server remains trusted to execute the reported weights; they are not a weight attestation or an atomic lock on model replacement.
+
+The AIx service supplied for local testing runs at `http://127.0.0.1:11435`. Its installed base model is `aix-qwen3.8:27b-ud-q3_k_xl` (catalog reports 27.3B, Q3_K_L), with digest `283945d2cfdbd2646a4cfa392a55f7ba6c64c69661464f145a321fcbe976a036`. [aix-ollama-endpoint-profiles.json](../examples/aix-ollama-endpoint-profiles.json) explicitly overrides the built-in endpoint for this service:
+
+```bash
+export OLLAMA_MODEL='aix-qwen3.8:27b-ud-q3_k_xl'
+python -m verislop providers check --config examples/ollama-review-config.json \
+  --endpoint-profiles examples/aix-ollama-endpoint-profiles.json --live
+python -m verislop providers probe --config examples/ollama-review-config.json \
+  --endpoint-profiles examples/aix-ollama-endpoint-profiles.json \
+  --agent local-critic --live --max-output-tokens 128
+```
+
+On 2026-10-07 the live catalog check and real broker JSON challenge both passed, with the exact requested/returned model name and digest, 79 input tokens and 24 output tokens. No model download or AIx source modification was required. This is evidence for the tested transport/JSON path; formal proof generation, review quality, and all cloud-provider live paths remain separate checks.
