@@ -1,0 +1,261 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The implementation is a Python function solve(data) for a numeric batch pipeline.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "A Python function named solve accepts data."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D2",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The input domain consists of JSON objects with exactly values, minimum and factor; values is a list of signed integers and minimum and factor are signed integers.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "The specified input has exactly the three named fields.",
+   "values contains signed integers; minimum and factor are signed integers."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Keep exactly the input occurrences whose original values are greater than or equal to minimum, maintaining original order and duplicate occurrences.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "The kept sequence is the subsequence of input values satisfying value >= minimum.",
+   "No qualifying occurrence is omitted and no nonqualifying occurrence is included.",
+   "Relative order and duplicate multiplicity are preserved."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Multiply each kept occurrence by factor to form the resulting list in kept order.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O1",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Each resulting element equals the corresponding kept original value multiplied by factor.",
+   "The resulting list has one element for every kept occurrence."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Return a JSON object with exactly values, total and count; values is the resulting list, total is its sum, and count is its length.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "The returned object's field set is exactly {values, total, count}.",
+   "values equals the resulting list defined by O2.",
+   "total equals the sum of returned values.",
+   "count equals the length of returned values."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "When the resulting list is empty, return values as an empty list, total as zero and count as zero.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "An empty resulting list produces {values: [], total: 0, count: 0}."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "All numeric operations use exact arbitrary-precision signed integer arithmetic, including when factor is negative or zero.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Comparisons, products and sums match mathematical signed integer arithmetic without overflow or precision loss.",
+   "Negative factors produce exact signed products.",
+   "A zero factor produces a zero for each kept occurrence without changing the resulting count."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N1",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Behavior for inputs outside the stated schema and environmental effects is outside the task's scope.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "No obligations are imposed on out-of-schema input behavior or environmental effects."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D2",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D2",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N1",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N1"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+[]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Implement a Python function solve(data) for a numeric batch pipeline.
+The input is a JSON object with exactly the fields values, minimum and factor. values is a list of signed integers; minimum and factor are signed integers.
+Keep each input value that is greater than or equal to minimum, in its original order, preserving duplicates. Multiply every kept value by factor.
+Return a JSON object with exactly the fields values, total and count. values is the resulting list; total is the sum of that list; count is its length.
+An empty result has values equal to an empty list, total equal to zero and count equal to zero. Arithmetic is exact arbitrary-precision signed integer arithmetic, including negative and zero factors.
+Inputs outside the stated schema and environmental effects are outside this task's scope.
+
+>>>

@@ -433,7 +433,9 @@ class StrictRecoveryLeanIntegrationTests(unittest.TestCase):
         from tests.helpers import MockLLM, mock_config, run_cli, unanimous
 
         good = (EX / "formalization/Contract.lean").read_text()
-        bad = good.replace("then .ok (input + 1)", "then .ok (input + 2)")
+        # Deliberately beyond the bounded default Nat seeds (0,1,2). Finite
+        # criticism must not bypass the proof/acceptance gate when it misses a bug.
+        bad = good.replace("then .ok (input + 1)", "then .ok (input + (if input > 2 then 2 else 1))")
         self.assertNotEqual(good, bad)
         form = json.loads((EX / "formalization/formalization.json").read_text())
         formalizer_requests = []
@@ -441,6 +443,9 @@ class StrictRecoveryLeanIntegrationTests(unittest.TestCase):
         review_requests = []
 
         def respond(system, user, model):
+            if "VeriSlop autonomous critic" in system:
+                from test_providers_review import Behaviour
+                return Behaviour()(system, user, model)
             if "VeriSlop formalizer" in system:
                 formalizer_requests.append(user)
                 return json.dumps({"lean_source": bad if len(formalizer_requests) == 1 else good,
@@ -491,7 +496,7 @@ class StrictRecoveryLeanIntegrationTests(unittest.TestCase):
                 active, rounds, _ = recovery.resolve_active(original)
                 self.assertEqual("accept", rounds[0]["rejected_stage"])
                 self.assertEqual(original.interpretation_root(), active.interpretation_root())
-                self.assertIn("then .ok (input + 2)", (original.path("contract") / "challenge/Contract.lean").read_text())
+                self.assertIn("input > 2 then 2 else 1", (original.path("contract") / "challenge/Contract.lean").read_text())
                 self.assertIn("then .ok (input + 1)", (active.path("contract") / "challenge/Contract.lean").read_text())
                 self.assertTrue((original.path("contract") / "proofs/candidate.lean").is_file())
                 self.assertEqual("BLOCKED", canonical.load_file(original.path("report"))["terminal_status"])
@@ -501,7 +506,7 @@ class StrictRecoveryLeanIntegrationTests(unittest.TestCase):
                 self.assertEqual("PASS", report["obligations"]["O17"]["outcomes"]["TESTED"])
                 self.assertEqual(2, len(report["builds"]))
                 self.assertTrue(all(build["ok"] for build in report["builds"]))
-                self.assertIn("input + 2", formalizer_requests[1])
+                self.assertIn("input > 2 then 2 else 1", formalizer_requests[1])
                 self.assertIn("PROOF_UNRESOLVED", formalizer_requests[1])
                 self.assertTrue(all(stage["status"] == "PASS" for stage in result["summary"]["stages"]))
             finally:

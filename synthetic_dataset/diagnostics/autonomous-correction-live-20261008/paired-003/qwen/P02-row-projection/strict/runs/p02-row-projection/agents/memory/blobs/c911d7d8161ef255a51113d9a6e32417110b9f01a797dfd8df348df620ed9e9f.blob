@@ -1,0 +1,411 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The function solve(data) accepts a JSON object with exactly the fields rows and minimum.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "data is a JSON object",
+   "data has exactly the keys 'rows' and 'minimum'"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D2",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The field minimum is a signed integer.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "minimum is an integer"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D3",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The field rows is a list of JSON objects, each with exactly the fields tag, amount and enabled.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "rows is a list",
+   "each element is a JSON object with exactly keys 'tag', 'amount', 'enabled'"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D4",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "In each row, tag is a Unicode string, amount is a signed integer, and enabled is a Boolean.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D3",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "tag is a string",
+   "amount is an integer",
+   "enabled is a boolean"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The output is a JSON object with exactly the fields rows, total and count.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "output is a JSON object",
+   "output has exactly the keys 'rows', 'total', 'count'"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The output rows list contains exactly the input rows where enabled is true and amount >= minimum, preserving original order and duplicates.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "D3",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "D4",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "A row is included if and only if enabled == true and amount >= minimum",
+   "The relative order of included rows matches the input order",
+   "Duplicate rows are preserved"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Each output row has exactly the fields tag and amount, copied without alteration from its retained input row.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "Each output row object has exactly keys 'tag' and 'amount'",
+   "The value of 'tag' is identical to the input row's 'tag'",
+   "The value of 'amount' is identical to the input row's 'amount'"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The output total is the sum of the amount fields of all retained rows, and count is the number of retained rows.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "total == sum(amount for row in retained_rows)",
+   "count == len(retained_rows)"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "If no rows are retained, the output rows is an empty list, total is 0, and count is 0.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "refines"
+   },
+   {
+    "id": "O4",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "If retained_rows is empty, output['rows'] == []",
+   "If retained_rows is empty, output['total'] == 0",
+   "If retained_rows is empty, output['count'] == 0"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I1",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "Arithmetic operations on amounts and total use exact arbitrary-precision signed integer arithmetic.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "D4",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "No floating-point arithmetic is used for amounts or total",
+   "Summation is exact for arbitrarily large integers"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I2",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "Unicode strings in tag fields are preserved exactly, including empty strings, whitespace, and combining characters.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D4",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Output tag values are byte-for-byte identical to input tag values",
+   "No normalization or trimming is applied to tag strings"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N1",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Handling of inputs outside the stated schema is not required.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No error handling or validation for malformed inputs is mandated"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N2",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Handling of environmental effects is not required.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No handling of external environmental factors is mandated"
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D2",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D2",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D3",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D3",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D4",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D4",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "I1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "I2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N1",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N1"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N2",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N2"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+[]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Implement a Python function solve(data) for a row filtering and projection pipeline.
+The input is a JSON object with exactly the fields rows and minimum. minimum is a signed integer. rows is a list of JSON objects, each with exactly the fields tag, amount and enabled: tag is a Unicode string, amount is a signed integer and enabled is a Boolean.
+Keep exactly the rows whose enabled field is true and whose amount is greater than or equal to minimum. Preserve original order and duplicates.
+Return a JSON object with exactly the fields rows, total and count. Each output row has exactly the fields tag and amount, copied without alteration from its retained input row. total is the sum of retained amounts and count is the number of retained rows.
+An empty result has rows equal to an empty list, total equal to zero and count equal to zero. Arithmetic is exact arbitrary-precision signed integer arithmetic. Preserve Unicode strings exactly, including empty strings, whitespace and combining characters.
+Inputs outside the stated schema and environmental effects are outside this task's scope.
+
+>>>

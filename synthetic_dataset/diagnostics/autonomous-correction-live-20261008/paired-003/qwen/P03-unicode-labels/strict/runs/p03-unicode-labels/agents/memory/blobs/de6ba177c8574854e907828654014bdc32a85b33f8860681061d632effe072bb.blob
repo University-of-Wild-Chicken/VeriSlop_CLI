@@ -1,0 +1,579 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The function is named solve, takes a single argument data, and is implemented in Python.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "A Python function named solve exists and accepts one parameter named data"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D2",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The input data is a JSON object with exactly the fields labels and prefix.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "data is a JSON object",
+   "data contains exactly the keys 'labels' and 'prefix'"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D3",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The field labels is a list of Unicode strings and the field prefix is a Unicode string.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "data['labels'] is a list where every element is a Unicode string",
+   "data['prefix'] is a Unicode string"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "A1",
+  "kind": "precondition",
+  "role": "assumption",
+  "statement": "The input data conforms to the stated schema: a JSON object with exactly the fields labels (list of Unicode strings) and prefix (Unicode string).",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "D3",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "data is a JSON object",
+   "data has exactly keys 'labels' and 'prefix'",
+   "data['labels'] is a list of Unicode strings",
+   "data['prefix'] is a Unicode string"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The function returns a JSON object with exactly the fields labels and count.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "return value is a JSON object",
+   "return value contains exactly the keys 'labels' and 'count'"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The output field labels is the list of remaining input labels (excluding empty strings) with the prefix concatenated to the front of each, preserving original order and duplicates.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "A1",
+    "relation": "assumes"
+   },
+   {
+    "id": "D3",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "For each input label L in data['labels'] where L != '', the output contains prefix + L at the corresponding position",
+   "Input labels where L == '' are not present in the output",
+   "The relative order of non-empty labels is preserved",
+   "Duplicate non-empty labels appear the same number of times in the output as in the input"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The output field count equals the length of the output labels list.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "return_value['count'] == len(return_value['labels'])"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "If the input labels list contains only empty strings (or is empty), the output labels is an empty list and count is zero.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "refines"
+   },
+   {
+    "id": "O3",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "If all input labels are empty strings, return_value['labels'] == []",
+   "If all input labels are empty strings, return_value['count'] == 0"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I1",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "Unicode text in the output labels is preserved exactly from the input labels, with no trimming of whitespace or normalization of combining characters.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "For each non-empty input label L, the suffix of the corresponding output label after the prefix is byte-identical to L",
+   "No whitespace is trimmed from the start or end of any label",
+   "No Unicode normalization (e.g., NFC, NFD) is applied to any label"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N1",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Handling of inputs outside the stated schema is not required.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No behavior is specified for inputs that do not conform to the schema in A1"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N2",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Handling of environmental effects is not required.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No behavior is specified for environmental effects"
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D2",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D2",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D3",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D3",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "A1",
+  "role": "assumption",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "A1",
+   "predicate": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "I1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N1",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N1"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N2",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N2"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[{"discharged_at": "function invocation, by the caller providing data that conforms to the stated schema", "id": "A1", "supplied_by": "caller"}]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+["A1"]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Implement a Python function solve(data) for a Unicode label pipeline.
+The input is a JSON object with exactly the fields labels and prefix. labels is a list of Unicode strings and prefix is a Unicode string.
+Remove exactly the labels that are the empty string. For every remaining label, concatenate prefix followed by that label. Preserve original order and duplicates.
+Return a JSON object with exactly the fields labels and count. labels is the resulting list and count is its length. An empty result has labels equal to an empty list and count equal to zero.
+Preserve Unicode text exactly. Do not trim whitespace or normalize combining characters. The prefix may be empty.
+Inputs outside the stated schema and environmental effects are outside this task's scope.
+
+>>>
+PREVIOUS CANDIDATE (untrusted source and binding proposal; repair rather than weaken):
+{
+ "lean_source": "-- unparseable formalizer response\n",
+ "formalization": {
+  "error": "unparseable formalizer response: typing: invalid sort 'Input'"
+ }
+}
+PREVIOUS UNPARSEABLE FORMALIZER RESPONSE (untrusted candidate; fix the envelope):
+{
+  "encoding": "verislop.formalizer-ast/0.1",
+  "records": {
+    "Input": {
+      "fields": [
+        {"name": "labels", "sort": {"list": "String"}},
+        {"name": "prefix", "sort": "String"}
+      ]
+    },
+    "Output": {
+      "fields": [
+        {"name": "labels", "sort": {"list": "String"}},
+        {"name": "count", "sort": "Nat"}
+      ]
+    }
+  },
+  "symbols": {
+    "solve": {
+      "args": ["Input"],
+      "result": "Output",
+      "body": {
+        "tag": "record",
+        "sort": "Output",
+        "fields": [
+          {
+            "tag": "list_filter",
+            "value": {
+              "tag": "field",
+              "sort": "Input",
+              "field": "labels",
+              "value": {"tag": "var", "index": 0}
+            },
+            "function": {
+              "sort": "String",
+              "body": {
+                "tag": "decide",
+                "formula": {
+                  "tag": "not",
+                  "body": {
+                    "tag": "eq",
+                    "left": {"tag": "var", "index": 0},
+                    "right": {"tag": "string", "value": ""}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "tag": "list_length",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "labels",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": "String",
+                "body": {
+                  "tag": "decide",
+                  "formula": {
+                    "tag": "not",
+                    "body": {
+                      "tag": "eq",
+                      "left": {"tag": "var", "index": 0},
+                      "right": {"tag": "string", "value": ""}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "predicates": {
+    "valid_input": {
+      "args": ["Input"],
+      "formula": {"tag": "true"}
+    }
+  },
+  "theorems": {
+    "solve_output_structure": {
+      "formula": {
+        "tag": "forall",
+        "sort": "Input",
+        "body": {
+          "tag": "and",
+          "left": {
+            "tag": "eq",
+            "left": {
+              "tag": "field",
+              "sort": "Output",
+              "field": "labels",
+              "value": {
+                "tag": "call",
+                "symbol": "solve",
+                "args": [{"tag": "var", "index": 0}]
+              }
+            },
+            "right": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "labels",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": "String",
+                "body": {
+                  "tag": "decide",
+                  "formula": {
+                    "tag": "not",
+                    "body": {
+                      "tag": "eq",
+                      "left": {"tag": "var", "index": 0},
+                      "right": {"tag": "string", "value": ""}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "right": {
+            "tag": "eq",
+            "left": {
+              "tag": "field",
+              "sort": "Output",
+              "field": "count",
+              "value": {
+                "tag": "call",
+                "symbol": "solve",
+                "args": [{"tag": "var", "index": 0}]
+              }
+            },
+            "right": {
+              "tag": "list_length",
+              "value": {
+                "tag": "list_filter",
+                "value": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "labels",
+                  "value": {"tag": "var", "index": 0}
+                },
+                "function": {
+                  "sort": "String",
+                  "body": {
+                    "tag": "decide",
+                    "formula": {
+                      "tag": "not",
+                      "body": {
+                        "tag": "eq",
+                        "left": {"tag": "var", "index": 0},
+                        "right": {"tag": "string", "value": ""}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "obligations": {
+    "D1": {
+      "declarations": [
+        {"kind": "symbol", "name": "solve"}
+      ]
+    },
+    "D2": {
+      "declarations": [
+        {"kind": "record", "name": "Input"}
+      ]
+    },
+    "D3": {
+      "declarations": [
+        {"kind": "record", "name": "Input"}
+      ]
+    },
+    "A1": {
+      "predicate": "valid_input"
+    },
+    "O1": {
+      "theorem": "solve_output_structure"
+    },
+    "O2": {
+      "theorem": "solve_output_structure"
+    },
+    "O3": {
+      "theorem": "solve_output_structure"
+    },
+    "O4": {
+      "theorem": "solve_output_structure"
+    },
+    "I1": {
+      "theorem": "solve_output_structure"
+    },
+    "N1": {},
+    "N2": {}
+  },
+  "witness_obligations": {
+    "witness_A1": {
+      "theorem": "solve_output_structure",
+      "witnesses_for": ["A1"],
+      "description": "The input record structure guarantees the schema; any Input record is a valid witness for the assumption that data conforms to the schema."
+    }
+  }
+}
+The previous candidate was rejected by the statement checker:
+- unparseable formalizer response: typing: invalid sort 'Input'
+- CRITIC DIAGNOSTIC REPAIR: The formalizer response is unparseable ('invalid sort Input'), so no executable guarantee exists to probe. Repair the formalization artifact so it parses and encodes the obligations (filter empty labels, prefix concatenation, order/duplicate preservation, count, Unicode fidelity) before critique can proceed.
+CORRECTION ATTEMPT 2: inspect each diagnostic and return a changed complete proposal that fixes the rejected syntax or registered-language use while preserving all obligations. Returning the same rejected source and bindings does not repair it.
+AUTONOMOUS CRITIQUE (untrusted proposals; preserve every interpreted obligation):
+{"status": "REPAIR", "feedback": ["CRITIC DIAGNOSTIC REPAIR: The formalizer response is unparseable ('invalid sort Input'), so no executable guarantee exists to probe. Repair the formalization artifact so it parses and encodes the obligations (filter empty labels, prefix concatenation, order/duplicate preservation, count, Unicode fidelity) before critique can proceed."]}

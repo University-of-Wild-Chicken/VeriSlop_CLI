@@ -1,0 +1,825 @@
+{
+  "encoding": "verislop.formalizer-ast/0.1",
+  "records": {
+    "InputRow": {
+      "fields": [
+        {"name": "tag", "sort": "String"},
+        {"name": "amount", "sort": "Int"},
+        {"name": "enabled", "sort": "Bool"}
+      ]
+    },
+    "Input": {
+      "fields": [
+        {"name": "rows", "sort": {"list": {"record": "InputRow"}}},
+        {"name": "minimum", "sort": "Int"}
+      ]
+    },
+    "OutputRow": {
+      "fields": [
+        {"name": "tag", "sort": "String"},
+        {"name": "amount", "sort": "Int"}
+      ]
+    },
+    "Output": {
+      "fields": [
+        {"name": "rows", "sort": {"list": {"record": "OutputRow"}}},
+        {"name": "total", "sort": "Int"},
+        {"name": "count", "sort": "Nat"}
+      ]
+    }
+  },
+  "symbols": {
+    "solve": {
+      "args": [{"record": "Input"}],
+      "result": {"record": "Output"},
+      "body": {
+        "tag": "record",
+        "sort": "Output",
+        "fields": [
+          {
+            "tag": "list_map",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "rows",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": {"record": "InputRow"},
+                "body": {
+                  "tag": "and",
+                  "left": {
+                    "tag": "bool_eq",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "enabled",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {"tag": "bool", "value": true}
+                  },
+                  "right": {
+                    "tag": "le",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "amount",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {
+                      "tag": "field",
+                      "sort": "Input",
+                      "field": "minimum",
+                      "value": {"tag": "var", "index": 1}
+                    }
+                  }
+                }
+              }
+            },
+            "function": {
+              "sort": {"record": "InputRow"},
+              "body": {
+                "tag": "record",
+                "sort": "OutputRow",
+                "fields": [
+                  {
+                    "tag": "field",
+                    "sort": "InputRow",
+                    "field": "tag",
+                    "value": {"tag": "var", "index": 0}
+                  },
+                  {
+                    "tag": "field",
+                    "sort": "InputRow",
+                    "field": "amount",
+                    "value": {"tag": "var", "index": 0}
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "tag": "list_sum",
+            "value": {
+              "tag": "list_map",
+              "value": {
+                "tag": "list_filter",
+                "value": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "rows",
+                  "value": {"tag": "var", "index": 0}
+                },
+                "function": {
+                  "sort": {"record": "InputRow"},
+                  "body": {
+                    "tag": "and",
+                    "left": {
+                      "tag": "bool_eq",
+                      "left": {
+                        "tag": "field",
+                        "sort": "InputRow",
+                        "field": "enabled",
+                        "value": {"tag": "var", "index": 0}
+                      },
+                      "right": {"tag": "bool", "value": true}
+                    },
+                    "right": {
+                      "tag": "le",
+                      "left": {
+                        "tag": "field",
+                        "sort": "InputRow",
+                        "field": "amount",
+                        "value": {"tag": "var", "index": 0}
+                      },
+                      "right": {
+                        "tag": "field",
+                        "sort": "Input",
+                        "field": "minimum",
+                        "value": {"tag": "var", "index": 1}
+                      }
+                    }
+                  }
+                }
+              },
+              "function": {
+                "sort": {"record": "InputRow"},
+                "body": {
+                  "tag": "field",
+                  "sort": "InputRow",
+                  "field": "amount",
+                  "value": {"tag": "var", "index": 0}
+                }
+              }
+            }
+          },
+          {
+            "tag": "list_length",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "rows",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": {"record": "InputRow"},
+                "body": {
+                  "tag": "and",
+                  "left": {
+                    "tag": "bool_eq",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "enabled",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {"tag": "bool", "value": true}
+                  },
+                  "right": {
+                    "tag": "le",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "amount",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {
+                      "tag": "field",
+                      "sort": "Input",
+                      "field": "minimum",
+                      "value": {"tag": "var", "index": 1}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "predicates": {},
+  "theorems": {
+    "solve_output_structure": {
+      "formula": {
+        "tag": "true"
+      }
+    },
+    "solve_row_filtering": {
+      "formula": {
+        "tag": "forall",
+        "sort": {"record": "Input"},
+        "body": {
+          "tag": "eq",
+          "left": {
+            "tag": "field",
+            "sort": "Output",
+            "field": "rows",
+            "value": {
+              "tag": "call",
+              "symbol": "solve",
+              "args": [{"tag": "var", "index": 0}]
+            }
+          },
+          "right": {
+            "tag": "list_map",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "rows",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": {"record": "InputRow"},
+                "body": {
+                  "tag": "and",
+                  "left": {
+                    "tag": "bool_eq",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "enabled",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {"tag": "bool", "value": true}
+                  },
+                  "right": {
+                    "tag": "le",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "amount",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {
+                      "tag": "field",
+                      "sort": "Input",
+                      "field": "minimum",
+                      "value": {"tag": "var", "index": 1}
+                    }
+                  }
+                }
+              }
+            },
+            "function": {
+              "sort": {"record": "InputRow"},
+              "body": {
+                "tag": "record",
+                "sort": "OutputRow",
+                "fields": [
+                  {
+                    "tag": "field",
+                    "sort": "InputRow",
+                    "field": "tag",
+                    "value": {"tag": "var", "index": 0}
+                  },
+                  {
+                    "tag": "field",
+                    "sort": "InputRow",
+                    "field": "amount",
+                    "value": {"tag": "var", "index": 0}
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "solve_row_projection": {
+      "formula": {
+        "tag": "forall",
+        "sort": {"record": "Input"},
+        "body": {
+          "tag": "eq",
+          "left": {
+            "tag": "field",
+            "sort": "Output",
+            "field": "rows",
+            "value": {
+              "tag": "call",
+              "symbol": "solve",
+              "args": [{"tag": "var", "index": 0}]
+            }
+          },
+          "right": {
+            "tag": "list_map",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "rows",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": {"record": "InputRow"},
+                "body": {
+                  "tag": "and",
+                  "left": {
+                    "tag": "bool_eq",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "enabled",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {"tag": "bool", "value": true}
+                  },
+                  "right": {
+                    "tag": "le",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "amount",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {
+                      "tag": "field",
+                      "sort": "Input",
+                      "field": "minimum",
+                      "value": {"tag": "var", "index": 1}
+                    }
+                  }
+                }
+              }
+            },
+            "function": {
+              "sort": {"record": "InputRow"},
+              "body": {
+                "tag": "record",
+                "sort": "OutputRow",
+                "fields": [
+                  {
+                    "tag": "field",
+                    "sort": "InputRow",
+                    "field": "tag",
+                    "value": {"tag": "var", "index": 0}
+                  },
+                  {
+                    "tag": "field",
+                    "sort": "InputRow",
+                    "field": "amount",
+                    "value": {"tag": "var", "index": 0}
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "solve_aggregates": {
+      "formula": {
+        "tag": "forall",
+        "sort": {"record": "Input"},
+        "body": {
+          "tag": "and",
+          "left": {
+            "tag": "eq",
+            "left": {
+              "tag": "field",
+              "sort": "Output",
+              "field": "total",
+              "value": {
+                "tag": "call",
+                "symbol": "solve",
+                "args": [{"tag": "var", "index": 0}]
+              }
+            },
+            "right": {
+              "tag": "list_sum",
+              "value": {
+                "tag": "list_map",
+                "value": {
+                  "tag": "list_filter",
+                  "value": {
+                    "tag": "field",
+                    "sort": "Input",
+                    "field": "rows",
+                    "value": {"tag": "var", "index": 0}
+                  },
+                  "function": {
+                    "sort": {"record": "InputRow"},
+                    "body": {
+                      "tag": "and",
+                      "left": {
+                        "tag": "bool_eq",
+                        "left": {
+                          "tag": "field",
+                          "sort": "InputRow",
+                          "field": "enabled",
+                          "value": {"tag": "var", "index": 0}
+                        },
+                        "right": {"tag": "bool", "value": true}
+                      },
+                      "right": {
+                        "tag": "le",
+                        "left": {
+                          "tag": "field",
+                          "sort": "InputRow",
+                          "field": "amount",
+                          "value": {"tag": "var", "index": 0}
+                        },
+                        "right": {
+                          "tag": "field",
+                          "sort": "Input",
+                          "field": "minimum",
+                          "value": {"tag": "var", "index": 1}
+                        }
+                      }
+                    }
+                  }
+                },
+                "function": {
+                  "sort": {"record": "InputRow"},
+                  "body": {
+                    "tag": "field",
+                    "sort": "InputRow",
+                    "field": "amount",
+                    "value": {"tag": "var", "index": 0}
+                  }
+                }
+              }
+            }
+          },
+          "right": {
+            "tag": "eq",
+            "left": {
+              "tag": "field",
+              "sort": "Output",
+              "field": "count",
+              "value": {
+                "tag": "call",
+                "symbol": "solve",
+                "args": [{"tag": "var", "index": 0}]
+              }
+            },
+            "right": {
+              "tag": "list_length",
+              "value": {
+                "tag": "list_filter",
+                "value": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "rows",
+                  "value": {"tag": "var", "index": 0}
+                },
+                "function": {
+                  "sort": {"record": "InputRow"},
+                  "body": {
+                    "tag": "and",
+                    "left": {
+                      "tag": "bool_eq",
+                      "left": {
+                        "tag": "field",
+                        "sort": "InputRow",
+                        "field": "enabled",
+                        "value": {"tag": "var", "index": 0}
+                      },
+                      "right": {"tag": "bool", "value": true}
+                    },
+                    "right": {
+                      "tag": "le",
+                      "left": {
+                        "tag": "field",
+                        "sort": "InputRow",
+                        "field": "amount",
+                        "value": {"tag": "var", "index": 0}
+                      },
+                      "right": {
+                        "tag": "field",
+                        "sort": "Input",
+                        "field": "minimum",
+                        "value": {"tag": "var", "index": 1}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "solve_empty_case": {
+      "formula": {
+        "tag": "forall",
+        "sort": {"record": "Input"},
+        "body": {
+          "tag": "implies",
+          "left": {
+            "tag": "eq",
+            "left": {
+              "tag": "list_length",
+              "value": {
+                "tag": "list_filter",
+                "value": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "rows",
+                  "value": {"tag": "var", "index": 0}
+                },
+                "function": {
+                  "sort": {"record": "InputRow"},
+                  "body": {
+                    "tag": "and",
+                    "left": {
+                      "tag": "bool_eq",
+                      "left": {
+                        "tag": "field",
+                        "sort": "InputRow",
+                        "field": "enabled",
+                        "value": {"tag": "var", "index": 0}
+                      },
+                      "right": {"tag": "bool", "value": true}
+                    },
+                    "right": {
+                      "tag": "le",
+                      "left": {
+                        "tag": "field",
+                        "sort": "InputRow",
+                        "field": "amount",
+                        "value": {"tag": "var", "index": 0}
+                      },
+                      "right": {
+                        "tag": "field",
+                        "sort": "Input",
+                        "field": "minimum",
+                        "value": {"tag": "var", "index": 1}
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "right": {"tag": "nat", "value": "0"}
+          },
+          "right": {
+            "tag": "and",
+            "left": {
+              "tag": "eq",
+              "left": {
+                "tag": "field",
+                "sort": "Output",
+                "field": "rows",
+                "value": {
+                  "tag": "call",
+                  "symbol": "solve",
+                  "args": [{"tag": "var", "index": 0}]
+                }
+              },
+              "right": {
+                "tag": "list",
+                "element_sort": {"record": "OutputRow"},
+                "items": []
+              }
+            },
+            "right": {
+              "tag": "and",
+              "left": {
+                "tag": "eq",
+                "left": {
+                  "tag": "field",
+                  "sort": "Output",
+                  "field": "total",
+                  "value": {
+                    "tag": "call",
+                    "symbol": "solve",
+                    "args": [{"tag": "var", "index": 0}]
+                  }
+                },
+                "right": {"tag": "int", "value": "0"}
+              },
+              "right": {
+                "tag": "eq",
+                "left": {
+                  "tag": "field",
+                  "sort": "Output",
+                  "field": "count",
+                  "value": {
+                    "tag": "call",
+                    "symbol": "solve",
+                    "args": [{"tag": "var", "index": 0}]
+                  }
+                },
+                "right": {"tag": "nat", "value": "0"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "solve_exact_arithmetic": {
+      "formula": {
+        "tag": "forall",
+        "sort": {"record": "Input"},
+        "body": {
+          "tag": "eq",
+          "left": {
+            "tag": "field",
+            "sort": "Output",
+            "field": "total",
+            "value": {
+              "tag": "call",
+              "symbol": "solve",
+              "args": [{"tag": "var", "index": 0}]
+            }
+          },
+          "right": {
+            "tag": "list_sum",
+            "value": {
+              "tag": "list_map",
+              "value": {
+                "tag": "list_filter",
+                "value": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "rows",
+                  "value": {"tag": "var", "index": 0}
+                },
+                "function": {
+                  "sort": {"record": "InputRow"},
+                  "body": {
+                    "tag": "and",
+                    "left": {
+                      "tag": "bool_eq",
+                      "left": {
+                        "tag": "field",
+                        "sort": "InputRow",
+                        "field": "enabled",
+                        "value": {"tag": "var", "index": 0}
+                      },
+                      "right": {"tag": "bool", "value": true}
+                    },
+                    "right": {
+                      "tag": "le",
+                      "left": {
+                        "tag": "field",
+                        "sort": "InputRow",
+                        "field": "amount",
+                        "value": {"tag": "var", "index": 0}
+                      },
+                      "right": {
+                        "tag": "field",
+                        "sort": "Input",
+                        "field": "minimum",
+                        "value": {"tag": "var", "index": 1}
+                      }
+                    }
+                  }
+                }
+              },
+              "function": {
+                "sort": {"record": "InputRow"},
+                "body": {
+                  "tag": "field",
+                  "sort": "InputRow",
+                  "field": "amount",
+                  "value": {"tag": "var", "index": 0}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "solve_unicode_preservation": {
+      "formula": {
+        "tag": "forall",
+        "sort": {"record": "Input"},
+        "body": {
+          "tag": "eq",
+          "left": {
+            "tag": "list_map",
+            "value": {
+              "tag": "field",
+              "sort": "Output",
+              "field": "rows",
+              "value": {
+                "tag": "call",
+                "symbol": "solve",
+                "args": [{"tag": "var", "index": 0}]
+              }
+            },
+            "function": {
+              "sort": {"record": "OutputRow"},
+              "body": {
+                "tag": "field",
+                "sort": "OutputRow",
+                "field": "tag",
+                "value": {"tag": "var", "index": 0}
+              }
+            }
+          },
+          "right": {
+            "tag": "list_map",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "rows",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": {"record": "InputRow"},
+                "body": {
+                  "tag": "and",
+                  "left": {
+                    "tag": "bool_eq",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "enabled",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {"tag": "bool", "value": true}
+                  },
+                  "right": {
+                    "tag": "le",
+                    "left": {
+                      "tag": "field",
+                      "sort": "InputRow",
+                      "field": "amount",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "right": {
+                      "tag": "field",
+                      "sort": "Input",
+                      "field": "minimum",
+                      "value": {"tag": "var", "index": 1}
+                    }
+                  }
+                }
+              }
+            },
+            "function": {
+              "sort": {"record": "InputRow"},
+              "body": {
+                "tag": "field",
+                "sort": "InputRow",
+                "field": "tag",
+                "value": {"tag": "var", "index": 0}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "obligations": {
+    "D1": {
+      "declarations": [
+        {"kind": "record", "name": "Input"},
+        {"kind": "symbol", "name": "solve"}
+      ]
+    },
+    "D2": {
+      "declarations": [
+        {"kind": "record", "name": "Input"}
+      ]
+    },
+    "D3": {
+      "declarations": [
+        {"kind": "record", "name": "InputRow"},
+        {"kind": "record", "name": "Input"}
+      ]
+    },
+    "D4": {
+      "declarations": [
+        {"kind": "record", "name": "InputRow"}
+      ]
+    },
+    "O1": {
+      "theorem": "solve_output_structure"
+    },
+    "O2": {
+      "theorem": "solve_row_filtering"
+    },
+    "O3": {
+      "theorem": "solve_row_projection"
+    },
+    "O4": {
+      "theorem": "solve_aggregates"
+    },
+    "O5": {
+      "theorem": "solve_empty_case"
+    },
+    "I1": {
+      "theorem": "solve_exact_arithmetic"
+    },
+    "I2": {
+      "theorem": "solve_unicode_preservation"
+    },
+    "N1": {},
+    "N2": {}
+  },
+  "witness_obligations": {}
+}

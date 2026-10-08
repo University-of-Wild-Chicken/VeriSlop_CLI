@@ -1,0 +1,471 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The function is named solve, takes a single argument data, and is implemented in Python.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "A Python function named solve exists",
+   "It accepts exactly one parameter named data"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D2",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The input data is a JSON object with exactly the fields values, minimum, and factor.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Input is a JSON object",
+   "Input contains keys 'values', 'minimum', 'factor'",
+   "Input contains no other keys"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D3",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The field values is a list of signed integers.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "data['values'] is a list",
+   "Every element in data['values'] is a signed integer"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D4",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The fields minimum and factor are signed integers.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "data['minimum'] is a signed integer",
+   "data['factor'] is a signed integer"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The resulting list contains exactly those input values that are greater than or equal to minimum, in their original order, preserving duplicates.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D3",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "D4",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "For every element v in input values, v is in the result if and only if v >= minimum",
+   "The relative order of kept elements matches the input order",
+   "Duplicate values are preserved"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Every value in the resulting list is the corresponding kept input value multiplied by factor.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O1",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "D4",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "For each index i, result[i] = kept_input[i] * factor"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The function returns a JSON object with exactly the fields values, total, and count.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Return value is a JSON object",
+   "Return value contains keys 'values', 'total', 'count'",
+   "Return value contains no other keys"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The output field values is the resulting list of transformed values.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O3",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "output['values'] equals the list produced by filtering and multiplying"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The output field total is the sum of the resulting list.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O4",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O3",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "output['total'] equals the sum of all elements in output['values']"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O6",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The output field count is the length of the resulting list.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O4",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O3",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "output['count'] equals the number of elements in output['values']"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O7",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "If the resulting list is empty, the output has values equal to an empty list, total equal to zero, and count equal to zero.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O4",
+    "relation": "refines"
+   },
+   {
+    "id": "O5",
+    "relation": "refines"
+   },
+   {
+    "id": "O6",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "If no input values satisfy v >= minimum, output['values'] == []",
+   "If no input values satisfy v >= minimum, output['total'] == 0",
+   "If no input values satisfy v >= minimum, output['count'] == 0"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I1",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "All arithmetic operations use exact arbitrary-precision signed integer arithmetic, including for negative and zero factors.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "refines"
+   },
+   {
+    "id": "O5",
+    "relation": "refines"
+   }
+  ],
+  "acceptance_criteria": [
+   "No floating-point arithmetic is used",
+   "No integer overflow occurs",
+   "Multiplication and summation preserve exact integer values for all signed integers, including negative and zero factors"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N1",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Handling of inputs outside the stated schema is outside the scope of this task.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No obligation to validate or reject malformed inputs",
+   "No obligation to handle missing or extra fields"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N2",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Handling of environmental effects is outside the scope of this task.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No obligation to handle external environmental factors"
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D2",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D2",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D3",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D3",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D4",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D4",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O6",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O6",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O7",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O7",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "I1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N1",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N1"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N2",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N2"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+[]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Implement a Python function solve(data) for a numeric batch pipeline.
+The input is a JSON object with exactly the fields values, minimum and factor. values is a list of signed integers; minimum and factor are signed integers.
+Keep each input value that is greater than or equal to minimum, in its original order, preserving duplicates. Multiply every kept value by factor.
+Return a JSON object with exactly the fields values, total and count. values is the resulting list; total is the sum of that list; count is its length.
+An empty result has values equal to an empty list, total equal to zero and count equal to zero. Arithmetic is exact arbitrary-precision signed integer arithmetic, including negative and zero factors.
+Inputs outside the stated schema and environmental effects are outside this task's scope.
+
+>>>
+PREVIOUS CANDIDATE (untrusted source and binding proposal; repair rather than weaken):
+{
+ "lean_source": "-- unparseable formalizer response\n",
+ "formalization": {
+  "error": "unparseable formalizer response: typing: invalid sort 'Input'"
+ }
+}
+The previous candidate was rejected by the statement checker:
+- INVALID_CANDIDATE: unparseable formalizer response: typing: invalid sort 'Input'
+- VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first
+- VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)
+- ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid
+- ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid
+- ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid
+- ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid
+- REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run
+- REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run
+- CRITIC DIAGNOSTIC REPAIR: The formalizer emitted an unparseable response ('typing: invalid sort 'Input''), so no executable guarantee exists. Repair by producing a valid formalization (or a valid Python implementation artifact) that defines solve(data) with the exact input/output schema and the filtering/multiplication/sum/count postconditions, then re-run the pipeline.
+CORRECTION ATTEMPT 1: inspect each diagnostic and return a changed complete proposal that fixes the rejected syntax or registered-language use while preserving all obligations. Returning the same rejected source and bindings does not repair it.
+AUTONOMOUS CRITIQUE (untrusted proposals; preserve every interpreted obligation):
+{"status": "REPAIR", "feedback": ["CRITIC DIAGNOSTIC REPAIR: The formalizer emitted an unparseable response ('typing: invalid sort 'Input''), so no executable guarantee exists. Repair by producing a valid formalization (or a valid Python implementation artifact) that defines solve(data) with the exact input/output schema and the filtering/multiplication/sum/count postconditions, then re-run the pipeline."]}

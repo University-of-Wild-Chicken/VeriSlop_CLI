@@ -1,0 +1,498 @@
+{
+  "obligations": [
+    {
+      "id": "D1",
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "The function solve(data) accepts a JSON object with exactly the fields rows and minimum.",
+      "required": true,
+      "scope": [
+        "input schema"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "data is a JSON object",
+        "data has exactly the keys 'rows' and 'minimum'"
+      ],
+      "sources": [
+        {
+          "quote": "Implement a Python function solve(data) for a row filtering and projection pipeline.",
+          "origin": "explicit",
+          "interpretation": "function signature and purpose"
+        },
+        {
+          "quote": "The input is a JSON object with exactly the fields rows and minimum.",
+          "origin": "explicit",
+          "interpretation": "input structure"
+        }
+      ]
+    },
+    {
+      "id": "D2",
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "The field minimum is a signed integer.",
+      "required": true,
+      "scope": [
+        "input field minimum"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "refines"
+        }
+      ],
+      "acceptance_criteria": [
+        "minimum is an integer"
+      ],
+      "sources": [
+        {
+          "quote": "minimum is a signed integer.",
+          "origin": "explicit",
+          "interpretation": "type of minimum"
+        }
+      ]
+    },
+    {
+      "id": "D3",
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "The field rows is a list of JSON objects, each with exactly the fields tag, amount and enabled.",
+      "required": true,
+      "scope": [
+        "input field rows"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "refines"
+        }
+      ],
+      "acceptance_criteria": [
+        "rows is a list",
+        "each element is a JSON object with exactly keys 'tag', 'amount', 'enabled'"
+      ],
+      "sources": [
+        {
+          "quote": "rows is a list of JSON objects, each with exactly the fields tag, amount and enabled: tag is a Unicode string, amount is a signed integer and enabled is a Boolean.",
+          "origin": "explicit",
+          "interpretation": "structure of rows"
+        }
+      ]
+    },
+    {
+      "id": "D4",
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "In each row, tag is a Unicode string, amount is a signed integer, and enabled is a Boolean.",
+      "required": true,
+      "scope": [
+        "row fields"
+      ],
+      "dependencies": [
+        {
+          "id": "D3",
+          "relation": "refines"
+        }
+      ],
+      "acceptance_criteria": [
+        "tag is a string",
+        "amount is an integer",
+        "enabled is a boolean"
+      ],
+      "sources": [
+        {
+          "quote": "rows is a list of JSON objects, each with exactly the fields tag, amount and enabled: tag is a Unicode string, amount is a signed integer and enabled is a Boolean.",
+          "origin": "explicit",
+          "interpretation": "types of row fields"
+        }
+      ]
+    },
+    {
+      "id": "O1",
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "The output is a JSON object with exactly the fields rows, total and count.",
+      "required": true,
+      "scope": [
+        "output schema"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "output is a JSON object",
+        "output has exactly the keys 'rows', 'total', 'count'"
+      ],
+      "sources": [
+        {
+          "quote": "Return a JSON object with exactly the fields rows, total and count.",
+          "origin": "explicit",
+          "interpretation": "output structure"
+        }
+      ]
+    },
+    {
+      "id": "O2",
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "The output rows list contains exactly the input rows where enabled is true and amount >= minimum, preserving original order and duplicates.",
+      "required": true,
+      "scope": [
+        "filtering logic"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "A row is included if and only if enabled == true and amount >= minimum",
+        "The relative order of included rows matches the input order",
+        "Duplicate rows are preserved"
+      ],
+      "sources": [
+        {
+          "quote": "Keep exactly the rows whose enabled field is true and whose amount is greater than or equal to minimum.",
+          "origin": "explicit",
+          "interpretation": "filtering criteria"
+        },
+        {
+          "quote": "Preserve original order and duplicates.",
+          "origin": "explicit",
+          "interpretation": "ordering and duplication"
+        }
+      ]
+    },
+    {
+      "id": "O3",
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "Each output row has exactly the fields tag and amount, copied without alteration from its retained input row.",
+      "required": true,
+      "scope": [
+        "projection logic"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "refines"
+        }
+      ],
+      "acceptance_criteria": [
+        "Each output row object has exactly keys 'tag' and 'amount'",
+        "The value of 'tag' is identical to the input row's 'tag'",
+        "The value of 'amount' is identical to the input row's 'amount'"
+      ],
+      "sources": [
+        {
+          "quote": "Each output row has exactly the fields tag and amount, copied without alteration from its retained input row.",
+          "origin": "explicit",
+          "interpretation": "projection and copying"
+        }
+      ]
+    },
+    {
+      "id": "O4",
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "The output total is the sum of the amount fields of all retained rows, and count is the number of retained rows.",
+      "required": true,
+      "scope": [
+        "aggregation logic"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        }
+      ],
+      "acceptance_criteria": [
+        "total == sum(amount for row in retained_rows)",
+        "count == len(retained_rows)"
+      ],
+      "sources": [
+        {
+          "quote": "total is the sum of retained amounts and count is the number of retained rows.",
+          "origin": "explicit",
+          "interpretation": "aggregation definitions"
+        }
+      ]
+    },
+    {
+      "id": "O5",
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "If no rows are retained, the output rows is an empty list, total is 0, and count is 0.",
+      "required": true,
+      "scope": [
+        "empty result case"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "refines"
+        },
+        {
+          "id": "O4",
+          "relation": "refines"
+        }
+      ],
+      "acceptance_criteria": [
+        "If retained_rows is empty, output['rows'] == []",
+        "If retained_rows is empty, output['total'] == 0",
+        "If retained_rows is empty, output['count'] == 0"
+      ],
+      "sources": [
+        {
+          "quote": "An empty result has rows equal to an empty list, total equal to zero and count equal to zero.",
+          "origin": "explicit",
+          "interpretation": "empty case behavior"
+        }
+      ]
+    },
+    {
+      "id": "I1",
+      "kind": "invariant",
+      "role": "guarantee",
+      "statement": "Arithmetic operations on amounts and total use exact arbitrary-precision signed integer arithmetic.",
+      "required": true,
+      "scope": [
+        "numeric operations"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "No floating-point arithmetic is used for amounts or total",
+        "Summation is exact for arbitrarily large integers"
+      ],
+      "sources": [
+        {
+          "quote": "Arithmetic is exact arbitrary-precision signed integer arithmetic.",
+          "origin": "explicit",
+          "interpretation": "numeric precision requirement"
+        }
+      ]
+    },
+    {
+      "id": "I2",
+      "kind": "invariant",
+      "role": "guarantee",
+      "statement": "Unicode strings in tag fields are preserved exactly, including empty strings, whitespace, and combining characters.",
+      "required": true,
+      "scope": [
+        "string handling"
+      ],
+      "dependencies": [
+        {
+          "id": "D4",
+          "relation": "uses_definition"
+        }
+      ],
+      "acceptance_criteria": [
+        "Output tag values are byte-for-byte identical to input tag values",
+        "No normalization or trimming is applied to tag strings"
+      ],
+      "sources": [
+        {
+          "quote": "Preserve Unicode strings exactly, including empty strings, whitespace and combining characters.",
+          "origin": "explicit",
+          "interpretation": "string preservation requirement"
+        }
+      ]
+    },
+    {
+      "id": "N1",
+      "kind": "explicit_non_goal",
+      "role": "exclusion",
+      "statement": "Handling of inputs outside the stated schema is not required.",
+      "required": true,
+      "scope": [
+        "input validation"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "No error handling or validation for malformed inputs is mandated"
+      ],
+      "sources": [
+        {
+          "quote": "Inputs outside the stated schema and environmental effects are outside this task's scope.",
+          "origin": "explicit",
+          "interpretation": "scope exclusion for invalid inputs"
+        }
+      ]
+    },
+    {
+      "id": "N2",
+      "kind": "explicit_non_goal",
+      "role": "exclusion",
+      "statement": "Handling of environmental effects is not required.",
+      "required": true,
+      "scope": [
+        "environmental dependencies"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "No handling of external environmental factors is mandated"
+      ],
+      "sources": [
+        {
+          "quote": "Inputs outside the stated schema and environmental effects are outside this task's scope.",
+          "origin": "explicit",
+          "interpretation": "scope exclusion for environmental effects"
+        }
+      ]
+    }
+  ],
+  "category_review": {
+    "entities": "Input schema (rows, minimum, row fields) and output schema (rows, total, count)",
+    "preconditions": "None explicitly stated as caller assumptions; schema is part of the definition",
+    "postconditions": "Filtering, projection, aggregation, and empty-case behavior",
+    "invariants": "Exact integer arithmetic and exact Unicode string preservation",
+    "safety_properties": "None stated",
+    "liveness_properties": "None stated",
+    "resource_constraints": "None stated",
+    "error_semantics": "None stated; out-of-schema inputs are out of scope",
+    "explicit_non_goals": "Out-of-schema inputs and environmental effects",
+    "ambiguities": "None stated"
+  },
+  "clauses": [
+    {
+      "clause_id": "C1",
+      "quote": "Implement a Python function solve(data) for a row filtering and projection pipeline.",
+      "disposition": "obligations",
+      "refs": [
+        "D1"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C2",
+      "quote": "The input is a JSON object with exactly the fields rows and minimum.",
+      "disposition": "obligations",
+      "refs": [
+        "D1"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C3",
+      "quote": "minimum is a signed integer.",
+      "disposition": "obligations",
+      "refs": [
+        "D2"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C4",
+      "quote": "rows is a list of JSON objects, each with exactly the fields tag, amount and enabled: tag is a Unicode string, amount is a signed integer and enabled is a Boolean.",
+      "disposition": "obligations",
+      "refs": [
+        "D3",
+        "D4"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C5",
+      "quote": "Keep exactly the rows whose enabled field is true and whose amount is greater than or equal to minimum.",
+      "disposition": "obligations",
+      "refs": [
+        "O2"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C6",
+      "quote": "Preserve original order and duplicates.",
+      "disposition": "obligations",
+      "refs": [
+        "O2"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C7",
+      "quote": "Return a JSON object with exactly the fields rows, total and count.",
+      "disposition": "obligations",
+      "refs": [
+        "O1"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C8",
+      "quote": "Each output row has exactly the fields tag and amount, copied without alteration from its retained input row.",
+      "disposition": "obligations",
+      "refs": [
+        "O3"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C9",
+      "quote": "total is the sum of retained amounts and count is the number of retained rows.",
+      "disposition": "obligations",
+      "refs": [
+        "O4"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C10",
+      "quote": "An empty result has rows equal to an empty list, total equal to zero and count equal to zero.",
+      "disposition": "obligations",
+      "refs": [
+        "O5"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C11",
+      "quote": "Arithmetic is exact arbitrary-precision signed integer arithmetic.",
+      "disposition": "obligations",
+      "refs": [
+        "I1"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C12",
+      "quote": "Preserve Unicode strings exactly, including empty strings, whitespace and combining characters.",
+      "disposition": "obligations",
+      "refs": [
+        "I2"
+      ],
+      "note": ""
+    },
+    {
+      "clause_id": "C13",
+      "quote": "Inputs outside the stated schema and environmental effects are outside this task's scope.",
+      "disposition": "exclusion",
+      "refs": [
+        "N1",
+        "N2"
+      ],
+      "note": ""
+    }
+  ],
+  "assumptions": [],
+  "ambiguities": [],
+  "selected_defaults": []
+}

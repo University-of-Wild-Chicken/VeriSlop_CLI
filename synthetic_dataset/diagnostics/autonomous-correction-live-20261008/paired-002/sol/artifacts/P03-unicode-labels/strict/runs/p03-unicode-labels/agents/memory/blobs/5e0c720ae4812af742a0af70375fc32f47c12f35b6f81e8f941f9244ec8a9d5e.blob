@@ -1,0 +1,178 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "Implement the Python function solve(data) with input data a JSON object containing exactly labels and prefix; labels is a list of Unicode strings and prefix is a Unicode string, including the empty string.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "The function is named solve and accepts data.",
+   "The stated input domain has exactly fields labels and prefix.",
+   "labels contains Unicode strings; prefix is a Unicode string and may be empty."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input in the stated domain, produce the sequence of prefix concatenated with each original label whose value is not the empty string, preserving original order and multiplicity.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Remove an input label if and only if it equals the empty string, before prefix concatenation.",
+   "Each retained label contributes exactly one output string equal to prefix followed by that label.",
+   "Retained labels appear in original order and duplicates remain duplicated.",
+   "With an empty prefix, each retained label appears unchanged."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Return a JSON object with exactly labels and count, where labels is the sequence produced by O1 and count is its length; an empty sequence yields labels=[] and count=0.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O1",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "The return object has exactly the fields labels and count.",
+   "The labels field equals the resulting list.",
+   "The count field equals the length of labels.",
+   "When no labels remain, return labels as an empty list and count as zero."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "safety_property",
+  "role": "guarantee",
+  "statement": "Preserve the exact Unicode text of the prefix and every retained label during concatenation, without trimming whitespace or normalizing combining characters.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Each output string contains the exact Unicode sequence of prefix followed by the exact Unicode sequence of the retained label.",
+   "Whitespace is preserved, including labels consisting only of whitespace.",
+   "Combining characters are preserved without normalization."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N1",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Behavior for inputs outside the stated schema and environmental effects are outside the task scope.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "No behavior is required for inputs outside the stated schema.",
+   "Environmental effects have no obligations in this proposal."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N1",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N1"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+[]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Implement a Python function solve(data) for a Unicode label pipeline.
+The input is a JSON object with exactly the fields labels and prefix. labels is a list of Unicode strings and prefix is a Unicode string.
+Remove exactly the labels that are the empty string. For every remaining label, concatenate prefix followed by that label. Preserve original order and duplicates.
+Return a JSON object with exactly the fields labels and count. labels is the resulting list and count is its length. An empty result has labels equal to an empty list and count equal to zero.
+Preserve Unicode text exactly. Do not trim whitespace or normalize combining characters. The prefix may be empty.
+Inputs outside the stated schema and environmental effects are outside this task's scope.
+
+>>>

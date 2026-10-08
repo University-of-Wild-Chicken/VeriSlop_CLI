@@ -1,0 +1,1143 @@
+{
+  "acceptance": {
+    "gate": "accepted_and_proved",
+    "obligations": {
+      "D1": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "D2": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "N1": {
+        "axioms": [],
+        "proved": "NOT_APPLICABLE",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O1": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O2": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O3": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O4": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      },
+      "O5": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "proved": "PASS",
+        "typechecked": "PASS",
+        "witnesses": null
+      }
+    }
+  },
+  "assurance_boundary": "Lean proofs establish the reference model only; Tier 0/1 implementation evidence is testing or runtime detection, never END_TO_END_VERIFIED.",
+  "bindings": [
+    {
+      "binding_id": "B-solve",
+      "formal_declaration": {
+        "args": [
+          {
+            "record": "Input"
+          }
+        ],
+        "decl_hash": "sha256:8c4895644569ff04f488ae113a6dd36e8fc8be1cbd3a338ac7fbcfa6f2fb3904",
+        "lean_decl": "VeriSlopAST.solve",
+        "result": {
+          "record": "Output"
+        }
+      },
+      "implementation_object": {
+        "file": "solution.py",
+        "file_hash": "sha256:39a174c4f5edb55e5d0f6f7aa5c8efe944cd3a6777a713af95009553b4e9c8f3",
+        "lineno": 1,
+        "qualname": "solve",
+        "source_hash": "sha256:39a174c4f5edb55e5d0f6f7aa5c8efe944cd3a6777a713af95009553b4e9c8f3"
+      },
+      "obligations": [
+        "D1",
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "O5"
+      ],
+      "serialization_profile": "python-v0_2",
+      "symbol": "solve"
+    }
+  ],
+  "checkpoint": "release",
+  "counterexample_policy": {
+    "assignment_wire_format": {
+      "Bool": {
+        "example": {
+          "bool": true
+        },
+        "payload": "JSON boolean",
+        "tag": "bool"
+      },
+      "Enum": {
+        "payload": "registered constructor ID from the accepted enumeration",
+        "tag": "str"
+      },
+      "Int": {
+        "example": {
+          "int": "-3"
+        },
+        "payload": "string matching 0|-?[1-9][0-9]*; python-v0_2 only",
+        "tag": "int"
+      },
+      "List": {
+        "example": {
+          "list": [
+            {
+              "int": "-3"
+            },
+            {
+              "int": "0"
+            }
+          ]
+        },
+        "payload": "array of recursively tagged element values; python-v0_2 only",
+        "tag": "list"
+      },
+      "Nat": {
+        "example": {
+          "int": "3"
+        },
+        "payload": "string matching 0|[1-9][0-9]*",
+        "tag": "int"
+      },
+      "Record": {
+        "payload": "object with exactly the accepted field keys and recursively tagged values; python-v0_2 only",
+        "tag": "dict"
+      },
+      "Result": {
+        "error_example": {
+          "tuple": [
+            {
+              "str": "error"
+            },
+            {
+              "none": null
+            }
+          ]
+        },
+        "ok_example": {
+          "tuple": [
+            {
+              "str": "ok"
+            },
+            {
+              "int": "3"
+            }
+          ]
+        },
+        "payload": "two values: {str:ok} + tagged ok payload, or {str:error} + tagged error payload",
+        "tag": "tuple"
+      },
+      "String": {
+        "example": {
+          "str": "é🙂"
+        },
+        "payload": "Unicode scalar string; python-v0_2 only",
+        "tag": "str"
+      },
+      "Unit": {
+        "example": {
+          "none": null
+        },
+        "payload": "JSON null",
+        "tag": "none"
+      },
+      "examples_are": "syntax illustrations, not constructed reviewer probes or replay evidence",
+      "forbidden_examples": [
+        "left=0, right=0",
+        [
+          0,
+          0
+        ],
+        {
+          "left": 0,
+          "right": 0
+        }
+      ],
+      "limits": {
+        "max_assignment_values": 32,
+        "max_decimal_digits": 1024,
+        "max_list_items": 256,
+        "max_nodes_per_value": 4096,
+        "max_record_fields": 64,
+        "max_string_chars": 1024,
+        "max_tag_depth": 32
+      },
+      "rule": "JSON array, exactly one strict tagged value per accepted leading universal binder, outermost first"
+    },
+    "ballot_protocol": {
+      "max_attempts": 3,
+      "rule": "bounded correction of malformed JSON or invalid probe construction; same packet and reviewer slot"
+    },
+    "format": "verislop.counterexample-policy/0.3",
+    "limitations": [
+      "target_case supports only the admitted pure Python syntax and exact decidable residuals",
+      "imports, I/O, reflection, nested functions, defaults, annotations and decorators are unsupported"
+    ],
+    "max_probes": 8,
+    "mechanical_claim_ids": [
+      "INTERPRETATION:request",
+      "CLOSURE:clean-builds",
+      "CLOSURE:determinism",
+      "CLOSURE:endpoint",
+      "CLOSURE:provenance",
+      "FORMALIZED:D1@1",
+      "FORMALIZED:D2@1",
+      "FORMALIZED:N1@1",
+      "FORMALIZED:O1@1",
+      "FORMALIZED:O2@1",
+      "FORMALIZED:O3@1",
+      "FORMALIZED:O4@1",
+      "FORMALIZED:O5@1",
+      "IMPLEMENTED:D1@1",
+      "IMPLEMENTED:O1@1",
+      "IMPLEMENTED:O2@1",
+      "IMPLEMENTED:O3@1",
+      "IMPLEMENTED:O4@1",
+      "IMPLEMENTED:O5@1",
+      "INTERPRETED:D1@1",
+      "INTERPRETED:D2@1",
+      "INTERPRETED:N1@1",
+      "INTERPRETED:O1@1",
+      "INTERPRETED:O2@1",
+      "INTERPRETED:O3@1",
+      "INTERPRETED:O4@1",
+      "INTERPRETED:O5@1",
+      "LINKED:D1@1",
+      "LINKED:O1@1",
+      "LINKED:O2@1",
+      "LINKED:O3@1",
+      "LINKED:O4@1",
+      "LINKED:O5@1",
+      "PROVED:O1@1",
+      "PROVED:O2@1",
+      "PROVED:O3@1",
+      "PROVED:O4@1",
+      "PROVED:O5@1",
+      "TESTED:O1@1",
+      "TESTED:O2@1",
+      "TESTED:O3@1",
+      "TESTED:O4@1",
+      "TESTED:O5@1",
+      "TYPECHECKED:D1@1",
+      "TYPECHECKED:D2@1",
+      "TYPECHECKED:N1@1",
+      "TYPECHECKED:O1@1",
+      "TYPECHECKED:O2@1",
+      "TYPECHECKED:O3@1",
+      "TYPECHECKED:O4@1",
+      "TYPECHECKED:O5@1"
+    ],
+    "proposals": {
+      "mechanical_failure": {
+        "claim_id": "INTERPRETATION:request",
+        "kind": "mechanical_failure"
+      },
+      "target_case": {
+        "assignment": [
+          {
+            "int": "0"
+          }
+        ],
+        "kind": "target_case",
+        "obligation_id": "required guarantee in scope"
+      }
+    },
+    "replay_limits": {
+      "max_arithmetic_bits": 4096,
+      "max_numeral_digits": 1024,
+      "max_target_invocations": 32,
+      "seconds_per_probe": 5
+    },
+    "scope": "concrete probes and independently replayed violations; no reliability speculation",
+    "target_case_binders": {
+      "accepted_ir_sha256": "sha256:485043be0012435ffd819bfbf383dd8f8ace6fed5d23479fee4696450a741807",
+      "obligations": {
+        "D1": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "D2": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "N1": {
+          "reason": "not a required functional implementation guarantee",
+          "status": "unsupported"
+        },
+        "O1": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "factor": {
+                  "int": "0"
+                },
+                "minimum": {
+                  "int": "0"
+                },
+                "values": {
+                  "list": []
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O1@sha256:b29d8daf6f36cf5275d711f593883e19da820a7806a8f57a24ce18d13fc2c606",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        },
+        "O2": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "factor": {
+                  "int": "0"
+                },
+                "minimum": {
+                  "int": "0"
+                },
+                "values": {
+                  "list": []
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O2@sha256:b29d8daf6f36cf5275d711f593883e19da820a7806a8f57a24ce18d13fc2c606",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        },
+        "O3": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "factor": {
+                  "int": "0"
+                },
+                "minimum": {
+                  "int": "0"
+                },
+                "values": {
+                  "list": []
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O3@sha256:b29d8daf6f36cf5275d711f593883e19da820a7806a8f57a24ce18d13fc2c606",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        },
+        "O4": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "factor": {
+                  "int": "0"
+                },
+                "minimum": {
+                  "int": "0"
+                },
+                "values": {
+                  "list": []
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O4@sha256:b29d8daf6f36cf5275d711f593883e19da820a7806a8f57a24ce18d13fc2c606",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        },
+        "O5": {
+          "assignment_arity": 1,
+          "assignment_example": [
+            {
+              "dict": {
+                "factor": {
+                  "int": "0"
+                },
+                "minimum": {
+                  "int": "0"
+                },
+                "values": {
+                  "list": []
+                }
+              }
+            }
+          ],
+          "assignment_order": "outermost to innermost leading universal binders",
+          "example_scope": "syntax illustration only; reviewer must construct a probe; replay determines admissibility",
+          "formula_ref": "artifact:accepted-expressions/O5@sha256:b29d8daf6f36cf5275d711f593883e19da820a7806a8f57a24ce18d13fc2c606",
+          "leading_universal_sorts": [
+            {
+              "record": "Input"
+            }
+          ],
+          "status": "supported"
+        }
+      },
+      "record_fields": {
+        "Input": [
+          {
+            "name": "values",
+            "sort": {
+              "list": "Int"
+            }
+          },
+          {
+            "name": "minimum",
+            "sort": "Int"
+          },
+          {
+            "name": "factor",
+            "sort": "Int"
+          }
+        ],
+        "Output": [
+          {
+            "name": "values",
+            "sort": {
+              "list": "Int"
+            }
+          },
+          {
+            "name": "total",
+            "sort": "Int"
+          },
+          {
+            "name": "count",
+            "sort": "Nat"
+          }
+        ]
+      },
+      "serialization_profile": "python-v0_2"
+    },
+    "template_scope": "closed syntax illustrations only; not constructed reviewer probes, search results or votes"
+  },
+  "evidence": [
+    "ev-034329c49436e54546b88ccc763affaa",
+    "ev-04482a29f7d2828536db3e7346f24538",
+    "ev-0d48235229554d7bb872ac58f4e74c03",
+    "ev-0d524d935af1a874c38935d8c7490923",
+    "ev-11605e475953f7282a205f7b9741bddd",
+    "ev-1193ff64b562725fff3b31207a8072c9",
+    "ev-1947955182f78f91fb6cb0551c8d37f8",
+    "ev-206858ca6a6be27f7b97c7b33945e1e5",
+    "ev-2890faa086863b259de30c4e351849ba",
+    "ev-2b365256efe03ad40b7a9336b5dba1f5",
+    "ev-2b560f5a081cf49572087c3ef6455a38",
+    "ev-2cc15061259ed419292df4eff7417d11",
+    "ev-2fe924a0383db21ebc5e89322c970b38",
+    "ev-30c869030f8540f9991e0688b0ee6f85",
+    "ev-31fdf5930979f782150145ba6c808111",
+    "ev-326572c804315b79c0e53fa72f6ed81a",
+    "ev-385ee39b3913f894f417b2c0cec143d3",
+    "ev-39b0fbcec8f82c66d8d1053d5f9220a2",
+    "ev-3c1252f2d07753297be9359ff46f98be",
+    "ev-3c5dbd69b5efd95bd2c71f7eb855abe1",
+    "ev-40f83b573d2b5f6e67d6e05a668c462c",
+    "ev-4458205cde3a3be248da35d817e92a74",
+    "ev-4cf59091301b7b5a0c62707a247feb92",
+    "ev-4f85523832ea48095fe956f929a977fa",
+    "ev-56c1942e59b825afa286ddb7379172b1",
+    "ev-5be46b5973ad6b0c6b789041eb99ef8c",
+    "ev-5cc9f3d29f36cf1b76af33decf1c4ddc",
+    "ev-5f1537b0cf980d1a84908a82a76b411c",
+    "ev-66191b5ecad8534267b3cb3c833562e7",
+    "ev-675d141bb11ea79161fdb52627e0265e",
+    "ev-6c50d7f899bd2b85f3a6f93af9dea40a",
+    "ev-7206c9d71d50156528cd571a2e500e26",
+    "ev-7535bdee6b8cb9769873c2fba6cc3907",
+    "ev-7601716a5bd508f19e419b05d1caaa20",
+    "ev-79069aff6167b38363e39eafe6a399a9",
+    "ev-7f3f2b8ca5107da9072b0ba3f0431123",
+    "ev-9677d6cfe7cb3cc910dbbef8f78115b5",
+    "ev-97e6ab2c9a981373100a5bc6eab71f4c",
+    "ev-9bfe88d408644b7da568d7f8127edea3",
+    "ev-a4771ef349f0d98f420aa1c049c3aeaf",
+    "ev-a5359bfcb4bee6c2a575ff700c2f257b",
+    "ev-aa09325b7bd3da968ae0f13064f82997",
+    "ev-af36ca2ff4f492c9190cbea5cc4b7a5d",
+    "ev-bb744e9c879b5f953446d78e7fbea619",
+    "ev-bbfb5a7e5da1c9be9b59a3d39a47329f",
+    "ev-bc3ceda87f18d7f666477a7ca4c8e2a1",
+    "ev-bdd37e72f85ef2b62c59d1e3b02b3153",
+    "ev-be4ed1b04e7037308cb8cfe156ff1974",
+    "ev-d613c4f6041adb3fe6f2d71fde380c9e",
+    "ev-d7311f03e58a32cae18da0fd72dc7956",
+    "ev-d9e4a662217a0e4b38888c03baae775b",
+    "ev-da213b8eeecb6c43dcd560f2348f6c96",
+    "ev-e5aa02b2b08c9dd6d6cfb0d98632289e",
+    "ev-f874a495bb827bd813f4c614b074bf95",
+    "ev-faa43a0c9284132171258b90005f705a",
+    "ev-ffa0fda95ca8dfb2bba5143ea5cf45c1"
+  ],
+  "formal_statements": {
+    "D1": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve",
+      "representation": "typed_metadata"
+    },
+    "D2": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.Input",
+      "representation": "typed_metadata"
+    },
+    "N1": {
+      "display": null,
+      "hypotheses": [],
+      "lean_symbol": "VeriSlop.Registry.N1",
+      "representation": "typed_metadata"
+    },
+    "O1": {
+      "display": "∀ x0 : Input, solve(x0) = Output(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor)), list_sum(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))), list_length(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_contract",
+      "representation": "contract_dsl"
+    },
+    "O2": {
+      "display": "∀ x0 : Input, solve(x0) = Output(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor)), list_sum(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))), list_length(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_contract",
+      "representation": "contract_dsl"
+    },
+    "O3": {
+      "display": "∀ x0 : Input, solve(x0) = Output(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor)), list_sum(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))), list_length(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_contract",
+      "representation": "contract_dsl"
+    },
+    "O4": {
+      "display": "∀ x0 : Input, solve(x0) = Output(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor)), list_sum(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))), list_length(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_contract",
+      "representation": "contract_dsl"
+    },
+    "O5": {
+      "display": "∀ x0 : Input, solve(x0) = Output(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor)), list_sum(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))), list_length(list_map(list_filter(x0.values, fun x1 => decide(x0.minimum ≤ x1)), fun x1 => (x1 * x0.factor))))",
+      "hypotheses": [],
+      "lean_symbol": "VeriSlopAST.solve_contract",
+      "representation": "contract_dsl"
+    }
+  },
+  "implementation": {
+    "solution.py": "def solve(x):\n    values = [v * x[\"factor\"] for v in x[\"values\"] if x[\"minimum\"] <= v]\n    return {\"values\": values, \"total\": sum(values), \"count\": len(values)}\n"
+  },
+  "lean_accepted_source": {
+    "path": "accepted/source/a1b5b34430e8d9a2133f4b79eafbce213dd6af13fdf256ab207555d81a570065.lean",
+    "sha256": "sha256:a1b5b34430e8d9a2133f4b79eafbce213dd6af13fdf256ab207555d81a570065",
+    "text": "import Std\n\n-- BEGIN VERISLOP REGISTRY\n-- Generated by `verislop formalize`. Typed obligation metadata: an index, never evidence.\nnamespace VeriSlop.Registry\n\nstructure SourceRef where\n  documentRef : String\n  documentHash : String\n  startByte : Nat\n  endByte : Nat\n  origin : String\n  interpretation : String\n\nstructure Dependency where\n  id : String\n  relation : String\n\nstructure Entry where\n  id : String\n  revision : Nat\n  kind : String\n  role : String\n  statement : String\n  required : Bool\n  sourceRefs : List SourceRef\n  scope : List String\n  dependencies : List Dependency\n  acceptanceCriteria : List String\n  bindings : List String\n\ndef «D1» : Entry := {\n  id := \"D1\",\n  revision := 1,\n  kind := \"entity\",\n  role := \"declaration\",\n  statement := \"The implementation is a Python function solve(data) for a numeric batch pipeline.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 0, endByte := 69, origin := \"explicit\", interpretation := \"Required language and function interface.\" }],\n  scope := [\"function interface\"],\n  dependencies := [],\n  acceptanceCriteria := [\"A Python function named solve accepts data.\"],\n  bindings := [\"VeriSlopAST.solve\"] }\n\ndef «D2» : Entry := {\n  id := \"D2\",\n  revision := 1,\n  kind := \"entity\",\n  role := \"declaration\",\n  statement := \"The input domain consists of JSON objects with exactly values, minimum and factor; values is a list of signed integers and minimum and factor are signed integers.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 70, endByte := 148, origin := \"explicit\", interpretation := \"Exact input fields.\" }, { documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 149, endByte := 185, origin := \"explicit\", interpretation := \"List element domain.\" }, { documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 186, endByte := 225, origin := \"explicit\", interpretation := \"Threshold and multiplier domains.\" }],\n  scope := [\"input domain\"],\n  dependencies := [],\n  acceptanceCriteria := [\"The specified input has exactly the three named fields.\", \"values contains signed integers; minimum and factor are signed integers.\"],\n  bindings := [\"VeriSlopAST.Input\", \"VeriSlopAST.Output\"] }\n\ndef «O1» : Entry := {\n  id := \"O1\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"Keep exactly the input occurrences whose original values are greater than or equal to minimum, maintaining original order and duplicate occurrences.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 226, endByte := 335, origin := \"explicit\", interpretation := \"Inclusive filtering with stable order and multiplicity.\" }],\n  scope := [\"all inputs in D2\"],\n  dependencies := [{ id := \"D2\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"The kept sequence is the subsequence of input values satisfying value >= minimum.\", \"No qualifying occurrence is omitted and no nonqualifying occurrence is included.\", \"Relative order and duplicate multiplicity are preserved.\"],\n  bindings := [\"VeriSlopAST.solve_contract\"] }\n\ndef «O2» : Entry := {\n  id := \"O2\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"Multiply each kept occurrence by factor to form the resulting list in kept order.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 336, endByte := 372, origin := \"explicit\", interpretation := \"Transformation after filtering.\" }],\n  scope := [\"all inputs in D2\"],\n  dependencies := [{ id := \"O1\", relation := \"uses_proof\" }, { id := \"D2\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"Each resulting element equals the corresponding kept original value multiplied by factor.\", \"The resulting list has one element for every kept occurrence.\"],\n  bindings := [\"VeriSlopAST.solve_contract\"] }\n\ndef «O3» : Entry := {\n  id := \"O3\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"Return a JSON object with exactly values, total and count; values is the resulting list, total is its sum, and count is its length.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 373, endByte := 442, origin := \"explicit\", interpretation := \"Exact output fields.\" }, { documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 443, endByte := 472, origin := \"explicit\", interpretation := \"Output list content.\" }, { documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 473, endByte := 503, origin := \"explicit\", interpretation := \"Output aggregate.\" }, { documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 504, endByte := 524, origin := \"explicit\", interpretation := \"Output cardinality.\" }],\n  scope := [\"all inputs in D2\"],\n  dependencies := [{ id := \"O2\", relation := \"uses_proof\" }],\n  acceptanceCriteria := [\"The returned object's field set is exactly {values, total, count}.\", \"values equals the resulting list defined by O2.\", \"total equals the sum of returned values.\", \"count equals the length of returned values.\"],\n  bindings := [\"VeriSlopAST.solve_contract\"] }\n\ndef «O4» : Entry := {\n  id := \"O4\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"When the resulting list is empty, return values as an empty list, total as zero and count as zero.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 525, endByte := 620, origin := \"explicit\", interpretation := \"Required empty-result behavior.\" }],\n  scope := [\"inputs producing an empty result\"],\n  dependencies := [{ id := \"O3\", relation := \"uses_proof\" }],\n  acceptanceCriteria := [\"An empty resulting list produces {values: [], total: 0, count: 0}.\"],\n  bindings := [\"VeriSlopAST.solve_contract\"] }\n\ndef «O5» : Entry := {\n  id := \"O5\",\n  revision := 1,\n  kind := \"postcondition\",\n  role := \"guarantee\",\n  statement := \"All numeric operations use exact arbitrary-precision signed integer arithmetic, including when factor is negative or zero.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 621, endByte := 724, origin := \"explicit\", interpretation := \"Exact numeric semantics over the full signed integer domain.\" }],\n  scope := [\"filter comparison, multiplication and summation for all inputs in D2\"],\n  dependencies := [{ id := \"D2\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"Comparisons, products and sums match mathematical signed integer arithmetic without overflow or precision loss.\", \"Negative factors produce exact signed products.\", \"A zero factor produces a zero for each kept occurrence without changing the resulting count.\"],\n  bindings := [\"VeriSlopAST.solve_contract\"] }\n\ndef «N1» : Entry := {\n  id := \"N1\",\n  revision := 1,\n  kind := \"explicit_non_goal\",\n  role := \"exclusion\",\n  statement := \"Behavior for inputs outside the stated schema and environmental effects is outside the task's scope.\",\n  required := true,\n  sourceRefs := [{ documentRef := \"data-pipelines/P01-numeric-batch.txt\", documentHash := \"sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0\", startByte := 725, endByte := 814, origin := \"explicit\", interpretation := \"Explicit scope exclusions.\" }],\n  scope := [\"out-of-schema inputs\", \"environmental effects\"],\n  dependencies := [{ id := \"D2\", relation := \"uses_definition\" }],\n  acceptanceCriteria := [\"No obligations are imposed on out-of-schema input behavior or environmental effects.\"],\n  bindings := [] }\n\ndef entries : List Entry := [«D1», «D2», «O1», «O2», «O3», «O4», «O5», «N1»]\n\nend VeriSlop.Registry\n-- END VERISLOP REGISTRY\n\nnamespace VeriSlopAST\nstructure «Input» where\n  «values» : (_root_.List _root_.Int)\n  «minimum» : _root_.Int\n  «factor» : _root_.Int\nstructure «Output» where\n  «values» : (_root_.List _root_.Int)\n  «total» : _root_.Int\n  «count» : _root_.Nat\ndef «solve» («_v0» : _root_.VeriSlopAST.«Input») : _root_.VeriSlopAST.«Output» := (_root_.VeriSlopAST.«Output».«mk» (@_root_.List.map _root_.Int _root_.Int (fun («_v1» : _root_.Int) => (_root_.Int.mul «_v1» (_root_.VeriSlopAST.«Input».«factor» «_v0»))) (@_root_.List.filter _root_.Int (fun («_v1» : _root_.Int) => (_root_.Decidable.decide ((_root_.VeriSlopAST.«Input».«minimum» «_v0») ≤ «_v1»))) (_root_.VeriSlopAST.«Input».«values» «_v0»))) (_root_.List.sum (@_root_.List.map _root_.Int _root_.Int (fun («_v1» : _root_.Int) => (_root_.Int.mul «_v1» (_root_.VeriSlopAST.«Input».«factor» «_v0»))) (@_root_.List.filter _root_.Int (fun («_v1» : _root_.Int) => (_root_.Decidable.decide ((_root_.VeriSlopAST.«Input».«minimum» «_v0») ≤ «_v1»))) (_root_.VeriSlopAST.«Input».«values» «_v0»)))) (@_root_.List.length _root_.Int (@_root_.List.map _root_.Int _root_.Int (fun («_v1» : _root_.Int) => (_root_.Int.mul «_v1» (_root_.VeriSlopAST.«Input».«factor» «_v0»))) (@_root_.List.filter _root_.Int (fun («_v1» : _root_.Int) => (_root_.Decidable.decide ((_root_.VeriSlopAST.«Input».«minimum» «_v0») ≤ «_v1»))) (_root_.VeriSlopAST.«Input».«values» «_v0»)))))\ntheorem «_vs_body_solve» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), ((_root_.VeriSlopAST.«solve» «_v0») = (_root_.VeriSlopAST.«Output».«mk» (@_root_.List.map _root_.Int _root_.Int (fun («_v1» : _root_.Int) => (_root_.Int.mul «_v1» (_root_.VeriSlopAST.«Input».«factor» «_v0»))) (@_root_.List.filter _root_.Int (fun («_v1» : _root_.Int) => (_root_.Decidable.decide ((_root_.VeriSlopAST.«Input».«minimum» «_v0») ≤ «_v1»))) (_root_.VeriSlopAST.«Input».«values» «_v0»))) (_root_.List.sum (@_root_.List.map _root_.Int _root_.Int (fun («_v1» : _root_.Int) => (_root_.Int.mul «_v1» (_root_.VeriSlopAST.«Input».«factor» «_v0»))) (@_root_.List.filter _root_.Int (fun («_v1» : _root_.Int) => (_root_.Decidable.decide ((_root_.VeriSlopAST.«Input».«minimum» «_v0») ≤ «_v1»))) (_root_.VeriSlopAST.«Input».«values» «_v0»)))) (@_root_.List.length _root_.Int (@_root_.List.map _root_.Int _root_.Int (fun («_v1» : _root_.Int) => (_root_.Int.mul «_v1» (_root_.VeriSlopAST.«Input».«factor» «_v0»))) (@_root_.List.filter _root_.Int (fun («_v1» : _root_.Int) => (_root_.Decidable.decide ((_root_.VeriSlopAST.«Input».«minimum» «_v0») ≤ «_v1»))) (_root_.VeriSlopAST.«Input».«values» «_v0»))))))) := by intros; rfl\ntheorem «solve_contract» : (∀ («_v0» : _root_.VeriSlopAST.«Input»), ((_root_.VeriSlopAST.«solve» «_v0») = (_root_.VeriSlopAST.«Output».«mk» (@_root_.List.map _root_.Int _root_.Int (fun («_v1» : _root_.Int) => (_root_.Int.mul «_v1» (_root_.VeriSlopAST.«Input».«factor» «_v0»))) (@_root_.List.filter _root_.Int (fun («_v1» : _root_.Int) => (_root_.Decidable.decide ((_root_.VeriSlopAST.«Input».«minimum» «_v0») ≤ «_v1»))) (_root_.VeriSlopAST.«Input».«values» «_v0»))) (_root_.List.sum (@_root_.List.map _root_.Int _root_.Int (fun («_v1» : _root_.Int) => (_root_.Int.mul «_v1» (_root_.VeriSlopAST.«Input».«factor» «_v0»))) (@_root_.List.filter _root_.Int (fun («_v1» : _root_.Int) => (_root_.Decidable.decide ((_root_.VeriSlopAST.«Input».«minimum» «_v0») ≤ «_v1»))) (_root_.VeriSlopAST.«Input».«values» «_v0»)))) (@_root_.List.length _root_.Int (@_root_.List.map _root_.Int _root_.Int (fun («_v1» : _root_.Int) => (_root_.Int.mul «_v1» (_root_.VeriSlopAST.«Input».«factor» «_v0»))) (@_root_.List.filter _root_.Int (fun («_v1» : _root_.Int) => (_root_.Decidable.decide ((_root_.VeriSlopAST.«Input».«minimum» «_v0») ≤ «_v1»))) (_root_.VeriSlopAST.«Input».«values» «_v0»))))))) := by first | (grind [_root_.«VeriSlopAST».«solve»]) | (simp_all [_root_.«VeriSlopAST».«solve»]; done) | (unfold _root_.«VeriSlopAST».«solve» at *; simp_all; omega) | omega | decide | sorry\nend VeriSlopAST\n"
+  },
+  "ledger": {
+    "ambiguities": [],
+    "artifact_kind": "interpretation",
+    "assumptions": [],
+    "clauses": [
+      {
+        "disposition": "obligations",
+        "end_byte": 69,
+        "refs": [
+          "D1"
+        ],
+        "start_byte": 0
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 148,
+        "refs": [
+          "D2"
+        ],
+        "start_byte": 70
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 185,
+        "refs": [
+          "D2"
+        ],
+        "start_byte": 149
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 225,
+        "refs": [
+          "D2"
+        ],
+        "start_byte": 186
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 335,
+        "refs": [
+          "O1"
+        ],
+        "start_byte": 226
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 372,
+        "refs": [
+          "O2"
+        ],
+        "start_byte": 336
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 442,
+        "refs": [
+          "O3"
+        ],
+        "start_byte": 373
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 472,
+        "refs": [
+          "O3"
+        ],
+        "start_byte": 443
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 503,
+        "refs": [
+          "O3"
+        ],
+        "start_byte": 473
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 524,
+        "refs": [
+          "O3"
+        ],
+        "start_byte": 504
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 620,
+        "refs": [
+          "O4"
+        ],
+        "start_byte": 525
+      },
+      {
+        "disposition": "obligations",
+        "end_byte": 724,
+        "refs": [
+          "O5"
+        ],
+        "start_byte": 621
+      },
+      {
+        "disposition": "exclusion",
+        "end_byte": 814,
+        "refs": [
+          "N1"
+        ],
+        "start_byte": 725
+      }
+    ],
+    "request": {
+      "byte_length": 815,
+      "document_hash": "sha256:77f8f41b0e2fe21e28786f9afbd211110962a205350b48c90dd572e0c7ab0ad0",
+      "document_ref": "data-pipelines/P01-numeric-batch.txt"
+    },
+    "schema_version": "0.1",
+    "selected_defaults": []
+  },
+  "non_goals": [
+    "Behavior for inputs outside the stated schema and environmental effects is outside the task's scope."
+  ],
+  "obligations": {
+    "D1": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve",
+        "representation": "typed_metadata"
+      },
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "declaration",
+      "statement": "The implementation is a Python function solve(data) for a numeric batch pipeline."
+    },
+    "D2": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Input",
+        "representation": "typed_metadata"
+      },
+      "kind": "entity",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "declaration",
+      "statement": "The input domain consists of JSON objects with exactly values, minimum and factor; values is a list of signed integers and minimum and factor are signed integers."
+    },
+    "N1": {
+      "formal": {
+        "axioms": [],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlop.Registry.N1",
+        "representation": "typed_metadata"
+      },
+      "kind": "explicit_non_goal",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "NOT_APPLICABLE",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "NOT_APPLICABLE",
+        "INTERPRETED": "PASS",
+        "LINKED": "NOT_APPLICABLE",
+        "PROVED": "NOT_APPLICABLE",
+        "TESTED": "NOT_APPLICABLE",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "exclusion",
+      "statement": "Behavior for inputs outside the stated schema and environmental effects is outside the task's scope."
+    },
+    "O1": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_contract",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "Keep exactly the input occurrences whose original values are greater than or equal to minimum, maintaining original order and duplicate occurrences."
+    },
+    "O2": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_contract",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "Multiply each kept occurrence by factor to form the resulting list in kept order."
+    },
+    "O3": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_contract",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "Return a JSON object with exactly values, total and count; values is the resulting list, total is its sum, and count is its length."
+    },
+    "O4": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_contract",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "When the resulting list is empty, return values as an empty list, total as zero and count as zero."
+    },
+    "O5": {
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.solve_contract",
+        "representation": "contract_dsl"
+      },
+      "kind": "postcondition",
+      "outcomes": {
+        "END_TO_END_VERIFIED": "PENDING",
+        "FORMALIZED": "PASS",
+        "IMPLEMENTED": "PASS",
+        "INTERPRETED": "PASS",
+        "LINKED": "PASS",
+        "PROVED": "PASS",
+        "TESTED": "PASS",
+        "TYPECHECKED": "PASS"
+      },
+      "required": true,
+      "role": "guarantee",
+      "statement": "All numeric operations use exact arbitrary-precision signed integer arithmetic, including when factor is negative or zero."
+    }
+  },
+  "request": "Implement a Python function solve(data) for a numeric batch pipeline.\nThe input is a JSON object with exactly the fields values, minimum and factor. values is a list of signed integers; minimum and factor are signed integers.\nKeep each input value that is greater than or equal to minimum, in its original order, preserving duplicates. Multiply every kept value by factor.\nReturn a JSON object with exactly the fields values, total and count. values is the resulting list; total is the sum of that list; count is its length.\nAn empty result has values equal to an empty list, total equal to zero and count equal to zero. Arithmetic is exact arbitrary-precision signed integer arithmetic, including negative and zero factors.\nInputs outside the stated schema and environmental effects are outside this task's scope.\n",
+  "scope": [
+    "D1",
+    "D2",
+    "N1",
+    "O1",
+    "O2",
+    "O3",
+    "O4",
+    "O5"
+  ],
+  "tests": {
+    "artifact_kind": "test_results",
+    "campaign": {
+      "artifact_kind": "test_campaign",
+      "boundary": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "7",
+        "8",
+        "15",
+        "16",
+        "255",
+        "256",
+        "65535",
+        "65536",
+        "2147483647",
+        "2147483648",
+        "4294967295",
+        "4294967296",
+        "9007199254740992",
+        "9223372036854775807",
+        "9223372036854775808",
+        "18446744073709551615",
+        "18446744073709551616",
+        "18446744073709551617"
+      ],
+      "boundary_probability_percent": 20,
+      "cases_per_obligation": 32,
+      "data_limits": {
+        "max_field_grid_values": 8,
+        "max_list_length": 8,
+        "max_record_grid_values": 20,
+        "max_string_length": 32,
+        "max_value_depth": 32,
+        "max_value_nodes": 4096
+      },
+      "generator": "verislop.data-sampler/0.2",
+      "grid": [
+        0,
+        1,
+        2
+      ],
+      "hint_probability_percent": 75,
+      "inner_samples": 8,
+      "max_generated_factor": 20,
+      "min_effective_cases": 20,
+      "nondeterminism_rechecks": 64,
+      "per_call_timeout_ms": 5000,
+      "random_mix": {
+        "large_bits": 70,
+        "medium_max": 10000,
+        "small_max": 32,
+        "weights": [
+          60,
+          25,
+          15
+        ]
+      },
+      "schema_version": "0.1",
+      "seed": 20261008,
+      "serialization_profile": "python-v0_2",
+      "shrink": true,
+      "signed_boundary": [
+        "-18446744073709551617",
+        "-18446744073709551616",
+        "-18446744073709551615",
+        "-9223372036854775808",
+        "-9223372036854775807",
+        "-9007199254740992",
+        "-4294967296",
+        "-4294967295",
+        "-2147483648",
+        "-2147483647",
+        "-65536",
+        "-65535",
+        "-256",
+        "-255",
+        "-16",
+        "-15",
+        "-8",
+        "-7",
+        "-3",
+        "-2",
+        "-1",
+        "0",
+        "1",
+        "2",
+        "3",
+        "7",
+        "8",
+        "15",
+        "16",
+        "255",
+        "256",
+        "65535",
+        "65536",
+        "2147483647",
+        "2147483648",
+        "4294967295",
+        "4294967296",
+        "9007199254740992",
+        "9223372036854775807",
+        "9223372036854775808",
+        "18446744073709551615",
+        "18446744073709551616",
+        "18446744073709551617"
+      ],
+      "signed_grid": [
+        "-2",
+        "-1",
+        "0",
+        "1",
+        "2",
+        "-9223372036854775808",
+        "9223372036854775808"
+      ],
+      "unicode_boundary": [
+        "",
+        "a",
+        "é",
+        "é",
+        "漢字",
+        "🙂",
+        "\u0000",
+        "\n",
+        "𝄞"
+      ]
+    },
+    "line_coverage": {
+      "solution.py": {
+        "executable": 3,
+        "executed": 3
+      }
+    },
+    "obligations": {
+      "O1": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O2": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O3": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O4": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      },
+      "O5": {
+        "codes": [],
+        "counterexamples": [],
+        "counts": {
+          "discarded": 0,
+          "effective": 32,
+          "failures": 0,
+          "generated": 32,
+          "indeterminate": 0,
+          "timeouts": 0
+        },
+        "outcome": "PASS"
+      }
+    },
+    "schema_version": "0.1",
+    "test_root": "sha256:e48edffc9af9cdbdab00c1615800317a45d6f0122eab83f63d90200e8dfb13fd"
+  }
+}

@@ -1,0 +1,316 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The implementation is a Python function solve(data) providing a row filtering and projection pipeline.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "A Python function named solve accepts data and returns the specified pipeline result."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D2",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The input domain consists of JSON objects with exactly rows and minimum; minimum is a signed integer; rows is a list of JSON objects each containing exactly tag, amount and enabled, with a Unicode string tag, signed integer amount and Boolean enabled.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Input field names are exactly rows and minimum.",
+   "minimum has the signed integer domain.",
+   "rows is a list; each row has exactly tag, amount and enabled with the stated types."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Retain every and only input row whose enabled value is true and whose amount is greater than or equal to minimum.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "An input row occurrence is retained if and only if enabled is true and amount >= minimum."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The retained row occurrences preserve input order and multiplicity, including duplicates.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O1",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Retained occurrences appear in increasing original position order.",
+   "Every qualifying duplicate occurrence appears once for each occurrence in the input."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Return a JSON object with exactly rows, total and count. Its rows list contains one projection for each retained row occurrence, with exactly tag and amount copied without alteration.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O1",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "The output object's keys are exactly rows, total and count.",
+   "Output rows is the ordered list of retained projections.",
+   "Each projected row has exactly tag and amount, equal to the respective retained input values."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "total equals the sum of retained amounts and count equals the number of retained row occurrences.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O1",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "total = sum of amount over all retained occurrences.",
+   "count = number of retained occurrences, including duplicates."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Whenever no rows are retained, the output has rows equal to an empty list, total equal to zero and count equal to zero.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O1",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "No retained occurrences implies rows = [], total = 0 and count = 0."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O6",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "All pipeline arithmetic uses exact arbitrary-precision signed integers.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Signed integer values and sums are represented exactly without overflow or rounding.",
+   "Filtering comparisons and aggregate arithmetic remain correct for arbitrarily large positive and negative integers."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O7",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Retained tags preserve their Unicode string values exactly, including empty strings, whitespace and combining characters.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Each output tag has exactly the same Unicode sequence as its retained input tag.",
+   "Empty strings, whitespace and combining characters are preserved without trimming or normalization."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N1",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Behavior for inputs outside the stated schema and environmental effects is outside the task scope.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "No correctness obligations are asserted for out-of-schema inputs or environmental effects."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D2",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D2",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O6",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O6",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O7",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O7",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N1",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N1"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+[]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Implement a Python function solve(data) for a row filtering and projection pipeline.
+The input is a JSON object with exactly the fields rows and minimum. minimum is a signed integer. rows is a list of JSON objects, each with exactly the fields tag, amount and enabled: tag is a Unicode string, amount is a signed integer and enabled is a Boolean.
+Keep exactly the rows whose enabled field is true and whose amount is greater than or equal to minimum. Preserve original order and duplicates.
+Return a JSON object with exactly the fields rows, total and count. Each output row has exactly the fields tag and amount, copied without alteration from its retained input row. total is the sum of retained amounts and count is the number of retained rows.
+An empty result has rows equal to an empty list, total equal to zero and count equal to zero. Arithmetic is exact arbitrary-precision signed integer arithmetic. Preserve Unicode strings exactly, including empty strings, whitespace and combining characters.
+Inputs outside the stated schema and environmental effects are outside this task's scope.
+
+>>>

@@ -1,0 +1,360 @@
+{
+  "encoding": "verislop.formalizer-ast/0.1",
+  "records": {
+    "Input": {
+      "fields": [
+        {"name": "values", "sort": {"list": "Int"}},
+        {"name": "minimum", "sort": "Int"},
+        {"name": "factor", "sort": "Int"}
+      ]
+    },
+    "Output": {
+      "fields": [
+        {"name": "values", "sort": {"list": "Int"}},
+        {"name": "total", "sort": "Int"},
+        {"name": "count", "sort": "Nat"}
+      ]
+    }
+  },
+  "symbols": {
+    "solve": {
+      "args": ["Input"],
+      "result": "Output",
+      "body": {
+        "tag": "record",
+        "sort": "Output",
+        "fields": [
+          {
+            "tag": "list_map",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "values",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": "Int",
+                "body": {
+                  "tag": "decide",
+                  "formula": {
+                    "tag": "le",
+                    "left": {
+                      "tag": "field",
+                      "sort": "Input",
+                      "field": "minimum",
+                      "value": {"tag": "var", "index": 1}
+                    },
+                    "right": {"tag": "var", "index": 0}
+                  }
+                }
+              }
+            },
+            "function": {
+              "sort": "Int",
+              "body": {
+                "tag": "int_mul",
+                "left": {"tag": "var", "index": 0},
+                "right": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "factor",
+                  "value": {"tag": "var", "index": 1}
+                }
+              }
+            }
+          },
+          {
+            "tag": "list_sum",
+            "value": {
+              "tag": "list_map",
+              "value": {
+                "tag": "list_filter",
+                "value": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "values",
+                  "value": {"tag": "var", "index": 0}
+                },
+                "function": {
+                  "sort": "Int",
+                  "body": {
+                    "tag": "decide",
+                    "formula": {
+                      "tag": "le",
+                      "left": {
+                        "tag": "field",
+                        "sort": "Input",
+                        "field": "minimum",
+                        "value": {"tag": "var", "index": 1}
+                      },
+                      "right": {"tag": "var", "index": 0}
+                    }
+                  }
+                }
+              },
+              "function": {
+                "sort": "Int",
+                "body": {
+                  "tag": "int_mul",
+                  "left": {"tag": "var", "index": 0},
+                  "right": {
+                    "tag": "field",
+                    "sort": "Input",
+                    "field": "factor",
+                    "value": {"tag": "var", "index": 1}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "tag": "list_length",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "values",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": "Int",
+                "body": {
+                  "tag": "decide",
+                  "formula": {
+                    "tag": "le",
+                    "left": {
+                      "tag": "field",
+                      "sort": "Input",
+                      "field": "minimum",
+                      "value": {"tag": "var", "index": 1}
+                    },
+                    "right": {"tag": "var", "index": 0}
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "predicates": {},
+  "theorems": {
+    "solve_spec": {
+      "formula": {
+        "tag": "forall",
+        "sort": {"record": "Input"},
+        "body": {
+          "tag": "and",
+          "left": {
+            "tag": "eq",
+            "left": {
+              "tag": "field",
+              "sort": "Output",
+              "field": "values",
+              "value": {
+                "tag": "call",
+                "symbol": "solve",
+                "args": [{"tag": "var", "index": 0}]
+              }
+            },
+            "right": {
+              "tag": "list_map",
+              "value": {
+                "tag": "list_filter",
+                "value": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "values",
+                  "value": {"tag": "var", "index": 0}
+                },
+                "function": {
+                  "sort": "Int",
+                  "body": {
+                    "tag": "decide",
+                    "formula": {
+                      "tag": "le",
+                      "left": {
+                        "tag": "field",
+                        "sort": "Input",
+                        "field": "minimum",
+                        "value": {"tag": "var", "index": 1}
+                      },
+                      "right": {"tag": "var", "index": 0}
+                    }
+                  }
+                }
+              },
+              "function": {
+                "sort": "Int",
+                "body": {
+                  "tag": "int_mul",
+                  "left": {"tag": "var", "index": 0},
+                  "right": {
+                    "tag": "field",
+                    "sort": "Input",
+                    "field": "factor",
+                    "value": {"tag": "var", "index": 1}
+                  }
+                }
+              }
+            }
+          },
+          "right": {
+            "tag": "and",
+            "left": {
+              "tag": "eq",
+              "left": {
+                "tag": "field",
+                "sort": "Output",
+                "field": "total",
+                "value": {
+                  "tag": "call",
+                  "symbol": "solve",
+                  "args": [{"tag": "var", "index": 0}]
+                }
+              },
+              "right": {
+                "tag": "list_sum",
+                "value": {
+                  "tag": "list_map",
+                  "value": {
+                    "tag": "list_filter",
+                    "value": {
+                      "tag": "field",
+                      "sort": "Input",
+                      "field": "values",
+                      "value": {"tag": "var", "index": 0}
+                    },
+                    "function": {
+                      "sort": "Int",
+                      "body": {
+                        "tag": "decide",
+                        "formula": {
+                          "tag": "le",
+                          "left": {
+                            "tag": "field",
+                            "sort": "Input",
+                            "field": "minimum",
+                            "value": {"tag": "var", "index": 1}
+                          },
+                          "right": {"tag": "var", "index": 0}
+                        }
+                      }
+                    }
+                  },
+                  "function": {
+                    "sort": "Int",
+                    "body": {
+                      "tag": "int_mul",
+                      "left": {"tag": "var", "index": 0},
+                      "right": {
+                        "tag": "field",
+                        "sort": "Input",
+                        "field": "factor",
+                        "value": {"tag": "var", "index": 1}
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "right": {
+              "tag": "eq",
+              "left": {
+                "tag": "field",
+                "sort": "Output",
+                "field": "count",
+                "value": {
+                  "tag": "call",
+                  "symbol": "solve",
+                  "args": [{"tag": "var", "index": 0}]
+                }
+              },
+              "right": {
+                "tag": "list_length",
+                "value": {
+                  "tag": "list_filter",
+                  "value": {
+                    "tag": "field",
+                    "sort": "Input",
+                    "field": "values",
+                    "value": {"tag": "var", "index": 0}
+                  },
+                  "function": {
+                    "sort": "Int",
+                    "body": {
+                      "tag": "decide",
+                      "formula": {
+                        "tag": "le",
+                        "left": {
+                          "tag": "field",
+                          "sort": "Input",
+                          "field": "minimum",
+                          "value": {"tag": "var", "index": 1}
+                        },
+                        "right": {"tag": "var", "index": 0}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "obligations": {
+    "D1": {
+      "declarations": [
+        {"kind": "symbol", "name": "solve"}
+      ]
+    },
+    "D2": {
+      "declarations": [
+        {"kind": "record", "name": "Input"}
+      ]
+    },
+    "D3": {
+      "declarations": [
+        {"kind": "record", "name": "Input"}
+      ]
+    },
+    "D4": {
+      "declarations": [
+        {"kind": "record", "name": "Input"}
+      ]
+    },
+    "O1": {
+      "theorem": "solve_spec"
+    },
+    "O2": {
+      "theorem": "solve_spec"
+    },
+    "O3": {
+      "theorem": "solve_spec"
+    },
+    "O4": {
+      "theorem": "solve_spec"
+    },
+    "O5": {
+      "theorem": "solve_spec"
+    },
+    "O6": {
+      "theorem": "solve_spec"
+    },
+    "O7": {
+      "theorem": "solve_spec"
+    },
+    "I1": {
+      "theorem": "solve_spec"
+    },
+    "N1": {},
+    "N2": {}
+  },
+  "witness_obligations": {}
+}

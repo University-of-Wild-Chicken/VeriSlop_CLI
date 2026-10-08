@@ -1,0 +1,18 @@
+{
+  "agent": "author",
+  "attempts": 1,
+  "context_window_tokens": null,
+  "error": null,
+  "instance": "raw/1",
+  "model_digest_sha256": null,
+  "purpose": "raw-coding",
+  "request_id": "/root/data_poc_evidence_audit/sol_p03_raw_req0001",
+  "requested_model": "gpt-6.1-sol",
+  "response": "{\"files\":{\"solution.py\":\"def solve(data):\\n    labels = [data[\\\"prefix\\\"] + label for label in data[\\\"labels\\\"] if label != \\\"\\\"]\\n    return {\\\"labels\\\": labels, \\\"count\\\": len(labels)}\\n\"}}",
+  "returned_model": null,
+  "system": "You are a software engineering coding agent. Implement the entire requested task in Python 3. Return only one JSON object {\"files\":{\"solution.py\":\"<complete source>\"}}. Do not return explanations, tests or placeholders. Define solve(data) exactly as requested.",
+  "system_sha256": "sha256:ccc6fddc279d6fc98153d8f9bf6a8ef5763a9a0dedaeb66acb6618b7c3cdbacb",
+  "user": "Implement a Python function solve(data) for a Unicode label pipeline.\nThe input is a JSON object with exactly the fields labels and prefix. labels is a list of Unicode strings and prefix is a Unicode string.\nRemove exactly the labels that are the empty string. For every remaining label, concatenate prefix followed by that label. Preserve original order and duplicates.\nReturn a JSON object with exactly the fields labels and count. labels is the resulting list and count is its length. An empty result has labels equal to an empty list and count equal to zero.\nPreserve Unicode text exactly. Do not trim whitespace or normalize combining characters. The prefix may be empty.\nInputs outside the stated schema and environmental effects are outside this task's scope.\n",
+  "user_sha256": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+  "wall_ms": 32295
+}

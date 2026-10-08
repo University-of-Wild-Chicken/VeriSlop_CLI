@@ -1,0 +1,342 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:implementation-selection:0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "format": {
+      "const": "verislop.implementation-selection/0.2"
+    },
+    "backend": {
+      "const": {
+        "id": "verislop.backend.vscore/0.1",
+        "tier": 2,
+        "target": "vscore",
+        "endpoint": "restricted_source",
+        "backend_version": "0.1",
+        "language": "vscore/0.1",
+        "semantics": "vscore-semantics/0.1",
+        "relation_template": "vscore.reference_refinement/0.1",
+        "end_to_end_eligible": true,
+        "testing": "unsupported",
+        "claims_format": "0.2",
+        "producers": {
+          "IMPLEMENTED": "verislop.vscore-materializer",
+          "LINKED": "verislop.vscore-linker",
+          "TESTED": "verislop.vscore-campaign-unavailable",
+          "semantic_edge": "verislop.vscore-checker",
+          "structural": "verislop.bridge-preparation",
+          "END_TO_END_VERIFIED": "verislop.closure",
+          "closure": "verislop.closure"
+        },
+        "property_fragment": "functional postconditions, pure value invariants, pure safety properties and explicit error semantics in verislop.contract-dsl/0.1 over Nat, Bool, Unit, accepted finite enumerations and nested Result, read through the existing transfer rule",
+        "limitations": [
+          "one delivered source file, one selected prepared bridge, one restricted_source node and one direct semantic edge from the imported accepted_contract node",
+          "every program entry binds one-to-one to an accepted function symbol",
+          "no guarantee-subset selection, competing bridges or edge composition",
+          "opaque lean_expr statements, formulas without an implementation symbol, calls inside range bounds, liveness and physical-resource claims are unsupported"
+        ],
+        "excluded_surfaces": [
+          "any host interpreter, ordinary Lean code generation, VM, compiler, linker, loader, operating-system service or native executable that might later execute the source",
+          "general state, sequences, loops, entry-to-entry calls, I/O, concurrency and fairness",
+          "constant-time claims and physical time, memory or other resources",
+          "machine-width integers (Nat is unbounded; no width conversion exists)",
+          "natural-language-to-contract fidelity (a declared interpretation boundary)"
+        ]
+      }
+    },
+    "backend_descriptor_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "bridge_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "source_node": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "endpoint_node": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "edge_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "edge_claim_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "plan_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "artifacts_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "accepted_ir_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "acceptance_certificate_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "profile_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "statements_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "covered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "accepted_statement_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "accepted_statement_hash"
+        ]
+      },
+      "minItems": 1
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "slot_id",
+            "path",
+            "sha256"
+          ]
+        },
+        "proof_source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "slot_id",
+            "path",
+            "sha256"
+          ]
+        },
+        "relation": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "slot_id",
+            "path",
+            "sha256"
+          ]
+        },
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "slot_id",
+            "path",
+            "sha256"
+          ]
+        },
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "slot_id",
+            "path",
+            "sha256"
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "proof_source",
+        "relation",
+        "model",
+        "profile"
+      ]
+    },
+    "test_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "require_tests": {
+          "type": "boolean"
+        },
+        "require_state": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            null,
+            "IMPLEMENTED",
+            "LINKED",
+            "TESTED",
+            "END_TO_END_VERIFIED"
+          ]
+        }
+      },
+      "required": [
+        "require_tests",
+        "require_state"
+      ]
+    },
+    "build_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "builds": {
+          "const": 2
+        },
+        "total_timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "build_timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "kernel_timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "memory_mb": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "require_network_isolation": {
+          "type": "boolean"
+        },
+        "require_filesystem_isolation": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "builds",
+        "total_timeout_seconds",
+        "build_timeout_seconds",
+        "kernel_timeout_seconds",
+        "memory_mb",
+        "require_network_isolation",
+        "require_filesystem_isolation"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "backend",
+    "backend_descriptor_hash",
+    "bridge_id",
+    "source_node",
+    "endpoint_node",
+    "edge_id",
+    "edge_claim_id",
+    "plan_hash",
+    "artifacts_hash",
+    "accepted_ir_hash",
+    "acceptance_certificate_hash",
+    "profile_hash",
+    "statements_hash",
+    "covered",
+    "inputs",
+    "test_policy",
+    "build_policy"
+  ]
+}

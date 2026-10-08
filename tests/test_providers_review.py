@@ -108,6 +108,26 @@ class Behaviour:
         if "VeriSlop interpreter" in system:
             self.calls.append("interpreter")
             return "Here is the proposal:\n```json\n" + json.dumps(PROPOSAL) + "\n```"
+        if "VeriSlop autonomous critic" in system:
+            from verislop import autonomous, contract_refutation, dsl
+            from verislop.targets import python_target
+            self.calls.append("critic")
+            data = json.loads(user)
+            corrections, probes = [], []
+            if data["diagnostics"]:
+                corrections = [{"diagnostic_index": 0, "artifact": "proposal.lean",
+                                "explanation": "Repair the exact recorded Lean diagnostic while preserving the requested contract."}]
+            else:
+                profile = dsl.Profile.from_json(data["profile"])
+                for oid, st in data["statements"].items():
+                    if st.get("role") == "guarantee" and st.get("representation") == "contract_dsl":
+                        formula = st["formula_package"]["formula"]
+                        sorts, _ = contract_refutation._universal(formula)
+                        probes = [{"obligation_id": oid, "inputs": [python_target.encode_arg(
+                            contract_refutation._defaults(sort, profile)[0], sort, profile) for sort in sorts]}]
+                        break
+            return json.dumps({"encoding": autonomous.VERSION, "verdict": "REPAIR" if corrections else "ACCEPT",
+                               "counterexamples": probes, "corrections": corrections})
         if "adversarial reviewer" in system:
             self.calls.append("review")
             out = self.review(user, packet_scope(user))

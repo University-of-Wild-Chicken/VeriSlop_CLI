@@ -1,0 +1,246 @@
+{
+  "encoding": "verislop.formalizer-ast/0.1",
+  "records": {
+    "Input": {
+      "fields": [
+        {"name": "labels", "sort": {"list": "String"}},
+        {"name": "prefix", "sort": "String"}
+      ]
+    },
+    "Output": {
+      "fields": [
+        {"name": "labels", "sort": {"list": "String"}},
+        {"name": "count", "sort": "Nat"}
+      ]
+    }
+  },
+  "symbols": {
+    "solve": {
+      "args": ["Input"],
+      "result": "Output",
+      "body": {
+        "tag": "record",
+        "sort": "Output",
+        "fields": [
+          {
+            "tag": "list_map",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "labels",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": "String",
+                "body": {
+                  "tag": "decide",
+                  "formula": {
+                    "tag": "not",
+                    "body": {
+                      "tag": "eq",
+                      "left": {"tag": "var", "index": 0},
+                      "right": {"tag": "string", "value": ""}
+                    }
+                  }
+                }
+              }
+            },
+            "function": {
+              "sort": "String",
+              "body": {
+                "tag": "string_append",
+                "left": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "prefix",
+                  "value": {"tag": "var", "index": 1}
+                },
+                "right": {"tag": "var", "index": 0}
+              }
+            }
+          },
+          {
+            "tag": "list_length",
+            "value": {
+              "tag": "list_filter",
+              "value": {
+                "tag": "field",
+                "sort": "Input",
+                "field": "labels",
+                "value": {"tag": "var", "index": 0}
+              },
+              "function": {
+                "sort": "String",
+                "body": {
+                  "tag": "decide",
+                  "formula": {
+                    "tag": "not",
+                    "body": {
+                      "tag": "eq",
+                      "left": {"tag": "var", "index": 0},
+                      "right": {"tag": "string", "value": ""}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "predicates": {
+    "valid_input": {
+      "args": ["Input"],
+      "formula": {"tag": "true"}
+    }
+  },
+  "theorems": {
+    "solve_output_structure": {
+      "formula": {
+        "tag": "forall",
+        "sort": "Input",
+        "body": {
+          "tag": "and",
+          "left": {
+            "tag": "eq",
+            "left": {
+              "tag": "field",
+              "sort": "Output",
+              "field": "labels",
+              "value": {
+                "tag": "call",
+                "symbol": "solve",
+                "args": [{"tag": "var", "index": 0}]
+              }
+            },
+            "right": {
+              "tag": "list_map",
+              "value": {
+                "tag": "list_filter",
+                "value": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "labels",
+                  "value": {"tag": "var", "index": 0}
+                },
+                "function": {
+                  "sort": "String",
+                  "body": {
+                    "tag": "decide",
+                    "formula": {
+                      "tag": "not",
+                      "body": {
+                        "tag": "eq",
+                        "left": {"tag": "var", "index": 0},
+                        "right": {"tag": "string", "value": ""}
+                      }
+                    }
+                  }
+                }
+              },
+              "function": {
+                "sort": "String",
+                "body": {
+                  "tag": "string_append",
+                  "left": {
+                    "tag": "field",
+                    "sort": "Input",
+                    "field": "prefix",
+                    "value": {"tag": "var", "index": 1}
+                  },
+                  "right": {"tag": "var", "index": 0}
+                }
+              }
+            }
+          },
+          "right": {
+            "tag": "eq",
+            "left": {
+              "tag": "field",
+              "sort": "Output",
+              "field": "count",
+              "value": {
+                "tag": "call",
+                "symbol": "solve",
+                "args": [{"tag": "var", "index": 0}]
+              }
+            },
+            "right": {
+              "tag": "list_length",
+              "value": {
+                "tag": "list_filter",
+                "value": {
+                  "tag": "field",
+                  "sort": "Input",
+                  "field": "labels",
+                  "value": {"tag": "var", "index": 0}
+                },
+                "function": {
+                  "sort": "String",
+                  "body": {
+                    "tag": "decide",
+                    "formula": {
+                      "tag": "not",
+                      "body": {
+                        "tag": "eq",
+                        "left": {"tag": "var", "index": 0},
+                        "right": {"tag": "string", "value": ""}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "obligations": {
+    "D1": {
+      "declarations": [
+        {"kind": "symbol", "name": "solve"}
+      ]
+    },
+    "D2": {
+      "declarations": [
+        {"kind": "record", "name": "Input"}
+      ]
+    },
+    "D3": {
+      "declarations": [
+        {"kind": "record", "name": "Input"}
+      ]
+    },
+    "A1": {
+      "predicate": "valid_input"
+    },
+    "O1": {
+      "theorem": "solve_output_structure"
+    },
+    "O2": {
+      "theorem": "solve_output_structure"
+    },
+    "O3": {
+      "theorem": "solve_output_structure"
+    },
+    "O4": {
+      "theorem": "solve_output_structure"
+    },
+    "I1": {
+      "theorem": "solve_output_structure"
+    },
+    "N1": {},
+    "N2": {}
+  },
+  "witness_obligations": {
+    "witness_A1": {
+      "theorem": "solve_output_structure",
+      "witnesses_for": ["A1"],
+      "description": "The input record structure guarantees the schema; any Input record is a valid witness for the assumption that data conforms to the schema."
+    }
+  }
+}

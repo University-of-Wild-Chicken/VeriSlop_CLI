@@ -1,0 +1,1011 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "none stated",
+    "entities": "Function solve(data), input JSON object with labels and prefix fields, output JSON object with labels and count fields",
+    "error_semantics": "none stated (out-of-schema inputs are out of scope)",
+    "explicit_non_goals": "Out-of-schema inputs and environmental effects are out of scope",
+    "invariants": "Unicode text preserved exactly; no whitespace trimming; no combining character normalization",
+    "liveness_properties": "none stated",
+    "postconditions": "Output is JSON object with exactly labels and count; labels contains prefix-concatenated non-empty input labels in order with duplicates; count equals length of labels; empty case yields empty list and zero",
+    "preconditions": "Input conforms to stated schema (JSON object with exactly labels and prefix fields of correct types)",
+    "resource_constraints": "none stated",
+    "safety_properties": "none stated"
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "A Python function named solve exists and accepts one parameter named data"
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "function signature"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 69,
+          "interpretation": "function name, language, and parameter",
+          "origin": "explicit",
+          "start_byte": 0
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function is named solve, takes a single argument data, and is implemented in Python."
+    },
+    {
+      "acceptance_criteria": [
+        "data is a JSON object",
+        "data contains exactly the keys 'labels' and 'prefix'"
+      ],
+      "dependencies": [],
+      "id": "D2",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input schema"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 139,
+          "interpretation": "input structure",
+          "origin": "explicit",
+          "start_byte": 70
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input data is a JSON object with exactly the fields labels and prefix."
+    },
+    {
+      "acceptance_criteria": [
+        "data['labels'] is a list where every element is a Unicode string",
+        "data['prefix'] is a Unicode string"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "refines"
+        }
+      ],
+      "id": "D3",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input field types"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 207,
+          "interpretation": "field types",
+          "origin": "explicit",
+          "start_byte": 140
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The field labels is a list of Unicode strings and the field prefix is a Unicode string."
+    }
+  ],
+  "error_semantics": [],
+  "explicit_non_goals": [
+    {
+      "acceptance_criteria": [
+        "No behavior is specified for inputs that do not conform to the schema in A1"
+      ],
+      "dependencies": [],
+      "id": "N1",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "out-of-schema inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 766,
+          "interpretation": "scope exclusion",
+          "origin": "explicit",
+          "start_byte": 677
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Handling of inputs outside the stated schema is not required."
+    },
+    {
+      "acceptance_criteria": [
+        "No behavior is specified for environmental effects"
+      ],
+      "dependencies": [],
+      "id": "N2",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "environmental effects"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 766,
+          "interpretation": "scope exclusion",
+          "origin": "explicit",
+          "start_byte": 677
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Handling of environmental effects is not required."
+    }
+  ],
+  "invariants": [
+    {
+      "acceptance_criteria": [
+        "For each non-empty input label L, the suffix of the corresponding output label after the prefix is byte-identical to L",
+        "No whitespace is trimmed from the start or end of any label",
+        "No Unicode normalization (e.g., NFC, NFD) is applied to any label"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "refines"
+        }
+      ],
+      "id": "I1",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "Unicode fidelity"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 593,
+          "interpretation": "exact preservation",
+          "origin": "explicit",
+          "start_byte": 563
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 651,
+          "interpretation": "prohibited transformations",
+          "origin": "explicit",
+          "start_byte": 594
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Unicode text in the output labels is preserved exactly from the input labels, with no trimming of whitespace or normalization of combining characters."
+    }
+  ],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "return value is a JSON object",
+        "return value contains exactly the keys 'labels' and 'count'"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output structure"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 433,
+          "interpretation": "output structure",
+          "origin": "explicit",
+          "start_byte": 371
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The function returns a JSON object with exactly the fields labels and count."
+    },
+    {
+      "acceptance_criteria": [
+        "For each input label L in data['labels'] where L != '', the output contains prefix + L at the corresponding position",
+        "Input labels where L == '' are not present in the output",
+        "The relative order of non-empty labels is preserved",
+        "Duplicate non-empty labels appear the same number of times in the output as in the input"
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output labels content"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 260,
+          "interpretation": "filtering rule",
+          "origin": "explicit",
+          "start_byte": 208
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 330,
+          "interpretation": "transformation rule",
+          "origin": "explicit",
+          "start_byte": 261
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 370,
+          "interpretation": "ordering and multiplicity preservation",
+          "origin": "explicit",
+          "start_byte": 331
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The output field labels is the list of remaining input labels (excluding empty strings) with the prefix concatenated to the front of each, preserving original order and duplicates."
+    },
+    {
+      "acceptance_criteria": [
+        "return_value['count'] == len(return_value['labels'])"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output count field"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 487,
+          "interpretation": "count definition",
+          "origin": "explicit",
+          "start_byte": 434
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The output field count equals the length of the output labels list."
+    },
+    {
+      "acceptance_criteria": [
+        "If all input labels are empty strings, return_value['labels'] == []",
+        "If all input labels are empty strings, return_value['count'] == 0"
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "refines"
+        },
+        {
+          "id": "O3",
+          "relation": "refines"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "empty result case"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 562,
+          "interpretation": "empty case specification",
+          "origin": "explicit",
+          "start_byte": 488
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "If the input labels list contains only empty strings (or is empty), the output labels is an empty list and count is zero."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "data is a JSON object",
+        "data has exactly keys 'labels' and 'prefix'",
+        "data['labels'] is a list of Unicode strings",
+        "data['prefix'] is a Unicode string"
+      ],
+      "dependencies": [
+        {
+          "id": "D2",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "D3",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at function invocation, by the caller providing data that conforms to the stated schema",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at function invocation, by the caller providing data that conforms to the stated schema",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:data-pipelines/P03-unicode-labels.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at function invocation, by the caller providing data that conforms to the stated schema",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at function invocation, by the caller providing data that conforms to the stated schema",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "input validation boundary"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 139,
+          "interpretation": "schema definition",
+          "origin": "explicit",
+          "start_byte": 70
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 207,
+          "interpretation": "type constraints",
+          "origin": "explicit",
+          "start_byte": 140
+        },
+        {
+          "document_hash": "sha256:940728f614a46cffe95619ba5c1ac83d141c36f32a84f66bddb2ee43753c8e55",
+          "document_ref": "data-pipelines/P03-unicode-labels.txt",
+          "end_byte": 766,
+          "interpretation": "scope exclusion implies caller responsibility for schema conformance",
+          "origin": "explicit",
+          "start_byte": 677
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input data conforms to the stated schema: a JSON object with exactly the fields labels (list of Unicode strings) and prefix (Unicode string)."
+    }
+  ],
+  "request_ref": "data-pipelines/P03-unicode-labels.txt",
+  "resource_constraints": [],
+  "safety_properties": [],
+  "schema_version": "0.1"
+}

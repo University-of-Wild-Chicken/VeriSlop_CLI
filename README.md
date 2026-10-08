@@ -10,6 +10,7 @@ This repository contains the **design specification** and a **working implementa
 - [VSCore 0.2 grammar and source admission](docs/vscore-generalized-grammar.md): implemented surface authoring, canonical Lean decoding, pure data/helpers/folds, and reconstructed source IR; accepted-contract bridging remains unsupported for 0.2.
 - [TESTED campaign specification and formalism](docs/tested-campaigns.md): proposed strict campaign semantics, finite Lean model, VSCore testing outline and concrete-counterexample review requirements. This design does not enable VSCore campaigns.
 - [Structured data test bridge](docs/data-pipeline-bridge.md): signed integers, Unicode strings, lists and fixed-field records, with a preregistered native natural-language proof-of-concept protocol.
+- [Autonomous correction and durable contract context](docs/autonomous-correction.md): configured critic tiers, replayable counterexamples, correction loops and exact JSON/Lean recovery after context loss.
 - [Schemas](schemas/): JSON interfaces. Schema validity is structure only; semantic validators check the rest.
 - [Examples](examples/): bounded increment with Python and VSCore candidates, and an independent [checked-subtraction VSCore contract](examples/vscore-subtraction/README.md).
 
@@ -233,6 +234,14 @@ and review gate must run again for that package. Use `--repair-rounds 0..8` to s
 total restart budget; the default is `review.budgets.max_repair_rounds`. Zero disables
 these restarts. Explicit contract/proof candidates are never automatically rewritten.
 There is no artifact-first bypass of formal acceptance.
+
+Agent-driven formalization and unresolved proof attempts now use the configured
+critic tiers to construct concrete cases or diagnose observed machine errors.
+False candidate guarantees can be refuted by new kernel-checked Lean proofs before
+freeze; reference/request mismatches remain explicitly untrusted semantic feedback.
+Every JSON/Lean attempt and exact model response is retained under `agents/memory`.
+Reload it with `bin/verislop context --package RUN --json --stage-prefix formalize/attempt`.
+See [the correction protocol](docs/autonomous-correction.md) for bounds and authority.
 
 Implementation proposals also receive bounded correction with exact binding keys
 and validator diagnostics before materialization. Reviewer protocol corrections
