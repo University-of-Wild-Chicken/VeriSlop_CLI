@@ -1,0 +1,385 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "Input is an object with events containing string group, integer time and integer-or-null value, integer start and end, positive integer width, and fill equal to none or previous. Output is a list of records with group, start, count and value.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Input and output use the specified JSON-compatible structure.",
+   "Output record group is a string, start and count are integers, and value is an integer or null."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "A1",
+  "kind": "precondition",
+  "role": "assumption",
+  "statement": "The caller supplies input conforming to D1, with width greater than zero and start less than or equal to end.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Input conforms to the specified schema, width > 0, and start <= end."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Provide a pure deterministic Python 3 solve(data) function in solution.py that receives the specified JSON-compatible input and returns JSON-serializable output without mutating the input.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "A1",
+    "relation": "assumes"
+   },
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "solution.py exposes solve(data).",
+   "Repeated calls on equal input produce equal output.",
+   "Input remains unchanged and output is JSON-serializable."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Enumerate every unique group appearing anywhere in events in lexicographic order, including groups whose events are all outside the requested interval.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "The group sequence is sorted unique event group names.",
+   "Group discovery does not discard groups with no in-range events."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For each group emit one record for every bucket start start + k*width with integer k >= 0 and bucket start < end. Each bucket covers [bucket start, min(bucket start + width, end)).",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "A1",
+    "relation": "assumes"
+   },
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Bucket starts increase by width from start and are strictly below end.",
+   "Bucket membership includes the lower boundary and excludes the upper boundary.",
+   "The final bucket is clipped to end.",
+   "When start equals end or there are no groups, output is empty."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For each group bucket, count and sum include exactly the event occurrences of that group whose times fall in the bucket and whose values are non-null. Duplicate occurrences contribute separately.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "count equals the number of qualifying non-null event occurrences.",
+   "sum equals the integer sum of those values.",
+   "Null values and out-of-range events contribute neither count nor sum.",
+   "Duplicate events are counted and summed separately."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "A bucket with count > 0 returns its sum as value. An empty bucket returns null for fill none; for fill previous it returns the latest previous nonempty bucket sum for that group, or null if no such bucket exists.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O4",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "I1",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Nonempty bucket value equals its sum in either fill mode.",
+   "Empty bucket count remains zero regardless of filling.",
+   "Empty bucket value is null in none mode.",
+   "Empty bucket value in previous mode follows I1, including zero and null before the first nonempty bucket."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O6",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Return the specified list of group, start, count and value records ordered first by lexicographically sorted group and then by increasing bucket start.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O5",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Each record has the specified group, start, count and value fields.",
+   "Records appear in group order followed by increasing bucket order.",
+   "The specified input/output structure and exact ordering are preserved."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O7",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Both public examples produce their supplied outputs exactly.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O6",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "For group a with values 2 and -2 in the first width-2 bucket over [0,5), return starts 0,2,4, counts 2,0,0 and values 0,0,0.",
+   "For group z with only time -1 over [0,1), return one record with start 0, count 0 and value null."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I1",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "For each group, previous is initially absent and thereafter equals the sum of its latest earlier nonempty emitted bucket. Nonempty means count > 0; a zero sum is a valid previous value. Empty buckets preserve previous, and events before start never seed it.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O4",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Previous is isolated per group and initially absent.",
+   "Each bucket with count > 0 updates previous to its sum, including zero.",
+   "Buckets with count = 0 never update or clear previous.",
+   "No event before start contributes to previous."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "S1",
+  "kind": "safety_property",
+  "role": "guarantee",
+  "statement": "The implementation uses only the Python standard library and performs no external I/O.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No third-party dependencies are used.",
+   "Execution performs no external I/O."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "A1",
+  "role": "assumption",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "A1",
+   "predicate": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O6",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O6",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O7",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O7",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "I1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "S1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "S1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[{"discharged_at": "Function invocation through input conforming to the stated schema, width > 0 and start <= end.", "id": "A1", "supplied_by": "caller"}]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except/Option sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+CAMPAIGN QUANTIFIER SHAPE (representation constraint, not a weaker specification): Structured campaigns sample only a leading forall prefix. A residual forall or exists over Nat/Int/String/List or another non-finite sort, including one inside a conjunction or implication, is not executable reference-preflight evidence. Finite Bool/Unit/enumeration and finite composite quantifiers and explicit range quantifiers remain admitted. State faithfully equivalent pointwise formulas beneath leading universal binders where equivalence holds for the requested domain. Preserve all examples, guards, obligations and dependencies; moving a closed conjunct under a binder can require an inhabited domain. Never replace an existential by a universal, bound an infinite requirement, or drop a claim to fit the test language. Propose your own complete replacement and let the ordinary Lean, denotation and critic checks evaluate it.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+NATIVE BOUNDARY FACETS: The typed envelope accepts optional native_requirements definitions and theorem rows with native references, including mixed formula+native guarantees. Entry file/name/arity, closed pure JSON, standard-runtime-only facilities, no external I/O, borrowed-input preservation and deterministic local evaluation have registered structural contracts. Author the actual requested parameters and faithful facets under the same frozen IDs. The kernel proves the model transfer/admission theorem; actual generated source must independently pass the bound checker and finite entry campaign. These are not opaque claims and are not grounds for an unsupported report merely because they observe source properties. Physical resource/liveness claims remain unsupported.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+["A1"]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Software engineering task D21: Grouped bucket aggregation with causal filling
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end. Groups are all unique event group names sorted lexicographically, including groups with no in-range events. For each group, emit buckets starting start,start+width,... strictly below end, each covering [bucketStart,min(bucketStart+width,end)). Sum only non-null in-range values; count counts these values. A nonempty bucket has value=sum and becomes previous value. Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first); empty buckets never reset previous. Events before start never seed previous. Return [{group,start,count,value}] in group then bucket order. Zero sum is a real previous value, duplicates are counted.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"end": 5, "events": [{"group": "a", "time": 0, "value": 2}, {"group": "a", "time": 1, "value": -2}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 2, "group": "a", "start": 0, "value": 0}, {"count": 0, "group": "a", "start": 2, "value": 0}, {"count": 0, "group": "a", "start": 4, "value": 0}]}, {"input": {"end": 1, "events": [{"group": "z", "time": -1, "value": 9}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 0, "group": "z", "start": 0, "value": null}]}]
+
+>>>

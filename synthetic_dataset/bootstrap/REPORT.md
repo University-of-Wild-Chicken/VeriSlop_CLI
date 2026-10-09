@@ -148,6 +148,53 @@ without the new opt-in preserve their original case-evaluation behavior.
   [Terminal result](stages/native-grouping-001/run/BOOTSTRAP-RESULT.json),
   [native report](stages/native-grouping-001/run/artifacts/D21/verislop/package-repair-01/report.json),
   [evidence seal](stages/native-grouping-001/run/BOOTSTRAP-EVIDENCE-MANIFEST.json).
+- `closed-computation-001`, original D21: 13 fresh exact responses; all nine
+  accepted/proved guarantees, accepted-AST export, generation, linkage, TESTED,
+  two clean builds and all 24 original-case observations passed. All nine campaigns
+  achieved 32 effective cases. Overall strict result **BLOCKED** by release
+  REVIEW_INCOMPLETE: the reviewer abstained because native finalization evidence
+  was unavailable before verify and optional END_TO_END_VERIFIED was displayed as
+  current PENDING. No behavioral counterexample was found, and the vote was not
+  overridden. The run autonomously repaired malformed formalizer JSON, an exact
+  clause citation, and two conservative source-admission diagnostics before
+  producing the requested `solution.py`. The original ten interpreted IDs and
+  all required flags remain. Value guarantees use one universal reference relation;
+  interface/runtime guarantees use native-only contracts. No separate closed
+  example theorem was generated, so this live result does not demonstrate use of
+  the new computation tactic. Exact origin and retained-score audits pass; the
+  root independently matched all 875 sealed files. Seven value campaigns retained
+  35 indeterminate assignments; two native campaigns retained 15 with 130 actual
+  invocations. These are excluded from effective passes under the legacy gate.
+  [Terminal result](stages/closed-computation-001/run/BOOTSTRAP-RESULT.json),
+  [native report](stages/closed-computation-001/run/artifacts/D21/verislop/package/report.json),
+  [evidence seal](stages/closed-computation-001/run/BOOTSTRAP-EVIDENCE-MANIFEST.json),
+  [campaign summary](validation/closed-computation-campaign-summary.json).
+- `review-scope-001`, original D21: **VERIFIED / native PASS / TESTED**, with
+  11 fresh exact Sol responses, all native stages and both configured reviews
+  passed, all 9 required TESTED guarantees passed, two clean builds and all 24
+  original-case observations passed. The requested `solution.py` was produced.
+  The CLI repaired an unterminated formalizer JSON object, constructed a complete
+  zero-sorry Lean proof after the built-in attempt left three holes, and repaired
+  one implementation proposal without an outer contract restart. Accepted-AST
+  reconstruction exported 12 obligations: the original 11 required interpreted
+  records and one derived non-vacuity witness. Eight value guarantees share a
+  universal reference relation and retain mandatory native facets; source safety
+  has a native-only contract. No separate closed example theorem or `cbv` proof
+  was produced, so this run does not demonstrate the computation tactic itself.
+  Every campaign achieved 32 effective cases. Eight value campaigns retained
+  13 indeterminate assignments; nine native campaigns retained 15 with 578 actual
+  invocations. No observed failures or timeouts were recorded. Unknowns are
+  excluded from the effective passes under the legacy quota policy; this is not
+  the proposed zero-unknown design. The root independently matched all 870 sealed
+  files and reproduced the retained score audit. There were zero transport errors;
+  no grader feedback or previous answers reached authoring roles.
+  Source root `sha256:64f99383023e719bf5ddaa9e94213724b30d0342b2c9fe4879997d116fcb2f20`.
+  [Terminal result](stages/review-scope-001/run/BOOTSTRAP-RESULT.json),
+  [native report](stages/review-scope-001/run/artifacts/D21/verislop/package/report.json),
+  [accepted IR](stages/review-scope-001/run/artifacts/D21/verislop/package/accepted/accepted-ir.json),
+  [evidence seal](stages/review-scope-001/run/BOOTSTRAP-EVIDENCE-MANIFEST.json),
+  [independent terminal audit](validation/review-scope-terminal-audit.json),
+  [campaign summary](validation/review-scope-campaign-summary.json).
 
 Each stage's directory contains source/corpus inventories, frozen specifications,
 request/final receipts, raw intermediate JSON/Lean files, and terminal evidence
@@ -182,14 +229,32 @@ false examples remain blocked at acceptance. The 37 proof/recovery regressions
 and 18 native/full-pipeline regressions passed. The initial fixture and tactic
 sequencing failures and independent generic audit are retained in
 [closed-computation-checks.json](validation/closed-computation-checks.json).
-`closed-computation-001` is running with a fresh source/specification root frozen
-before the preceding independent grading was read. It starts from the original
-D21 prompt with fresh roles; the previous model answers and grading results are
-not role context. Running status is not a completed live result.
+`closed-computation-001` used a fresh source/specification root frozen before the
+preceding independent grading was read. It started from the original D21 prompt
+with fresh roles; previous model answers and grading results were not role context.
 Its snapshot was prepared while the preceding run was active, as the main bootstrap
 protocol permits; execution began after that run's result was sealed and audited.
 This differs from the detailed computation specification's stronger wording to
 freeze only after the preceding seal. No in-flight source was edited.
+The [review-scope specification](../../docs/bootstrap-review-scope.md) preceded
+the new shared producer-phase/assurance context. Native release exposes its four
+registered later finalization claims as FUTURE; VSCore retains its post-mechanical
+current gate. Observed milestone outcomes, configured votes, consensus and final
+closure requirements remain intact. The independent audit reproduced an optional
+duplicate hiding a required failure and an ambiguous inventory still confirming
+an unrelated coverage probe. Both were fixed before freezing the next snapshot.
+Per-inventory duplicates and conflicting identities now block, while VSCore's
+explicit inherited contract fields must retain exact canonical JSON identity.
+All replay kinds use the shared ambiguity check. The final 21 unrelated scope
+tests, 52 review regressions and 32 native/VSCore full-workflow checks passed.
+Earlier template/fixture errors and two deliberately interrupted engineering
+groups are retained in [review-scope-checks.json](validation/review-scope-checks.json).
+The isolated frozen runtime also passed the same 21 scope checks. Its fresh
+`review-scope-001` D21 run then passed the complete strict workflow and independent
+terminal audit, as recorded above. This snapshot was frozen after the preceding
+seal and after all final engineering checks. The earlier blocked release vote
+remains unchanged. Different model proposals and computation budgets prevent
+attributing the two runs' whole outcome difference solely to the scope fix.
 Relevant regression suites passed: 21 data bridge/workflow tests, 14 cast/fold
 kernel tests, 13 sandbox tests, 20 formal frontend tests, 32 concrete-review tests,
 and 16 full-corpus harness tests. Each suite is a registered engineering check;

@@ -1,0 +1,1114 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None within the stated input domain.",
+    "entities": "Specified input schema and output records.",
+    "error_semantics": "Behavior outside the stated valid input domain is not specified.",
+    "explicit_non_goals": "None stated.",
+    "invariants": "Per-group previous value is the latest nonempty bucket sum and persists across empty buckets.",
+    "liveness_properties": "None separately stated.",
+    "postconditions": "Pure deterministic function, complete group and bucket enumeration, aggregation, filling, ordered output and examples.",
+    "preconditions": "Caller supplies the stated valid input schema, positive width and start <= end.",
+    "resource_constraints": "None stated.",
+    "safety_properties": "Standard library only and no external I/O."
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "Input and output use the specified JSON-compatible structure.",
+        "Output record group is a string, start and count are integers, and value is an integer or null."
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input and output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 366,
+          "interpretation": "Input schema.",
+          "origin": "explicit",
+          "start_byte": 238
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 992,
+          "interpretation": "Output schema.",
+          "origin": "explicit",
+          "start_byte": 930
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 186,
+          "interpretation": "JSON-compatible values.",
+          "origin": "explicit",
+          "start_byte": 135
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1251,
+          "interpretation": "JSON input and serializable output.",
+          "origin": "explicit",
+          "start_byte": 1178
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Input is an object with events containing string group, integer time and integer-or-null value, integer start and end, positive integer width, and fill equal to none or previous. Output is a list of records with group, start, count and value."
+    }
+  ],
+  "error_semantics": [],
+  "explicit_non_goals": [],
+  "invariants": [
+    {
+      "acceptance_criteria": [
+        "Previous is isolated per group and initially absent.",
+        "Each bucket with count > 0 updates previous to its sum, including zero.",
+        "Buckets with count = 0 never update or clear previous.",
+        "No event before start contributes to previous."
+      ],
+      "dependencies": [
+        {
+          "id": "O4",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "I1",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "per-group traversal in increasing bucket order"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 732,
+          "interpretation": "Nonempty bucket updates previous.",
+          "origin": "explicit",
+          "start_byte": 673
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 888,
+          "interpretation": "Empty buckets retain previous.",
+          "origin": "explicit",
+          "start_byte": 853
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 929,
+          "interpretation": "No historical seeding before start.",
+          "origin": "explicit",
+          "start_byte": 889
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1051,
+          "interpretation": "Zero is a valid previous value.",
+          "origin": "explicit",
+          "start_byte": 993
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each group, previous is initially absent and thereafter equals the sum of its latest earlier nonempty emitted bucket. Nonempty means count > 0; a zero sum is a valid previous value. Empty buckets preserve previous, and events before start never seed it."
+    }
+  ],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "solution.py exposes solve(data).",
+        "Repeated calls on equal input produce equal output.",
+        "Input remains unchanged and output is JSON-serializable."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        },
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py",
+        "all valid inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 134,
+          "interpretation": "Required function and file, with purity.",
+          "origin": "explicit",
+          "start_byte": 79
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1129,
+          "interpretation": "Python 3, purity and determinism.",
+          "origin": "explicit",
+          "start_byte": 1053
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1251,
+          "interpretation": "JSON interface.",
+          "origin": "explicit",
+          "start_byte": 1178
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Provide a pure deterministic Python 3 solve(data) function in solution.py that receives the specified JSON-compatible input and returns JSON-serializable output without mutating the input."
+    },
+    {
+      "acceptance_criteria": [
+        "The group sequence is sorted unique event group names.",
+        "Group discovery does not discard groups with no in-range events."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all valid inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 474,
+          "interpretation": "Complete sorted group enumeration.",
+          "origin": "explicit",
+          "start_byte": 367
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Enumerate every unique group appearing anywhere in events in lexicographic order, including groups whose events are all outside the requested interval."
+    },
+    {
+      "acceptance_criteria": [
+        "Bucket starts increase by width from start and are strictly below end.",
+        "Bucket membership includes the lower boundary and excludes the upper boundary.",
+        "The final bucket is clipped to end.",
+        "When start equals end or there are no groups, output is empty."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        },
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all groups and valid intervals"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 534,
+          "interpretation": "Bucket progression.",
+          "origin": "explicit",
+          "start_byte": 475
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 610,
+          "interpretation": "Half-open and clipped bucket intervals.",
+          "origin": "explicit",
+          "start_byte": 535
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each group emit one record for every bucket start start + k*width with integer k >= 0 and bucket start < end. Each bucket covers [bucket start, min(bucket start + width, end))."
+    },
+    {
+      "acceptance_criteria": [
+        "count equals the number of qualifying non-null event occurrences.",
+        "sum equals the integer sum of those values.",
+        "Null values and out-of-range events contribute neither count nor sum.",
+        "Duplicate events are counted and summed separately."
+      ],
+      "dependencies": [
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all group buckets"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 645,
+          "interpretation": "Qualifying values for sums.",
+          "origin": "explicit",
+          "start_byte": 611
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 672,
+          "interpretation": "Count uses the same values.",
+          "origin": "explicit",
+          "start_byte": 646
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1051,
+          "interpretation": "Duplicate occurrences count separately.",
+          "origin": "explicit",
+          "start_byte": 993
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each group bucket, count and sum include exactly the event occurrences of that group whose times fall in the bucket and whose values are non-null. Duplicate occurrences contribute separately."
+    },
+    {
+      "acceptance_criteria": [
+        "Nonempty bucket value equals its sum in either fill mode.",
+        "Empty bucket count remains zero regardless of filling.",
+        "Empty bucket value is null in none mode.",
+        "Empty bucket value in previous mode follows I1, including zero and null before the first nonempty bucket."
+      ],
+      "dependencies": [
+        {
+          "id": "O4",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "I1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all emitted buckets and both fill modes"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 732,
+          "interpretation": "Nonempty bucket value.",
+          "origin": "explicit",
+          "start_byte": 673
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 852,
+          "interpretation": "Empty bucket filling rules.",
+          "origin": "explicit",
+          "start_byte": 733
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "A bucket with count > 0 returns its sum as value. An empty bucket returns null for fill none; for fill previous it returns the latest previous nonempty bucket sum for that group, or null if no such bucket exists."
+    },
+    {
+      "acceptance_criteria": [
+        "Each record has the specified group, start, count and value fields.",
+        "Records appear in group order followed by increasing bucket order.",
+        "The specified input/output structure and exact ordering are preserved."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O5",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "returned output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 992,
+          "interpretation": "Return shape and ordering.",
+          "origin": "explicit",
+          "start_byte": 930
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1317,
+          "interpretation": "Preserve exact structure and ordering.",
+          "origin": "explicit",
+          "start_byte": 1252
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Return the specified list of group, start, count and value records ordered first by lexicographically sorted group and then by increasing bucket start."
+    },
+    {
+      "acceptance_criteria": [
+        "For group a with values 2 and -2 in the first width-2 bucket over [0,5), return starts 0,2,4, counts 2,0,0 and values 0,0,0.",
+        "For group z with only time -1 over [0,1), return one record with start 0, count 0 and value null."
+      ],
+      "dependencies": [
+        {
+          "id": "O6",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "public examples"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1891,
+          "interpretation": "Required example behavior, including zero carry and exclusion of historical seeding.",
+          "origin": "explicit",
+          "start_byte": 1319
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Both public examples produce their supplied outputs exactly."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "Input conforms to the specified schema, width > 0, and start <= end."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at Function invocation through input conforming to the stated schema, width > 0 and start <= end.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at Function invocation through input conforming to the stated schema, width > 0 and start <= end.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at Function invocation through input conforming to the stated schema, width > 0 and start <= end.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at Function invocation through input conforming to the stated schema, width > 0 and start <= end.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "function invocation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 366,
+          "interpretation": "Stated valid input domain.",
+          "origin": "explicit",
+          "start_byte": 238
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The caller supplies input conforming to D1, with width greater than zero and start less than or equal to end."
+    }
+  ],
+  "request_ref": "tasks/D21/prompt.txt",
+  "resource_constraints": [],
+  "safety_properties": [
+    {
+      "acceptance_criteria": [
+        "No third-party dependencies are used.",
+        "Execution performs no external I/O."
+      ],
+      "dependencies": [],
+      "id": "S1",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/D21/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "implementation and execution"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 237,
+          "interpretation": "Dependency and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 187
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1177,
+          "interpretation": "Repeated dependency and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 1130
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The implementation uses only the Python standard library and performs no external I/O."
+    }
+  ],
+  "schema_version": "0.1"
+}

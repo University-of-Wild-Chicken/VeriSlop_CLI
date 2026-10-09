@@ -1,0 +1,1538 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "D1": {
+      "acceptance_criteria": [
+        "The specified input fields and types define the supported domain, including empty events and start = end."
+      ],
+      "dependencies": [],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/D1@sha256:a0743089790c9d070d5a86f0ab2dd5e7322df7ce2fe6c8be9cd70ffc97bd732c",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Event",
+        "reification_evidence_ref": "reification:D1@sha256:00ec7404284704beeccb2a21557c95e38e1de5aeb3fcc8fee4e37e017e883dff",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:9ce0a38c60cbaa39232df3dd646f0124188d3c549608e32b19d6b59e0bb36bfa",
+        "statement_hash": "sha256:c9ad634d6239af99561392b869dff5b07b9f5cfd324f84039f4784dda8bd0857"
+      },
+      "id": "D1",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-bc86893be477859ea3bc4b4fd64c3bb8"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-df430d136fbd441c3274edfee8cccbc3"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-57f20b4b134d117197ae6ae43b3ba6ab"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "input domain"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-6f0f31d4f7856d8da80be935884983b8"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-bc829276d9756a29162f4b477baae2d0"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input domain"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 366,
+          "interpretation": "Specified input structure and domain.",
+          "origin": "explicit",
+          "start_byte": 238
+        }
+      ],
+      "state": "LINKED",
+      "statement": "Input is an object containing events, start, end, width and fill. Each event has a string group, integer time and integer or null value; start and end are integers, width is a positive integer, fill is 'none' or 'previous', and start <= end."
+    },
+    "I1": {
+      "acceptance_criteria": [
+        "Previous state is independent for each group.",
+        "Empty buckets never reset previous.",
+        "A nonempty bucket with sum zero establishes previous = 0.",
+        "Events before start cannot seed previous."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/I1@sha256:5070feb265008f4104df1bf27009c8e7162aae960d0746c6baf21d3abaada919",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.complete_behavior",
+        "reification_evidence_ref": "reification:I1@sha256:7fdc36f47f797c8f31c90ddef93e74ab0932e24e0fb26f8380df0c260d4caeb6",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:1242421b1f229ff370443855c28a1c5474aaf9a88070a7faf99c5b8376a53fae",
+        "statement_hash": "sha256:282e5f78d26c62e37b14d7610fbd634abece4df9caa5dd5627445c8dda4c20d9"
+      },
+      "id": "I1",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-c27087a3c064a30973273d8d8360758c"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-b1edd283250c10b1a111c9390b5f5365"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-c59cd46424c92b9ef3ab4385572b0f1e"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-d939147a085ff8d6bc8a2daae8ad8a5c"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "per-group previous state"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-6ab7d86420fe1fec9433a69caa4e8cf2"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-b4381c3bd3deb735aceccf5035f72b0f"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-703304dd3857a0508e89cb0ef0cf8cc8"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite testing of the accepted property and linked target calls; not a proof of universal Python correctness"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-fa0b3bc1836050256298854bae8eaffa"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "per-group previous state"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 732,
+          "interpretation": "Nonempty buckets establish previous.",
+          "origin": "explicit",
+          "start_byte": 673
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 888,
+          "interpretation": "Empty buckets retain previous.",
+          "origin": "explicit",
+          "start_byte": 853
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 929,
+          "interpretation": "Pre-start events cannot seed filling.",
+          "origin": "explicit",
+          "start_byte": 889
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1051,
+          "interpretation": "Zero is a valid previous sum.",
+          "origin": "explicit",
+          "start_byte": 993
+        }
+      ],
+      "state": "TESTED",
+      "statement": "During each group's ascending bucket traversal, previous is initially absent and changes only upon a bucket with count > 0, to that bucket's sum including zero. Empty buckets retain previous, and events before start never initialize it."
+    },
+    "O1": {
+      "acceptance_criteria": [
+        "solution.py exposes solve(data).",
+        "Repeated calls with equal input return equal results.",
+        "The function has no externally observable side effects and does not mutate its input.",
+        "The result is JSON-serializable."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O1@sha256:d0c4482257d2731717a9d3267d0f9fbe738bd0f573dd4236341f2d89d1b16240",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.python_interface",
+        "reification_evidence_ref": "reification:O1@sha256:743ea003d476918dea82d31bba7cceeacd5d527373cf14228d4b9c872d578c9b",
+        "representation": "contract_facets",
+        "semantic_closure_hash": "sha256:c4a6f8b654f3cdfcdaf77facd84dc3b6c3c2696f61b1c785357177d4101dacc5",
+        "statement_hash": "sha256:1a031ad783299f3441cbd469312ba31d7286e3be4c64a680b0a7ae587ca5fa5f"
+      },
+      "id": "O1",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-6d204495ce75079df66f26497f2d6e0c"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-2e51ed2640d72afb9d3a5b9b8ebdaf46"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-e5683db87a5726dab814b96de1cccc55"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-8ef6cfab14451252c29272444f6e93d7"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "function interface and execution"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-9720fa45f22c03350a834be54acce2af"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-58b1eba44145949c5078a85b76565eca"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-664c6055f43a6a629bcdafd8adaaf1a6"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite testing of the accepted property and linked target calls; not a proof of universal Python correctness"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-7d08ea2f9a282b3ef01ee87a8ece7adb"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "function interface and execution"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 134,
+          "interpretation": "Required function and purity.",
+          "origin": "explicit",
+          "start_byte": 79
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 186,
+          "interpretation": "JSON-compatible interface.",
+          "origin": "explicit",
+          "start_byte": 135
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1129,
+          "interpretation": "Python 3 and deterministic purity.",
+          "origin": "explicit",
+          "start_byte": 1053
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1251,
+          "interpretation": "JSON input and serializable output.",
+          "origin": "explicit",
+          "start_byte": 1178
+        }
+      ],
+      "state": "TESTED",
+      "statement": "Provide a pure deterministic Python 3 solve(data) function in solution.py accepting JSON-compatible Python input and returning a JSON-serializable result."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "Groups equal the lexicographically sorted set of group names across all input events.",
+        "Out-of-range events still establish group membership.",
+        "An empty event list yields no groups."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O2@sha256:5070feb265008f4104df1bf27009c8e7162aae960d0746c6baf21d3abaada919",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.complete_behavior",
+        "reification_evidence_ref": "reification:O2@sha256:7fdc36f47f797c8f31c90ddef93e74ab0932e24e0fb26f8380df0c260d4caeb6",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:1242421b1f229ff370443855c28a1c5474aaf9a88070a7faf99c5b8376a53fae",
+        "statement_hash": "sha256:282e5f78d26c62e37b14d7610fbd634abece4df9caa5dd5627445c8dda4c20d9"
+      },
+      "id": "O2",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-8232c9edd146a9f5b9174230bf9ad011"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-8a9d77ac2d504ae449b2177113cd906e"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-50e156f9a8d26a9da0c6c7409cfc8fed"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-11f042b71048d10931a1b6b48b2d21cd"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "group enumeration"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-3440b93b4e6fb34ddf762858fab9cf8e"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-d3835b56b9b0ee70e3f8075398164349"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-295f9548ec883c90fde843725b3aa3ca"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite testing of the accepted property and linked target calls; not a proof of universal Python correctness"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-35a8436e3172b4426c4ce020d3812cd5"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "group enumeration"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 474,
+          "interpretation": "Complete group discovery and ordering.",
+          "origin": "explicit",
+          "start_byte": 367
+        }
+      ],
+      "state": "TESTED",
+      "statement": "Derive groups from all unique event group names and sort them lexicographically, including groups whose events all fall outside the requested interval."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "Each group has exactly the specified bucket starts in ascending order.",
+        "Bucket lower boundaries are inclusive and upper boundaries are exclusive.",
+        "The last bucket is clipped at end.",
+        "start = end yields an empty result."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O3@sha256:5070feb265008f4104df1bf27009c8e7162aae960d0746c6baf21d3abaada919",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.complete_behavior",
+        "reification_evidence_ref": "reification:O3@sha256:7fdc36f47f797c8f31c90ddef93e74ab0932e24e0fb26f8380df0c260d4caeb6",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:1242421b1f229ff370443855c28a1c5474aaf9a88070a7faf99c5b8376a53fae",
+        "statement_hash": "sha256:282e5f78d26c62e37b14d7610fbd634abece4df9caa5dd5627445c8dda4c20d9"
+      },
+      "id": "O3",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-d0f579db493b03c489b22b358a1c17fb"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-e940b5cb34badd26a132573e8fad7c12"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-3aa1c22c23573b1264f34706be8349cd"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-f2502bc157d574a0e59270e99b6474b1"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "bucket enumeration and boundaries"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-024a80b31ced3e79d920f519a3cd2883"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-846f5af3f5d41c4734108f654563176c"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-ee570982120899bdb80340b03ae3881b"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite testing of the accepted property and linked target calls; not a proof of universal Python correctness"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-517aa2380a811f4c3cbf1ed219e030ee"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "bucket enumeration and boundaries"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 534,
+          "interpretation": "Bucket start sequence for each group.",
+          "origin": "explicit",
+          "start_byte": 475
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 610,
+          "interpretation": "Strict stopping boundary and half-open bucket intervals.",
+          "origin": "explicit",
+          "start_byte": 535
+        }
+      ],
+      "state": "TESTED",
+      "statement": "For every group emit one bucket for each start + k*width with integer k >= 0 and bucket start strictly below end; its interval is [bucketStart, min(bucketStart + width, end))."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "count equals the number of non-null matching event occurrences in the bucket.",
+        "sum equals the integer sum of those occurrences.",
+        "Null values contribute neither to count nor sum.",
+        "Events outside [start,end) contribute neither to count nor sum.",
+        "Duplicate occurrences each contribute independently."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O4@sha256:5070feb265008f4104df1bf27009c8e7162aae960d0746c6baf21d3abaada919",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.complete_behavior",
+        "reification_evidence_ref": "reification:O4@sha256:7fdc36f47f797c8f31c90ddef93e74ab0932e24e0fb26f8380df0c260d4caeb6",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:1242421b1f229ff370443855c28a1c5474aaf9a88070a7faf99c5b8376a53fae",
+        "statement_hash": "sha256:282e5f78d26c62e37b14d7610fbd634abece4df9caa5dd5627445c8dda4c20d9"
+      },
+      "id": "O4",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-87682a7eb08e711afd5596ca511e6627"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-5d20b1454d5695cce00991572995b525"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-ec864cfc98e5b7fd1a061cb2f89a793e"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-3882a4ad5346f05a5c35648d554caa3d"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "bucket aggregation"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-c91b8414322cc4e837d549d8cefae316"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-95b9067b8d6773f4e421a0ee27d81640"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-020de344b546c695894a3965470c38f9"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite testing of the accepted property and linked target calls; not a proof of universal Python correctness"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-000787968c5ef24951cc165223dbb698"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "bucket aggregation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 645,
+          "interpretation": "Non-null in-range aggregation.",
+          "origin": "explicit",
+          "start_byte": 611
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 672,
+          "interpretation": "Count uses the same contributing values.",
+          "origin": "explicit",
+          "start_byte": 646
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1051,
+          "interpretation": "Duplicate occurrences are counted.",
+          "origin": "explicit",
+          "start_byte": 993
+        }
+      ],
+      "state": "TESTED",
+      "statement": "For each group and bucket, count and sum every matching event with non-null value whose time lies in that bucket; preserve duplicate event contributions."
+    },
+    "O5": {
+      "acceptance_criteria": [
+        "Nonempty buckets return their sum for either fill mode.",
+        "Empty buckets return null in fill 'none' mode.",
+        "Empty buckets in fill 'previous' mode use only the latest earlier nonempty bucket of their own group.",
+        "Before the first nonempty bucket, previous-filled values are null."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O5@sha256:5070feb265008f4104df1bf27009c8e7162aae960d0746c6baf21d3abaada919",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.complete_behavior",
+        "reification_evidence_ref": "reification:O5@sha256:7fdc36f47f797c8f31c90ddef93e74ab0932e24e0fb26f8380df0c260d4caeb6",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:1242421b1f229ff370443855c28a1c5474aaf9a88070a7faf99c5b8376a53fae",
+        "statement_hash": "sha256:282e5f78d26c62e37b14d7610fbd634abece4df9caa5dd5627445c8dda4c20d9"
+      },
+      "id": "O5",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-c9fb0f14c2a564fb299aa86a0bdfd656"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-a1100378254eb6b73e5ad8cb80b9d50e"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-bbf70ed1e8ad6b98b0579b85a61757fb"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-0ba1bec8616cefd64c6d3b167460f0f5"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "bucket values and causal filling"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-f89c55c9a3dcc86c79f95366283d3bba"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-3bf81cc9f24c97656187b7a2ac652ea0"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-a898a47ae3e448fd41cfde9e3ebfbb52"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite testing of the accepted property and linked target calls; not a proof of universal Python correctness"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-066980a3bcf190149fcac1bae4e27a2d"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "bucket values and causal filling"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 732,
+          "interpretation": "Nonempty bucket output and previous value.",
+          "origin": "explicit",
+          "start_byte": 673
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 852,
+          "interpretation": "Empty bucket behavior in both fill modes.",
+          "origin": "explicit",
+          "start_byte": 733
+        }
+      ],
+      "state": "TESTED",
+      "statement": "A bucket with count > 0 returns its sum as value. A bucket with count = 0 returns null for fill 'none'; for fill 'previous' it returns the sum of the latest earlier bucket of the same group with count > 0, or null if no such bucket exists."
+    },
+    "O6": {
+      "acceptance_criteria": [
+        "Each emitted record contains exactly group, start, count and value.",
+        "Records follow group order and then bucket order.",
+        "Record fields contain the group name, bucket start, contributing count and specified filled or summed value."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O6@sha256:5070feb265008f4104df1bf27009c8e7162aae960d0746c6baf21d3abaada919",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.complete_behavior",
+        "reification_evidence_ref": "reification:O6@sha256:7fdc36f47f797c8f31c90ddef93e74ab0932e24e0fb26f8380df0c260d4caeb6",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:1242421b1f229ff370443855c28a1c5474aaf9a88070a7faf99c5b8376a53fae",
+        "statement_hash": "sha256:282e5f78d26c62e37b14d7610fbd634abece4df9caa5dd5627445c8dda4c20d9"
+      },
+      "id": "O6",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-3e52fd2489ff69661eeb7cdf34042466"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-7e5df444703edd9a41a788b7b379f64f"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-83c3735dded0fc79034bf57155c0fb51"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-ef38ec930d6692b496ad5af294fb0baa"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "output structure and ordering"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-f11f370f543aef5f798a237620842b75"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-733f6190a27cfd61c2ce7f3011e1436c"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-d288bac7b0d33c86b17f166a2b42b345"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite testing of the accepted property and linked target calls; not a proof of universal Python correctness"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-02064f19bb9b3201308848302e6c18d6"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "output structure and ordering"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 992,
+          "interpretation": "Output fields and record ordering.",
+          "origin": "explicit",
+          "start_byte": 930
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1317,
+          "interpretation": "Preserve specified structure and exact ordering.",
+          "origin": "explicit",
+          "start_byte": 1252
+        }
+      ],
+      "state": "TESTED",
+      "statement": "Return a list of records with group, start, count and value fields, ordered first by lexicographically sorted group and then by ascending bucket start, preserving the specified interface structure."
+    },
+    "O7": {
+      "acceptance_criteria": [
+        "For group a with values 2 and -2 in the first bucket, return records at starts 0, 2 and 4 with counts 2, 0 and 0 and values 0, 0 and 0.",
+        "For group z with its only event at time -1 and start 0, return one record at start 0 with count 0 and value null."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O7@sha256:5070feb265008f4104df1bf27009c8e7162aae960d0746c6baf21d3abaada919",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.complete_behavior",
+        "reification_evidence_ref": "reification:O7@sha256:7fdc36f47f797c8f31c90ddef93e74ab0932e24e0fb26f8380df0c260d4caeb6",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:1242421b1f229ff370443855c28a1c5474aaf9a88070a7faf99c5b8376a53fae",
+        "statement_hash": "sha256:282e5f78d26c62e37b14d7610fbd634abece4df9caa5dd5627445c8dda4c20d9"
+      },
+      "id": "O7",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-1071c16a720ed4598b1a61ef4006bcf9"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-2dba2a0b862853f0011085dceee444c6"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-ce4e250842d14da9eabf9b243cbfed5a"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-54d6f44e9536eb3b1a48f3bfd0369963"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "public examples"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-830af89eb14d308706d930b172868f44"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-5b956f2bdc845b46cf4f35e431df37a4"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-9447935552d0335cc1e54a81a127dbe9"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite testing of the accepted property and linked target calls; not a proof of universal Python correctness"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-fdcf6f3cca1d4660fee5b12d6a88853e"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "public examples"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1891,
+          "interpretation": "Concrete examples require zero propagation and prohibit pre-start seeding.",
+          "origin": "explicit",
+          "start_byte": 1319
+        }
+      ],
+      "state": "TESTED",
+      "statement": "Match both supplied public example outputs exactly."
+    },
+    "R1": {
+      "acceptance_criteria": [
+        "No non-standard-library dependencies are required.",
+        "Execution performs no external I/O."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/R1@sha256:5747809e5bad092d8532395e9143285399aa44a59ab59946684b6c4e92cfbb99",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.runtime",
+        "reification_evidence_ref": "reification:R1@sha256:aa0d4d30b77916b0de37ac65f79082e4a84c370d2fb10ee0d0d973f73a7417d0",
+        "representation": "contract_facets",
+        "semantic_closure_hash": "sha256:ff9e7f4a119597b5b09d6b07be8934c6f6d9b09aef7c85eeaec06c5179598d30",
+        "statement_hash": "sha256:0bd447e1e112a4e5e75790542bc77f361229f15261f9136255a2adc1d6ee9670"
+      },
+      "id": "R1",
+      "implementation_refs": [
+        "solution.py#solve@sha256:9417eecfc5e1450fe6cd5f8fe7986446906d2c4dec8e0c411cdab560f3dc2e54",
+        "solution.py#stats@sha256:59c66b859e194be671f6eea8fca439d3fb2fcdf05b15740b04004f8b0b62be08",
+        "solution.py#traverse@sha256:66c495976e464f15d4accb613dca50736f3c4a57ec26bef0c423ed094f967f0e"
+      ],
+      "kind": "resource_constraint",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-b4efd5ac4664224ebf743746804c54bd"
+          ],
+          "outcome": "UNSUPPORTED",
+          "reason": "Tier 0 (test_campaign) is ineligible for END_TO_END_VERIFIED: no semantic correspondence to an implementation endpoint is established",
+          "scope": [
+            "closure root sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+            "endpoint test_campaign"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-96830a26b454871ec92423945e99ffb8"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-02798396e0117b758922a3654847cec4"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-materializer",
+          "scope": [
+            "implementation root sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+            "artifact exists and byte-compiles; correctness not established"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-74792850b4cde25a68b6fa3fbd36e248"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "implementation and function execution"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-e4d9ba1ea7985ae24ff8f9d3ac597ceb"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-linker",
+          "scope": [
+            "link root sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+            "structural identity and coverage; not semantic equivalence"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-c5de9360be669c62549b58a7bf6dd6f4"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [
+            "evidence:ev-c2b678b1ed2b8ea4dc937f5902c50117"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.python-tier0-campaign",
+          "scope": [
+            "test root sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be",
+            "campaign verislop.data-sampler/0.2 seed 20261008",
+            "finite testing of the accepted property and linked target calls; not a proof of universal Python correctness"
+          ]
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-3e6aa6c014737f66ba73064da19a2473"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+            "certificate sha256:5a6e0d466dbc293c8bc2f1db9d8b077136df2ae416874b3e08bc95a7edf3ec50",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "implementation and function execution"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 237,
+          "interpretation": "Dependency and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 187
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1177,
+          "interpretation": "Repeated dependency and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 1130
+        }
+      ],
+      "state": "TESTED",
+      "statement": "Use only Python standard-library facilities and perform no external I/O."
+    }
+  },
+  "roots": {
+    "closure_root": "sha256:e7cbddb5ddf9db29101559b79275490090abee8b03074e362f6010cf2f2eb828",
+    "contract_input_root": "sha256:a72a7cd16ec03047aca6fe543866711ea6c6e5d7977590ac5f0cfff4e85acade",
+    "implementation_root": "sha256:48afc542646f65ae640cbcad367d028d081fafbc306c665bcd288bb378cc9656",
+    "interpretation_root": "sha256:39e5a53c39a581705495c93cca762f783403b1fd5505b058b34517a8142956c2",
+    "link_root": "sha256:9c23aa2a3d629f41d41ba89e1f80b7d7e1da4b7806e8f7949dba3c9eb2c8434a",
+    "test_root": "sha256:b0f42ca5df976457e6b2f11da09203aacc43d11ee0fb0b14aa56d9e308a787be"
+  },
+  "schema_version": "0.1"
+}
