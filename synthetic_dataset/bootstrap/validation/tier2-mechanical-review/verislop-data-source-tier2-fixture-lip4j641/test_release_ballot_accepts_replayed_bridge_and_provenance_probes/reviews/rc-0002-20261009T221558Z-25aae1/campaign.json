@@ -1,0 +1,88 @@
+{
+  "campaign_id": "rc-0002-20261009T221558Z-25aae1",
+  "checkpoint": "release",
+  "config": {
+    "agents": {
+      "author": {
+        "max_output_tokens": 4000,
+        "model_ref": "env:VERISLOP_TEST_MODEL",
+        "provider": "mock",
+        "tool_profile": "candidate_writer"
+      },
+      "reviewer": {
+        "max_output_tokens": 2000,
+        "model_ref": "mock-reviewer",
+        "provider": "mock",
+        "tool_profile": "review_readonly"
+      }
+    },
+    "bridge_tier": 2,
+    "endpoint": "restricted_source",
+    "providers": {
+      "mock": {
+        "adapter": "openai_compatible",
+        "api_family": "chat_completions",
+        "concurrency": 4,
+        "credential_ref": "env:VERISLOP_TEST_KEY",
+        "endpoint_profile": "mock-local",
+        "request_timeout_seconds": 30
+      }
+    },
+    "release": {
+      "require_all_review_tiers": true,
+      "require_mechanical_pass": true,
+      "require_requested_bridge_tier": true
+    },
+    "review": {
+      "budgets": {
+        "max_calls_per_instance": 4,
+        "max_provider_retries": 1,
+        "max_repair_rounds": 0,
+        "max_total_tokens": 1000000,
+        "max_wall_seconds_per_tier": 300
+      },
+      "checkpoints": [
+        "formal_contract",
+        "release"
+      ],
+      "restart_after_repair": "first_tier",
+      "review_tiers": [
+        {
+          "consensus": {
+            "blocking_findings_veto": true,
+            "max_abstentions": 0,
+            "max_soft_rejects": 0,
+            "mode": "unanimous",
+            "require_all_responses": true
+          },
+          "id": "release",
+          "reviewers": [
+            {
+              "agent": "reviewer",
+              "count": 1,
+              "focus": "general"
+            }
+          ]
+        }
+      ]
+    },
+    "roles": {
+      "formalizer": "author",
+      "implementer": "author",
+      "interpreter": "author",
+      "prover": "author",
+      "repairer": "author"
+    },
+    "schema_version": "0.1"
+  },
+  "review_target_root": "sha256:66b69bfd3b5e72ff9cb2d0234802e18b0fc22dacec6918f2b83d003b18cee108",
+  "schema_version": "0.1",
+  "target_components": {
+    "checkpoint": "release",
+    "closure_root": "sha256:a3d67264715a2add856fc3fc8cdde30801504c0a97a77ecdb94bbe63d2d314a5",
+    "format": "verislop.review-target/0.2",
+    "mechanical_projection_hash": "sha256:95f6bd6a9f6669a26263f5b26dc4639e23c6df24ae1a50ca6a6566800de5126d",
+    "model_resolution_manifest_hash": "sha256:1f55a4bb8b9c41398bb283981e2419b9720e77bc4fc5c8cd2284c2c57cc03b23",
+    "reviewer_configuration_hash": "sha256:2d8d80fe65657d548b0e843fa3ff9c9bebd270efd85f4f15d4542ad3f9dd23a8"
+  }
+}

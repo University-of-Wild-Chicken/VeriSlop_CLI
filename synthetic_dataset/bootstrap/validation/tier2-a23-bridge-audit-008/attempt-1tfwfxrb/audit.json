@@ -1,0 +1,644 @@
+{
+  "bridge_edge": "edge-6c6b7f3cad1aebbacfb2127f",
+  "checks": {
+    "path": "checks.json",
+    "sha256": "sha256:26fb5bfc8bb6dd1bb7df4adfaa05f53c12789eb0d4d017aa971ee94d63bd4f2c"
+  },
+  "claim": "BRIDGE:implementation:vscore-refinement",
+  "created_at": "2026-10-09T20:03:47.793787+00:00",
+  "findings": {
+    "adapters": "Input record ordered n,m,a,b into right-associated Int product ending Unit; to/inv prove both inverse laws. intRawLaws/productRawLaws/recordRawLaws prove decode(encode)=some and encode(decode)=raw for the exact canonical layout; injectivity and representation follow.",
+    "concrete_defects_found": [],
+    "domain": {
+      "delivered_entry": "program.vscore.json / solve / arity 1; sole entry; no helpers",
+      "functional_transfers": "O1 and O2 retain forall valid x, exact List.sum(List.map (fun i => Int.fdiv(a * Int.ofNat i + b, m)) (List.range n.toNat)); negative infinity division is the exact pinned Int.fdiv; empty range and sum give zero",
+      "implementation_refinement": "forall x : Input, source_fn_solve x = VeriSlopAST.solve x; no guard, extra bound, witness or assumed Refines premise in final theorem",
+      "input": "one Input record with n,m,a,b all unbounded mathematical Int",
+      "public_domain": "0 <= n <= 500 and 0 < m; a and b arbitrary signed Int"
+    },
+    "lifecycle_scope": "Stored bridge semantic acceptance and exact descriptor checks passed. No new kernel replay/build executed by this audit. Closure/current exists now but terminal report, release consensus, complete execution graph and terminal seals are deliberately outside this bridge-only finding; no end-to-end success is assigned here.",
+    "parse_and_compile": "Exact delivered source byte vector is parsed to rawProgram; checkProgram proves exact signature; compileProgram_ok and find_solve prove successful extraction rather than dummy fallback.",
+    "proof": "Fresh candidate Proof.lean proves edge_of_refines with intro x; with_unfolding_all rfl. Stored accepted theorem has exact EdgeProp type and allowed axioms Classical.choice, Quot.sound, propext; native stored A/B compilation observations report zero sorries and replayed proposition closure.",
+    "raw_coverage": "InputsCover_solve covers every ArgsTyped raw argument vector using exact encodeEnv_decodeEnv and adapter to_from. RawEval_solve equates actual evalEntry of encoded arbitrary Input with encoded source_fn_solve. Neither uses the valid-input guard.",
+    "required_id_closure": "EdgeProp contains SourceParses, SourceChecks, InputsCover_solve, RawEval_solve, Refines_solve, SourceAdequate_solve and Transfer_O1, Transfer_O2, Transfer_S1, Transfer_S2. Certificate and frozen plan bind each required ID/revision to its accepted statement hash.",
+    "source_adequacy": "SourceAdequate_solve is in EdgeProp. It retains actual compile/find equations, parameter/result RawLaws, typed raw coverage and totality, deterministic Observation, unchanged arguments, absence of externalIO/floatingPoint, result data shape, normative evalEntry equality and empty effect trace. Facts are derived through exactSourceFacts of the admitted compiler entry, not candidate metadata or an abstract model witness.",
+    "trust_scope": "This is the accepted normative VSCore3 pure evaluator and raw Value representation, not a host interpreter/operating-system runtime, separate Python/Lean executable, CLI JSON transport or complexity guarantee. Natural-language correspondence and registered compiler/reifier/kernel/toolchain/hash/sandbox foundations remain explicit trust."
+  },
+  "format": "verislop.independent-readonly-audit/0.1",
+  "input_count": 101,
+  "inputs": {
+    "package/accepted/acceptance.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/acceptance.json",
+      "sha256": "sha256:89787168099235d54d21a388149cb8375a7eb129281e688c5624b535a70f00af",
+      "size": 6206,
+      "snapshot": "inputs/package/accepted/acceptance.json"
+    },
+    "package/accepted/accepted-ir.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/accepted-ir.json",
+      "sha256": "sha256:72f6da61af74ac1746d739a86df83ccac3e6e58a09e9eb49baddcfd450b2d5ec",
+      "size": 37157,
+      "snapshot": "inputs/package/accepted/accepted-ir.json"
+    },
+    "package/accepted/certificates/89787168099235d54d21a388149cb8375a7eb129281e688c5624b535a70f00af.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/certificates/89787168099235d54d21a388149cb8375a7eb129281e688c5624b535a70f00af.json",
+      "sha256": "sha256:89787168099235d54d21a388149cb8375a7eb129281e688c5624b535a70f00af",
+      "size": 6206,
+      "snapshot": "inputs/package/accepted/certificates/89787168099235d54d21a388149cb8375a7eb129281e688c5624b535a70f00af.json"
+    },
+    "package/accepted/environment/73bc30c3c060511897310e739dc85b5b4e7964e3e8e4e5191d6fd20f97338d6e.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/environment/73bc30c3c060511897310e739dc85b5b4e7964e3e8e4e5191d6fd20f97338d6e.json",
+      "sha256": "sha256:73bc30c3c060511897310e739dc85b5b4e7964e3e8e4e5191d6fd20f97338d6e",
+      "size": 1020137,
+      "snapshot": "inputs/package/accepted/environment/73bc30c3c060511897310e739dc85b5b4e7964e3e8e4e5191d6fd20f97338d6e.json"
+    },
+    "package/accepted/expressions/38d7fc363a0e3004d12452eec9b87f525ab4167ded8b1ada7a66b0afc83c8a71.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/expressions/38d7fc363a0e3004d12452eec9b87f525ab4167ded8b1ada7a66b0afc83c8a71.json",
+      "sha256": "sha256:38d7fc363a0e3004d12452eec9b87f525ab4167ded8b1ada7a66b0afc83c8a71",
+      "size": 811,
+      "snapshot": "inputs/package/accepted/expressions/38d7fc363a0e3004d12452eec9b87f525ab4167ded8b1ada7a66b0afc83c8a71.json"
+    },
+    "package/accepted/expressions/3ab9980836480b7a9f4e45b4e0f9647ad1a9fc60baaac0600dc1df5bb8bc92c4.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/expressions/3ab9980836480b7a9f4e45b4e0f9647ad1a9fc60baaac0600dc1df5bb8bc92c4.json",
+      "sha256": "sha256:3ab9980836480b7a9f4e45b4e0f9647ad1a9fc60baaac0600dc1df5bb8bc92c4",
+      "size": 843,
+      "snapshot": "inputs/package/accepted/expressions/3ab9980836480b7a9f4e45b4e0f9647ad1a9fc60baaac0600dc1df5bb8bc92c4.json"
+    },
+    "package/accepted/expressions/5399758458c7cd7c29aa20dfaa87c7e877b6a7ece35e33e17f27e0942dc5b9f5.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/expressions/5399758458c7cd7c29aa20dfaa87c7e877b6a7ece35e33e17f27e0942dc5b9f5.json",
+      "sha256": "sha256:5399758458c7cd7c29aa20dfaa87c7e877b6a7ece35e33e17f27e0942dc5b9f5",
+      "size": 132,
+      "snapshot": "inputs/package/accepted/expressions/5399758458c7cd7c29aa20dfaa87c7e877b6a7ece35e33e17f27e0942dc5b9f5.json"
+    },
+    "package/accepted/expressions/7fd084b028baad4520b783c4fb17aa18acc30bfa06488b1e98881a114d519740.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/expressions/7fd084b028baad4520b783c4fb17aa18acc30bfa06488b1e98881a114d519740.json",
+      "sha256": "sha256:7fd084b028baad4520b783c4fb17aa18acc30bfa06488b1e98881a114d519740",
+      "size": 2355,
+      "snapshot": "inputs/package/accepted/expressions/7fd084b028baad4520b783c4fb17aa18acc30bfa06488b1e98881a114d519740.json"
+    },
+    "package/accepted/expressions/aee325fa6f44225b5a0c7bb1dae7e76d9d76bd964c6b184bf9081a8121c80638.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/expressions/aee325fa6f44225b5a0c7bb1dae7e76d9d76bd964c6b184bf9081a8121c80638.json",
+      "sha256": "sha256:aee325fa6f44225b5a0c7bb1dae7e76d9d76bd964c6b184bf9081a8121c80638",
+      "size": 231,
+      "snapshot": "inputs/package/accepted/expressions/aee325fa6f44225b5a0c7bb1dae7e76d9d76bd964c6b184bf9081a8121c80638.json"
+    },
+    "package/accepted/expressions/d4e4807b29d9c490dfdf7bbff9496ae22ae32108b4114e17984a1b60f33edf86.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/expressions/d4e4807b29d9c490dfdf7bbff9496ae22ae32108b4114e17984a1b60f33edf86.json",
+      "sha256": "sha256:d4e4807b29d9c490dfdf7bbff9496ae22ae32108b4114e17984a1b60f33edf86",
+      "size": 319,
+      "snapshot": "inputs/package/accepted/expressions/d4e4807b29d9c490dfdf7bbff9496ae22ae32108b4114e17984a1b60f33edf86.json"
+    },
+    "package/accepted/expressions/f4f998befb1467966f4369afab30d21ea67cbad885bfa9cdee7eff174fe00c6d.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/expressions/f4f998befb1467966f4369afab30d21ea67cbad885bfa9cdee7eff174fe00c6d.json",
+      "sha256": "sha256:f4f998befb1467966f4369afab30d21ea67cbad885bfa9cdee7eff174fe00c6d",
+      "size": 132,
+      "snapshot": "inputs/package/accepted/expressions/f4f998befb1467966f4369afab30d21ea67cbad885bfa9cdee7eff174fe00c6d.json"
+    },
+    "package/accepted/ir/72f6da61af74ac1746d739a86df83ccac3e6e58a09e9eb49baddcfd450b2d5ec.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/ir/72f6da61af74ac1746d739a86df83ccac3e6e58a09e9eb49baddcfd450b2d5ec.json",
+      "sha256": "sha256:72f6da61af74ac1746d739a86df83ccac3e6e58a09e9eb49baddcfd450b2d5ec",
+      "size": 37157,
+      "snapshot": "inputs/package/accepted/ir/72f6da61af74ac1746d739a86df83ccac3e6e58a09e9eb49baddcfd450b2d5ec.json"
+    },
+    "package/accepted/olean/af8c7351739fa7306bf8aea900289f08de89102a76aefb7d47df326d937dbf75.olean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/olean/af8c7351739fa7306bf8aea900289f08de89102a76aefb7d47df326d937dbf75.olean",
+      "sha256": "sha256:af8c7351739fa7306bf8aea900289f08de89102a76aefb7d47df326d937dbf75",
+      "size": 1221480,
+      "snapshot": "inputs/package/accepted/olean/af8c7351739fa7306bf8aea900289f08de89102a76aefb7d47df326d937dbf75.olean"
+    },
+    "package/accepted/profile/1271ce96cb762edf33d81fb6000430e6e0af3d5d4d809266010321076bd56bee.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/profile/1271ce96cb762edf33d81fb6000430e6e0af3d5d4d809266010321076bd56bee.json",
+      "sha256": "sha256:1271ce96cb762edf33d81fb6000430e6e0af3d5d4d809266010321076bd56bee",
+      "size": 1903,
+      "snapshot": "inputs/package/accepted/profile/1271ce96cb762edf33d81fb6000430e6e0af3d5d4d809266010321076bd56bee.json"
+    },
+    "package/accepted/source/aba79b31c631950cf8c338c62f3c1a25c7c93b2c19bebaaaf00d530c1f17a068.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/source/aba79b31c631950cf8c338c62f3c1a25c7c93b2c19bebaaaf00d530c1f17a068.lean",
+      "sha256": "sha256:aba79b31c631950cf8c338c62f3c1a25c7c93b2c19bebaaaf00d530c1f17a068",
+      "size": 42662,
+      "snapshot": "inputs/package/accepted/source/aba79b31c631950cf8c338c62f3c1a25c7c93b2c19bebaaaf00d530c1f17a068.lean"
+    },
+    "package/accepted/statements/9927a80cd232d3f82a38092022b119bcaef537132f619eb9a90a13ac26d4237a.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/accepted/statements/9927a80cd232d3f82a38092022b119bcaef537132f619eb9a90a13ac26d4237a.json",
+      "sha256": "sha256:9927a80cd232d3f82a38092022b119bcaef537132f619eb9a90a13ac26d4237a",
+      "size": 77726,
+      "snapshot": "inputs/package/accepted/statements/9927a80cd232d3f82a38092022b119bcaef537132f619eb9a90a13ac26d4237a.json"
+    },
+    "package/bridges/bindings.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/bindings.json",
+      "sha256": "sha256:5ea649f9d3b202089f0dce984359fad9d31d69b86e0c399025f8d80b75e37536",
+      "size": 395,
+      "snapshot": "inputs/package/bridges/bindings.json"
+    },
+    "package/bridges/implementation/accepted/accepted-ir.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/accepted-ir.json",
+      "sha256": "sha256:72f6da61af74ac1746d739a86df83ccac3e6e58a09e9eb49baddcfd450b2d5ec",
+      "size": 37157,
+      "snapshot": "inputs/package/bridges/implementation/accepted/accepted-ir.json"
+    },
+    "package/bridges/implementation/accepted/certificates/89787168099235d54d21a388149cb8375a7eb129281e688c5624b535a70f00af.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/certificates/89787168099235d54d21a388149cb8375a7eb129281e688c5624b535a70f00af.json",
+      "sha256": "sha256:89787168099235d54d21a388149cb8375a7eb129281e688c5624b535a70f00af",
+      "size": 6206,
+      "snapshot": "inputs/package/bridges/implementation/accepted/certificates/89787168099235d54d21a388149cb8375a7eb129281e688c5624b535a70f00af.json"
+    },
+    "package/bridges/implementation/accepted/environment/73bc30c3c060511897310e739dc85b5b4e7964e3e8e4e5191d6fd20f97338d6e.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/environment/73bc30c3c060511897310e739dc85b5b4e7964e3e8e4e5191d6fd20f97338d6e.json",
+      "sha256": "sha256:73bc30c3c060511897310e739dc85b5b4e7964e3e8e4e5191d6fd20f97338d6e",
+      "size": 1020137,
+      "snapshot": "inputs/package/bridges/implementation/accepted/environment/73bc30c3c060511897310e739dc85b5b4e7964e3e8e4e5191d6fd20f97338d6e.json"
+    },
+    "package/bridges/implementation/accepted/expressions/38d7fc363a0e3004d12452eec9b87f525ab4167ded8b1ada7a66b0afc83c8a71.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/expressions/38d7fc363a0e3004d12452eec9b87f525ab4167ded8b1ada7a66b0afc83c8a71.json",
+      "sha256": "sha256:38d7fc363a0e3004d12452eec9b87f525ab4167ded8b1ada7a66b0afc83c8a71",
+      "size": 811,
+      "snapshot": "inputs/package/bridges/implementation/accepted/expressions/38d7fc363a0e3004d12452eec9b87f525ab4167ded8b1ada7a66b0afc83c8a71.json"
+    },
+    "package/bridges/implementation/accepted/expressions/3ab9980836480b7a9f4e45b4e0f9647ad1a9fc60baaac0600dc1df5bb8bc92c4.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/expressions/3ab9980836480b7a9f4e45b4e0f9647ad1a9fc60baaac0600dc1df5bb8bc92c4.json",
+      "sha256": "sha256:3ab9980836480b7a9f4e45b4e0f9647ad1a9fc60baaac0600dc1df5bb8bc92c4",
+      "size": 843,
+      "snapshot": "inputs/package/bridges/implementation/accepted/expressions/3ab9980836480b7a9f4e45b4e0f9647ad1a9fc60baaac0600dc1df5bb8bc92c4.json"
+    },
+    "package/bridges/implementation/accepted/expressions/5399758458c7cd7c29aa20dfaa87c7e877b6a7ece35e33e17f27e0942dc5b9f5.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/expressions/5399758458c7cd7c29aa20dfaa87c7e877b6a7ece35e33e17f27e0942dc5b9f5.json",
+      "sha256": "sha256:5399758458c7cd7c29aa20dfaa87c7e877b6a7ece35e33e17f27e0942dc5b9f5",
+      "size": 132,
+      "snapshot": "inputs/package/bridges/implementation/accepted/expressions/5399758458c7cd7c29aa20dfaa87c7e877b6a7ece35e33e17f27e0942dc5b9f5.json"
+    },
+    "package/bridges/implementation/accepted/expressions/7fd084b028baad4520b783c4fb17aa18acc30bfa06488b1e98881a114d519740.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/expressions/7fd084b028baad4520b783c4fb17aa18acc30bfa06488b1e98881a114d519740.json",
+      "sha256": "sha256:7fd084b028baad4520b783c4fb17aa18acc30bfa06488b1e98881a114d519740",
+      "size": 2355,
+      "snapshot": "inputs/package/bridges/implementation/accepted/expressions/7fd084b028baad4520b783c4fb17aa18acc30bfa06488b1e98881a114d519740.json"
+    },
+    "package/bridges/implementation/accepted/expressions/aee325fa6f44225b5a0c7bb1dae7e76d9d76bd964c6b184bf9081a8121c80638.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/expressions/aee325fa6f44225b5a0c7bb1dae7e76d9d76bd964c6b184bf9081a8121c80638.json",
+      "sha256": "sha256:aee325fa6f44225b5a0c7bb1dae7e76d9d76bd964c6b184bf9081a8121c80638",
+      "size": 231,
+      "snapshot": "inputs/package/bridges/implementation/accepted/expressions/aee325fa6f44225b5a0c7bb1dae7e76d9d76bd964c6b184bf9081a8121c80638.json"
+    },
+    "package/bridges/implementation/accepted/expressions/d4e4807b29d9c490dfdf7bbff9496ae22ae32108b4114e17984a1b60f33edf86.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/expressions/d4e4807b29d9c490dfdf7bbff9496ae22ae32108b4114e17984a1b60f33edf86.json",
+      "sha256": "sha256:d4e4807b29d9c490dfdf7bbff9496ae22ae32108b4114e17984a1b60f33edf86",
+      "size": 319,
+      "snapshot": "inputs/package/bridges/implementation/accepted/expressions/d4e4807b29d9c490dfdf7bbff9496ae22ae32108b4114e17984a1b60f33edf86.json"
+    },
+    "package/bridges/implementation/accepted/expressions/f4f998befb1467966f4369afab30d21ea67cbad885bfa9cdee7eff174fe00c6d.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/expressions/f4f998befb1467966f4369afab30d21ea67cbad885bfa9cdee7eff174fe00c6d.json",
+      "sha256": "sha256:f4f998befb1467966f4369afab30d21ea67cbad885bfa9cdee7eff174fe00c6d",
+      "size": 132,
+      "snapshot": "inputs/package/bridges/implementation/accepted/expressions/f4f998befb1467966f4369afab30d21ea67cbad885bfa9cdee7eff174fe00c6d.json"
+    },
+    "package/bridges/implementation/accepted/olean/af8c7351739fa7306bf8aea900289f08de89102a76aefb7d47df326d937dbf75.olean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/olean/af8c7351739fa7306bf8aea900289f08de89102a76aefb7d47df326d937dbf75.olean",
+      "sha256": "sha256:af8c7351739fa7306bf8aea900289f08de89102a76aefb7d47df326d937dbf75",
+      "size": 1221480,
+      "snapshot": "inputs/package/bridges/implementation/accepted/olean/af8c7351739fa7306bf8aea900289f08de89102a76aefb7d47df326d937dbf75.olean"
+    },
+    "package/bridges/implementation/accepted/profile/1271ce96cb762edf33d81fb6000430e6e0af3d5d4d809266010321076bd56bee.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/profile/1271ce96cb762edf33d81fb6000430e6e0af3d5d4d809266010321076bd56bee.json",
+      "sha256": "sha256:1271ce96cb762edf33d81fb6000430e6e0af3d5d4d809266010321076bd56bee",
+      "size": 1903,
+      "snapshot": "inputs/package/bridges/implementation/accepted/profile/1271ce96cb762edf33d81fb6000430e6e0af3d5d4d809266010321076bd56bee.json"
+    },
+    "package/bridges/implementation/accepted/source/aba79b31c631950cf8c338c62f3c1a25c7c93b2c19bebaaaf00d530c1f17a068.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/source/aba79b31c631950cf8c338c62f3c1a25c7c93b2c19bebaaaf00d530c1f17a068.lean",
+      "sha256": "sha256:aba79b31c631950cf8c338c62f3c1a25c7c93b2c19bebaaaf00d530c1f17a068",
+      "size": 42662,
+      "snapshot": "inputs/package/bridges/implementation/accepted/source/aba79b31c631950cf8c338c62f3c1a25c7c93b2c19bebaaaf00d530c1f17a068.lean"
+    },
+    "package/bridges/implementation/accepted/statements/9927a80cd232d3f82a38092022b119bcaef537132f619eb9a90a13ac26d4237a.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/accepted/statements/9927a80cd232d3f82a38092022b119bcaef537132f619eb9a90a13ac26d4237a.json",
+      "sha256": "sha256:9927a80cd232d3f82a38092022b119bcaef537132f619eb9a90a13ac26d4237a",
+      "size": 77726,
+      "snapshot": "inputs/package/bridges/implementation/accepted/statements/9927a80cd232d3f82a38092022b119bcaef537132f619eb9a90a13ac26d4237a.json"
+    },
+    "package/bridges/implementation/artifacts.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/artifacts.json",
+      "sha256": "sha256:61600dcbdcb600114ab9af6a266f6e89fb950687713eeaa8dbec59a558ada0de",
+      "size": 7785,
+      "snapshot": "inputs/package/bridges/implementation/artifacts.json"
+    },
+    "package/bridges/implementation/candidate-inputs/Proof.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/candidate-inputs/Proof.lean",
+      "sha256": "sha256:d40b74c2aa87a52bc7341b62da248130002185cda28916d278a0b641820680cd",
+      "size": 275,
+      "snapshot": "inputs/package/bridges/implementation/candidate-inputs/Proof.lean"
+    },
+    "package/bridges/implementation/candidate-inputs/model.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/candidate-inputs/model.json",
+      "sha256": "sha256:3e11e5c6f030778d6fd63bd64bf35855f1ad917909c339f333153a2d6bc48d64",
+      "size": 1690,
+      "snapshot": "inputs/package/bridges/implementation/candidate-inputs/model.json"
+    },
+    "package/bridges/implementation/candidate-inputs/profile.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/candidate-inputs/profile.json",
+      "sha256": "sha256:9161c1b408f8b9432b2a148dfff42abe00714c48a7b467419b8c1d4ed6cf5581",
+      "size": 1507,
+      "snapshot": "inputs/package/bridges/implementation/candidate-inputs/profile.json"
+    },
+    "package/bridges/implementation/candidate-inputs/program.vscore.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/candidate-inputs/program.vscore.json",
+      "sha256": "sha256:fc3e6141c0bead91c8e7a5561f9bc670abf833559d4ae0518fb32cb5bf437125",
+      "size": 813,
+      "snapshot": "inputs/package/bridges/implementation/candidate-inputs/program.vscore.json"
+    },
+    "package/bridges/implementation/candidate-inputs/relation.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/candidate-inputs/relation.json",
+      "sha256": "sha256:83399baf1c5503863bea991898970c5dfa1c3671c33fafca0aac80f96c77bc78",
+      "size": 215,
+      "snapshot": "inputs/package/bridges/implementation/candidate-inputs/relation.json"
+    },
+    "package/bridges/implementation/claims.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/claims.json",
+      "sha256": "sha256:64c12c5b63138e61fd683f4d03df10b373c4788d0b47606112e1261bda2a720b",
+      "size": 44762,
+      "snapshot": "inputs/package/bridges/implementation/claims.json"
+    },
+    "package/bridges/implementation/contract/challenge/Contract.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/contract/challenge/Contract.lean",
+      "sha256": "sha256:0e38b00b3a3fe253110fa7a8eac56cdc5f741b094e152b35d0129a025db9897c",
+      "size": 42428,
+      "snapshot": "inputs/package/bridges/implementation/contract/challenge/Contract.lean"
+    },
+    "package/bridges/implementation/contract/challenge/challenge.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/contract/challenge/challenge.json",
+      "sha256": "sha256:a12a56255b71a952dd2de1287be1cdd7b6a626f12f76bb3253ee0518111b584a",
+      "size": 2663,
+      "snapshot": "inputs/package/bridges/implementation/contract/challenge/challenge.json"
+    },
+    "package/bridges/implementation/contract/challenge/formalization.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/contract/challenge/formalization.json",
+      "sha256": "sha256:eac1bb053396d68ca86b0a259fe11b4567315b190369c18f46839a630d6999c2",
+      "size": 1170,
+      "snapshot": "inputs/package/bridges/implementation/contract/challenge/formalization.json"
+    },
+    "package/bridges/implementation/contract/challenge/lean-toolchain": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/contract/challenge/lean-toolchain",
+      "sha256": "sha256:d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b",
+      "size": 25,
+      "snapshot": "inputs/package/bridges/implementation/contract/challenge/lean-toolchain"
+    },
+    "package/bridges/implementation/contract/challenge/policy.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/contract/challenge/policy.json",
+      "sha256": "sha256:8319119acc0c3df741f36474159a3a35ef574ada68ba671e203c6a501054503b",
+      "size": 395,
+      "snapshot": "inputs/package/bridges/implementation/contract/challenge/policy.json"
+    },
+    "package/bridges/implementation/contract/challenge/profile.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/contract/challenge/profile.json",
+      "sha256": "sha256:1271ce96cb762edf33d81fb6000430e6e0af3d5d4d809266010321076bd56bee",
+      "size": 1903,
+      "snapshot": "inputs/package/bridges/implementation/contract/challenge/profile.json"
+    },
+    "package/bridges/implementation/contract/challenge/statements.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/contract/challenge/statements.json",
+      "sha256": "sha256:9927a80cd232d3f82a38092022b119bcaef537132f619eb9a90a13ac26d4237a",
+      "size": 77726,
+      "snapshot": "inputs/package/bridges/implementation/contract/challenge/statements.json"
+    },
+    "package/bridges/implementation/contract/challenge/verifiers.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/contract/challenge/verifiers.json",
+      "sha256": "sha256:e20e385ed2026aa944e244e1379b4be1e32a9e440e5b350746bddc7672af2532",
+      "size": 6372,
+      "snapshot": "inputs/package/bridges/implementation/contract/challenge/verifiers.json"
+    },
+    "package/bridges/implementation/draft.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/draft.json",
+      "sha256": "sha256:3cf1513034b54f07c401d82c1de69e861e30528af85748fca20c7c35c82f3d96",
+      "size": 54734,
+      "snapshot": "inputs/package/bridges/implementation/draft.json"
+    },
+    "package/bridges/implementation/import-receipt.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/import-receipt.json",
+      "sha256": "sha256:2fd3b61e65d7af3a8d824c254e9671635e13b07cf7a70ffb5cdd559bc0de8401",
+      "size": 1176,
+      "snapshot": "inputs/package/bridges/implementation/import-receipt.json"
+    },
+    "package/bridges/implementation/interpretation.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/interpretation.json",
+      "sha256": "sha256:d49a000296edba8c4c170857470b62294d86c61c66d15354a531fde44888e630",
+      "size": 7922,
+      "snapshot": "inputs/package/bridges/implementation/interpretation.json"
+    },
+    "package/bridges/implementation/plan.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/plan.json",
+      "sha256": "sha256:85cea31c3c24a29ebd0b5624e1936a9cd317e40fdd7ba955fa9a1665893a6a1e",
+      "size": 7683,
+      "snapshot": "inputs/package/bridges/implementation/plan.json"
+    },
+    "package/bridges/implementation/preparation-certificate.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/preparation-certificate.json",
+      "sha256": "sha256:16c69c6087e7c36fbfbc037d86b8cf108aed61c661e3ba70ee4e7d77a3278d23",
+      "size": 1345,
+      "snapshot": "inputs/package/bridges/implementation/preparation-certificate.json"
+    },
+    "package/bridges/implementation/proposal.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/proposal.json",
+      "sha256": "sha256:0fdcfa53c8dbd2678582fd4a5605ed8dc9d2edbf76a69f049782463d76466410",
+      "size": 2518,
+      "snapshot": "inputs/package/bridges/implementation/proposal.json"
+    },
+    "package/bridges/implementation/request/prompt.txt": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/request/prompt.txt",
+      "sha256": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+      "size": 6208,
+      "snapshot": "inputs/package/bridges/implementation/request/prompt.txt"
+    },
+    "package/bridges/implementation/request/request.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/request/request.json",
+      "sha256": "sha256:f87f4df8da63930122b7cf92097e349b6c6572ab943fc9902c6d2c8e3daeb633",
+      "size": 305,
+      "snapshot": "inputs/package/bridges/implementation/request/request.json"
+    },
+    "package/bridges/implementation/request/source-policy.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/request/source-policy.json",
+      "sha256": "sha256:b3f3d5a78b1e03333b5b13bc1abb0a15d509efef0c99cb1ad8caf37f7d3ca8fc",
+      "size": 977,
+      "snapshot": "inputs/package/bridges/implementation/request/source-policy.json"
+    },
+    "package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/accepted/VeriSlopBridgeGoal.olean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/accepted/VeriSlopBridgeGoal.olean",
+      "sha256": "sha256:6709d413710542d5d34afd3a3db169233991b56833ec50fe8ecdd289e8aefb14",
+      "size": 1336856,
+      "snapshot": "inputs/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/accepted/VeriSlopBridgeGoal.olean"
+    },
+    "package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/accepted/VeriSlopBridgeProof.olean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/accepted/VeriSlopBridgeProof.olean",
+      "sha256": "sha256:274ba8bd5e19afb331076ea8ec2d3dcfcd015d7bf8642041f3f2fede5beb013b",
+      "size": 4904,
+      "snapshot": "inputs/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/accepted/VeriSlopBridgeProof.olean"
+    },
+    "package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/builds/A.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/builds/A.json",
+      "sha256": "sha256:6e2c0204f653c8f53b72ab6fc3b8bd359b5377e2bfba397ecb1cd2231087540c",
+      "size": 3993,
+      "snapshot": "inputs/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/builds/A.json"
+    },
+    "package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/builds/B.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/builds/B.json",
+      "sha256": "sha256:6e2c0204f653c8f53b72ab6fc3b8bd359b5377e2bfba397ecb1cd2231087540c",
+      "size": 3993,
+      "snapshot": "inputs/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/builds/B.json"
+    },
+    "package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/certificate.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/certificate.json",
+      "sha256": "sha256:b66fb10f1b7d14e533eccfd54b6eca7d6b56075b3bdb38dbf2e9068d1006e5d2",
+      "size": 4462,
+      "snapshot": "inputs/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/certificate.json"
+    },
+    "package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/evidence/ev-4469736ddd836dce177efc579535b107.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/evidence/ev-4469736ddd836dce177efc579535b107.json",
+      "sha256": "sha256:108f04b5e4072835bd2f2b97ea4096f45822a6be4a53713d927c82822e0f3949",
+      "size": 1935,
+      "snapshot": "inputs/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/evidence/ev-4469736ddd836dce177efc579535b107.json"
+    },
+    "package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/evidence/raw/c23715b6c41bd1aeeeae5917482ddd3d5def168a5664f67bdfd3fb0533be7a43.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/evidence/raw/c23715b6c41bd1aeeeae5917482ddd3d5def168a5664f67bdfd3fb0533be7a43.json",
+      "sha256": "sha256:c23715b6c41bd1aeeeae5917482ddd3d5def168a5664f67bdfd3fb0533be7a43",
+      "size": 2095,
+      "snapshot": "inputs/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/evidence/raw/c23715b6c41bd1aeeeae5917482ddd3d5def168a5664f67bdfd3fb0533be7a43.json"
+    },
+    "package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/goal/VeriSlopBridgeGoal.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/goal/VeriSlopBridgeGoal.lean",
+      "sha256": "sha256:b616e76380bc882c0a0f00660bd7ee0358df43fb6964a601899170c8511c0e49",
+      "size": 22911,
+      "snapshot": "inputs/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/goal/VeriSlopBridgeGoal.lean"
+    },
+    "package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/implementation-ir.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/implementation-ir.json",
+      "sha256": "sha256:33b5782e90b21deb279f02550e54833e6a629bee32dd58aef66edbee3f1c3bb1",
+      "size": 2086,
+      "snapshot": "inputs/package/bridges/implementation/semantic/edge-6c6b7f3cad1aebbacfb2127f/implementation-ir.json"
+    },
+    "package/bridges/link.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/bridges/link.json",
+      "sha256": "sha256:cf8b11d39fd51d98f4fadae60076db39e06e666b8c8a13f4f7f1b4d959551d9a",
+      "size": 4625,
+      "snapshot": "inputs/package/bridges/link.json"
+    },
+    "package/claims.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/claims.json",
+      "sha256": "sha256:64c12c5b63138e61fd683f4d03df10b373c4788d0b47606112e1261bda2a720b",
+      "size": 44762,
+      "snapshot": "inputs/package/claims.json"
+    },
+    "package/closure/implementation-claims.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/closure/implementation-claims.json",
+      "sha256": "sha256:ea093490c221b4616692504af79518a839a872f579382534803aefd9204bc3e2",
+      "size": 83581,
+      "snapshot": "inputs/package/closure/implementation-claims.json"
+    },
+    "package/closure/manifest.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/closure/manifest.json",
+      "sha256": "sha256:fe5aaf47ea8b4e100a3cecc5dbc6d18404b7000c42d99740af732af9c5db189f",
+      "size": 38196,
+      "snapshot": "inputs/package/closure/manifest.json"
+    },
+    "package/closure/plan.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/closure/plan.json",
+      "sha256": "sha256:32af08218fc24cffc4269986969f0f86854fd8728a632fc727ed030ad9a61ac5",
+      "size": 27097,
+      "snapshot": "inputs/package/closure/plan.json"
+    },
+    "package/closure/selection.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/closure/selection.json",
+      "sha256": "sha256:cde11f69067c13a904106e2667e8ab8af8048773af0c2624afcbff6ffaeeedfc",
+      "size": 4473,
+      "snapshot": "inputs/package/closure/selection.json"
+    },
+    "package/closure/tcb.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/closure/tcb.json",
+      "sha256": "sha256:d1ee17b7c8697afa3b14a83f70297ae3ddd6babf086d514d0dd6a593a1fbc6af",
+      "size": 878,
+      "snapshot": "inputs/package/closure/tcb.json"
+    },
+    "package/closure/verifiers.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/closure/verifiers.json",
+      "sha256": "sha256:663d9fc33ccedcaf22c241ce4a240f06a9f2775a6de1a0deaed5f893d024fbe3",
+      "size": 16630,
+      "snapshot": "inputs/package/closure/verifiers.json"
+    },
+    "package/implementation/materialization.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/implementation/materialization.json",
+      "sha256": "sha256:20f3186c4aaae3e9d31af370c6de29023eed5525170b36b809267d731dacf3c8",
+      "size": 1866,
+      "snapshot": "inputs/package/implementation/materialization.json"
+    },
+    "package/implementation/program.vscore.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/implementation/program.vscore.json",
+      "sha256": "sha256:fc3e6141c0bead91c8e7a5561f9bc670abf833559d4ae0518fb32cb5bf437125",
+      "size": 813,
+      "snapshot": "inputs/package/implementation/program.vscore.json"
+    },
+    "package/interpretation.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/interpretation.json",
+      "sha256": "sha256:d49a000296edba8c4c170857470b62294d86c61c66d15354a531fde44888e630",
+      "size": 7922,
+      "snapshot": "inputs/package/interpretation.json"
+    },
+    "package/package.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/package.json",
+      "sha256": "sha256:bfb0c6f55b453b39485e5cef28a5a8f277fc2e37d549997325527f33dd032d90",
+      "size": 3445,
+      "snapshot": "inputs/package/package.json"
+    },
+    "package/request/prompt.txt": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/request/prompt.txt",
+      "sha256": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+      "size": 6208,
+      "snapshot": "inputs/package/request/prompt.txt"
+    },
+    "package/request/request.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/request/request.json",
+      "sha256": "sha256:f87f4df8da63930122b7cf92097e349b6c6572ab943fc9902c6d2c8e3daeb633",
+      "size": 305,
+      "snapshot": "inputs/package/request/request.json"
+    },
+    "package/request/source-policy.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package/request/source-policy.json",
+      "sha256": "sha256:b3f3d5a78b1e03333b5b13bc1abb0a15d509efef0c99cb1ad8caf37f7d3ca8fc",
+      "size": 977,
+      "snapshot": "inputs/package/request/source-policy.json"
+    },
+    "project/verislop/bridges/vscore3_checker.py": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/bridges/vscore3_checker.py",
+      "sha256": "sha256:bd4fc79e10db1c65ed8f7d1cac7a87a384dac68f414305794cf58f0fcf14a655",
+      "size": 52981,
+      "snapshot": "inputs/project/verislop/bridges/vscore3_checker.py"
+    },
+    "project/verislop/lean/SourceBoundary.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/SourceBoundary.lean",
+      "sha256": "sha256:3e81c92d2ebe4be3c72b2259311cbbdcb9b351f76b121b0357f76ea6a2ef1ce0",
+      "size": 4300,
+      "snapshot": "inputs/project/verislop/lean/SourceBoundary.lean"
+    },
+    "project/verislop/lean/VSCore/Decode.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore/Decode.lean",
+      "sha256": "sha256:16560e2dd234bcd17f46fdf37e1fd8e1216d2fa6c6dc51ca80b9bd1abd5290ae",
+      "size": 15043,
+      "snapshot": "inputs/project/verislop/lean/VSCore/Decode.lean"
+    },
+    "project/verislop/lean/VSCore/Syntax.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore/Syntax.lean",
+      "sha256": "sha256:ee0faaa1b79c628926ea2205037e8ddda27679fdb26b00cad121a5db2cf25cd9",
+      "size": 2504,
+      "snapshot": "inputs/project/verislop/lean/VSCore/Syntax.lean"
+    },
+    "project/verislop/lean/VSCore3.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3.lean",
+      "sha256": "sha256:56151ad3d8ccc7ae9c42911c1562a42383dc95020bdd68ded0e23c2455082e1c",
+      "size": 272,
+      "snapshot": "inputs/project/verislop/lean/VSCore3.lean"
+    },
+    "project/verislop/lean/VSCore3/Decode.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3/Decode.lean",
+      "sha256": "sha256:3b20afa33a068d0044034030f503cf9f749bf36a8f946a742f6894f5b5671798",
+      "size": 16511,
+      "snapshot": "inputs/project/verislop/lean/VSCore3/Decode.lean"
+    },
+    "project/verislop/lean/VSCore3/Equality.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3/Equality.lean",
+      "sha256": "sha256:ac41505ea252f6ebb9a90c37f15a1d8f6c22dfd650a056b8ebb51d9fbe923f43",
+      "size": 3302,
+      "snapshot": "inputs/project/verislop/lean/VSCore3/Equality.lean"
+    },
+    "project/verislop/lean/VSCore3/Proofs.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3/Proofs.lean",
+      "sha256": "sha256:da5e517bc44612a3bb3c7a1c11abfccf5000c0b8e21433112e2591cb6003e806",
+      "size": 5947,
+      "snapshot": "inputs/project/verislop/lean/VSCore3/Proofs.lean"
+    },
+    "project/verislop/lean/VSCore3/Semantics.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3/Semantics.lean",
+      "sha256": "sha256:fdcb212ec711c263526483c050974c4c8ebe39c58e639c10a5a96e8a356954d2",
+      "size": 5900,
+      "snapshot": "inputs/project/verislop/lean/VSCore3/Semantics.lean"
+    },
+    "project/verislop/lean/VSCore3/SourceFacts.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3/SourceFacts.lean",
+      "sha256": "sha256:abccaf22aee85dc85a3b8ea8aef81dc5bfb4fb86eb6eff6ba3d1b64c3d1b9576",
+      "size": 7534,
+      "snapshot": "inputs/project/verislop/lean/VSCore3/SourceFacts.lean"
+    },
+    "project/verislop/lean/VSCore3/Syntax.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3/Syntax.lean",
+      "sha256": "sha256:62a95e3064a425499d178a6707503c89680a6e9a1b05e5cd3d8ccaf7ea3dd3bf",
+      "size": 3194,
+      "snapshot": "inputs/project/verislop/lean/VSCore3/Syntax.lean"
+    },
+    "project/verislop/lean/VSCore3/Transport.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3/Transport.lean",
+      "sha256": "sha256:3cffd4350a8de66b695f3636e47bdc6a2d4c32746fa0f2b9fd86be47d920b103",
+      "size": 17048,
+      "snapshot": "inputs/project/verislop/lean/VSCore3/Transport.lean"
+    },
+    "project/verislop/lean/VSCore3/Typed.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3/Typed.lean",
+      "sha256": "sha256:7e8063a62728c44c03339282503b0234abdf66f73801a5495bd2b60f20bdea38",
+      "size": 8688,
+      "snapshot": "inputs/project/verislop/lean/VSCore3/Typed.lean"
+    },
+    "project/verislop/lean/VSCore3/Typing.lean": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/lean/VSCore3/Typing.lean",
+      "sha256": "sha256:3560ac3400b56b9cdff6e39689bea87fed3777ba1746149f3aec4bef91fea2d4",
+      "size": 22954,
+      "snapshot": "inputs/project/verislop/lean/VSCore3/Typing.lean"
+    },
+    "project/verislop/source_contract.py": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/source_contract.py",
+      "sha256": "sha256:5e7e8d8269709e36fd51cbced2f6d09b07ad7dad8c42c1852399cf4ec7a70ece",
+      "size": 14730,
+      "snapshot": "inputs/project/verislop/source_contract.py"
+    },
+    "project/verislop/source_policy.py": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/source_policy.py",
+      "sha256": "sha256:4d9d448009b1d0606f44aebbb49d20ccf33ab8648a14a73e5a67bd39b3fa39f5",
+      "size": 8271,
+      "snapshot": "inputs/project/verislop/source_policy.py"
+    },
+    "project/verislop/targets/vscore3_target.py": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/project/verislop/targets/vscore3_target.py",
+      "sha256": "sha256:e2a8c98c8c56c4d4b022c3c7f9a6837e741d4b75598396fb75f096c240674f02",
+      "size": 36113,
+      "snapshot": "inputs/project/verislop/targets/vscore3_target.py"
+    },
+    "request/delivery-revision.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/requests/A23/delivery-revision.json",
+      "sha256": "sha256:16a268836657e113ab90d7a7a03f88a4e0ddf189078688bd4f1531b8a8a0fde8",
+      "size": 6609,
+      "snapshot": "inputs/request/delivery-revision.json"
+    },
+    "request/original-metadata.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/requests/A23/original-metadata.json",
+      "sha256": "sha256:ca17e599108fb1a6116e2b9e3f70d2fafa284ee316e7a91a103c413799f9c4df",
+      "size": 2388,
+      "snapshot": "inputs/request/original-metadata.json"
+    },
+    "request/original-prompt.txt": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/requests/A23/original-prompt.txt",
+      "sha256": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+      "size": 1053,
+      "snapshot": "inputs/request/original-prompt.txt"
+    },
+    "request/revised-prompt.txt": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/requests/A23/revised-prompt.txt",
+      "sha256": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+      "size": 6208,
+      "snapshot": "inputs/request/revised-prompt.txt"
+    },
+    "request/source-policy.json": {
+      "path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/requests/A23/source-policy.json",
+      "sha256": "sha256:b3f3d5a78b1e03333b5b13bc1abb0a15d509efef0c99cb1ad8caf37f7d3ca8fc",
+      "size": 977,
+      "snapshot": "inputs/request/source-policy.json"
+    }
+  },
+  "method": "Read current fresh accepted Lean source/AST IR, exact goal/proof, frozen source policy, registered operational/transport semantics, source/bridge certificates and stored A/B build observations; run pure frozen-project load_context, derive_goal and verify_published(rebuild=False). No native kernel/model/driver execution, no frozen/live package modification, no historical task artifacts/hidden data used.",
+  "package": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008/run/artifacts/A23/verislop/package",
+  "scope_status": "NO_CONCRETE_SCOPE_DEFECT_FOUND_IN_ACCEPTED_SOURCE_AND_BRIDGE",
+  "source_freeze_root": "sha256:c5a79ce0211df8c51c1280c496daa107bdb87bc949a5acacafa5cd6b3e3fbc13",
+  "stage": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-008",
+  "task": "fresh stage008 A23 accepted implementation source and semantic bridge audit",
+  "terminal_closure_status": "NOT_AUDITED_IN_THIS_RECEIPT"
+}

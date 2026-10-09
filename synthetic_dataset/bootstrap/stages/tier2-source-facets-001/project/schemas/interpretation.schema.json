@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:interpretation:0.1",
+  "title": "Interpretation ledger: clause dispositions, assumption suppliers and ambiguity decisions",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "artifact_kind": { "const": "interpretation" },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "document_ref": { "type": "string", "minLength": 1 },
+        "document_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "byte_length": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["document_ref", "document_hash", "byte_length"]
+    },
+    "clauses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "start_byte": { "type": "integer", "minimum": 0 },
+          "end_byte": { "type": "integer", "minimum": 0 },
+          "disposition": { "enum": ["obligations", "exclusion", "ambiguity", "context"] },
+          "refs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "note": { "type": "string" }
+        },
+        "required": ["start_byte", "end_byte", "disposition", "refs"]
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "supplied_by": { "type": "string", "minLength": 1 },
+          "discharged_at": { "type": "string", "minLength": 1 }
+        },
+        "required": ["id", "supplied_by", "discharged_at"]
+      }
+    },
+    "ambiguities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "alternatives": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "description": { "type": "string", "minLength": 1 }
+              },
+              "required": ["id", "description"]
+            }
+          },
+          "affected_obligations": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "impact": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "correctness", "data_loss", "security", "failure_behavior",
+                "numeric_semantics", "formal_boundary", "routine"
+              ]
+            }
+          },
+          "resolution": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "status": { "enum": ["unresolved", "resolved"] },
+              "selected": { "type": ["string", "null"] },
+              "provenance": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "kind": { "enum": ["user", "policy_default", "interpreter_default", "none"] },
+                  "detail": { "type": "string", "minLength": 1 }
+                },
+                "required": ["kind", "detail"]
+              }
+            },
+            "required": ["status", "selected", "provenance"]
+          }
+        },
+        "required": ["id", "alternatives", "affected_obligations", "impact", "resolution"]
+      }
+    },
+    "selected_defaults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "topic": { "type": "string", "minLength": 1 },
+          "choice": { "type": "string", "minLength": 1 },
+          "rationale": { "type": "string", "minLength": 1 },
+          "provenance": { "type": "string", "minLength": 1 }
+        },
+        "required": ["topic", "choice", "rationale", "provenance"]
+      }
+    }
+  },
+  "required": [
+    "schema_version", "artifact_kind", "request", "clauses", "assumptions", "ambiguities", "selected_defaults"
+  ]
+}

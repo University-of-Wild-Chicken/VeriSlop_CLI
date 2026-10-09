@@ -1,0 +1,286 @@
+{
+  "obligations": [
+    {
+      "id": "D1",
+      "revision": 1,
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "The deliverable is canonical program.vscore.json in vscore/0.3 under normative Lean vscore-semantics/0.3 and data-pipeline/0.3, with exactly one admitted typed entry solve of arity 1. Its input represents JSON {n,m,a,b}, with integer fields, and its result represents a JSON integer. Integers are unbounded mathematical integers; language strings contain Unicode scalar values and lexicographic comparison uses scalar codepoints.",
+      "required": true,
+      "scope": ["deliverable", "typed input and result", "normative source semantics"],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "The canonical file has exactly one admitted typed entry named solve with arity 1.",
+        "Input and result types represent the specified JSON object and integer result using data-pipeline/0.3.",
+        "Source interpretation uses normative Lean vscore-semantics/0.3, unbounded integer arithmetic, and the specified Unicode string semantics."
+      ],
+      "sources": [
+        {"clause_id": "C2", "origin": "explicit", "interpretation": "Deliverable and entry identity."},
+        {"clause_id": "C3", "origin": "explicit", "interpretation": "Typed input and result representation."},
+        {"clause_id": "C7", "origin": "explicit", "interpretation": "Integer input fields."},
+        {"clause_id": "C12", "origin": "explicit", "interpretation": "Canonical source and normative profiles."},
+        {"clause_id": "C16", "origin": "explicit", "interpretation": "Unbounded integer semantics."},
+        {"clause_id": "C17", "origin": "explicit", "interpretation": "Unicode scalar string semantics."},
+        {"clause_id": "C23", "origin": "explicit", "interpretation": "Preserve requirement identity."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "D1 remains a required declaration."}
+      ]
+    },
+    {
+      "id": "A1",
+      "revision": 1,
+      "kind": "precondition",
+      "role": "assumption",
+      "statement": "Supplied inputs satisfy the specified JSON schema: n,m,a,b are integers, 0 <= n <= 500 and m > 0. The signed integers a and b have no additional magnitude bound; magnitude 10^30 is explicitly permitted. No additional input preconditions apply.",
+      "required": true,
+      "scope": ["supplied input"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}],
+      "acceptance_criteria": [
+        "Every supplied input has the specified integer fields with 0 <= n <= 500 and m > 0.",
+        "Neither a nor b is restricted by an unstated magnitude limit or sign restriction.",
+        "No extra precondition restricts the requested functional domain."
+      ],
+      "sources": [
+        {"clause_id": "C5", "origin": "explicit", "interpretation": "Supplier guarantees valid schema and bounds."},
+        {"clause_id": "C7", "origin": "explicit", "interpretation": "Exact valid input domain."},
+        {"clause_id": "C18", "origin": "explicit", "interpretation": "No additional preconditions."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "Preserve required assumption A1."}
+      ]
+    },
+    {
+      "id": "N1",
+      "revision": 1,
+      "kind": "explicit_non_goal",
+      "role": "exclusion",
+      "statement": "Behavior for malformed input is outside the required functional contract.",
+      "required": true,
+      "scope": ["inputs violating the stated schema or bounds"],
+      "dependencies": [],
+      "acceptance_criteria": ["No functional behavior is required for malformed input."],
+      "sources": [
+        {"clause_id": "C6", "origin": "explicit", "interpretation": "Malformed-input exclusion."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "Preserve required exclusion N1."}
+      ]
+    },
+    {
+      "id": "O1",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "For every input satisfying A1, execution of the actual admitted solve entry of arity 1 in canonical program.vscore.json returns exactly the integer sum over 0 <= i < n of floor((a*i+b)/m), where floor rounds toward negative infinity. For n=0 the result is 0. Universal implementation refinement must connect this formula to that source entry under normative Lean vscore-semantics/0.3 and data-pipeline/0.3. Its formal contract must also require typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only for that file and entry.",
+      "required": true,
+      "scope": ["all inputs satisfying A1", "actual canonical solve source"],
+      "dependencies": [
+        {"id": "D1", "relation": "uses_definition"},
+        {"id": "A1", "relation": "assumes"}
+      ],
+      "acceptance_criteria": [
+        "For every valid input x, eval(program.vscore.json, solve, x) returns sum_{i=0}^{n-1} floor((a*i+b)/m).",
+        "Each summand q is the unique integer satisfying m*q <= a*i+b < m*(q+1).",
+        "Every valid input with n=0 returns 0.",
+        "The preserved examples return -4 for {a:-2,b:1,m:3,n:4} and 0 for {a:100,b:-99,m:7,n:0}; examples do not substitute for universal refinement.",
+        "The formal contract binds file program.vscore.json, entry solve, arity 1 and all seven closed source properties: typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data, restricted_runtime_only.",
+        "A result-existence theorem or unrelated value equality does not discharge the mixed source/value requirement."
+      ],
+      "sources": [
+        {"clause_id": "C8", "origin": "explicit", "interpretation": "Universal floor-sum formula."},
+        {"clause_id": "C9", "origin": "explicit", "interpretation": "Floor toward negative infinity."},
+        {"clause_id": "C10", "origin": "explicit", "interpretation": "Empty sum equals zero."},
+        {"clause_id": "C19", "origin": "explicit", "interpretation": "Preserve original public examples."},
+        {"clause_id": "C20", "origin": "explicit", "interpretation": "Example values and universal refinement."},
+        {"clause_id": "C22", "origin": "explicit", "interpretation": "Functional meaning remains unchanged."},
+        {"clause_id": "C26", "origin": "explicit", "interpretation": "Complete mathematical statement and universal implementation refinement."},
+        {"clause_id": "C27", "origin": "explicit", "interpretation": "Examples cannot replace universal guarantees."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "Preserve O1 identity and required guarantee."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Source delivery binds each required guarantee."},
+        {"clause_id": "C35", "origin": "explicit", "interpretation": "Exact source requirements belong in the formal contract."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Value theorems cannot replace source facets."},
+        {"clause_id": "C37", "origin": "explicit", "interpretation": "O1 requires mixed source/value refinement."},
+        {"clause_id": "C38", "origin": "explicit", "interpretation": "Value facets are required by default."},
+        {"clause_id": "C42", "origin": "explicit", "interpretation": "Exact O1 source-facet policy."}
+      ]
+    },
+    {
+      "id": "O2",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "For every input satisfying A1, the actual canonical program.vscore.json entry solve of arity 1 accepts the typed representation of {n,m,a,b} and returns the data-pipeline/0.3 representation of the exact JSON integer sum_{i=0}^{n-1} floor((a*i+b)/m), preserving the specified input/output structure and exact ordering. Execution is total, pure and deterministic under normative Lean vscore-semantics/0.3, preserves immutable input values, has no external effects, and uses unbounded mathematical integers without floating point. The formal contract requires universal source implementation refinement and the exact seven properties typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+      "required": true,
+      "scope": ["typed input/output serialization", "all inputs satisfying A1", "canonical source delivery"],
+      "dependencies": [
+        {"id": "D1", "relation": "uses_definition"},
+        {"id": "A1", "relation": "assumes"}
+      ],
+      "acceptance_criteria": [
+        "The file is program.vscore.json with exactly one admitted typed entry solve of arity 1 in canonical vscore/0.3.",
+        "For every valid JSON input x, admitted typed execution and data-pipeline/0.3 serialization return the JSON integer sum_{i=0}^{n-1} floor((a*i+b)/m), including zero when n=0.",
+        "The input/output structure and exact ordering follow the specified serialization profile without modifying input values.",
+        "The formal contract includes typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only for the actual file and entry.",
+        "Universal refinement establishes both the functional value proposition and source requirements; neither an existence theorem nor a value equality alone replaces them."
+      ],
+      "sources": [
+        {"clause_id": "C2", "origin": "explicit", "interpretation": "Admitted typed entry delivery."},
+        {"clause_id": "C3", "origin": "explicit", "interpretation": "Typed JSON input and result."},
+        {"clause_id": "C8", "origin": "explicit", "interpretation": "Functional value of the serialized result."},
+        {"clause_id": "C9", "origin": "explicit", "interpretation": "Signed floor semantics."},
+        {"clause_id": "C10", "origin": "explicit", "interpretation": "Empty-sum result."},
+        {"clause_id": "C12", "origin": "explicit", "interpretation": "Normative source and serialization profiles."},
+        {"clause_id": "C13", "origin": "explicit", "interpretation": "Structure and ordering preservation."},
+        {"clause_id": "C14", "origin": "explicit", "interpretation": "Total, pure deterministic execution."},
+        {"clause_id": "C15", "origin": "explicit", "interpretation": "Immutable input and effect restrictions."},
+        {"clause_id": "C16", "origin": "explicit", "interpretation": "Exact unbounded integer arithmetic."},
+        {"clause_id": "C24", "origin": "explicit", "interpretation": "Revised IDs retain typed pure source properties."},
+        {"clause_id": "C25", "origin": "explicit", "interpretation": "Delivery assurance is preserved."},
+        {"clause_id": "C26", "origin": "explicit", "interpretation": "Universal implementation refinement."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "Preserve required O2 identity."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Exact source delivery."},
+        {"clause_id": "C35", "origin": "explicit", "interpretation": "Source facets in the formal contract."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Source facets cannot be replaced by equality alone."},
+        {"clause_id": "C37", "origin": "explicit", "interpretation": "Mixed source/value guarantee."},
+        {"clause_id": "C38", "origin": "explicit", "interpretation": "Default required value facets."},
+        {"clause_id": "C42", "origin": "explicit", "interpretation": "Exact O2 policy row."}
+      ]
+    },
+    {
+      "id": "S1",
+      "revision": 1,
+      "kind": "safety_property",
+      "role": "guarantee",
+      "statement": "Canonical program.vscore.json has one admitted typed entry solve of arity 1 whose normative restricted-source execution is typed-total, deterministic, input-preserving, free of external I/O and floating point, and pure data. It performs no external I/O, does not read benchmark files, leaves input values immutable, and uses no external-effect constructors. Its source-only formal contract retains all seven exact properties typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+      "required": true,
+      "scope": ["canonical solve source", "all admitted typed execution"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}],
+      "acceptance_criteria": [
+        "The contract binds program.vscore.json, solve, arity 1, and all seven required closed source properties.",
+        "No external I/O or benchmark-file reads occur; input values are preserved and no external-effect constructors are used.",
+        "This operational source-only requirement is discharged through exact source properties rather than a replacement value equality."
+      ],
+      "sources": [
+        {"clause_id": "C4", "origin": "explicit", "interpretation": "No I/O or benchmark reads."},
+        {"clause_id": "C12", "origin": "explicit", "interpretation": "Canonical restricted source."},
+        {"clause_id": "C14", "origin": "explicit", "interpretation": "Total pure deterministic execution."},
+        {"clause_id": "C15", "origin": "explicit", "interpretation": "Input immutability and effect restrictions."},
+        {"clause_id": "C24", "origin": "explicit", "interpretation": "Revised source properties."},
+        {"clause_id": "C25", "origin": "explicit", "interpretation": "Preserved assurance."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "Preserve required safety property S1."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Exact source delivery for S1."},
+        {"clause_id": "C35", "origin": "explicit", "interpretation": "Source formal contract."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Source requirements cannot be replaced by mathematical equality."},
+        {"clause_id": "C39", "origin": "explicit", "interpretation": "S1 is explicitly source-only."},
+        {"clause_id": "C42", "origin": "explicit", "interpretation": "Exact seven S1 source properties."}
+      ]
+    },
+    {
+      "id": "S2",
+      "revision": 1,
+      "kind": "safety_property",
+      "role": "guarantee",
+      "statement": "Canonical program.vscore.json, with exactly one admitted typed entry solve of arity 1, uses exact unbounded mathematical integer arithmetic without floating point throughout signed floor-sum execution. Its source-only formal contract requires typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only under normative Lean vscore-semantics/0.3 and data-pipeline/0.3.",
+      "required": true,
+      "scope": ["all arithmetic in canonical solve", "normative restricted-source execution"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}],
+      "acceptance_criteria": [
+        "No floating-point representation or operation is used in computing the floor sum.",
+        "Arithmetic is unbounded mathematical integer arithmetic, including intermediate values.",
+        "The source contract binds program.vscore.json, solve, arity 1 and all seven exact required properties.",
+        "S2 remains a required operational source-only guarantee and is not replaced by a value equality."
+      ],
+      "sources": [
+        {"clause_id": "C8", "origin": "explicit", "interpretation": "Exact arithmetic for the sum."},
+        {"clause_id": "C11", "origin": "explicit", "interpretation": "Avoid floating point."},
+        {"clause_id": "C16", "origin": "explicit", "interpretation": "Unbounded mathematical integers."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "Preserve required S2 identity."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Exact canonical source delivery."},
+        {"clause_id": "C35", "origin": "explicit", "interpretation": "Formal source contract."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Retain non-floating-point source semantics."},
+        {"clause_id": "C39", "origin": "explicit", "interpretation": "S2 is source-only."},
+        {"clause_id": "C42", "origin": "explicit", "interpretation": "Exact S2 policy row."}
+      ]
+    },
+    {
+      "id": "N2",
+      "revision": 1,
+      "kind": "explicit_non_goal",
+      "role": "exclusion",
+      "statement": "Runtime campaigns and machine-code, compiler, runtime or physical-resource assurance are outside scope. The assurance boundary is normative restricted-source execution only, explicitly trusting natural-language correspondence, host tooling, the pinned Lean kernel, hashing and OS/hardware.",
+      "required": true,
+      "scope": ["assurance boundary"],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "No runtime campaign is required.",
+        "No machine-code, compiler, runtime or physical-resource assurance is asserted.",
+        "The explicit trusted components remain outside the restricted-source proof boundary."
+      ],
+      "sources": [
+        {"clause_id": "C30", "origin": "explicit", "interpretation": "Runtime campaigns excluded."},
+        {"clause_id": "C31", "origin": "explicit", "interpretation": "Normative source boundary and explicit trust."},
+        {"clause_id": "C32", "origin": "explicit", "interpretation": "Excluded downstream assurance."}
+      ]
+    }
+  ],
+  "category_review": {
+    "entities": "D1 defines canonical typed solve, integer JSON input/result and normative language semantics.",
+    "preconditions": "A1 is the sole explicit supplier assumption; no extra bounds are added.",
+    "postconditions": "O1 and O2 require universal exact floor-sum behavior together with their exact source facets and typed serialization.",
+    "invariants": "Input preservation is retained in every required source-policy guarantee; no separate algorithmic invariant is specified.",
+    "safety_properties": "S1 and S2 retain all seven mandatory source properties as required source-only operational guarantees.",
+    "liveness_properties": "Typed totality is required in each source-policy guarantee; no separate timing or progress requirement is stated.",
+    "resource_constraints": "No physical-resource assurance or complexity bound is requested.",
+    "error_semantics": "Malformed-input behavior is excluded by N1.",
+    "explicit_non_goals": "N1 excludes malformed-input behavior; N2 records excluded runtime campaigns and downstream assurance.",
+    "ambiguities": "None; specified profiles determine representation and ordering, and signed input flexibility introduces no ambiguity."
+  },
+  "clauses": [
+    {"clause_id": "C1", "disposition": "context", "refs": [], "note": "Task title identifies the signed floor-sum kernel."},
+    {"clause_id": "C2", "disposition": "obligations", "refs": ["D1", "O2"], "note": ""},
+    {"clause_id": "C3", "disposition": "obligations", "refs": ["D1", "O2"], "note": ""},
+    {"clause_id": "C4", "disposition": "obligations", "refs": ["S1"], "note": ""},
+    {"clause_id": "C5", "disposition": "obligations", "refs": ["A1"], "note": ""},
+    {"clause_id": "C6", "disposition": "exclusion", "refs": ["N1"], "note": ""},
+    {"clause_id": "C7", "disposition": "obligations", "refs": ["D1", "A1"], "note": ""},
+    {"clause_id": "C8", "disposition": "obligations", "refs": ["O1", "O2", "S2"], "note": ""},
+    {"clause_id": "C9", "disposition": "obligations", "refs": ["O1", "O2"], "note": ""},
+    {"clause_id": "C10", "disposition": "obligations", "refs": ["O1", "O2"], "note": ""},
+    {"clause_id": "C11", "disposition": "obligations", "refs": ["S2"], "note": ""},
+    {"clause_id": "C12", "disposition": "obligations", "refs": ["D1", "O2", "S1"], "note": ""},
+    {"clause_id": "C13", "disposition": "obligations", "refs": ["O2"], "note": ""},
+    {"clause_id": "C14", "disposition": "obligations", "refs": ["O2", "S1"], "note": ""},
+    {"clause_id": "C15", "disposition": "obligations", "refs": ["O2", "S1"], "note": ""},
+    {"clause_id": "C16", "disposition": "obligations", "refs": ["D1", "O2", "S2"], "note": ""},
+    {"clause_id": "C17", "disposition": "obligations", "refs": ["D1"], "note": ""},
+    {"clause_id": "C18", "disposition": "obligations", "refs": ["A1"], "note": ""},
+    {"clause_id": "C19", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C20", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C21", "disposition": "context", "refs": [], "note": "Delivery revision metadata identifies this as a new canonical restricted-source request."},
+    {"clause_id": "C22", "disposition": "obligations", "refs": ["O1"], "note": "Original functional meaning is retained."},
+    {"clause_id": "C23", "disposition": "obligations", "refs": ["D1", "A1", "N1", "O1", "O2", "S1", "S2"], "note": "Original IDs, kinds, roles and required flags are preserved."},
+    {"clause_id": "C24", "disposition": "obligations", "refs": ["O2", "S1"], "note": ""},
+    {"clause_id": "C25", "disposition": "obligations", "refs": ["O2", "S1"], "note": ""},
+    {"clause_id": "C26", "disposition": "obligations", "refs": ["O1", "O2"], "note": ""},
+    {"clause_id": "C27", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C28", "disposition": "context", "refs": [], "note": "Offsets identify revised source text; citations use current manifest IDs."},
+    {"clause_id": "C29", "disposition": "obligations", "refs": ["D1", "N1", "O1", "O2", "A1", "S1", "S2"], "note": "Preserve listed identities and requested Tier 2 restricted_source vscore/0.3 assurance endpoint without asserting achievement."},
+    {"clause_id": "C30", "disposition": "exclusion", "refs": ["N2"], "note": ""},
+    {"clause_id": "C31", "disposition": "exclusion", "refs": ["N2"], "note": "Explicit trust and restricted-source assurance boundary."},
+    {"clause_id": "C32", "disposition": "exclusion", "refs": ["N2"], "note": ""},
+    {"clause_id": "C33", "disposition": "context", "refs": [], "note": "Source-facet specification is a frozen request constraint, not accepted IR or proof evidence."},
+    {"clause_id": "C34", "disposition": "obligations", "refs": ["O1", "O2", "S1", "S2"], "note": ""},
+    {"clause_id": "C35", "disposition": "obligations", "refs": ["O1", "O2", "S1", "S2"], "note": ""},
+    {"clause_id": "C36", "disposition": "obligations", "refs": ["O1", "O2", "S1", "S2"], "note": ""},
+    {"clause_id": "C37", "disposition": "obligations", "refs": ["O1", "O2"], "note": ""},
+    {"clause_id": "C38", "disposition": "obligations", "refs": ["O1", "O2"], "note": ""},
+    {"clause_id": "C39", "disposition": "obligations", "refs": ["S1", "S2"], "note": ""},
+    {"clause_id": "C40", "disposition": "context", "refs": [], "note": "Source-policy rows apply to guarantees rather than assumptions, exclusions or separate non-vacuity witnesses."},
+    {"clause_id": "C41", "disposition": "context", "refs": [], "note": "Supervisor verification procedure checks reconstructed contract facets before proof, after acceptance and at closure; no check is asserted as completed."},
+    {"clause_id": "C42", "disposition": "obligations", "refs": ["O1", "O2", "S1", "S2"], "note": "Exact file, entry, arity, all seven properties and value-required classifications are retained."}
+  ],
+  "assumptions": [
+    {
+      "id": "A1",
+      "supplied_by": "input supplier",
+      "discharged_at": "solve invocation, by supplied input satisfying the specified schema and bounds"
+    }
+  ],
+  "ambiguities": [],
+  "selected_defaults": []
+}

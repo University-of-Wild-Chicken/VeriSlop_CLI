@@ -1,0 +1,102 @@
+(* VSCore 0.2 surface authoring grammar. `vscore compile` emits canonical JSON;
+   `vscore check` admits that JSON in Lean. The .vsc surface text is not certified.
+   EBNF: comma = sequence; | = alternative; [...] = optional; {...} = repetition;
+   (...) = grouping. Quoted terminals are exact ASCII strings.
+   Lexing and static rules are specified in docs/vscore-generalized-grammar.md.
+   Comments/whitespace are skipped outside tokens. Keywords are whole tokens.
+*)
+
+program = "program", '"vscore/0.2"', "profile", '"pure-data/0.2"', ";",
+          { type-declaration }, { helper-declaration },
+          entry-declaration, { entry-declaration } ;
+
+type-declaration = record-declaration | variant-declaration ;
+record-declaration = "record", name, "{", { field-declaration }, "}" ;
+field-declaration = name, ":", type, ";" ;
+variant-declaration = "variant", name, "{", constructor-declaration,
+                      { constructor-declaration }, "}" ;
+constructor-declaration = name, [ "(", type, { ",", type }, ")" ], ";" ;
+
+helper-declaration = "fn", name, "(", [ parameters ], ")", "->", type,
+                     "{", expression, "}" ;
+entry-declaration = "entry", name, "(", [ parameters ], ")", "->", type,
+                    "{", expression, "}" ;
+parameters = parameter, { ",", parameter } ;
+parameter = name, ":", type ;
+
+type = "Nat" | "Bool" | "Unit"
+     | "Enum", "(", name, ")"
+     | "Record", "(", name, ")"
+     | "Variant", "(", name, ")"
+     | "Result", "(", type, ",", type, ")"
+     | "Option", "(", type, ")"
+     | "List", "(", type, ")" ;
+
+expression = let-expression | if-expression | match-expression | or-expression ;
+let-expression = "let", name, "=", expression, ";", expression ;
+if-expression = "if", expression, "then", expression, "else", expression ;
+match-expression = "match", expression, "{", branch, { branch }, "}" ;
+branch = pattern, "=>", expression, ";" ;
+pattern = "ok", "(", name, ")" | "error", "(", name, ")"
+        | "none" | "some", "(", name, ")"
+        | "nil" | "cons", "(", name, ",", name, ")"
+        | "variant", name, ".", name, "(", [ names ], ")" ;
+names = name, { ",", name } ;
+
+(* Lowest to highest precedence; arithmetic/Boolean repetition is left associative.
+   Equality and comparison are non-associative: a second operator requires parentheses.
+   && and || evaluate BOTH operands, as in VSCore 0.1.
+*)
+or-expression = and-expression, { "||", and-expression } ;
+and-expression = equality-expression, { "&&", equality-expression } ;
+equality-expression = comparison-expression, [ "==", comparison-expression ] ;
+comparison-expression = additive-expression,
+                        [ ( "<" | "<=" ), additive-expression ] ;
+additive-expression = multiplicative-expression,
+                      { ( "+" | "-" ), multiplicative-expression } ;
+multiplicative-expression = unary-expression, { "*", unary-expression } ;
+unary-expression = "not", unary-expression | postfix-expression ;
+postfix-expression = primary-expression, { ".", name } ;
+
+primary-expression = name | natural | "true" | "false" | "unit"
+                   | "(", expression, ")"
+                   | "enum", "(", name, ",", name, ")"
+                   | "ok", "[", type, "]", "(", expression, ")"
+                   | "error", "[", type, "]", "(", expression, ")"
+                   | "none", "[", type, "]"
+                   | "some", "(", expression, ")"
+                   | "nil", "[", type, "]"
+                   | "cons", "(", expression, ",", expression, ")"
+                   | "list", "[", type, "]", "(", [ arguments ], ")"
+                   | "record", name, "{", [ field-initializers ], "}"
+                   | "variant", name, ".", name, "(", [ arguments ], ")"
+                   | "call", name, "(", [ arguments ], ")"
+                   | "List", ".", "fold", "(", expression, ",", expression,
+                     ";", name, ",", name, "=>", expression, ")"
+                   | "Nat", ".", "fold", "(", expression, ",", expression,
+                     ";", name, ",", name, "=>", expression, ")" ;
+arguments = expression, { ",", expression } ;
+field-initializers = field-initializer, { ",", field-initializer } ;
+field-initializer = name, "=", expression ;
+
+(* Word terminals in syntactic productions above are reserved; character terminals in
+   lexical productions below are not keywords. Names and naturals are indivisible tokens.
+   Reserved words cannot be bare names. @"..." preserves an exact opaque ID,
+   including a keyword, dot, or hyphen. There are no escapes in quoted IDs.
+   All names are at most 128 ASCII bytes after removing @ and quotation marks.
+*)
+name = identifier | quoted-name ;
+identifier = letter-or-underscore, { letter-or-underscore | digit } ;
+quoted-name = '@"', legacy-id, '"' ;
+legacy-id = letter-or-underscore,
+            { letter-or-underscore | digit | "." | "-" } ;
+natural = "0" | nonzero-digit, { digit } ;
+letter-or-underscore = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H"
+                     | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P"
+                     | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X"
+                     | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f"
+                     | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n"
+                     | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v"
+                     | "w" | "x" | "y" | "z" | "_" ;
+digit = "0" | nonzero-digit ;
+nonzero-digit = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;

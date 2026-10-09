@@ -1,0 +1,184 @@
+{
+  "encoding": "verislop.formalizer-ast/0.1",
+  "records": {
+    "Input": {
+      "fields": [
+        {"name": "n", "sort": "Int"},
+        {"name": "m", "sort": "Int"},
+        {"name": "a", "sort": "Int"},
+        {"name": "b", "sort": "Int"}
+      ]
+    }
+  },
+  "symbols": {
+    "solve": {
+      "args": [{"record": "Input"}],
+      "result": "Int",
+      "body": {
+        "tag": "list_sum",
+        "value": {
+          "tag": "list_map",
+          "value": {
+            "tag": "list_range",
+            "stop": {
+              "tag": "int_to_nat",
+              "value": {"tag": "field", "sort": "Input", "field": "n", "value": {"tag": "var", "index": 0}}
+            }
+          },
+          "function": {
+            "sort": "Nat",
+            "body": {
+              "tag": "int_fdiv",
+              "left": {
+                "tag": "int_add",
+                "left": {
+                  "tag": "int_mul",
+                  "left": {"tag": "field", "sort": "Input", "field": "a", "value": {"tag": "var", "index": 1}},
+                  "right": {"tag": "nat_to_int", "value": {"tag": "var", "index": 0}}
+                },
+                "right": {"tag": "field", "sort": "Input", "field": "b", "value": {"tag": "var", "index": 1}}
+              },
+              "right": {"tag": "field", "sort": "Input", "field": "m", "value": {"tag": "var", "index": 1}}
+            }
+          }
+        }
+      }
+    }
+  },
+  "predicates": {
+    "valid_input": {
+      "args": [{"record": "Input"}],
+      "formula": {
+        "tag": "and",
+        "left": {
+          "tag": "and",
+          "left": {
+            "tag": "le",
+            "left": {"tag": "int", "value": "0"},
+            "right": {"tag": "field", "sort": "Input", "field": "n", "value": {"tag": "var", "index": 0}}
+          },
+          "right": {
+            "tag": "le",
+            "left": {"tag": "field", "sort": "Input", "field": "n", "value": {"tag": "var", "index": 0}},
+            "right": {"tag": "int", "value": "500"}
+          }
+        },
+        "right": {
+          "tag": "lt",
+          "left": {"tag": "int", "value": "0"},
+          "right": {"tag": "field", "sort": "Input", "field": "m", "value": {"tag": "var", "index": 0}}
+        }
+      }
+    }
+  },
+  "source_requirements": {
+    "solve_source": {
+      "symbol": "solve",
+      "requirements": [
+        {"tag": "entry", "file": "program.vscore.json", "entry": "solve", "arity": 1},
+        {"tag": "typed_total"},
+        {"tag": "deterministic"},
+        {"tag": "input_preserved"},
+        {"tag": "no_external_io"},
+        {"tag": "no_floating_point"},
+        {"tag": "pure_data"},
+        {"tag": "restricted_runtime_only"}
+      ]
+    }
+  },
+  "theorems": {
+    "solve_contract": {
+      "source": ["solve_source"],
+      "formula": {
+        "tag": "forall",
+        "sort": {"record": "Input"},
+        "body": {
+          "tag": "implies",
+          "left": {"tag": "predicate", "predicate": "valid_input", "args": [{"tag": "var", "index": 0}]},
+          "right": {
+            "tag": "eq",
+            "left": {"tag": "call", "symbol": "solve", "args": [{"tag": "var", "index": 0}]},
+            "right": {
+              "tag": "list_sum",
+              "value": {
+                "tag": "list_map",
+                "value": {
+                  "tag": "list_range",
+                  "stop": {
+                    "tag": "int_to_nat",
+                    "value": {"tag": "field", "sort": "Input", "field": "n", "value": {"tag": "var", "index": 0}}
+                  }
+                },
+                "function": {
+                  "sort": "Nat",
+                  "body": {
+                    "tag": "int_fdiv",
+                    "left": {
+                      "tag": "int_add",
+                      "left": {
+                        "tag": "int_mul",
+                        "left": {"tag": "field", "sort": "Input", "field": "a", "value": {"tag": "var", "index": 1}},
+                        "right": {"tag": "nat_to_int", "value": {"tag": "var", "index": 0}}
+                      },
+                      "right": {"tag": "field", "sort": "Input", "field": "b", "value": {"tag": "var", "index": 1}}
+                    },
+                    "right": {"tag": "field", "sort": "Input", "field": "m", "value": {"tag": "var", "index": 1}}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "solve_operational": {
+      "source": ["solve_source"]
+    },
+    "valid_input_inhabited": {
+      "formula": {
+        "tag": "exists",
+        "sort": {"record": "Input"},
+        "body": {
+          "tag": "and",
+          "left": {"tag": "predicate", "predicate": "valid_input", "args": [{"tag": "var", "index": 0}]},
+          "right": {
+            "tag": "eq",
+            "left": {"tag": "var", "index": 0},
+            "right": {
+              "tag": "record",
+              "sort": "Input",
+              "fields": [
+                {"tag": "int", "value": "0"},
+                {"tag": "int", "value": "1"},
+                {"tag": "int", "value": "0"},
+                {"tag": "int", "value": "0"}
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "obligations": {
+    "D1": {
+      "declarations": [
+        {"kind": "record", "name": "Input"},
+        {"kind": "symbol", "name": "solve"}
+      ]
+    },
+    "A1": {"predicate": "valid_input"},
+    "O1": {"theorem": "solve_contract"},
+    "O2": {"theorem": "solve_contract"},
+    "S1": {"theorem": "solve_operational"},
+    "S2": {"theorem": "solve_operational"},
+    "N1": {},
+    "N2": {}
+  },
+  "witness_obligations": {
+    "valid_input_witness": {
+      "theorem": "valid_input_inhabited",
+      "witnesses_for": ["A1"],
+      "description": "The input with n=0, m=1, a=0 and b=0 satisfies exactly the supplied bounds."
+    }
+  }
+}

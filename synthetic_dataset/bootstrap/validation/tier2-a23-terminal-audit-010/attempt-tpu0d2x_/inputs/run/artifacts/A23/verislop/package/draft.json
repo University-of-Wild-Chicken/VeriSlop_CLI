@@ -1,0 +1,1204 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None; domain, formula, signed floor behavior and source facets are specified.",
+    "entities": "Canonical program.vscore.json, sole typed solve entry of arity 1, integer object input and integer result, normative source and serialization semantics.",
+    "error_semantics": "Malformed-input behavior is excluded by N1.",
+    "explicit_non_goals": "Malformed-input behavior, runtime campaigns and assurance beyond normative restricted source.",
+    "invariants": "No separate algorithm invariant is specified; source guarantees require input immutability.",
+    "liveness_properties": "No separate liveness requirement; admitted typed execution must be total.",
+    "postconditions": "O1 and O2 require complete universal floor-sum refinement and exact typed input/output preservation with all seven source facets.",
+    "preconditions": "A1 records the explicit supplier assumption; no additional bounds or preconditions.",
+    "resource_constraints": "No algorithmic resource bound or physical-resource assurance is requested.",
+    "safety_properties": "S1 requires total pure deterministic execution and effect restrictions; S2 requires exact unbounded integer arithmetic. Both are source-only operational guarantees retaining all seven facets."
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "The canonical filename is program.vscore.json and its sole admitted typed entry is solve of arity 1.",
+        "The typed input represents the specified four integer fields and the result represents a JSON integer.",
+        "Source and serialization conform to vscore/0.3, normative Lean vscore-semantics/0.3 and data-pipeline/0.3.",
+        "Strings use Unicode scalar values and scalar-codepoint lexicographic comparison."
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-010:A23"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "canonical source",
+        "typed input and result",
+        "language and serialization semantics"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 137,
+          "interpretation": "canonical file and entry",
+          "origin": "explicit",
+          "start_byte": 67
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 222,
+          "interpretation": "typed JSON representation",
+          "origin": "explicit",
+          "start_byte": 138
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 467,
+          "interpretation": "integer input fields",
+          "origin": "explicit",
+          "start_byte": 383
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 762,
+          "interpretation": "normative source and serialization",
+          "origin": "explicit",
+          "start_byte": 615
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 1131,
+          "interpretation": "string semantics",
+          "origin": "explicit",
+          "start_byte": 1042
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3628,
+          "interpretation": "preserved declaration identity",
+          "origin": "explicit",
+          "start_byte": 2085
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The deliverable is canonical program.vscore.json with exactly one admitted typed entry solve of arity 1 under vscore/0.3, normative Lean vscore-semantics/0.3 and data-pipeline/0.3. Its typed input represents the JSON object {n,m,a,b} of mathematical integers and its result represents one JSON integer. Language strings contain Unicode scalar values and compare lexicographically by scalar codepoint."
+    }
+  ],
+  "error_semantics": [],
+  "explicit_non_goals": [
+    {
+      "acceptance_criteria": [
+        "The functional contract imposes no behavior for malformed inputs."
+      ],
+      "dependencies": [],
+      "id": "N1",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-010:A23"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "malformed inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 382,
+          "interpretation": "malformed-input exclusion",
+          "origin": "explicit",
+          "start_byte": 338
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 1733,
+          "interpretation": "preserve N1 identity, exclusion role and required flag",
+          "origin": "explicit",
+          "start_byte": 1654
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3628,
+          "interpretation": "preserved exclusion metadata",
+          "origin": "explicit",
+          "start_byte": 2085
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "No behavior is required for malformed input outside the stated schema and bounds."
+    },
+    {
+      "acceptance_criteria": [
+        "No runtime campaign is required.",
+        "The assurance scope does not extend to machine code, compilers, runtimes or physical resources."
+      ],
+      "dependencies": [],
+      "id": "N2",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-010:A23"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "assurance boundary"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3665,
+          "interpretation": "runtime campaigns excluded",
+          "origin": "explicit",
+          "start_byte": 3629
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3849,
+          "interpretation": "normative restricted-source boundary",
+          "origin": "explicit",
+          "start_byte": 3666
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3927,
+          "interpretation": "excluded assurance layers",
+          "origin": "explicit",
+          "start_byte": 3850
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Runtime campaigns and machine-code, compiler, runtime or physical-resource assurance are outside the requested normative restricted-source verification boundary."
+    }
+  ],
+  "invariants": [],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "For every valid input, the decoded result equals Σ_{i=0}^{n-1} floor((a*i+b)/m).",
+        "Each quotient rounds toward negative infinity and n=0 returns zero.",
+        "Input {a:-2,b:1,m:3,n:4} returns -4; input {a:100,b:-99,m:7,n:0} returns 0.",
+        "The formal contract binds program.vscore.json, solve, arity 1 and typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data, restricted_runtime_only.",
+        "The complete value proposition and universal source implementation refinement are required alongside the source facets; examples or mathematical existence/equality alone do not replace them."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-010:A23"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "every input satisfying A1",
+        "actual canonical solve implementation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 518,
+          "interpretation": "complete floor-sum formula",
+          "origin": "explicit",
+          "start_byte": 468
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 572,
+          "interpretation": "signed floor semantics",
+          "origin": "explicit",
+          "start_byte": 519
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 591,
+          "interpretation": "empty sum",
+          "origin": "explicit",
+          "start_byte": 573
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 1269,
+          "interpretation": "preserved examples",
+          "origin": "explicit",
+          "start_byte": 1224
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 1427,
+          "interpretation": "exact example values and universal refinement",
+          "origin": "explicit",
+          "start_byte": 1270
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 1985,
+          "interpretation": "complete mathematical statement and universal refinement",
+          "origin": "explicit",
+          "start_byte": 1874
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 2026,
+          "interpretation": "examples do not replace universal behavior",
+          "origin": "explicit",
+          "start_byte": 1986
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3628,
+          "interpretation": "preserved O1 identity",
+          "origin": "explicit",
+          "start_byte": 2085
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4264,
+          "interpretation": "canonical source delivery",
+          "origin": "explicit",
+          "start_byte": 4060
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4326,
+          "interpretation": "source requirements in formal contract",
+          "origin": "explicit",
+          "start_byte": 4265
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4496,
+          "interpretation": "no replacement of source requirements by equality",
+          "origin": "explicit",
+          "start_byte": 4327
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4713,
+          "interpretation": "mixed source/value guarantee",
+          "origin": "explicit",
+          "start_byte": 4497
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4774,
+          "interpretation": "required value facet",
+          "origin": "explicit",
+          "start_byte": 4714
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 6207,
+          "interpretation": "O1 exact seven facets and value_required=true",
+          "origin": "explicit",
+          "start_byte": 5156
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For every input satisfying A1, the actual sole admitted typed arity-1 solve entry in canonical program.vscore.json returns exactly Σ_{i=0}^{n-1} floor((a*i+b)/m). Floor is toward negative infinity, including negative numerators, and the empty sum is zero. The formal contract requires universal refinement of this complete value proposition by the actual source under normative Lean vscore-semantics/0.3 and data-pipeline/0.3, together with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only for that exact file and entry."
+    },
+    {
+      "acceptance_criteria": [
+        "The deliverable has filename program.vscore.json and one admitted typed solve entry of arity 1.",
+        "Typed and serialized input/output preserve the specified object fields, integer result and exact ordering according to data-pipeline/0.3.",
+        "For every input satisfying A1, the represented result equals Σ_{i=0}^{n-1} floor((a*i+b)/m), using negative-infinity floor and zero for n=0.",
+        "The formal contract binds the exact file and entry to typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+        "The complete value proposition and universal source implementation refinement are required alongside all source facets."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-010:A23"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "canonical delivery",
+        "typed and serialized input/output",
+        "every input satisfying A1"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 137,
+          "interpretation": "canonical typed entry",
+          "origin": "explicit",
+          "start_byte": 67
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 222,
+          "interpretation": "typed input/output structure",
+          "origin": "explicit",
+          "start_byte": 138
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 518,
+          "interpretation": "represented functional result",
+          "origin": "explicit",
+          "start_byte": 468
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 572,
+          "interpretation": "floor semantics",
+          "origin": "explicit",
+          "start_byte": 519
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 591,
+          "interpretation": "empty result",
+          "origin": "explicit",
+          "start_byte": 573
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 762,
+          "interpretation": "source and serialization semantics",
+          "origin": "explicit",
+          "start_byte": 615
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 828,
+          "interpretation": "structure and ordering preservation",
+          "origin": "explicit",
+          "start_byte": 763
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 887,
+          "interpretation": "total pure deterministic execution",
+          "origin": "explicit",
+          "start_byte": 829
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 969,
+          "interpretation": "input immutability and effect restrictions",
+          "origin": "explicit",
+          "start_byte": 888
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 1041,
+          "interpretation": "unbounded exact arithmetic",
+          "origin": "explicit",
+          "start_byte": 970
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3628,
+          "interpretation": "preserved O2 identity",
+          "origin": "explicit",
+          "start_byte": 2085
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4264,
+          "interpretation": "canonical source requirements",
+          "origin": "explicit",
+          "start_byte": 4060
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4326,
+          "interpretation": "formal source contract",
+          "origin": "explicit",
+          "start_byte": 4265
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4496,
+          "interpretation": "no substitution by equality alone",
+          "origin": "explicit",
+          "start_byte": 4327
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4713,
+          "interpretation": "mixed source/value refinement",
+          "origin": "explicit",
+          "start_byte": 4497
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4774,
+          "interpretation": "required value facet",
+          "origin": "explicit",
+          "start_byte": 4714
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 6207,
+          "interpretation": "O2 exact seven facets and value_required=true",
+          "origin": "explicit",
+          "start_byte": 5156
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Canonical program.vscore.json supplies exactly one admitted typed solve entry of arity 1 whose typed and serialized input/result preserve the specified JSON structure and exact ordering under data-pipeline/0.3. For every input satisfying A1 the represented integer result equals Σ_{i=0}^{n-1} floor((a*i+b)/m), with floor toward negative infinity and zero for n=0. The formal contract requires universal refinement of this complete typed input/output behavior by the actual source under normative Lean vscore-semantics/0.3 and requires typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only for the exact file and entry."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "Supplied inputs satisfy the specified schema, 0<=n<=500 and m>0.",
+        "No magnitude restriction is imposed on a or b.",
+        "No additional caller precondition restricts the specified domain."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by input supplier and discharged at solve invocation, by supplying the specified integer object with 0<=n<=500 and m>0",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by input supplier and discharged at solve invocation, by supplying the specified integer object with 0<=n<=500 and m>0",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-010:A23"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by input supplier and discharged at solve invocation, by supplying the specified integer object with 0<=n<=500 and m>0",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by input supplier and discharged at solve invocation, by supplying the specified integer object with 0<=n<=500 and m>0",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "supplied inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 337,
+          "interpretation": "supplier assumption",
+          "origin": "explicit",
+          "start_byte": 280
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 467,
+          "interpretation": "complete input domain",
+          "origin": "explicit",
+          "start_byte": 383
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 1222,
+          "interpretation": "no additional preconditions",
+          "origin": "explicit",
+          "start_byte": 1132
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3628,
+          "interpretation": "preserved assumption identity",
+          "origin": "explicit",
+          "start_byte": 2085
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input supplier supplies the specified object {n,m,a,b} with integer fields, 0<=n<=500 and m>0. The integers a and b have arbitrary signs and magnitudes, including magnitude 10^30. No additional input bounds or preconditions apply."
+    }
+  ],
+  "request_ref": "tier2:tier2-source-facets-010:A23",
+  "resource_constraints": [],
+  "safety_properties": [
+    {
+      "acceptance_criteria": [
+        "The formal contract binds program.vscore.json, solve and arity 1 to typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+        "Admitted typed execution is total, deterministic and pure, preserves inputs and cannot perform external effects.",
+        "No external I/O or benchmark-file reads occur.",
+        "Operational source requirements are retained and cannot be replaced by value equalities."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "S1",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-010:A23"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "canonical solve source",
+        "admitted typed execution"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 279,
+          "interpretation": "no external I/O or benchmark reads",
+          "origin": "explicit",
+          "start_byte": 223
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 762,
+          "interpretation": "restricted normative source",
+          "origin": "explicit",
+          "start_byte": 615
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 887,
+          "interpretation": "totality, purity and determinism",
+          "origin": "explicit",
+          "start_byte": 829
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 969,
+          "interpretation": "immutable inputs and effect restrictions",
+          "origin": "explicit",
+          "start_byte": 888
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3628,
+          "interpretation": "preserved S1 identity",
+          "origin": "explicit",
+          "start_byte": 2085
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4264,
+          "interpretation": "canonical source requirements",
+          "origin": "explicit",
+          "start_byte": 4060
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4326,
+          "interpretation": "formal source contract",
+          "origin": "explicit",
+          "start_byte": 4265
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4496,
+          "interpretation": "source properties cannot be replaced by equality",
+          "origin": "explicit",
+          "start_byte": 4327
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4928,
+          "interpretation": "operational source-only classification",
+          "origin": "explicit",
+          "start_byte": 4775
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 6207,
+          "interpretation": "S1 exact seven facets and value_required=false",
+          "origin": "explicit",
+          "start_byte": 5156
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The sole admitted typed arity-1 solve entry in canonical program.vscore.json executes totally, purely and deterministically under normative restricted vscore/0.3 semantics, preserves immutable input values, performs no external I/O, never reads benchmark files and uses no external-effect constructors or floating-point operations. Its formal contract requires typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only. S1 is an operational source-only guarantee."
+    },
+    {
+      "acceptance_criteria": [
+        "Arithmetic uses unbounded mathematical integers without floating-point intermediates or bounded-integer overflow.",
+        "Signed division implements floor toward negative infinity.",
+        "The formal contract binds program.vscore.json, solve and arity 1 to typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+        "Operational source requirements are retained and cannot be replaced by value equalities."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "S2",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-010:A23"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "canonical solve arithmetic",
+        "arbitrary signed integer magnitudes"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 518,
+          "interpretation": "exact floor-sum arithmetic",
+          "origin": "explicit",
+          "start_byte": 468
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 572,
+          "interpretation": "negative-infinity division",
+          "origin": "explicit",
+          "start_byte": 519
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 613,
+          "interpretation": "no floating point",
+          "origin": "explicit",
+          "start_byte": 592
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 1041,
+          "interpretation": "unbounded integer semantics",
+          "origin": "explicit",
+          "start_byte": 970
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 3628,
+          "interpretation": "preserved S2 identity",
+          "origin": "explicit",
+          "start_byte": 2085
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4264,
+          "interpretation": "canonical source requirements",
+          "origin": "explicit",
+          "start_byte": 4060
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4326,
+          "interpretation": "formal source contract",
+          "origin": "explicit",
+          "start_byte": 4265
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4496,
+          "interpretation": "source requirements cannot be replaced by equality",
+          "origin": "explicit",
+          "start_byte": 4327
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 4928,
+          "interpretation": "operational source-only classification",
+          "origin": "explicit",
+          "start_byte": 4775
+        },
+        {
+          "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+          "document_ref": "tier2:tier2-source-facets-010:A23",
+          "end_byte": 6207,
+          "interpretation": "S2 exact seven facets and value_required=false",
+          "origin": "explicit",
+          "start_byte": 5156
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The sole admitted typed arity-1 solve entry in canonical program.vscore.json uses exact unbounded mathematical integers for signed multiplication, addition, division toward negative infinity and summation, without floating point or bounded-integer overflow. Its formal contract requires typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only under normative Lean vscore-semantics/0.3 and data-pipeline/0.3. S2 is an operational source-only guarantee."
+    }
+  ],
+  "schema_version": "0.1"
+}

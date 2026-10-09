@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:bridge-proposal:0.1",
+  "title": "Untrusted bridge preparation proposal",
+  "$comment": "The supervisor injects the accepted-contract node and its accepted artifacts, derives accepted obligation revisions and statement hashes, computes artifact sizes and hashes, and assigns registered checkers. The expected proposition hash remains a proposed goal identity, not proof or an accepted Lean expression. Runtime checks enforce reserved identities, exact applicable obligation coverage, ownership, references and an acyclic premise graph.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "format": { "const": "verislop.bridge-proposal/0.1" },
+    "bridge_id": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+    "tier": { "enum": [2, 3, 4] },
+    "endpoint": { "enum": ["restricted_source", "proof_bearing_source", "extracted_language", "machine_code_region", "native_binary"] },
+    "nodes": { "type": "array", "minItems": 1, "maxItems": 512, "uniqueItems": true, "items": { "$ref": "#/$defs/node" } },
+    "artifacts": { "type": "array", "minItems": 1, "maxItems": 512, "uniqueItems": true, "items": { "$ref": "#/$defs/artifact" } },
+    "edges": { "type": "array", "minItems": 1, "maxItems": 512, "uniqueItems": true, "items": { "$ref": "#/$defs/edge" } },
+    "obligations": { "type": "array", "minItems": 1, "maxItems": 512, "uniqueItems": true, "items": { "$ref": "#/$defs/obligation" } },
+    "reproducible_slots": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/nonempty_ids" },
+    "declared_trust": { "type": "array", "maxItems": 512, "uniqueItems": true, "items": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/trust" } }
+  },
+  "required": ["schema_version", "format", "bridge_id", "tier", "endpoint", "nodes", "artifacts", "edges", "obligations", "reproducible_slots", "declared_trust"],
+  "allOf": [
+    { "if": { "properties": { "tier": { "const": 2 } } }, "then": { "properties": { "endpoint": { "const": "restricted_source" } } } },
+    { "if": { "properties": { "tier": { "const": 3 } } }, "then": { "properties": { "endpoint": { "enum": ["proof_bearing_source", "extracted_language"] } } } },
+    { "if": { "properties": { "tier": { "const": 4 } } }, "then": { "properties": { "endpoint": { "enum": ["machine_code_region", "native_binary"] } } } }
+  ],
+  "$defs": {
+    "candidate_node_id": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id",
+      "not": { "const": "accepted-contract" }
+    },
+    "candidate_slot_id": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id",
+      "not": { "enum": ["contract-model", "contract-profile"] }
+    },
+    "node": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "node_id": { "$ref": "#/$defs/candidate_node_id" },
+        "kind": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id", "not": { "const": "accepted_contract" } },
+        "model_slot": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+        "profile_slot": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" }
+      },
+      "required": ["node_id", "kind", "model_slot", "profile_slot"]
+    },
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "slot_id": { "$ref": "#/$defs/candidate_slot_id" },
+        "role": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id", "not": { "enum": ["accepted_ir", "acceptance_certificate", "contract_import"] } },
+        "node_id": { "$ref": "#/$defs/candidate_node_id" },
+        "path": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path" }
+      },
+      "required": ["slot_id", "role", "node_id", "path"]
+    },
+    "edge": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "edge_id": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+        "claim_id": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+        "source_node": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+        "target_node": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+        "relation_slot": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+        "expected_proposition_hash": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" },
+        "premises": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/ids" }
+      },
+      "required": ["edge_id", "claim_id", "source_node", "target_node", "relation_slot", "expected_proposition_hash", "premises"]
+    },
+    "obligation": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+        "required_claims": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/nonempty_ids" }
+      },
+      "required": ["id", "required_claims"]
+    }
+  }
+}

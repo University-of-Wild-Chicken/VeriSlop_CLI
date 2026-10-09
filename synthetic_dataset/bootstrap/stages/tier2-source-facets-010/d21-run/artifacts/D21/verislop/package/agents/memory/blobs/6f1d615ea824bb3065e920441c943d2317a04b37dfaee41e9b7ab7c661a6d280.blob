@@ -1,0 +1,611 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The canonical artifact is program.vscore.json with one typed entry solve of arity 1. Its input represents {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'} and its result represents [{group:string,start:int,count:natural,value:int|null}] under the data-pipeline/0.3 serialization profile. Integers are unbounded mathematical integers; strings are sequences of Unicode scalar values ordered lexicographically by scalar codepoint.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "The declared input and result preserve all specified fields and their domains.",
+   "Canonical source uses vscore/0.3 under normative Lean vscore-semantics/0.3 and data-pipeline/0.3.",
+   "Define G as the scalar-codepoint-lexicographically sorted unique group names of all input events.",
+   "Define B as the increasing sequence b_k=start+k*width for natural k with b_k<end.",
+   "For g in G and k indexing B, define M(g,k) as the list of event occurrences with group=g, b_k<=time<min(b_k+width,end), and value non-null; define c(g,k)=length M(g,k) and s(g,k)=the mathematical integer sum of those values."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "A1",
+  "kind": "precondition",
+  "role": "assumption",
+  "statement": "The caller supplies an input of the specified domain, with width a positive integer, start<=end, and fill equal to 'none' or 'previous'. There are no additional bounds or preconditions.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "width>0 and start<=end.",
+   "Every event has the stated group, time and nullable integer value types.",
+   "No restriction is imposed on event ordering, duplicate occurrences, integer magnitude, group names, or whether events are in range."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Deliver canonical program.vscore.json with exactly one admitted typed solve entry of arity 1 under normative Lean vscore-semantics/0.3 and data-pipeline/0.3. For every input satisfying A1 its normative evaluation must return precisely the grouped bucket aggregation defined by O2 through O6, preserving the specified JSON structure. This is universal source implementation refinement, together with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "The O1 contract requires file=program.vscore.json, entry=solve, arity=1 and all seven closed source properties.",
+   "For every admissible input x, evaluating the delivered solve(x) produces exactly the ordered records specified by G, B, c, s and the causal value formula in O5.",
+   "The complete value proposition and its universal refinement by the actual source are required; an existence theorem, True or reflexive equality is insufficient."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1, the group sequence used by the delivered solve is exactly G: every unique group name from all input events, including names represented only by out-of-range or null-valued events, once each in Unicode scalar-codepoint lexicographic order. Universally refine this formula with the single arity-1 solve in canonical program.vscore.json and require typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only in O2's contract.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "G=sort_unique([event.group for every event occurrence]), using scalar-codepoint lexicographic order.",
+   "No group is removed because its events are outside [start,end) or have null values.",
+   "O2 requires both its complete group formula and universal source refinement, plus file=program.vscore.json, entry=solve, arity=1 and all seven closed source properties."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1 and every g in G, the delivered solve emits exactly one bucket for each b_k=start+k*width<end, in increasing k, with membership interval [b_k,min(b_k+width,end)). No bucket starts at or beyond end. If start=end, no records are emitted. Universally refine this formula with the single arity-1 solve in canonical program.vscore.json and require typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only in O3's contract.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Bucket starts are exactly B, with neither missing nor extra starts for any group.",
+   "The left interval endpoint is inclusive and the right endpoint exclusive, including the clipped final bucket.",
+   "O3 requires its complete bucket formula and universal source refinement, plus file=program.vscore.json, entry=solve, arity=1 and all seven closed source properties."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1 and every emitted bucket (g,k), its count equals c(g,k) and its aggregate sum equals s(g,k), computed from exactly the non-null event occurrences belonging to that group's clipped bucket interval. Duplicate occurrences each contribute separately; null and out-of-range values do not contribute. All arithmetic is exact over unbounded integers. Universally refine this formula with the single arity-1 solve in canonical program.vscore.json and require typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only in O4's contract.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "count(g,k)=length M(g,k); sum(g,k)=sum of every occurrence's integer value in M(g,k).",
+   "A bucket is nonempty exactly when c(g,k)>0, even if its sum is zero.",
+   "O4 requires its complete aggregation formula and universal source refinement, plus file=program.vscore.json, entry=solve, arity=1 and all seven closed source properties."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1 and emitted bucket (g,k), value is s(g,k) when c(g,k)>0. When c(g,k)=0, value is null if fill='none'; if fill='previous', value is s(g,j) for the greatest j<k with c(g,j)>0, or null if no such j exists. Previous state is independent for each group, starts absent, changes only upon a nonempty bucket, and retains a zero sum as a real value. Empty buckets never reset it, and events before start never seed it. Universally refine this formula with the single arity-1 solve in canonical program.vscore.json and require typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only in O5's contract.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Let p(g,0)=null; after bucket k, p(g,k+1)=s(g,k) if c(g,k)>0 and p(g,k+1)=p(g,k) otherwise.",
+   "value(g,k)=s(g,k) if c(g,k)>0; otherwise null for fill='none' and p(g,k) for fill='previous'.",
+   "Neither another group's history nor an event before start can initialize or update p(g,k).",
+   "O5 requires the complete guarded value and state formulas and universal source refinement, plus file=program.vscore.json, entry=solve, arity=1 and all seven closed source properties."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O6",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1, the result of the delivered solve is exactly the list [{group:g,start:b_k,count:c(g,k),value:value(g,k)}] obtained by traversing G in order and, within each group, B in increasing order, using O5's value formula. Preserve this input/output structure and ordering under data-pipeline/0.3; return an empty list when G or B is empty. Universally refine this formula with the single arity-1 solve in canonical program.vscore.json and require typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only in O6's contract.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "The result is exactly the group-major, bucket-minor sequence of records with the specified four fields.",
+   "Result length equals length(G)*length(B), including groups with no contributing events.",
+   "O6 requires the complete result-list formula and universal source refinement, plus file=program.vscore.json, entry=solve, arity=1 and all seven closed source properties."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O7",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Preserve both original public example input/output pairs exactly, and require universal implementation refinement of the complete functional specification for every input satisfying A1; examples do not replace that universal proposition. For events a:(0,2),(1,-2), start=0,end=5,width=2,fill='previous', return [(a,0,2,0),(a,2,0,0),(a,4,0,0)] in the specified record structure. For event z:(-1,9), start=0,end=1,width=2,fill='previous', return [(z,0,0,null)]. Require canonical program.vscore.json's single typed solve entry of arity 1 with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only as part of O7's mixed source/value contract.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Both public examples evaluate to their exact original output lists.",
+   "For every admissible input, actual source evaluation equals the complete result formula in O2 through O6, rather than only matching examples.",
+   "O7 requires file=program.vscore.json, entry=solve, arity=1 and all seven closed source properties alongside its value proposition."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O8",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The proposed formal contracts must retain all specified requirement IDs, kinds, roles and required flags, preserve every required guarantee's exact source facets, and include complete value formulas with universal source refinement for O1 through O7. I1 and S1 alone are source-only. The requested verification scope is Tier 2 restricted_source with backend vscore/0.3, limited to normative restricted-source execution and the explicitly stated trust boundary. Source facets must be independently checked against kernel-reconstructed contracts before proof, after acceptance and at closure; this proposal does not assert their discharge or any lifecycle state.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Retain D1, A1, I1, O1, O2, O3, O4, O5, O6, O7 and S1 with their stated kinds, roles and required=true.",
+   "For each policy guarantee, require program.vscore.json, solve, arity 1 and the exact seven closed source properties in that guarantee's contract.",
+   "Require mixed source/value contracts for every value_required=true row; classify only I1 and S1 as source-only.",
+   "Do not treat frozen request constraints as accepted IR, proof evidence or established source discharge.",
+   "Keep natural-language correspondence, host tooling, pinned Lean kernel, hashing and OS/hardware explicitly in the trusted boundary."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I1",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "As the explicitly classified source-only operational invariant, program.vscore.json must contain the single typed solve entry of arity 1 whose admitted normative restricted-source execution is typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only. Its exact source requirements must remain in its formal contract; no value equality substitutes for them. The causal filling behavior associated with the original invariant is retained in O5.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "The contract for I1 requires file=program.vscore.json, entry=solve, arity=1 and all seven named closed source properties.",
+   "I1 is source-only with value_required=false.",
+   "Normative execution preserves immutable input and exact unbounded integer semantics without floating point."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "S1",
+  "kind": "safety_property",
+  "role": "guarantee",
+  "statement": "As the explicitly classified source-only safety guarantee, the single typed arity-1 solve entry in canonical program.vscore.json must operate solely through admitted vscore/0.3 pure data constructors under normative Lean vscore-semantics/0.3. Its formal contract requires typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only, with immutable inputs, no external-effect constructors and exact unbounded integer arithmetic.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "S1 requires file=program.vscore.json, entry=solve, arity=1 and all seven closed source properties.",
+   "S1 has value_required=false and is not substituted with a mathematical equality or result-existence proposition.",
+   "No external I/O, input mutation, floating-point arithmetic or execution outside the normative restricted-source boundary is admitted."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "N1",
+  "kind": "explicit_non_goal",
+  "role": "exclusion",
+  "statement": "Runtime campaigns and assurance about machine code, compilers, runtime systems or physical resources are outside the requested scope.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No runtime campaign or machine-code, compiler, runtime or physical-resource assurance is required or claimed."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "A1",
+  "role": "assumption",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "A1",
+   "predicate": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O6",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O6",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O7",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O7",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O8",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O8",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "I1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "S1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "S1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "N1",
+  "role": "exclusion",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "N1"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[{"discharged_at": "Typed solve invocation with the specified input domain, positive width and start<=end.", "id": "A1", "supplied_by": "caller"}]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 2,
+ "target": "vscore",
+ "endpoint": "restricted_source",
+ "require_state": "END_TO_END_VERIFIED",
+ "policy": "strict",
+ "backend_version": "0.3"
+}
+REQUIRED SOURCE FACETS (frozen specification constraint; not accepted IR or proof evidence):
+{
+ "format": "verislop.required-source-facets/0.1",
+ "obligations": {
+  "I1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": false
+  },
+  "O1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O2": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O3": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O4": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O5": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O6": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O7": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "S1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": false
+  }
+ },
+ "schema_version": "0.1"
+}
+Retain every policy obligation ID as a required guarantee with its complete requested behavior. Each row fixes the canonical file, entry, arity and closed source properties for that ID. value_required=true requires the complete functional value proposition as well as the source facets; a mathematical existence result, True, reflexive equality or an unrelated entry cannot replace them. Do not convert these requirements into assumptions, declarations, exclusions or optional guarantees. The policy supplies no algorithm, candidate source, expected output, accepted statement or lifecycle state.
+Every policy row is checked against the kernel-elaborated theorem before proof generation, and again after acceptance and in closure. Missing source facets, changed entry/arity or omitted IDs must be repaired under the same specification. Use an actual typed endpoint and the real SourceBoundary Contract conjunction; math-only proxies do not meet the policy. Native Python requirements do not discharge this source policy.
+POLICY AUTHORING WIRE: source_requirements is a map from local definition IDs to {"symbol":"actual_local_function","requirements":[{"tag":"entry","file":"program.vscore.json","entry":"exact_policy_entry","arity":0},{"tag":"typed_total"}]} (use the actual policy arity and every policy property, not the illustrative values). Property constructors are exactly {"tag":TAG}, with TAG one of typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data, restricted_runtime_only. Each obligations[OID] binds its theorem local ID; that theorems row has {"source":["source_definition_local_ID"]}, plus "formula":CLOSED_FORMULA whenever value_required=true. Keep the full formula. The compiler emits the exact Contract conjunct and value projection depending on the original theorem. Do not author Lean code or fact observations inside this AST.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+VSCORE 0.3 SOURCE BOUNDARY: Delivery is canonical program.vscore.json under data-pipeline/0.3 and restricted_source semantics. Use source_requirements and source theorem references for the actual frozen entry/type/purity/determinism/input-preservation/runtime requirements, with optional formula facets for functional behavior. Preserve every required ID and the complete typed data domain, including all binders, branch guards and ordered record fields. SourceBoundary proves the abstract checking rule; exact source discharge is a separate VSCore3 kernel bridge with admission and observation laws. Author no fact flags, snapshots, effect traces or source-policy receipts. Native Python facets require their own endpoint; do not copy them into this revised source boundary. Universal refinement is required for value behavior; finite runtime examples cannot replace it. TESTED is an unsupported separate campaign capability, so do not constrain formulas to a sampled leading-forall campaign. Opaque statements, physical-resource/liveness claims and host execution remain unsupported.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+["A1"]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Software engineering task D21: Grouped bucket aggregation with causal filling
+
+Deliver program.vscore.json with one pure admitted typed entry named solve. Its typed input and result must represent the specified JSON input/output structure. Perform no external I/O. Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end. Groups are all unique event group names sorted lexicographically, including groups with no in-range events. For each group, emit buckets starting start,start+width,... strictly below end, each covering [bucketStart,min(bucketStart+width,end)). Sum only non-null in-range values; count counts these values. A nonempty bucket has value=sum and becomes previous value. Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first); empty buckets never reset previous. Events before start never seed previous. Return [{group,start,count,value}] in group then bucket order. Zero sum is a real previous value, duplicates are counted.
+
+Implement the solve entry as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and the data-pipeline/0.3 serialization profile. Preserve the specified input/output structure and exact ordering. Admitted typed execution is total, pure and deterministic; input values are immutable, and the language has no external-effect constructors. Arithmetic uses unbounded mathematical integers without floating point. Strings contain Unicode scalar values and lexicographic order compares scalar codepoints. There are no additional input bounds or preconditions beyond the functional specification.
+
+Original public examples (preserved verbatim; universal refinement is required):
+[{"input": {"end": 5, "events": [{"group": "a", "time": 0, "value": 2}, {"group": "a", "time": 1, "value": -2}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 2, "group": "a", "start": 0, "value": 0}, {"count": 0, "group": "a", "start": 2, "value": 0}, {"count": 0, "group": "a", "start": 4, "value": 0}]}, {"input": {"end": 1, "events": [{"group": "z", "time": -1, "value": 9}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 0, "group": "z", "start": 0, "value": null}]}]
+
+
+Explicit delivery revision and requirement identity metadata:
+This is a new canonical restricted-source delivery request. The functional clauses, stated domains and public example values above retain their original meaning. Preserve these requirement IDs, roles and required flags in the interpretation. IDs mapped across a delivery revision now state the specified typed pure source properties; their previous delivery assurance is unchanged. Each functional guarantee requires its complete mathematical statement and universal implementation refinement; illustrative examples do not replace it. The clause offsets below refer to the revised text above.
+[{"delivery_revised":true,"id":"D1","kind":"entity","required":true,"revised_clause_spans":[{"end_byte":393,"start_byte":265},{"end_byte":1019,"start_byte":957},{"end_byte":264,"start_byte":79},{"end_byte":1687,"start_byte":1080}],"role":"declaration"},{"delivery_revised":false,"id":"I1","kind":"invariant","required":true,"revised_clause_spans":[{"end_byte":759,"start_byte":700},{"end_byte":915,"start_byte":880},{"end_byte":956,"start_byte":916},{"end_byte":1078,"start_byte":1020}],"role":"guarantee"},{"delivery_revised":true,"id":"O1","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":264,"start_byte":79},{"end_byte":1687,"start_byte":1080},{"end_byte":1687,"start_byte":1080}],"role":"guarantee"},{"delivery_revised":false,"id":"O2","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":501,"start_byte":394}],"role":"guarantee"},{"delivery_revised":false,"id":"O3","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":561,"start_byte":502},{"end_byte":637,"start_byte":562}],"role":"guarantee"},{"delivery_revised":false,"id":"O4","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":672,"start_byte":638},{"end_byte":699,"start_byte":673},{"end_byte":1078,"start_byte":1020}],"role":"guarantee"},{"delivery_revised":false,"id":"O5","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":759,"start_byte":700},{"end_byte":879,"start_byte":760}],"role":"guarantee"},{"delivery_revised":true,"id":"O6","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":1019,"start_byte":957},{"end_byte":1687,"start_byte":1080}],"role":"guarantee"},{"delivery_revised":true,"id":"O7","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":2282,"start_byte":1689}],"role":"guarantee"},{"delivery_revised":false,"id":"A1","kind":"precondition","required":true,"revised_clause_spans":[{"end_byte":393,"start_byte":265}],"role":"assumption"},{"delivery_revised":true,"id":"S1","kind":"safety_property","required":true,"revised_clause_spans":[{"end_byte":264,"start_byte":79},{"end_byte":1687,"start_byte":1080}],"role":"guarantee"}]
+Requested endpoint: Tier 2 / restricted_source, backend vscore/0.3, END_TO_END_VERIFIED. Runtime campaigns are not requested. This request claims normative restricted-source execution only, with natural-language correspondence, host tooling, the pinned Lean kernel, hashing and OS/hardware explicitly trusted. No machine-code, compiler, runtime or physical-resource assurance is claimed.
+
+Mandatory requested source-facet specification:
+This is a frozen request constraint, not accepted obligation IR or proof evidence. Every listed original required guarantee retains the globally requested source delivery: canonical file program.vscore.json, one typed entry solve of arity 1, and all seven closed source properties below. Include the exact source requirements in its formal contract; a mathematical result-existence or equality theorem cannot replace entry identity, purity, input preservation, effect restrictions or exact non-floating-point semantics. For every value_required=true row also preserve the complete functional formula and universal source implementation refinement as a mixed source/value guarantee, including functional safety properties and invariants. Value facets are required by default regardless of category. Only the explicitly classified operational IDs below are source-only, retaining their source requirements rather than being replaced by value equalities. Assumptions, exclusions and separate non-vacuity witnesses are not source-policy rows. These constraints will be independently checked against kernel-reconstructed contract facets before proof, after acceptance and at closure.
+{"source_only_operational_ids":["I1","S1"],"value_required_default":true}
+{"format":"verislop.required-source-facets/0.1","obligations":{"I1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":false},"O1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O2":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O3":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O4":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O5":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O6":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O7":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"S1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":false}},"schema_version":"0.1"}
+
+>>>

@@ -1,0 +1,534 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "D1": {
+      "acceptance_criteria": [
+        "Exact accepted types and universal function equality"
+      ],
+      "dependencies": [],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/D1@sha256:483bcf6953f45e611a59dcab91a6dcc1fd09c279a7b24d8be6a5f21d54a51c6c",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.Packet",
+        "reification_evidence_ref": "reification:D1@sha256:4392b016f0ea0d7f40c93e20126286d0086a30c1ee383aaeeb5fbd1e69473de1",
+        "representation": "typed_metadata",
+        "semantic_closure_hash": "sha256:4e8afcc063f1ead21bea7b17cd2f1237e671ef74ee572df1a89fc5089caba2b1",
+        "statement_hash": "sha256:58297addbf9a52d5a226de2a81293daab984e4ce338acf7302c15faac03dc2c7"
+      },
+      "id": "D1",
+      "implementation_refs": [
+        "accepted:VeriSlopAST.Packet@sha256:c7a6cdbc5997d1e53cfc1b4f1a29650e420cdcc0c914f7259c9568c5161c57e1",
+        "accepted:VeriSlopAST.shift@sha256:0b78abc4562c80d59e53baec65577700c1dcd754cd532412463f1c634266d978",
+        "accepted:VeriSlopAST.solve@sha256:3b4ed448a746e97d1294f69f2bf34d3527e0fd6ed964742a02ee0bdb13440618",
+        "vscore-profile:sha256:4ec90cac95e4f09cb5d81c5bf313089dd88ff7b5b3bea756bc273999cc933d01"
+      ],
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-001298a043da8f9d9a30872fe7288d46"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-d253d70866de9e471871406088cec8c0"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.vscore3-materializer",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "vscore-semantics/0.3"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-afe50b0ba2cb6560eaf06c8b7cec9728"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "all mathematical inputs under VSCore 0.3 semantics"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-15a307e749c0ca850252e6c86054644a"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.vscore3-linker",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "vscore-semantics/0.3"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-5a9b88eacc8c07644afaff0b92e09c43"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "certificate sha256:5feafffb7dd05fb32ecc3d9708b6470ecb880e2b7a77290ae271623a7f1cc4b2",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "all mathematical inputs under VSCore 0.3 semantics"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ccfbb06d1b9b65cc1a4b4f322b220147e045cf306a53836479fc22efbe5237c9",
+          "document_ref": "request.txt",
+          "end_byte": 589,
+          "interpretation": "the pure source record and integer function contract",
+          "origin": "explicit",
+          "start_byte": 0
+        }
+      ],
+      "state": "LINKED",
+      "statement": "Deliver a VSCore 0.3 pure source implementation. Packet has amount:Int, words:List String and extra:Option Int. shift subtracts three from every mathematical integer. solve returns Packet.amount minus three. Mapping shift over any integer list equals mapping subtraction of three. Deliver solve in program.vscore.json with typed total evaluation, deterministic results, preserved inputs, no external I/O or floating point, pure data and the restricted runtime. These source requirements are independently required and also part of the value guarantee. This is a restricted source contract."
+    },
+    "O1": {
+      "acceptance_criteria": [
+        "Exact accepted types and universal function equality"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/O1@sha256:8b286194be6a729a454f717bbc0d6c06007d4b9886ad48e34c4c111bd2325750",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.result",
+        "reification_evidence_ref": "reification:O1@sha256:8a6fd7fa678c020a1d2d7ec926b426be083c5cf795d514e99cbceef123d1c3ce",
+        "representation": "source_facets",
+        "semantic_closure_hash": "sha256:faa981da9dae4c608217f91f54b8f768b0963f1d1d6e63ab39404ec6ef11b9f8",
+        "statement_hash": "sha256:da4b950a31ac5370e1a9e44ad41ffe0785cb48cee41b4563af033d32aad011ac"
+      },
+      "id": "O1",
+      "implementation_refs": [
+        "vscore:implementation/program.vscore.json#entry/solve@sha256:3f49720f68a80d1d953f6b1e848c785e8b4e3063b6b1b9f336d31fffe1720659"
+      ],
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-2937bb7aef16da73541c8cdfbbc7ab22"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.closure",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "closure root sha256:c0bda6233a155ac0d582c913f2ad03e99a62a71c28f5524a7d5a2a6a9a25721c"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-da46580358462f3dfbea2f034eaca144"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-58e031e447020d4546d8a9d5633e6e32"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.vscore3-materializer",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "vscore-semantics/0.3"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-9d7f9ec378c4338d1872caf495886599"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "all mathematical inputs under VSCore 0.3 semantics"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-b53e2fc68d209e42961ace0ae781d3ad"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.vscore3-linker",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "vscore-semantics/0.3"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-0af2b6f79b6c344a4f64ccf21d5e058b"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "certificate sha256:5feafffb7dd05fb32ecc3d9708b6470ecb880e2b7a77290ae271623a7f1cc4b2",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-ff4a50b7172dad1abebf3c6f7bdd6eca"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "certificate sha256:5feafffb7dd05fb32ecc3d9708b6470ecb880e2b7a77290ae271623a7f1cc4b2",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all mathematical inputs under VSCore 0.3 semantics"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ccfbb06d1b9b65cc1a4b4f322b220147e045cf306a53836479fc22efbe5237c9",
+          "document_ref": "request.txt",
+          "end_byte": 589,
+          "interpretation": "the pure source record and integer function contract",
+          "origin": "explicit",
+          "start_byte": 0
+        }
+      ],
+      "state": "END_TO_END_VERIFIED",
+      "statement": "Deliver a VSCore 0.3 pure source implementation. Packet has amount:Int, words:List String and extra:Option Int. shift subtracts three from every mathematical integer. solve returns Packet.amount minus three. Mapping shift over any integer list equals mapping subtraction of three. Deliver solve in program.vscore.json with typed total evaluation, deterministic results, preserved inputs, no external I/O or floating point, pure data and the restricted runtime. These source requirements are independently required and also part of the value guarantee. This is a restricted source contract."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "Exact accepted types and universal function equality"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [],
+        "formula_ref": "artifact:accepted-expressions/O2@sha256:19906e734eda8fcbb72d0024c3e0043af1c9bdbb9bdc8098e34d5d73bbb4f226",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.binder",
+        "reification_evidence_ref": "reification:O2@sha256:dc9af5e33ff681ac6f6cbd65191fecb73f58effb40967b0cf0ccc811ebb9bc74",
+        "representation": "contract_dsl",
+        "semantic_closure_hash": "sha256:54ba96bd40e5c26806f80400b9f829a6617feed405e1c75af1ba2679c369323d",
+        "statement_hash": "sha256:6c0e46b857b4435dedb45c08454283608aa15152fe56f0ed809b4fbdf8b32d82"
+      },
+      "id": "O2",
+      "implementation_refs": [
+        "vscore:implementation/program.vscore.json#entry/shift@sha256:3f49720f68a80d1d953f6b1e848c785e8b4e3063b6b1b9f336d31fffe1720659"
+      ],
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-a3ae2eb41878939330b4dd03339e3b72"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.closure",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "closure root sha256:c0bda6233a155ac0d582c913f2ad03e99a62a71c28f5524a7d5a2a6a9a25721c"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-23219e6a5c3feabefff293c163c50b9b"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-536f2c71b768bba88b4aa6a3762a52aa"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.vscore3-materializer",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "vscore-semantics/0.3"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-f2a9b7a2fe1951bdfca9429fb66b20c3"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "all mathematical inputs under VSCore 0.3 semantics"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-86bba75ba33ae21e905475c5fad39581"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.vscore3-linker",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "vscore-semantics/0.3"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-cf183b00b598ec38b246708a86ab0530"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "certificate sha256:5feafffb7dd05fb32ecc3d9708b6470ecb880e2b7a77290ae271623a7f1cc4b2",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-b15ec4988677a8aed8c2b496e41e9b00"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "certificate sha256:5feafffb7dd05fb32ecc3d9708b6470ecb880e2b7a77290ae271623a7f1cc4b2",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all mathematical inputs under VSCore 0.3 semantics"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ccfbb06d1b9b65cc1a4b4f322b220147e045cf306a53836479fc22efbe5237c9",
+          "document_ref": "request.txt",
+          "end_byte": 589,
+          "interpretation": "the pure source record and integer function contract",
+          "origin": "explicit",
+          "start_byte": 0
+        }
+      ],
+      "state": "END_TO_END_VERIFIED",
+      "statement": "Deliver a VSCore 0.3 pure source implementation. Packet has amount:Int, words:List String and extra:Option Int. shift subtracts three from every mathematical integer. solve returns Packet.amount minus three. Mapping shift over any integer list equals mapping subtraction of three. Deliver solve in program.vscore.json with typed total evaluation, deterministic results, preserved inputs, no external I/O or floating point, pure data and the restricted runtime. These source requirements are independently required and also part of the value guarantee. This is a restricted source contract."
+    },
+    "S1": {
+      "acceptance_criteria": [
+        "Exact accepted types and universal function equality"
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "formal": {
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "formula_ref": "artifact:accepted-expressions/S1@sha256:f5f2919427591f09b997a8b056f2a31285a4187e8c155affd99436022d0e89e4",
+        "hypotheses": [],
+        "lean_symbol": "VeriSlopAST.source_only",
+        "reification_evidence_ref": "reification:S1@sha256:a01eae1268eb847f6c31604fa6d07ad09332811bd6da8bf4266d6c62508841a4",
+        "representation": "source_facets",
+        "semantic_closure_hash": "sha256:159019a564c9f061ff6e3f9f4727c528fb8c65ff5ec9163d479b88d230833670",
+        "statement_hash": "sha256:b65af93b01779ec69aa2ede2590f9d64f5a9bb0f7041ff1dd1f77ea9bd5f3719"
+      },
+      "id": "S1",
+      "implementation_refs": [
+        "vscore:implementation/program.vscore.json#entry/solve@sha256:3f49720f68a80d1d953f6b1e848c785e8b4e3063b6b1b9f336d31fffe1720659"
+      ],
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [
+            "evidence:ev-1bfd234dfb7bbac7e498ff64d538309f"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.closure",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "closure root sha256:c0bda6233a155ac0d582c913f2ad03e99a62a71c28f5524a7d5a2a6a9a25721c"
+          ]
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-ef399943b823c53f3fd6bcf42a304d90"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [
+            "evidence:ev-b6f686d418960548b5c01c6ce0f771c0"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.vscore3-materializer",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "vscore-semantics/0.3"
+          ]
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-055c42622310301f5a3704117fae9e24"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "all mathematical inputs under VSCore 0.3 semantics"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [
+            "evidence:ev-609d8d7785f8d500300788bbeaa50a8e"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.vscore3-linker",
+          "scope": [
+            "restricted_source; vscore/0.3",
+            "vscore-semantics/0.3"
+          ]
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-1b38911bbc0f44487b23e2cf7cbc1189"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "certificate sha256:5feafffb7dd05fb32ecc3d9708b6470ecb880e2b7a77290ae271623a7f1cc4b2",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-407dac49b978757c31252ef3a3c3fdc5"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+            "certificate sha256:5feafffb7dd05fb32ecc3d9708b6470ecb880e2b7a77290ae271623a7f1cc4b2",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all mathematical inputs under VSCore 0.3 semantics"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:ccfbb06d1b9b65cc1a4b4f322b220147e045cf306a53836479fc22efbe5237c9",
+          "document_ref": "request.txt",
+          "end_byte": 589,
+          "interpretation": "the pure source record and integer function contract",
+          "origin": "explicit",
+          "start_byte": 0
+        }
+      ],
+      "state": "END_TO_END_VERIFIED",
+      "statement": "Deliver a VSCore 0.3 pure source implementation. Packet has amount:Int, words:List String and extra:Option Int. shift subtracts three from every mathematical integer. solve returns Packet.amount minus three. Mapping shift over any integer list equals mapping subtraction of three. Deliver solve in program.vscore.json with typed total evaluation, deterministic results, preserved inputs, no external I/O or floating point, pure data and the restricted runtime. These source requirements are independently required and also part of the value guarantee. This is a restricted source contract."
+    }
+  },
+  "roots": {
+    "closure_root": "sha256:c0bda6233a155ac0d582c913f2ad03e99a62a71c28f5524a7d5a2a6a9a25721c",
+    "contract_input_root": "sha256:7b54c1dc83722908f2ec7693f786478475562326657322027a3558f9c7cc0a53",
+    "implementation_root": "sha256:69ff276ea163566016e15c3d694291faf1b79d6c22d2d63fa9383f7403db9d58",
+    "interpretation_root": "sha256:d3c8230527d8c5d8e5097932847a294e57dd77da3b6810aab32783b7aaf6f73d",
+    "link_root": "sha256:8278fa3ef09882f11e6c0a0f23c2dc1380041e9ab6b07acd83645e8d56cb83d2"
+  },
+  "schema_version": "0.1"
+}

@@ -1,0 +1,51 @@
+test_registered_review_budget_preserves_python_default_and_dispatches_exact_03 (tests.test_vscore3_review_replay.ReplayConstructionTests) ... ok
+test_structured_grounding_keeps_calls_beneath_local_map_binders (tests.test_vscore3_review_replay.ReplayConstructionTests) ... ok
+test_unbounded_residual_quantifiers_never_become_decidable_probes (tests.test_vscore3_review_replay.ReplayConstructionTests) ... ok
+test_actual_wrong_valid_source_confirms_before_any_semantic_proof_acceptance (tests.test_vscore3_review_replay.VSCoreKernelReviewTests) ... ok
+test_changed_source_cannot_confirm_and_restoration_recovers_exact_binding (tests.test_vscore3_review_replay.VSCoreKernelReviewTests) ... ok
+test_matching_ground_case_is_not_reproduced (tests.test_vscore3_review_replay.VSCoreKernelReviewTests) ... ok
+test_reviewer_guidance_has_exact_value_binders_and_versioned_budget (tests.test_vscore3_review_replay.VSCoreKernelReviewTests) ... ERROR
+test_source_only_and_wrong_sort_or_arity_are_unsupported (tests.test_vscore3_review_replay.VSCoreKernelReviewTests) ... ok
+ERROR
+
+======================================================================
+ERROR: test_reviewer_guidance_has_exact_value_binders_and_versioned_budget (tests.test_vscore3_review_replay.VSCoreKernelReviewTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/augustus/VeriSlop_CLI/tests/test_vscore3_review_replay.py", line 140, in test_reviewer_guidance_has_exact_value_binders_and_versioned_budget
+    policy = review._counterexample_policy(self.pkg, "implementation", ["G1", "G2"])
+  File "/home/augustus/VeriSlop_CLI/verislop/review.py", line 277, in _counterexample_policy
+    "examples_are": "syntax illustrations, not constructed reviewer probes or replay evidence"}
+  File "/home/augustus/VeriSlop_CLI/verislop/review.py", line 150, in _target_case_binders
+    if (not backend_diags and backend and backend["id"] in (registry.VSCORE_ID, registry.VSCORE3_ID)
+  File "/home/augustus/VeriSlop_CLI/verislop/backends/registry.py", line 167, in is_vscore
+    d, _ = frozen_backend(pkg)
+  File "/home/augustus/VeriSlop_CLI/verislop/backends/registry.py", line 140, in frozen_backend
+    claims = frozen_claims(pkg)
+  File "/home/augustus/VeriSlop_CLI/verislop/backends/registry.py", line 120, in frozen_claims
+    p = Path(pkg.path("closure")) / "implementation-claims.json"
+AttributeError: 'dict' object has no attribute 'path'
+
+======================================================================
+ERROR: tearDownClass (tests.test_vscore3_review_replay.VSCoreKernelReviewTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 12, in retain_then_cleanup
+  File "/home/augustus/VeriSlop_CLI/verislop/fsutil.py", line 61, in write_json
+    data = canonical.dumps_pretty(obj) if pretty else canonical.dumps(obj)
+  File "/home/augustus/VeriSlop_CLI/verislop/canonical.py", line 169, in dumps
+    _encode(obj, out)
+  File "/home/augustus/VeriSlop_CLI/verislop/canonical.py", line 160, in _encode
+    _encode(obj[key], out)
+  File "/home/augustus/VeriSlop_CLI/verislop/canonical.py", line 148, in _encode
+    _encode(item, out)
+  File "/home/augustus/VeriSlop_CLI/verislop/canonical.py", line 160, in _encode
+    _encode(obj[key], out)
+  File "/home/augustus/VeriSlop_CLI/verislop/canonical.py", line 139, in _encode
+    raise CanonicalJSONError("binary floating-point values are not canonicalisable here")
+verislop.canonical.CanonicalJSONError: binary floating-point values are not canonicalisable here
+
+----------------------------------------------------------------------
+Ran 8 tests in 118.973s
+
+FAILED (errors=2)

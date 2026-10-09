@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:implementation-claims:0.3",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "format": {
+      "const": "verislop.implementation-claims/0.2"
+    },
+    "artifact_kind": {
+      "const": "implementation_claims"
+    },
+    "backend": {
+      "const": "verislop.backend.vscore/0.3"
+    },
+    "bound_to": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accepted_ir": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "certificate": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "contract_input_root": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "accepted_ir",
+        "certificate",
+        "contract_input_root"
+      ]
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tier": {
+          "const": 2
+        },
+        "target": {
+          "const": "vscore"
+        },
+        "endpoint": {
+          "const": "restricted_source"
+        },
+        "backend": {
+          "const": "verislop.backend.vscore/0.3"
+        },
+        "language": {
+          "const": "vscore/0.3"
+        },
+        "semantics": {
+          "const": "vscore-semantics/0.3"
+        },
+        "require_state": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            null,
+            "IMPLEMENTED",
+            "LINKED",
+            "TESTED",
+            "END_TO_END_VERIFIED"
+          ]
+        },
+        "require_tests": {
+          "type": "boolean"
+        },
+        "bridge_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "tier_default_applied": {
+          "type": "boolean"
+        },
+        "backend_version": {
+          "const": "0.3"
+        }
+      },
+      "required": [
+        "tier",
+        "target",
+        "endpoint",
+        "backend",
+        "language",
+        "semantics",
+        "require_state",
+        "require_tests",
+        "bridge_id",
+        "tier_default_applied",
+        "backend_version"
+      ]
+    },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "guarantee",
+              "assumption",
+              "declaration",
+              "exclusion",
+              "open_question"
+            ]
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "$ref": "urn:verislop:schema:obligation:0.1#/$defs/source"
+            },
+            "minItems": 1
+          },
+          "scope": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "urn:verislop:schema:obligation:0.1#/$defs/dependency"
+            }
+          },
+          "acceptance_criteria": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "origin": {
+            "enum": [
+              "interpreted",
+              "derived"
+            ]
+          },
+          "record_digest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "blocked_by": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "kind",
+          "role",
+          "statement",
+          "required",
+          "source_refs",
+          "scope",
+          "dependencies",
+          "acceptance_criteria",
+          "origin",
+          "record_digest",
+          "blocked_by"
+        ]
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "obligation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "milestone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "applicable": {
+            "type": "boolean"
+          },
+          "verifier": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pass_predicate": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "enum": [
+              "blocking",
+              "advisory"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1
+          },
+          "root_kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "result_predicate": {
+            "type": "string",
+            "minLength": 1
+          },
+          "premises": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0
+          },
+          "scope": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0
+          },
+          "trusted_dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0
+          },
+          "accepted_statement_hash": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "claim_id",
+          "obligation",
+          "milestone",
+          "required",
+          "applicable",
+          "verifier",
+          "pass_predicate",
+          "severity",
+          "reason",
+          "revision",
+          "root_kind",
+          "result_predicate",
+          "premises",
+          "scope",
+          "trusted_dependencies",
+          "accepted_statement_hash"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "artifact_kind",
+    "backend",
+    "bound_to",
+    "parameters",
+    "obligations",
+    "claims"
+  ]
+}

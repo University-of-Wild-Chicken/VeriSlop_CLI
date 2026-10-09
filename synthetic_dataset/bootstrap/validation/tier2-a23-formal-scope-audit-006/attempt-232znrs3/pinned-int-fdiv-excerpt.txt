@@ -1,0 +1,45 @@
+-/
+@[extern "lean_int_mod", implicit_reducible]
+def tmod : (@& Int) → (@& Int) → Int
+  | ofNat m, ofNat n =>  ofNat (m % n)
+  | ofNat m, -[n +1] =>  ofNat (m % succ n)
+  | -[m +1], ofNat n => -ofNat (succ m % n)
+  | -[m +1], -[n +1] => -ofNat (succ m % succ n)
+
+theorem ofNat_tdiv (m n : Nat) : ↑(m / n) = tdiv ↑m ↑n := rfl
+
+/-! ### F-rounding division
+This pair satisfies `fdiv x y = floor (x / y)`.
+-/
+
+/--
+Integer division using the F-rounding convention.
+
+In the F-rounding convention (flooring division), `Int.fdiv x y` satisfies `Int.fdiv x y = ⌊x / y⌋`
+and `Int.fmod` is the unique function satisfying `Int.fmod x y + (Int.fdiv x y) * y = x`.
+
+Examples:
+* `(7 : Int).fdiv (0 : Int) = 0`
+* `(0 : Int).fdiv (7 : Int) = 0`
+* `(12 : Int).fdiv (6 : Int) = 2`
+* `(12 : Int).fdiv (-6 : Int) = -2`
+* `(-12 : Int).fdiv (6 : Int) = -2`
+* `(-12 : Int).fdiv (-6 : Int) = 2`
+* `(12 : Int).fdiv (7 : Int) = 1`
+* `(12 : Int).fdiv (-7 : Int) = -2`
+* `(-12 : Int).fdiv (7 : Int) = -2`
+* `(-12 : Int).fdiv (-7 : Int) = 1`
+-/
+@[implicit_reducible]
+def fdiv : Int → Int → Int
+  | 0,       _       => 0
+  | ofNat m, ofNat n => ofNat (m / n)
+  | ofNat (succ m), -[n+1] => -[m / succ n +1]
+  | -[_+1],  0       => 0
+  | -[m+1],  ofNat (succ n) => -[m / succ n +1]
+  | -[m+1],  -[n+1]  => ofNat (succ m / succ n)
+
+/--
+Integer modulus using the F-rounding convention.
+
+In the F-rounding convention (flooring division), `Int.fdiv x y` satisfies `Int.fdiv x y = ⌊x / y⌋`

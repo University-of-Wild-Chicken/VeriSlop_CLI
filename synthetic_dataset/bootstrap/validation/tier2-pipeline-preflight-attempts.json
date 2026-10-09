@@ -1,0 +1,337 @@
+{
+  "format": "verislop.tier2-pipeline-preflight-attempts/0.1",
+  "attempts": [
+    {
+      "attempt_id": "backend-schema-1",
+      "test": "tests.test_vscore3_pipeline.RegisteredVSCore3PipelineTests.setUpClass",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "tests.test_vscore3_pipeline",
+        "-q"
+      ],
+      "status": "BLOCKED",
+      "duration_seconds": 92.322,
+      "errors": [
+        {
+          "code": "INVALID_CANDIDATE",
+          "severity": "blocking",
+          "message": "vscore-materialization-v3: $.bindings[0].args[0]: matches 0 alternatives; exactly one required"
+        }
+      ],
+      "evidence_availability": "tool-transcript-only; temporary failed package and historical source snapshot were not retained",
+      "source_hashes_sampled_now": {
+        "tests/test_vscore3_pipeline.py": "sha256:4c617b63ff9847f8e2746754c339b14296f6193b1bf0de4a55478ef8775df29b",
+        "schemas/vscore-materialization-v3.schema.json": "sha256:2c58be1f41fc7a5e3f145e12e64eeecdb52df8568461f9ce1069f9438075c39b",
+        "schemas/link-record-v3.schema.json": "sha256:325fdbaebfdaf7c8f4cecc20ec14c621a74b2b9c64e72f700ac5d8f626f4ee45",
+        "schemas/mechanical-result-v3.schema.json": "sha256:aa6ef9933b95d5f455d34bd33c6ff369e8593a4f6d83dabf64d9e345655aeb0b"
+      },
+      "fixture_proof_hash": "sha256:ac2ce0ff3dd987c073fab909ca3f59d3d64b1d55367790f1c16217e3cfed7c3e",
+      "proof_hash_provenance": "reconstructed exact earlier fixture proof by replacing the sole known with_unfolding_all rfl edit; historical test file hash unavailable",
+      "fixture_surface_hash": "sha256:9f04a381b495238c4cfa76260b8bdf1bac4d347f587a5866ee3afaa730e8f478",
+      "fixture_relation_hash": "sha256:221d8c09a1eec20967b3c0f5fdc7f2369d9d41e87bb327424114931768dc6844"
+    },
+    {
+      "attempt_id": "backend-proof-2",
+      "test": "tests.test_vscore3_pipeline.RegisteredVSCore3PipelineTests.setUpClass",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "tests.test_vscore3_pipeline",
+        "-q"
+      ],
+      "status": "BLOCKED",
+      "duration_seconds": 142.766,
+      "errors": [
+        {
+          "code": "CANDIDATE_BUILD_FAILURE",
+          "severity": "blocking",
+          "message": "candidate proof module failed to elaborate: rfl could not show source_fn_shift/source_fn_solve equal to VeriSlopAST.shift/VeriSlopAST.solve",
+          "claims": [
+            "BRIDGE:implementation:vscore-refinement"
+          ]
+        }
+      ],
+      "evidence_availability": "tool-transcript-only; temporary failed package and historical source snapshot were not retained",
+      "source_hashes_sampled_now": {
+        "tests/test_vscore3_pipeline.py": "sha256:4c617b63ff9847f8e2746754c339b14296f6193b1bf0de4a55478ef8775df29b",
+        "schemas/vscore-materialization-v3.schema.json": "sha256:2c58be1f41fc7a5e3f145e12e64eeecdb52df8568461f9ce1069f9438075c39b",
+        "schemas/link-record-v3.schema.json": "sha256:325fdbaebfdaf7c8f4cecc20ec14c621a74b2b9c64e72f700ac5d8f626f4ee45",
+        "schemas/mechanical-result-v3.schema.json": "sha256:aa6ef9933b95d5f455d34bd33c6ff369e8593a4f6d83dabf64d9e345655aeb0b"
+      },
+      "fixture_proof_hash": "sha256:ac2ce0ff3dd987c073fab909ca3f59d3d64b1d55367790f1c16217e3cfed7c3e",
+      "proof_hash_provenance": "reconstructed exact earlier fixture proof by replacing the sole known with_unfolding_all rfl edit; historical test file hash unavailable",
+      "fixture_surface_hash": "sha256:9f04a381b495238c4cfa76260b8bdf1bac4d347f587a5866ee3afaa730e8f478",
+      "fixture_relation_hash": "sha256:221d8c09a1eec20967b3c0f5fdc7f2369d9d41e87bb327424114931768dc6844"
+    },
+    {
+      "attempt_id": "backend-complete-3",
+      "test": "tests.test_vscore3_pipeline",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "tests.test_vscore3_pipeline",
+        "-q"
+      ],
+      "status": "VERIFIED",
+      "duration_seconds": 382.886,
+      "tests_run": 2,
+      "errors": [],
+      "evidence_availability": "full package and candidate captured before test temporary cleanup; historical observed paths are retained in the capture",
+      "capture": "synthetic_dataset/bootstrap/validation/tier2-pipeline-initial-pass/capture.json",
+      "capture_hash": "sha256:f4e88949d95272c09e2d16fbb51318eb2b7cbb22d600b119f0078bff30583364",
+      "captured_files": 289,
+      "mechanical_status": "VERIFIED",
+      "terminal_status": "VERIFIED",
+      "source_hashes_sampled_now": {
+        "tests/test_vscore3_pipeline.py": "sha256:4c617b63ff9847f8e2746754c339b14296f6193b1bf0de4a55478ef8775df29b",
+        "verislop/targets/vscore3_source.py": "sha256:bd78c0138eb755e26de033bc37d0b643433574bef593a28b5d7ff5d4e00dda08",
+        "verislop/targets/vscore3_check.py": "sha256:0536145d7f46fc60e8a458fe09e07e5ae4473f1b9b480ecad0cfe3e9748eb526",
+        "verislop/targets/vscore3_target.py": "sha256:872d10e1b335f471fbb5aa23c9d18b5f353d54f2b1752e2516b9d8203a10f54a",
+        "verislop/bridges/vscore3_checker.py": "sha256:5b6ea70b5019d9c51ddbfc3842a03ad210fb922ea8ae98b9eb6323a944f3dfd1"
+      }
+    },
+    {
+      "attempt_id": "regression-harness-4",
+      "test": "frontend/workflow/readiness/old review combined invocation",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "tests.test_vscore3_frontend",
+        "tests.test_vscore3_workflow_unit",
+        "tests.test_formalize_readiness",
+        "tests.test_autonomous_correction",
+        "tests.test_review_projections",
+        "tests.test_vscore_review",
+        "-q"
+      ],
+      "status": "BLOCKED",
+      "duration_seconds": 121.703,
+      "tests_run": 38,
+      "errors": [
+        {
+          "kind": "IMPORT_ERROR",
+          "message": "test_autonomous_correction requires tests on PYTHONPATH; test_formal_frontend_workflow unavailable in this invocation"
+        },
+        {
+          "kind": "IMPORT_ERROR",
+          "message": "tests.test_review_projections module does not exist (correct module singular test_review_projection)"
+        },
+        {
+          "kind": "STALE_OR_UNBOUND_EVIDENCE",
+          "message": "VSCoreReviewIntegration verify observed changed registered verifier/schema/runtime dependencies after freeze during concurrent registered edits"
+        }
+      ],
+      "evidence_availability": "tool-transcript-only; failed temporary package not retained",
+      "followup": "rerun pure unit/kernel checks with PYTHONPATH=.:tests; old complete review integration deferred to stable final source freeze"
+    },
+    {
+      "attempt_id": "source-acceptance-schema-5",
+      "test": "tests.test_source_pipeline",
+      "status": "BLOCKED",
+      "duration_seconds": 14.266,
+      "errors": [
+        {
+          "kind": "SCHEMA_REJECTION",
+          "message": "acceptance-certificate obligations.G2.representation enum excludes source_facets"
+        }
+      ],
+      "evidence_availability": "tool-transcript-only; child reported failure before acceptance artifact publication",
+      "repair": "added distinct source_facets accepted representation to acceptance-certificate schema; no semantic claim changed"
+    },
+    {
+      "attempt_id": "source-acceptance-complete-6",
+      "test": "tests.test_source_pipeline",
+      "status": "VERIFIED",
+      "tests_run": 3,
+      "duration_seconds": 17.731,
+      "errors": [],
+      "evidence_availability": "actual before-cleanup child wrapper package/certificate capture independently inspected; copied unchanged to canonical validation area",
+      "capture": "synthetic_dataset/bootstrap/validation/tier2-source-acceptance-pass/capture.json",
+      "capture_hash": "sha256:3f2443072f540bda7b8420024eba0a19c46199ffe6036d30407bc3938fc4314e",
+      "files": 90,
+      "file_root": "sha256:fb059008c00f837c305080859495c4979122903eacee6aab39c1866e243636f8",
+      "does_not_assert_mechanical_closure": true
+    },
+    {
+      "attempt_id": "source-review-fixture-wire-7",
+      "test": "tests.test_vscore3_review_replay",
+      "status": "BLOCKED",
+      "duration_seconds": 15.764,
+      "errors": [
+        {
+          "kind": "INVALID_CANDIDATE",
+          "message": "authored unrelated fixture used internal ite/condition instead of exact wire if/cond; generation correctly rejected"
+        }
+      ],
+      "evidence_availability": "full child attempt retained /home/augustus/VeriSlop_CLI/validation/tier2-source-review-probes-gate1",
+      "repair": "test fixture wire tag/field corrected only, no production semantic change"
+    },
+    {
+      "attempt_id": "source-review-selection-schema-8",
+      "test": "tests.test_vscore3_review_replay",
+      "status": "BLOCKED",
+      "duration_seconds": 63.351,
+      "errors": [
+        {
+          "kind": "INVALID_CANDIDATE",
+          "message": "implementation-selection-v3 backend constant stale after explicit source-facet/conditional-refinement descriptor descriptions changed"
+        }
+      ],
+      "evidence_availability": "actual failed package/stages retained /home/augustus/VeriSlop_CLI/validation/tier2-source-review-probes-gate2",
+      "repair": "synchronized exact registered descriptor constant; no accepted model/source/semantic theorem changed"
+    },
+    {
+      "attempt_id": "source-review-cold-timeout-9",
+      "test": "standalone generic verislop.targets.vscore3_replay.check benchmark",
+      "status": "BLOCKED",
+      "duration_seconds": 32.995,
+      "configured_budget_seconds": 30,
+      "errors": [
+        {
+          "kind": "REPLAY_DEADLINE_EXHAUSTED",
+          "message": "cold complete kernel replay plus all library declaration export exceeded remaining shared30s; result left unresolved"
+        }
+      ],
+      "evidence_availability": "child tool transcript only; no complete package capture claimed for standalone benchmark",
+      "repair": "kept complete imported-module kernel replay while restricting declaration export to Goal and supervisor Probe, with exactGoal/AST/source/accepted-transfer/result-type/import/axiom audits retained",
+      "subsequent_benchmark_seconds": {
+        "cold_false": 12.334,
+        "warm_true": 5.466
+      }
+    },
+    {
+      "attempt_id": "source-review-stale-process-10",
+      "test": "tests.test_vscore3_review_replay",
+      "status": "BLOCKED",
+      "tests_run": 9,
+      "duration_seconds": "118.973",
+      "errors": [
+        {
+          "kind": "STALE_TEST_PROCESS",
+          "message": "generic false and matching kernel probes passed, but reviewer guidance process loaded pre-fix descriptor dispatch and overall test failed"
+        },
+        {
+          "kind": "CAPTURE_ERROR",
+          "message": "float wall_seconds rejected by canonical serializer in wrapper teardown; original temporary package deleted"
+        }
+      ],
+      "evidence_availability": "child tool transcript only; no gate3 package or capture claimed",
+      "repair": "fresh process and decimal-string timing serialization; current descriptor ID dispatch unchanged during rerun"
+    },
+    {
+      "attempt_id": "source-review-complete-11",
+      "test": "tests.test_vscore3_review_replay",
+      "status": "VERIFIED",
+      "tests_run": 9,
+      "duration_seconds": "119.691",
+      "errors": [],
+      "capture": "synthetic_dataset/bootstrap/validation/tier2-source-review-probes-pass/capture.json",
+      "capture_sha256": "sha256:2f91e639c2257ad5312848217479ad884475fc962593dc3854e7c84585edce07",
+      "files": 137,
+      "files_root": "sha256:77ab97e55760c271e75d6656e2d41120d77ad038e9e0dc8d0cb84162271f1077",
+      "probe_results_sha256": "sha256:44b2048e2f3911f8b6021faefb9e96f916173246f7d500ed0c97cc4ebba6c076",
+      "budget_seconds_per_probe": 30,
+      "actual_kernel_seconds": {
+        "cold_false": "12.633602",
+        "warm_true": "5.887548",
+        "explicit_deadline_unresolved": "0.019227"
+      },
+      "does_not_assert_complete_mechanical_closure": true
+    },
+    {
+      "attempt_id": "source-full-pipeline-complete-12",
+      "test": "tests.test_vscore3_source_pipeline",
+      "command": [
+        "PYTHONPATH=.:tests",
+        "python",
+        "synthetic_dataset/bootstrap/validation/tier2-source-pipeline-pass/run-fresh-fixture.py"
+      ],
+      "status": "VERIFIED",
+      "tests_run": 2,
+      "duration_seconds": "436.719682",
+      "errors": [],
+      "capture": "synthetic_dataset/bootstrap/validation/tier2-source-pipeline-pass/verislop-data-source-tier2-fixture-gq_37_a9/capture.json",
+      "capture_sha256": "sha256:a2488375c5b3f554b12f9f956198d2a530d2fa00cae3c335aa067606cf3d8ff8",
+      "files": 492,
+      "files_root": "sha256:5aa9ef435333bbeedfdd2f6e2e1b50b2806f594b92b04972598c9a67b8cae5be",
+      "engineering_freeze": "synthetic_dataset/bootstrap/validation/tier2-source-pipeline-pass/freeze-002.json",
+      "engineering_source_root": "sha256:261179fbba17aa59d8f4e9924b4e0af5df71111b10a16e55b43f97c0af0d1eb7",
+      "source_freeze_matches_current_after_execution": true,
+      "actual_report_sha256": "sha256:58014bd5961ebe4ad865af074e204b2ccc5f2f4c52b084f1e07088a49c1f3284",
+      "actual_test_result": "synthetic_dataset/bootstrap/validation/tier2-source-pipeline-pass/run-result.json",
+      "actual_test_result_sha256": "sha256:0183fb83edf61a01a4ffff44ca2b6f9f0ba7f18fd4b52d221c95d0ff82d4f46d",
+      "scope": "full current registered source-only/mixed universal refinement and source-facet closure with two clean identical builds, explicit semantic preparation rebuild, execution revalidation and source mutation rejection; unrelated authored fixture; no task answers or live model calls"
+    },
+    {
+      "attempt_id": "source-policy-constructor-preflight-1",
+      "test": "tests.test_source_policy",
+      "status": "FAILED",
+      "duration_seconds_decimal": "26.574",
+      "tests_run": 7,
+      "errors": [
+        "New SOURCE_FACETS_REQUIRED diagnostic was not yet registered; negative constructor fixtures raised instead of persisting a blocking result.",
+        "Synthetic unit source package omitted its required source-facet encoding."
+      ],
+      "evidence_availability": "Terminal duration/status/errors observed in tool transcript; actual kernel artifacts captured before temporary cleanup. Historical failed source file bytes unavailable.",
+      "receipt": "synthetic_dataset/bootstrap/validation/tier2-source-policy-preflight/actual-test-receipt.json",
+      "receipt_hash": "sha256:c6328b1d8134a0a922707f0bb9b87cdf9ac273dfb501dbb2ac815268b6b58d91",
+      "source_hash_provenance": "Source hashes sampled after final focused test; not historical failed-source evidence."
+    },
+    {
+      "attempt_id": "source-policy-constructor-preflight-2",
+      "test": "tests.test_source_policy",
+      "status": "PASS",
+      "duration_seconds_decimal": "26.872",
+      "tests_run": 7,
+      "errors": [],
+      "evidence_availability": "Terminal result in tool transcript; kernel artifacts captured before cleanup.",
+      "receipt": "synthetic_dataset/bootstrap/validation/tier2-source-policy-preflight/actual-test-receipt.json",
+      "receipt_hash": "sha256:c6328b1d8134a0a922707f0bb9b87cdf9ac273dfb501dbb2ac815268b6b58d91",
+      "source_hash_provenance": "Source hashes sampled after final focused test; not historical failed-source evidence."
+    },
+    {
+      "attempt_id": "source-policy-import-preflight-3",
+      "test": "tests.test_source_policy",
+      "status": "PASS",
+      "duration_seconds_decimal": "34.328",
+      "tests_run": 8,
+      "errors": [],
+      "evidence_availability": "Terminal result in tool transcript; actual private-import replay executed; kernel artifacts captured before cleanup.",
+      "receipt": "synthetic_dataset/bootstrap/validation/tier2-source-policy-preflight/actual-test-receipt.json",
+      "receipt_hash": "sha256:c6328b1d8134a0a922707f0bb9b87cdf9ac273dfb501dbb2ac815268b6b58d91",
+      "source_hash_provenance": "Source hashes sampled after final focused test; not historical failed-source evidence."
+    },
+    {
+      "attempt_id": "source-policy-focused-preflight-4",
+      "test": "source policy, policy CLI, pending reports, native startup, frontend, workflow",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "tests.test_source_policy",
+        "tests.test_source_policy_cli",
+        "tests.test_pending_report_dispatch",
+        "tests.test_vscore3_cli_startup",
+        "tests.test_vscore3_frontend",
+        "tests.test_vscore3_workflow_unit",
+        "-q"
+      ],
+      "environment": {
+        "PYTHONPATH": ".:tests"
+      },
+      "status": "PASS",
+      "duration_seconds_decimal": "36.188",
+      "tests_run": 46,
+      "errors": [],
+      "evidence_availability": "Terminal result in tool transcript; actual strict-recovery/import/kernel artifacts captured before cleanup.",
+      "receipt": "synthetic_dataset/bootstrap/validation/tier2-source-policy-preflight/actual-test-receipt.json",
+      "receipt_hash": "sha256:c6328b1d8134a0a922707f0bb9b87cdf9ac273dfb501dbb2ac815268b6b58d91",
+      "source_hash_provenance": "Source hashes sampled after final focused test; not historical failed-source evidence."
+    }
+  ]
+}

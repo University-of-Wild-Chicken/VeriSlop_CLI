@@ -1,0 +1,71 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "G2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every mathematical signed Int x, plus(x) returns x + 2 and retains all those source guarantees.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "preserve the exact entry and source guarantees"
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "G1",
+  "kind": "safety_property",
+  "role": "guarantee",
+  "statement": "Deliver plus with arity one in program.vscore.json as total typed pure data under VSCore 0.3. Its restricted-source evaluation is deterministic, preserves its input, has no external I/O or floating point, and uses only the restricted source runtime.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "preserve the exact entry and source guarantees"
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "G2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "G2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "G1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "G1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "tier": 2,
+ "target": "vscore",
+ "endpoint": "restricted_source",
+ "backend_version": "0.3",
+ "require_state": "END_TO_END_VERIFIED"
+}
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+VSCORE 0.3 SOURCE BOUNDARY: Delivery is canonical program.vscore.json under data-pipeline/0.3 and restricted_source semantics. Use source_requirements and source theorem references for the actual frozen entry/type/purity/determinism/input-preservation/runtime requirements, with optional formula facets for functional behavior. Preserve every required ID and the complete typed data domain, including all binders, branch guards and ordered record fields. SourceBoundary proves the abstract checking rule; exact source discharge is a separate VSCore3 kernel bridge with admission and observation laws. Author no fact flags, snapshots, effect traces or source-policy receipts. Native Python facets require their own endpoint; do not copy them into this revised source boundary. Universal refinement is required for value behavior; finite runtime examples cannot replace it. TESTED is an unsupported separate campaign capability, so do not constrain formulas to a sampled leading-forall campaign. Opaque statements, physical-resource/liveness claims and host execution remain unsupported.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+[]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Deliver plus with arity one in program.vscore.json as total typed pure data under VSCore 0.3. Its restricted-source evaluation is deterministic, preserves its input, has no external I/O or floating point, and uses only the restricted source runtime.
+For every mathematical signed Int x, plus(x) returns x + 2 and retains all those source guarantees.
+>>>

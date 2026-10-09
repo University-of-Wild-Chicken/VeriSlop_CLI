@@ -166,7 +166,7 @@ class AutonomousCorrectionTests(unittest.TestCase):
         result = critic({"phase": "formalize", "attempt": 1, "source": b"-- opaque candidate", "form": {},
                          "records": [], "ledger": ledger, "diagnostics": [], "analysis": None, "statements": {}})
         self.assertEqual(["bad", "bad", "good", "senior"], calls)
-        self.assertEqual("SEARCH_COMPLETED", result["status"])
+        self.assertEqual("SEARCH_UNSUPPORTED", result["status"])
         self.assertEqual(["TIER_ACCEPTED", "TIER_ACCEPTED"], [t["result"] for t in result["tiers"]])
         self.assertTrue(all(d["severity"] == "warning" for d in result["diagnostics"]))
         self.assertFalse(result["milestone_authority"])

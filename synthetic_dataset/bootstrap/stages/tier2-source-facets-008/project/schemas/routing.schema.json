@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:routing:0.1",
+  "title": "Prompt routing decision; advisory, never proof evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "artifact_kind": { "const": "routing" },
+    "classifier": { "type": "string", "minLength": 1 },
+    "document_ref": { "type": "string", "minLength": 1 },
+    "document_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "mode": { "enum": ["auto", "software"] },
+    "decision": { "enum": ["SOFTWARE", "NON_SOFTWARE", "UNCERTAIN"] },
+    "routing_result": { "enum": ["OBLIGATION_PIPELINE", "NOT_APPLICABLE", "AMBIGUOUS"] },
+    "reason": { "type": "string", "minLength": 1 },
+    "supporting_spans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "start_byte": { "type": "integer", "minimum": 0 },
+          "end_byte": { "type": "integer", "minimum": 0 },
+          "text": { "type": "string" }
+        },
+        "required": ["start_byte", "end_byte", "text"]
+      }
+    },
+    "segments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "start_byte": { "type": "integer", "minimum": 0 },
+          "end_byte": { "type": "integer", "minimum": 0 },
+          "label": { "enum": ["software", "non_software", "neutral"] }
+        },
+        "required": ["start_byte", "end_byte", "label"]
+      }
+    },
+    "confidence_is_evidence": { "const": false },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selected": { "enum": ["software", "non_software"] },
+        "provenance": { "type": "string", "minLength": 1 }
+      },
+      "required": ["selected", "provenance"]
+    }
+  },
+  "required": [
+    "schema_version", "artifact_kind", "classifier", "document_ref", "document_hash", "mode",
+    "decision", "routing_result", "reason", "supporting_spans", "segments", "confidence_is_evidence"
+  ]
+}

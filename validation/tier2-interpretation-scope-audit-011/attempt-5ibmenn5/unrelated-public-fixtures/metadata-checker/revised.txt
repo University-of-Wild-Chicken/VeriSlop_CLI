@@ -1,0 +1,24 @@
+Unrelated public software request: metadata-checker
+
+Deliver program.vscore.json with one admitted typed entry named solve. Its typed input and result must represent the specified JSON input/output structure. Perform no external I/O and do not read benchmark files.
+
+Input {rows:[{name:string,declared:int,observed:int}],fallback:int|null}. All Unicode scalar names and mathematical integers are allowed; arrays may be empty and duplicate names are retained.
+
+Implement a verifier that checks every supplied metadata record against its declaration and returns every mismatch in input order.
+
+Keep a per-record audit log, including matching records and repeated names.
+
+Implement the solve entry as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and the data-pipeline/0.3 serialization profile. Preserve the specified input/output structure and exact ordering. Admitted typed execution is total, pure and deterministic; input values are immutable, and the language has no external-effect constructors. Arithmetic uses unbounded mathematical integers without floating point. Strings contain Unicode scalar values and lexicographic order compares scalar codepoints. There are no additional input bounds or preconditions beyond the functional specification.
+
+Original public examples (preserved verbatim; universal refinement is required):
+[{"input":{"rows":[],"fallback":null},"output":[]}]
+
+
+Explicit delivery revision and requirement identity metadata:
+This is a new canonical restricted-source delivery request. The functional clauses, stated domains and public example values above retain their original meaning. IDs mapped across a delivery revision now state the specified typed pure source properties; their previous delivery assurance is unchanged. Each functional guarantee requires its complete mathematical statement and universal implementation refinement; illustrative examples do not replace it. The clause offsets below refer to the revised text above.
+[{"delivery_revised":false,"id":"G-software","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":667,"start_byte":267}],"role":"guarantee"}]
+
+Mandatory requested source-facet specification:
+Every listed original required guarantee retains the globally requested source delivery: canonical file program.vscore.json, one typed entry solve of arity 1, and all seven closed source properties below. A mathematical result-existence or equality theorem cannot replace entry identity, purity, input preservation, effect restrictions or exact non-floating-point semantics. For every value_required=true row the source must implement the complete functional formula with universal source implementation refinement, including functional safety properties and invariants. Value facets are required by default regardless of category. Only the explicitly classified operational IDs below are source-only, retaining their source requirements rather than being replaced by value equalities. Assumptions, exclusions and separate non-vacuity witnesses are not source-policy rows.
+{"source_only_operational_ids":[],"value_required_default":true}
+{"format":"verislop.required-source-facets/0.1","obligations":{"G-software":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true}},"schema_version":"0.1"}

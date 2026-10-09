@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:vscore-model:0.3",
+  "title": "Registered VSCore semantic model descriptor",
+  "$comment": "A candidate supplies a copy as its node model; the registered checker requires byte equality with the descriptor derived from the verifier-owned library sources.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.3"
+    },
+    "format": {
+      "const": "verislop.vscore-model/0.3"
+    },
+    "language": {
+      "const": "vscore/0.3"
+    },
+    "semantics": {
+      "const": "vscore-semantics/0.3"
+    },
+    "lean_toolchain": {
+      "type": "string",
+      "minLength": 1
+    },
+    "library": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "module": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+          }
+        },
+        "required": [
+          "module",
+          "sha256"
+        ]
+      }
+    },
+    "evaluation": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "language",
+    "semantics",
+    "lean_toolchain",
+    "library",
+    "evaluation"
+  ]
+}

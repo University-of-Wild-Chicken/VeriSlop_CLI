@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:review-counterexample-proposal:0.2",
+  "$defs": {
+    "wire": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "int": {
+              "type": "string",
+              "anyOf": [
+                {"pattern": "^(0|[1-9][0-9]*)$", "maxLength": 1024},
+                {"pattern": "^-[1-9][0-9]*$", "maxLength": 1025}
+              ]
+            }
+          },
+          "required": [
+            "int"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "bool": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "bool"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "none": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "none"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "str": {
+              "type": "string",
+              "pattern": "^[^\\uD800-\\uDFFF]*$",
+              "maxLength": 1024
+            }
+          },
+          "required": [
+            "str"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tuple": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "$ref": "urn:verislop:schema:review-counterexample-proposal:0.2#/$defs/wire"
+              }
+            }
+          },
+          "required": [
+            "tuple"
+          ]
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "properties": {"list": {"type": "array", "maxItems": 256,
+            "items": {"$ref": "urn:verislop:schema:review-counterexample-proposal:0.2#/$defs/wire"}}},
+          "required": ["list"]
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "properties": {"dict": {"type": "object", "maxProperties": 64,
+            "propertyNames": {"type": "string", "maxLength": 256, "pattern": "^[^\\uD800-\\uDFFF]*$"},
+            "additionalProperties": {"$ref": "urn:verislop:schema:review-counterexample-proposal:0.2#/$defs/wire"}}},
+          "required": ["dict"]
+        }
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "kind": {"const": "source_violation"},
+        "obligation_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "file": {"type": "string", "minLength": 1, "maxLength": 256},
+        "ast_path": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "rule": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$", "maxLength": 128}
+      },
+      "required": ["kind", "obligation_id", "file", "ast_path", "rule"]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "target_case"
+        },
+        "obligation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "assignment": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "$ref": "urn:verislop:schema:review-counterexample-proposal:0.2#/$defs/wire"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "obligation_id",
+        "assignment"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "mechanical_failure"
+        },
+        "claim_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "kind",
+        "claim_id"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "missing_requirement"
+        },
+        "start_byte": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_byte": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quoted": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384
+        }
+      },
+      "required": [
+        "kind",
+        "start_byte",
+        "end_byte",
+        "quoted"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "created_at": "2026-10-09T15:42:34Z",
+  "recovery_root": "package",
+  "requested": {
+    "backend_version": "0.3",
+    "endpoint": "restricted_source",
+    "require_state": "END_TO_END_VERIFIED",
+    "target": "vscore",
+    "tier": 2
+  },
+  "run_id": "package-repair-01",
+  "run_parameters": {
+    "attachments": [],
+    "config": "unused-provider-config",
+    "draft_candidate": "/tmp/verislop-source-policy-kernel-_6br0hwq/positive/package-repair-01/draft.json",
+    "ledger_candidate": "/tmp/verislop-source-policy-kernel-_6br0hwq/positive/package-repair-01/interpretation.json",
+    "non_interactive": true,
+    "prompt_file": "/tmp/verislop-source-policy-kernel-_6br0hwq/positive/package-repair-01/request/prompt.txt",
+    "recovery_context": {
+      "autonomous_critique": null,
+      "counterexamples": [],
+      "feedback": [
+        "SOURCE_FACETS_REQUIRED: fresh unrelated fixture requires its declared source endpoint"
+      ],
+      "interpretation_root": "sha256:8da5f225edff354126d06a20e571f3d70cc539ad2f3e89b0421831b2b2af50d6",
+      "memory_snapshot_ref": null,
+      "previous_candidate": {
+        "formalization": {
+          "artifact_kind": "formalization_candidate",
+          "bindings": [
+            {
+              "obligation": "G1",
+              "source_requirements": [
+                "VeriSlopAST.Delivery"
+              ],
+              "theorem": "VeriSlopAST.Spec"
+            },
+            {
+              "obligation": "G2",
+              "source_requirements": [
+                "VeriSlopAST.Delivery"
+              ],
+              "theorem": "VeriSlopAST.ValueSpec",
+              "value_projection": "VeriSlopAST._vs_value_ValueSpec"
+            }
+          ],
+          "internal_obligations": [],
+          "lean_file": "Contract.lean",
+          "lean_toolchain": "leanprover/lean4:v4.34.1",
+          "profile_id": "generated.v0_2",
+          "schema_version": "0.1"
+        },
+        "lean_source": "import Std\n\n/-!\nNormative restricted-source boundary requirement model, v0.1. These rules prove\nchecking soundness and inhabitation of an abstract fact model. They do not assert\nfacts about a delivered program, its evaluator, or a host runtime. The source\nbridge must derive every fact from the exact admitted source and semantic laws.\nThis algebra is independent of the Python NativeBoundary model.\n-/\nnamespace VeriSlop.Source\n\ninductive SourceRequirement where\n  | entry (file id : String) (arity : Nat)\n  | typedTotal\n  | deterministic\n  | inputPreserved\n  | noExternalIO\n  | noFloatingPoint\n  | pureData\n  | restrictedRuntimeOnly\n  deriving DecidableEq\n\nstructure Entry where\n  file : String\n  id : String\n  arity : Nat\n  deriving DecidableEq\n\nstructure ModuleFacts where\n  entries : List Entry\n  uniqueEntries : Bool\n  typedTotal : Bool\n  deterministic : Bool\n  inputPreserved : Bool\n  noExternalIO : Bool\n  noFloatingPoint : Bool\n  pureData : Bool\n  restrictedRuntimeOnly : Bool\n\ndef checkRequirement (r : SourceRequirement) (m : ModuleFacts) : Bool :=\n  match r with\n  | .entry f n a => m.uniqueEntries && decide (Entry.mk f n a ∈ m.entries)\n  | .typedTotal => m.typedTotal\n  | .deterministic => m.deterministic\n  | .inputPreserved => m.inputPreserved\n  | .noExternalIO => m.noExternalIO\n  | .noFloatingPoint => m.noFloatingPoint\n  | .pureData => m.pureData\n  | .restrictedRuntimeOnly => m.restrictedRuntimeOnly\n\ndef HoldsRequirement (r : SourceRequirement) (m : ModuleFacts) : Prop :=\n  match r with\n  | .entry f n a => m.uniqueEntries = true ∧ Entry.mk f n a ∈ m.entries\n  | .typedTotal => m.typedTotal = true\n  | .deterministic => m.deterministic = true\n  | .inputPreserved => m.inputPreserved = true\n  | .noExternalIO => m.noExternalIO = true\n  | .noFloatingPoint => m.noFloatingPoint = true\n  | .pureData => m.pureData = true\n  | .restrictedRuntimeOnly => m.restrictedRuntimeOnly = true\n\ndef checkBoundary (rs : List SourceRequirement) (m : ModuleFacts) : Bool :=\n  rs.all (fun r => checkRequirement r m)\n\ndef HoldsBoundary (rs : List SourceRequirement) (m : ModuleFacts) : Prop :=\n  ∀ r ∈ rs, HoldsRequirement r m\n\ndef Transfer (rs : List SourceRequirement) : Prop :=\n  ∀ m, checkBoundary rs m = true → HoldsBoundary rs m\n\ndef AdmissionInhabited (rs : List SourceRequirement) : Prop :=\n  ∃ m, checkBoundary rs m = true\n\n/-- Closed accepted data identifies the endpoint; Contract supplies only abstract\nchecking rules and does not establish implementation refinement. -/\nstructure SourceDefinition (τ : Type) where\n  endpoint : τ\n  requirements : List SourceRequirement\n\ndef Contract {τ : Type} (d : SourceDefinition τ) : Prop :=\n  Transfer d.requirements ∧ AdmissionInhabited d.requirements\n\ntheorem checkRequirement_sound (r : SourceRequirement) (m : ModuleFacts) :\n    checkRequirement r m = true → HoldsRequirement r m := by\n  cases r <;> simp [checkRequirement, HoldsRequirement, Bool.and_eq_true]\n\ntheorem transfer_sound (rs : List SourceRequirement) : Transfer rs := by\n  intro m h r hr\n  exact checkRequirement_sound r m ((List.all_eq_true.mp h) r hr)\n\ndef witnessEntries : List SourceRequirement → List Entry\n  | [] => []\n  | .entry f n a :: rs => Entry.mk f n a :: witnessEntries rs\n  | _ :: rs => witnessEntries rs\n\ndef modelWitness (rs : List SourceRequirement) : ModuleFacts :=\n  ⟨witnessEntries rs, true, true, true, true, true, true, true, true⟩\n\ntheorem entry_in_witness (f n : String) (a : Nat) (rs : List SourceRequirement)\n    (h : SourceRequirement.entry f n a ∈ rs) : Entry.mk f n a ∈ witnessEntries rs := by\n  induction rs with\n  | nil => simp at h\n  | cons r rs ih => cases r <;> simp_all [witnessEntries] <;> grind\n\ntheorem admission_inhabited (rs : List SourceRequirement) : AdmissionInhabited rs := by\n  refine ⟨modelWitness rs, List.all_eq_true.mpr ?_⟩\n  intro r hr\n  cases r with\n  | entry f n a =>\n    simp [checkRequirement, modelWitness, entry_in_witness f n a rs hr]\n  | typedTotal => rfl\n  | deterministic => rfl\n  | inputPreserved => rfl\n  | noExternalIO => rfl\n  | noFloatingPoint => rfl\n  | pureData => rfl\n  | restrictedRuntimeOnly => rfl\n\ntheorem contract_sound {τ : Type} (d : SourceDefinition τ) : Contract d :=\n  ⟨transfer_sound d.requirements, admission_inhabited d.requirements⟩\n\nend VeriSlop.Source\n\nnamespace VeriSlopAST\ndef «plus» («_v0» : _root_.Int) : _root_.Int := (_root_.Int.add «_v0» (_root_.Int.ofNat 2))\ntheorem «_vs_body_plus» : (∀ («_v0» : _root_.Int), ((_root_.VeriSlopAST.«plus» «_v0») = (_root_.Int.add «_v0» (_root_.Int.ofNat 2)))) := by intros; rfl\ndef «Delivery» : _root_.VeriSlop.Source.SourceDefinition (_root_.Int → _root_.Int) := ⟨_root_.VeriSlopAST.«plus», [(_root_.VeriSlop.Source.SourceRequirement.entry \"program.vscore.json\" \"plus\" 1), _root_.VeriSlop.Source.SourceRequirement.typedTotal, _root_.VeriSlop.Source.SourceRequirement.deterministic, _root_.VeriSlop.Source.SourceRequirement.inputPreserved, _root_.VeriSlop.Source.SourceRequirement.noExternalIO, _root_.VeriSlop.Source.SourceRequirement.noFloatingPoint, _root_.VeriSlop.Source.SourceRequirement.pureData, _root_.VeriSlop.Source.SourceRequirement.restrictedRuntimeOnly]⟩\ntheorem «Spec» : (_root_.VeriSlop.Source.Contract _root_.VeriSlopAST.«Delivery») := by sorry\ntheorem «ValueSpec» : ((∀ («_v0» : _root_.Int), ((_root_.VeriSlopAST.«plus» «_v0») = (_root_.Int.add «_v0» (_root_.Int.ofNat 2)))) ∧ (_root_.VeriSlop.Source.Contract _root_.VeriSlopAST.«Delivery»)) := by sorry\ntheorem «_vs_value_ValueSpec» : (∀ («_v0» : _root_.Int), ((_root_.VeriSlopAST.«plus» «_v0») = (_root_.Int.add «_v0» (_root_.Int.ofNat 2)))) := by exact _root_.VeriSlopAST.«ValueSpec».1\nend VeriSlopAST\n",
+        "parent_raw_response_snapshot": {
+          "package": "package",
+          "snapshot_ref": {
+            "path": "agents/memory/snapshots/00000002-1b310fd874ae7eb2f3eb3a8a0da8ca1b0fd0c68caba6ab698ca23d5853af4201.json",
+            "sha256": "sha256:1b310fd874ae7eb2f3eb3a8a0da8ca1b0fd0c68caba6ab698ca23d5853af4201",
+            "size": 854
+          }
+        },
+        "raw_response": "{\"encoding\":\"verislop.formalizer-ast/0.1\",\"obligations\":{\"G1\":{\"theorem\":\"Spec\"},\"G2\":{\"theorem\":\"ValueSpec\"}},\"predicates\":{},\"records\":{},\"source_requirements\":{\"Delivery\":{\"requirements\":[{\"arity\":1,\"entry\":\"plus\",\"file\":\"program.vscore.json\",\"tag\":\"entry\"},{\"tag\":\"typed_total\"},{\"tag\":\"deterministic\"},{\"tag\":\"input_preserved\"},{\"tag\":\"no_external_io\"},{\"tag\":\"no_floating_point\"},{\"tag\":\"pure_data\"},{\"tag\":\"restricted_runtime_only\"}],\"symbol\":\"plus\"}},\"symbols\":{\"plus\":{\"args\":[\"Int\"],\"body\":{\"left\":{\"index\":0,\"tag\":\"var\"},\"right\":{\"tag\":\"int\",\"value\":\"2\"},\"tag\":\"int_add\"},\"result\":\"Int\"}},\"theorems\":{\"Spec\":{\"source\":[\"Delivery\"]},\"ValueSpec\":{\"formula\":{\"body\":{\"left\":{\"args\":[{\"index\":0,\"tag\":\"var\"}],\"symbol\":\"plus\",\"tag\":\"call\"},\"right\":{\"left\":{\"index\":0,\"tag\":\"var\"},\"right\":{\"tag\":\"int\",\"value\":\"2\"},\"tag\":\"int_add\"},\"tag\":\"eq\"},\"sort\":\"Int\",\"tag\":\"forall\"},\"source\":[\"Delivery\"]}},\"witness_obligations\":{}}",
+        "raw_response_snapshot": {
+          "path": "agents/memory/snapshots/00000001-007b060ae634bf669aba72a58b1903d2c467f0208e31c35fbe0ffb875e835f50.json",
+          "sha256": "sha256:007b060ae634bf669aba72a58b1903d2c467f0208e31c35fbe0ffb875e835f50",
+          "size": 719
+        },
+        "typed_proposal": {
+          "encoding": "verislop.formalizer-ast/0.1",
+          "obligations": {
+            "G1": {
+              "theorem": "Spec"
+            },
+            "G2": {
+              "theorem": "ValueSpec"
+            }
+          },
+          "predicates": {},
+          "records": {},
+          "source_requirements": {
+            "Delivery": {
+              "requirements": [
+                {
+                  "arity": 1,
+                  "entry": "plus",
+                  "file": "program.vscore.json",
+                  "tag": "entry"
+                },
+                {
+                  "tag": "typed_total"
+                },
+                {
+                  "tag": "deterministic"
+                },
+                {
+                  "tag": "input_preserved"
+                },
+                {
+                  "tag": "no_external_io"
+                },
+                {
+                  "tag": "no_floating_point"
+                },
+                {
+                  "tag": "pure_data"
+                },
+                {
+                  "tag": "restricted_runtime_only"
+                }
+              ],
+              "symbol": "plus"
+            }
+          },
+          "symbols": {
+            "plus": {
+              "args": [
+                "Int"
+              ],
+              "body": {
+                "left": {
+                  "index": 0,
+                  "tag": "var"
+                },
+                "right": {
+                  "tag": "int",
+                  "value": "2"
+                },
+                "tag": "int_add"
+              },
+              "result": "Int"
+            }
+          },
+          "theorems": {
+            "Spec": {
+              "source": [
+                "Delivery"
+              ]
+            },
+            "ValueSpec": {
+              "formula": {
+                "body": {
+                  "left": {
+                    "args": [
+                      {
+                        "index": 0,
+                        "tag": "var"
+                      }
+                    ],
+                    "symbol": "plus",
+                    "tag": "call"
+                  },
+                  "right": {
+                    "left": {
+                      "index": 0,
+                      "tag": "var"
+                    },
+                    "right": {
+                      "tag": "int",
+                      "value": "2"
+                    },
+                    "tag": "int_add"
+                  },
+                  "tag": "eq"
+                },
+                "sort": "Int",
+                "tag": "forall"
+              },
+              "source": [
+                "Delivery"
+              ]
+            }
+          },
+          "witness_obligations": {}
+        }
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 1,
+    "resolve": []
+  },
+  "schema_version": "0.1",
+  "source_policy": {
+    "format": "verislop.required-source-facets/0.1",
+    "path": "request/source-policy.json",
+    "sha256": "sha256:b1449dfe1dee0bbb97e368ae13157ea5b63ce97603b9f7ced6e3f554ce2440c6"
+  },
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

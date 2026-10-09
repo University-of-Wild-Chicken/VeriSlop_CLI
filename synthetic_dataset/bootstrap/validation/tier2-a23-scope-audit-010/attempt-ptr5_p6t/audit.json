@@ -1,0 +1,199 @@
+{
+  "checks": {
+    "path": "checks.json",
+    "sha256": "sha256:e4f79058aabbe85e318bf704d3c941c79972d3c37cc296e5bb1337052a637eb8"
+  },
+  "created_at": "2026-10-09T21:07:56.969674+00:00",
+  "findings": [
+    "Frozen verify_inputs authenticates exact project/source snapshot and preregistered eight inputs, profile/config bytes and delivery reconstruction. Source root matches parent freeze; native request bytes and source policy match the frozen request.",
+    "Public specification retains one Input object {n,m,a,b}; 0<=n<=500, m>0; a/b arbitrary signed unbounded integers. Floor rounds toward negative infinity and empty sum is zero. Canonical VSCore delivery and JSON shape replace only explicit delivery clauses; all preserved segments compare byte for byte. No additional input bounds are introduced.",
+    "All seven original identities remain explicit. Source policy requires exact program.vscore.json/solve/arity1 and seven properties for O1,O2,S1,S2; value facets default true, with only approved S1/S2 source-only. Assumptions/exclusions/non-vacuity stay separate.",
+    "Fresh frozen challenge source (not accepted proof authority) defines Input.n/m/a/b as Int and valid_input exactly 0<=n and n<=500 and 0<m. Its reference solve uses Int.fdiv(a*Int.ofNat i+b,m), List.range(n.toNat) and List.sum, preserving signed floor and empty sum.",
+    "Fresh challenge binds O1/O2 to complete_behavior: forall valid_input x, solve x equals the complete explicit floor sum, conjoined with Source.Contract SolveSource. S1/S2 bind operational_source to the same exact source requirements. A required separate valid_input_inhabited theorem proposes n=0,m=1,a=0,b=0. Challenge proof holes remain normal pending obligations; no acceptance is inferred."
+  ],
+  "format": "verislop.independent-readonly-audit/0.1",
+  "input_count": 28,
+  "inputs": {
+    "engineering-source-freeze.json": {
+      "scope": "Current generic engineering source freeze only; not a task candidate or proof.",
+      "sha256": "sha256:e10c4e7b04384d31d5b361661b0f2b5be6e18343f4101d32644fd91575a17786",
+      "size": 24721,
+      "snapshot": "inputs/engineering-source-freeze.json",
+      "source": "/home/augustus/VeriSlop_CLI/validation/tier2-native-boundary-gate-010/source-freeze.json"
+    },
+    "project/docs/bootstrap-tier2-data.md": {
+      "sha256": "sha256:8380e1656154da63cd6df1d091548d2746cea80f089457754e87d71b9bc7f664",
+      "size": 7135,
+      "snapshot": "inputs/project/docs/bootstrap-tier2-data.md",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/project/docs/bootstrap-tier2-data.md"
+    },
+    "project/docs/bootstrap-tier2-source-facets.md": {
+      "sha256": "sha256:6159f3cfde5a55f185aaa0d889f8908381f2e5151110a94936f169dcfe29b7b4",
+      "size": 9613,
+      "snapshot": "inputs/project/docs/bootstrap-tier2-source-facets.md",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/project/docs/bootstrap-tier2-source-facets.md"
+    },
+    "project/docs/bootstrap-tier2-terminal-validation.md": {
+      "sha256": "sha256:25ff879886d72435ac01f5940df1f3607c808da341113a35ab955f7862a438a5",
+      "size": 5095,
+      "snapshot": "inputs/project/docs/bootstrap-tier2-terminal-validation.md",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/project/docs/bootstrap-tier2-terminal-validation.md"
+    },
+    "project/synthetic_dataset/tools/bootstrap_tier2.py": {
+      "sha256": "sha256:160a53702a75d4523dfafc7f2854fd25259f33a961a2353c1852cda37beeda5d",
+      "size": 102302,
+      "snapshot": "inputs/project/synthetic_dataset/tools/bootstrap_tier2.py",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/project/synthetic_dataset/tools/bootstrap_tier2.py"
+    },
+    "project/verislop/source_contract.py": {
+      "sha256": "sha256:5e7e8d8269709e36fd51cbced2f6d09b07ad7dad8c42c1852399cf4ec7a70ece",
+      "size": 14730,
+      "snapshot": "inputs/project/verislop/source_contract.py",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/project/verislop/source_contract.py"
+    },
+    "project/verislop/source_policy.py": {
+      "sha256": "sha256:4d9d448009b1d0606f44aebbb49d20ccf33ab8648a14a73e5a67bd39b3fa39f5",
+      "size": 8271,
+      "snapshot": "inputs/project/verislop/source_policy.py",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/project/verislop/source_policy.py"
+    },
+    "run/artifacts/A23/verislop/package/contract/challenge/Contract.lean": {
+      "sha256": "sha256:fbec631eeb09d2a0222dd2a7dbcff1f5813acb64b113c44a2fab084b78c8b1f1",
+      "size": 37025,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/contract/challenge/Contract.lean",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/contract/challenge/Contract.lean"
+    },
+    "run/artifacts/A23/verislop/package/contract/challenge/challenge.json": {
+      "sha256": "sha256:aaada8fc2aeeb25d89e90eb025f7dfb6968f80ae0afee834e3d7435610175e45",
+      "size": 2663,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/contract/challenge/challenge.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/contract/challenge/challenge.json"
+    },
+    "run/artifacts/A23/verislop/package/contract/challenge/formalization.json": {
+      "sha256": "sha256:6494cca3194beabaeb9a0fe7221d890032e62c099571f71807bbbd1b40d8fb92",
+      "size": 1149,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/contract/challenge/formalization.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/contract/challenge/formalization.json"
+    },
+    "run/artifacts/A23/verislop/package/contract/challenge/lean-toolchain": {
+      "sha256": "sha256:d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b",
+      "size": 25,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/contract/challenge/lean-toolchain",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/contract/challenge/lean-toolchain"
+    },
+    "run/artifacts/A23/verislop/package/contract/challenge/policy.json": {
+      "sha256": "sha256:8319119acc0c3df741f36474159a3a35ef574ada68ba671e203c6a501054503b",
+      "size": 395,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/contract/challenge/policy.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/contract/challenge/policy.json"
+    },
+    "run/artifacts/A23/verislop/package/contract/challenge/profile.json": {
+      "sha256": "sha256:0d878c080bb1907b2dd7d0f943de400974a0ed934d9304320568f924c6f5723d",
+      "size": 1903,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/contract/challenge/profile.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/contract/challenge/profile.json"
+    },
+    "run/artifacts/A23/verislop/package/contract/challenge/statements.json": {
+      "sha256": "sha256:f89e171d8a1734480e6c255f17e69995126c41aafb181098c41e987a606759d2",
+      "size": 77428,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/contract/challenge/statements.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/contract/challenge/statements.json"
+    },
+    "run/artifacts/A23/verislop/package/contract/challenge/verifiers.json": {
+      "sha256": "sha256:e20e385ed2026aa944e244e1379b4be1e32a9e440e5b350746bddc7672af2532",
+      "size": 6372,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/contract/challenge/verifiers.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/contract/challenge/verifiers.json"
+    },
+    "run/artifacts/A23/verislop/package/request/prompt.txt": {
+      "sha256": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+      "size": 6208,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/request/prompt.txt",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/request/prompt.txt"
+    },
+    "run/artifacts/A23/verislop/package/request/request.json": {
+      "sha256": "sha256:f9195c93e9fb6e2cb87aee80e60076799587030f33c2d872f7388bb31f024107",
+      "size": 305,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/request/request.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/request/request.json"
+    },
+    "run/artifacts/A23/verislop/package/request/source-policy.json": {
+      "sha256": "sha256:b3f3d5a78b1e03333b5b13bc1abb0a15d509efef0c99cb1ad8caf37f7d3ca8fc",
+      "size": 977,
+      "snapshot": "inputs/run/artifacts/A23/verislop/package/request/source-policy.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package/request/source-policy.json"
+    },
+    "run/config.json": {
+      "sha256": "sha256:f2730e5262680d91f9ad19f9d921c1caee8490401f72ed95112a7d8c3c9c384e",
+      "size": 1288,
+      "snapshot": "inputs/run/config.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/config.json"
+    },
+    "run/engineering-validation.json": {
+      "sha256": "sha256:f9a299721c6b275713602bd5aacbc8425dacb3f7ca15fbcdd1369ce8e2d6c231",
+      "size": 175391,
+      "snapshot": "inputs/run/engineering-validation.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/engineering-validation.json"
+    },
+    "run/preregistration.json": {
+      "sha256": "sha256:5e03e32135f8821d9babd8631c100b2ef883c98935613b7e8ef1d38c5315a3f3",
+      "size": 433,
+      "snapshot": "inputs/run/preregistration.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/preregistration.json"
+    },
+    "run/protocol.json": {
+      "sha256": "sha256:74b5b3db2e9871ab5024eb0db967198ddd188abfc6fe5408a950d06c855ce904",
+      "size": 31269,
+      "snapshot": "inputs/run/protocol.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/protocol.json"
+    },
+    "run/provider-home/endpoint-profiles.json": {
+      "sha256": "sha256:c9ece1be88134c6e7d0316bb6c4edc971376e460e14be150e8d3b6d1d7562df6",
+      "size": 273,
+      "snapshot": "inputs/run/provider-home/endpoint-profiles.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/provider-home/endpoint-profiles.json"
+    },
+    "run/requests/A23/delivery-revision.json": {
+      "sha256": "sha256:16a268836657e113ab90d7a7a03f88a4e0ddf189078688bd4f1531b8a8a0fde8",
+      "size": 6609,
+      "snapshot": "inputs/run/requests/A23/delivery-revision.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/requests/A23/delivery-revision.json"
+    },
+    "run/requests/A23/original-metadata.json": {
+      "sha256": "sha256:ca17e599108fb1a6116e2b9e3f70d2fafa284ee316e7a91a103c413799f9c4df",
+      "size": 2388,
+      "snapshot": "inputs/run/requests/A23/original-metadata.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/requests/A23/original-metadata.json"
+    },
+    "run/requests/A23/original-prompt.txt": {
+      "sha256": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+      "size": 1053,
+      "snapshot": "inputs/run/requests/A23/original-prompt.txt",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/requests/A23/original-prompt.txt"
+    },
+    "run/requests/A23/revised-prompt.txt": {
+      "sha256": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b",
+      "size": 6208,
+      "snapshot": "inputs/run/requests/A23/revised-prompt.txt",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/requests/A23/revised-prompt.txt"
+    },
+    "run/requests/A23/source-policy.json": {
+      "sha256": "sha256:b3f3d5a78b1e03333b5b13bc1abb0a15d509efef0c99cb1ad8caf37f7d3ca8fc",
+      "size": 977,
+      "snapshot": "inputs/run/requests/A23/source-policy.json",
+      "source": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/requests/A23/source-policy.json"
+    }
+  },
+  "milestone_authority": false,
+  "package": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010/run/artifacts/A23/verislop/package",
+  "pending": [
+    "Accepted Lean module, reconstructed environment/IR, exact accepted expressions, theorem proofs, permitted axioms and non-vacuity witness verification.",
+    "Delivered source, syntax/admission certificates, universal implementation refinement, raw-input coverage/adapter inverse laws, actual source/effect adequacy and per-ID transfer proof.",
+    "Final sealed native/current mechanical graph, independent clean builds, constructive reviews and bootstrap terminal outcome; separately audited when requested."
+  ],
+  "source_root": "sha256:f72db4961eda28039e8e55ed5e7817ef194e0d8da50d8471aebcc7b33bf9f13f",
+  "stage": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-010",
+  "status": "BOUNDED_INITIAL_SCOPE_NO_CONCRETE_DEFECT_FOUND; ACCEPTED_PROOFS_AND_IMPLEMENTATION_PENDING",
+  "task": "Stage010 A23 initial public scope and freeze authenticity audit",
+  "trust_scope": "Natural-language correspondence, controller/hash provenance and the declared normative VSCore/kernel/tooling/OS foundations remain trusted. No hidden case/oracle/old task source or proof was consulted; no live role was messaged or coached. Current generic engineering record is hash-bound as input, not re-executed by this audit."
+}

@@ -8,6 +8,7 @@ This repository contains the **design specification** and a **working implementa
 - [Implementation notes](docs/implementation.md): how the CLI realises the specification, artifact by artifact, and where it stops.
 - [Tier 2–4 specification and implementation outline](docs/tier-2-4.md): implemented restricted-source closure and proposed extraction and machine-code backends, with proof obligations and release gates.
 - [VSCore 0.2 grammar and source admission](docs/vscore-generalized-grammar.md): implemented surface authoring, canonical Lean decoding, pure data/helpers/folds, and reconstructed source IR; accepted-contract bridging remains unsupported for 0.2.
+- [VSCore 0.3 Tier 2 data bootstrap](docs/bootstrap-tier2-data.md) and [typed source guarantees](docs/bootstrap-tier2-source-facets.md): versioned Int/String/list grammar, canonical record adapters, universal functional refinement and exact operational guarantees under an explicitly revised source contract.
 - [TESTED campaign specification and formalism](docs/tested-campaigns.md): proposed strict campaign semantics, finite Lean model, VSCore testing outline and concrete-counterexample review requirements. This design does not enable VSCore campaigns.
 - [Structured data test bridge](docs/data-pipeline-bridge.md): signed integers, Unicode strings, lists and fixed-field records, with a preregistered native natural-language proof-of-concept protocol.
 - [Autonomous correction and durable contract context](docs/autonomous-correction.md): configured critic tiers, replayable counterexamples, correction loops and exact JSON/Lean recovery after context loss.
@@ -97,6 +98,7 @@ Run status has exactly three terminal values (`VERIFIED`, `BLOCKED`, `INFRASTRUC
 | 0 | Python, `python-v0_1` or `python-v0_2` / `test_campaign` | supported | TESTED for the recorded campaign |
 | 1 | Python / `instrumented_runtime` | supported | runtime detection (raise before return) + TESTED |
 | 2 | VSCore `vscore/0.1` / `restricted_source` | supported for the admitted pure profile | END_TO_END_VERIFIED under the normative Lean source semantics; runtime campaigns unsupported |
+| 2 | VSCore `vscore/0.3` / `restricted_source` | explicit `--backend-version 0.3` | END_TO_END_VERIFIED for admitted data contracts and source facets after complete closure |
 | 3–4 | extraction, machine code | **unsupported** | capability diagnostic; never downgraded |
 
 Tier 2 can establish `END_TO_END_VERIFIED [restricted_source; vscore/0.1]` for its complete required guarantee set. Opaque Lean statements can be accepted and PROVED, but they get no fabricated test oracle or monitor. Liveness and physical-resource obligations are never discharged by finite campaigns.
@@ -117,7 +119,7 @@ A structural PASS assigns no obligation state and proves no implementation relat
 
 ### Tier 2: VSCore restricted source
 
-One registered relation template exists: `vscore.reference_refinement/0.1`, decided by `verislop.vscore-checker`. A candidate delivers a VSCore 0.1 program as canonical JSON bytes, binds accepted symbols to its entries, and proves one refinement theorem per symbol. Everything else is derived by the supervisor from the accepted run ([example](examples/vscore/README.md)):
+The original relation template is `vscore.reference_refinement/0.1`, decided by `verislop.vscore-checker`. A candidate delivers a VSCore 0.1 program as canonical JSON bytes, binds accepted symbols to its entries, and proves one refinement theorem per symbol. Everything else is derived by the supervisor from the accepted run ([example](examples/vscore/README.md)):
 
 ```bash
 bin/verislop vscore goal --package $P --source examples/vscore/program.vscore.json \
@@ -177,8 +179,39 @@ This establishes **source admission only**. It assigns no obligation milestone o
 `END_TO_END_VERIFIED` claim, certifies no `.vsc` surface semantics, and supplies no registered
 `TESTED` campaign. Accepted-contract refinement, input coverage and obligation transport
 remain unsupported for 0.2; `vscore goal` reports that capability boundary explicitly. The
-registered implementation bridge continues to use `vscore/0.1`. See the
+original implementation bridge continues to use `vscore/0.1`. See the
 [examples and finite correctness fixtures](examples/vscore-grammar/README.md).
+
+### VSCore 0.3: data contracts and source guarantees
+
+The distinct `vscore.reference_refinement/0.3` bridge supports mathematical Int,
+Unicode String, lists, options, exact nominal records, enumerations and Result
+ports. Its source grammar adds pure list operations, including map/filter/sum,
+to typed helpers and folds. Refinement replaces accepted function calls under
+every binder and connects the exact admitted function to raw evaluation through
+typed inverse laws, raw encoding laws and input coverage.
+
+Select it explicitly for a request that delivers VSCore source:
+
+```bash
+bin/verislop run --prompt-file request.txt --mode software --config verislop.json \
+  --tier 2 --target vscore --backend-version 0.3 --endpoint restricted_source \
+  --require-state END_TO_END_VERIFIED --policy strict --non-interactive
+```
+
+Source facets are reconstructed from accepted `VeriSlop.Source.SourceDefinition`
+constructors. The bridge derives entry, totality, determinism, input preservation
+and absence of I/O/floating-point effects from the exact normative evaluator.
+The abstract SourceBoundary contract does not establish those facts by itself.
+Source-only guarantees constrain these operational properties; value guarantees
+add universal functional refinement. Both require current independent mechanical
+closure and configured concrete adversarial review. Runtime TESTED remains a
+separate unsupported capability for this endpoint.
+
+An original Python request needs an explicit revised delivery contract. Its old
+Python artifacts and assurance remain unchanged. This Tier 2 endpoint certifies
+restricted-source semantics; host interpreters, compilers and machine code remain
+outside the certified boundary.
 
 Accepted runs must match the current verifier hashes. Regenerate a run after updating verifier code; preparation rejects stale certificates and evidence.
 

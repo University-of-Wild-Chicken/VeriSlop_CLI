@@ -1,0 +1,408 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:closure-plan:0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "format": {
+      "const": "verislop.closure-plan/0.2"
+    },
+    "closure_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "backend": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "const": "verislop.backend.vscore/0.1"
+        },
+        "tier": {
+          "const": 2
+        },
+        "target": {
+          "const": "vscore"
+        },
+        "endpoint": {
+          "const": "restricted_source"
+        },
+        "backend_version": {
+          "const": "0.1"
+        },
+        "language": {
+          "const": "vscore/0.1"
+        },
+        "semantics": {
+          "const": "vscore-semantics/0.1"
+        },
+        "relation_template": {
+          "const": "vscore.reference_refinement/0.1"
+        },
+        "end_to_end_eligible": {
+          "const": true
+        },
+        "testing": {
+          "const": "unsupported"
+        },
+        "claims_format": {
+          "const": "0.2"
+        },
+        "producers": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "IMPLEMENTED": {
+              "type": "string",
+              "minLength": 1
+            },
+            "LINKED": {
+              "type": "string",
+              "minLength": 1
+            },
+            "TESTED": {
+              "type": "string",
+              "minLength": 1
+            },
+            "semantic_edge": {
+              "type": "string",
+              "minLength": 1
+            },
+            "structural": {
+              "type": "string",
+              "minLength": 1
+            },
+            "END_TO_END_VERIFIED": {
+              "type": "string",
+              "minLength": 1
+            },
+            "closure": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "IMPLEMENTED",
+            "LINKED",
+            "TESTED",
+            "semantic_edge",
+            "structural",
+            "END_TO_END_VERIFIED",
+            "closure"
+          ]
+        },
+        "property_fragment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "excluded_surfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "tier",
+        "target",
+        "endpoint",
+        "backend_version",
+        "language",
+        "semantics",
+        "relation_template",
+        "end_to_end_eligible",
+        "testing",
+        "claims_format",
+        "producers",
+        "property_fragment",
+        "limitations",
+        "excluded_surfaces"
+      ]
+    },
+    "endpoint": {
+      "const": "restricted_source"
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "claim_inventories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ]
+      }
+    },
+    "claim_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "premise_graph": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "premises": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "claim_id",
+          "premises"
+        ]
+      }
+    },
+    "public_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "obligation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "scope": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "claim_id",
+          "obligation",
+          "scope"
+        ]
+      }
+    },
+    "test_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "require_tests": {
+          "const": false
+        },
+        "require_state": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "require_tests",
+        "require_state"
+      ]
+    },
+    "build_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "builds": {
+          "const": 2
+        },
+        "total_timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "build_timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "kernel_timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "memory_mb": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "require_network_isolation": {
+          "type": "boolean"
+        },
+        "require_filesystem_isolation": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "builds",
+        "total_timeout_seconds"
+      ]
+    },
+    "reproducible_outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "slot": {
+            "type": "string",
+            "minLength": 1
+          },
+          "producer": {
+            "const": "verislop.closure"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "slot",
+          "producer",
+          "format"
+        ]
+      }
+    },
+    "permitted_nondeterministic_fields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "verifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "id",
+          "sha256"
+        ]
+      }
+    },
+    "schemas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "id",
+          "sha256"
+        ]
+      }
+    },
+    "tcb": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "closure_id",
+    "backend",
+    "endpoint",
+    "selection",
+    "claim_inventories",
+    "claim_ids",
+    "premise_graph",
+    "public_claims",
+    "test_policy",
+    "build_policy",
+    "reproducible_outputs",
+    "permitted_nondeterministic_fields",
+    "verifiers",
+    "schemas",
+    "tcb"
+  ]
+}

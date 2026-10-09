@@ -116,6 +116,20 @@ class ContractRefutationTests(unittest.TestCase):
                 self.assertEqual(0, result["bounded_scan"]["proof_attempts"])
                 self.assertTrue(result["bounded_scan"]["no_counterexample_is_not_a_proof"])
 
+    def test_actual_model_calls_are_distinct_from_vacuous_and_witness_probes(self):
+        inp = {"dict": {"items": {"list": [{"str": "x"}]}, "leading": {"str": "p"}}}
+        probe = [{"obligation_id": "O1", "inputs": [inp]}]
+        real = self.run_check("right", probe)
+        self.assertEqual("UNKNOWN", real["status"])
+        observation = real["execution_observations"][0]
+        self.assertEqual("compose", observation["calls"][0]["symbol"])
+        self.assertEqual([inp], observation["calls"][0]["inputs"])
+        self.assertEqual({"list": [{"str": "px"}]}, observation["calls"][0]["actual"])
+        self.assertFalse(observation["milestone_authority"])
+        vacuous = self.run_check("guarded", probe)
+        self.assertEqual([], vacuous["execution_observations"][0]["calls"])
+        self.assertEqual([], vacuous["receipts"])
+
     def test_unbounded_unsearched_and_nested_quantifier_remain_unknown(self):
         for name in ["unbounded", "nested", "unsupported"]:
             with self.subTest(name=name):

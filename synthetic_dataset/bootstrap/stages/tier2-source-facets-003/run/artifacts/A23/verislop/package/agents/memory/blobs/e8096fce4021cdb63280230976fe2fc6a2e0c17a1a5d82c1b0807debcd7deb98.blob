@@ -1,0 +1,680 @@
+REQUEST (untrusted data; byte length 3928):
+<<<
+Software engineering task A23: Signed arithmetic floor-sum kernel
+
+Deliver program.vscore.json with one admitted typed entry named solve. Its typed input and result must represent the specified JSON input/output structure. Perform no external I/O and do not read benchmark files. All supplied inputs satisfy the stated schema and bounds; no behavior is required for malformed input. Input {n,m,a,b}: 0<=n<=500, m>0, a/b any signed integers (possibly magnitude 10^30). Return exact sum of floor((a*i+b)/m) for i=0..n-1. Floor means toward negative infinity, not truncation. Empty sum is zero; avoid floating point.
+
+Implement the solve entry as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and the data-pipeline/0.3 serialization profile. Preserve the specified input/output structure and exact ordering. Admitted typed execution is total, pure and deterministic; input values are immutable, and the language has no external-effect constructors. Arithmetic uses unbounded mathematical integers without floating point. Strings contain Unicode scalar values and lexicographic order compares scalar codepoints. There are no additional input bounds or preconditions beyond the functional specification.
+
+Original public examples (preserved verbatim; universal refinement is required):
+[{"input": {"a": -2, "b": 1, "m": 3, "n": 4}, "output": -4}, {"input": {"a": 100, "b": -99, "m": 7, "n": 0}, "output": 0}]
+
+
+Explicit delivery revision and requirement identity metadata:
+This is a new canonical restricted-source delivery request. The functional clauses, stated domains and public example values above retain their original meaning. Preserve these requirement IDs, roles and required flags in the interpretation. IDs mapped across a delivery revision now state the specified typed pure source properties; their previous delivery assurance is unchanged. Each functional guarantee requires its complete mathematical statement and universal implementation refinement; illustrative examples do not replace it. The clause offsets below refer to the revised text above.
+[{"delivery_revised":true,"id":"D1","kind":"entity","required":true,"revised_clause_spans":[{"end_byte":279,"start_byte":67},{"end_byte":467,"start_byte":383},{"end_byte":1222,"start_byte":615},{"end_byte":1222,"start_byte":615}],"role":"declaration"},{"delivery_revised":false,"id":"N1","kind":"explicit_non_goal","required":true,"revised_clause_spans":[{"end_byte":382,"start_byte":338}],"role":"exclusion"},{"delivery_revised":true,"id":"O1","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":518,"start_byte":468},{"end_byte":572,"start_byte":519},{"end_byte":591,"start_byte":573},{"end_byte":1427,"start_byte":1224}],"role":"guarantee"},{"delivery_revised":true,"id":"O2","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":279,"start_byte":67},{"end_byte":1222,"start_byte":615}],"role":"guarantee"},{"delivery_revised":false,"id":"A1","kind":"precondition","required":true,"revised_clause_spans":[{"end_byte":337,"start_byte":280},{"end_byte":467,"start_byte":383}],"role":"assumption"},{"delivery_revised":true,"id":"S1","kind":"safety_property","required":true,"revised_clause_spans":[{"end_byte":279,"start_byte":67},{"end_byte":279,"start_byte":67},{"end_byte":1222,"start_byte":615}],"role":"guarantee"},{"delivery_revised":false,"id":"S2","kind":"safety_property","required":true,"revised_clause_spans":[{"end_byte":613,"start_byte":592},{"end_byte":518,"start_byte":468}],"role":"guarantee"}]
+Requested endpoint: Tier 2 / restricted_source, backend vscore/0.3, END_TO_END_VERIFIED. Runtime campaigns are not requested. This request claims normative restricted-source execution only, with natural-language correspondence, host tooling, the pinned Lean kernel, hashing and OS/hardware explicitly trusted. No machine-code, compiler, runtime or physical-resource assurance is claimed.
+
+>>>
+
+REQUEST CLAUSE MANIFEST (supervisor-owned exact quotes and UTF-8 byte spans):
+[
+ {
+  "clause_id": "C1",
+  "quote": "Software engineering task A23: Signed arithmetic floor-sum kernel",
+  "start_byte": 0,
+  "end_byte": 65
+ },
+ {
+  "clause_id": "C2",
+  "quote": "Deliver program.vscore.json with one admitted typed entry named solve.",
+  "start_byte": 67,
+  "end_byte": 137
+ },
+ {
+  "clause_id": "C3",
+  "quote": "Its typed input and result must represent the specified JSON input/output structure.",
+  "start_byte": 138,
+  "end_byte": 222
+ },
+ {
+  "clause_id": "C4",
+  "quote": "Perform no external I/O and do not read benchmark files.",
+  "start_byte": 223,
+  "end_byte": 279
+ },
+ {
+  "clause_id": "C5",
+  "quote": "All supplied inputs satisfy the stated schema and bounds;",
+  "start_byte": 280,
+  "end_byte": 337
+ },
+ {
+  "clause_id": "C6",
+  "quote": "no behavior is required for malformed input.",
+  "start_byte": 338,
+  "end_byte": 382
+ },
+ {
+  "clause_id": "C7",
+  "quote": "Input {n,m,a,b}: 0<=n<=500, m>0, a/b any signed integers (possibly magnitude 10^30).",
+  "start_byte": 383,
+  "end_byte": 467
+ },
+ {
+  "clause_id": "C8",
+  "quote": "Return exact sum of floor((a*i+b)/m) for i=0..n-1.",
+  "start_byte": 468,
+  "end_byte": 518
+ },
+ {
+  "clause_id": "C9",
+  "quote": "Floor means toward negative infinity, not truncation.",
+  "start_byte": 519,
+  "end_byte": 572
+ },
+ {
+  "clause_id": "C10",
+  "quote": "Empty sum is zero;",
+  "start_byte": 573,
+  "end_byte": 591
+ },
+ {
+  "clause_id": "C11",
+  "quote": "avoid floating point.",
+  "start_byte": 592,
+  "end_byte": 613
+ },
+ {
+  "clause_id": "C12",
+  "quote": "Implement the solve entry as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and the data-pipeline/0.3 serialization profile.",
+  "start_byte": 615,
+  "end_byte": 762
+ },
+ {
+  "clause_id": "C13",
+  "quote": "Preserve the specified input/output structure and exact ordering.",
+  "start_byte": 763,
+  "end_byte": 828
+ },
+ {
+  "clause_id": "C14",
+  "quote": "Admitted typed execution is total, pure and deterministic;",
+  "start_byte": 829,
+  "end_byte": 887
+ },
+ {
+  "clause_id": "C15",
+  "quote": "input values are immutable, and the language has no external-effect constructors.",
+  "start_byte": 888,
+  "end_byte": 969
+ },
+ {
+  "clause_id": "C16",
+  "quote": "Arithmetic uses unbounded mathematical integers without floating point.",
+  "start_byte": 970,
+  "end_byte": 1041
+ },
+ {
+  "clause_id": "C17",
+  "quote": "Strings contain Unicode scalar values and lexicographic order compares scalar codepoints.",
+  "start_byte": 1042,
+  "end_byte": 1131
+ },
+ {
+  "clause_id": "C18",
+  "quote": "There are no additional input bounds or preconditions beyond the functional specification.",
+  "start_byte": 1132,
+  "end_byte": 1222
+ },
+ {
+  "clause_id": "C19",
+  "quote": "Original public examples (preserved verbatim;",
+  "start_byte": 1224,
+  "end_byte": 1269
+ },
+ {
+  "clause_id": "C20",
+  "quote": "universal refinement is required):\n[{\"input\": {\"a\": -2, \"b\": 1, \"m\": 3, \"n\": 4}, \"output\": -4}, {\"input\": {\"a\": 100, \"b\": -99, \"m\": 7, \"n\": 0}, \"output\": 0}]",
+  "start_byte": 1270,
+  "end_byte": 1427
+ },
+ {
+  "clause_id": "C21",
+  "quote": "Explicit delivery revision and requirement identity metadata:\nThis is a new canonical restricted-source delivery request.",
+  "start_byte": 1430,
+  "end_byte": 1551
+ },
+ {
+  "clause_id": "C22",
+  "quote": "The functional clauses, stated domains and public example values above retain their original meaning.",
+  "start_byte": 1552,
+  "end_byte": 1653
+ },
+ {
+  "clause_id": "C23",
+  "quote": "Preserve these requirement IDs, roles and required flags in the interpretation.",
+  "start_byte": 1654,
+  "end_byte": 1733
+ },
+ {
+  "clause_id": "C24",
+  "quote": "IDs mapped across a delivery revision now state the specified typed pure source properties;",
+  "start_byte": 1734,
+  "end_byte": 1825
+ },
+ {
+  "clause_id": "C25",
+  "quote": "their previous delivery assurance is unchanged.",
+  "start_byte": 1826,
+  "end_byte": 1873
+ },
+ {
+  "clause_id": "C26",
+  "quote": "Each functional guarantee requires its complete mathematical statement and universal implementation refinement;",
+  "start_byte": 1874,
+  "end_byte": 1985
+ },
+ {
+  "clause_id": "C27",
+  "quote": "illustrative examples do not replace it.",
+  "start_byte": 1986,
+  "end_byte": 2026
+ },
+ {
+  "clause_id": "C28",
+  "quote": "The clause offsets below refer to the revised text above.",
+  "start_byte": 2027,
+  "end_byte": 2084
+ },
+ {
+  "clause_id": "C29",
+  "quote": "[{\"delivery_revised\":true,\"id\":\"D1\",\"kind\":\"entity\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":279,\"start_byte\":67},{\"end_byte\":467,\"start_byte\":383},{\"end_byte\":1222,\"start_byte\":615},{\"end_byte\":1222,\"start_byte\":615}],\"role\":\"declaration\"},{\"delivery_revised\":false,\"id\":\"N1\",\"kind\":\"explicit_non_goal\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":382,\"start_byte\":338}],\"role\":\"exclusion\"},{\"delivery_revised\":true,\"id\":\"O1\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":518,\"start_byte\":468},{\"end_byte\":572,\"start_byte\":519},{\"end_byte\":591,\"start_byte\":573},{\"end_byte\":1427,\"start_byte\":1224}],\"role\":\"guarantee\"},{\"delivery_revised\":true,\"id\":\"O2\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":279,\"start_byte\":67},{\"end_byte\":1222,\"start_byte\":615}],\"role\":\"guarantee\"},{\"delivery_revised\":false,\"id\":\"A1\",\"kind\":\"precondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":337,\"start_byte\":280},{\"end_byte\":467,\"start_byte\":383}],\"role\":\"assumption\"},{\"delivery_revised\":true,\"id\":\"S1\",\"kind\":\"safety_property\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":279,\"start_byte\":67},{\"end_byte\":279,\"start_byte\":67},{\"end_byte\":1222,\"start_byte\":615}],\"role\":\"guarantee\"},{\"delivery_revised\":false,\"id\":\"S2\",\"kind\":\"safety_property\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":613,\"start_byte\":592},{\"end_byte\":518,\"start_byte\":468}],\"role\":\"guarantee\"}]\nRequested endpoint: Tier 2 / restricted_source, backend vscore/0.3, END_TO_END_VERIFIED.",
+  "start_byte": 2085,
+  "end_byte": 3628
+ },
+ {
+  "clause_id": "C30",
+  "quote": "Runtime campaigns are not requested.",
+  "start_byte": 3629,
+  "end_byte": 3665
+ },
+ {
+  "clause_id": "C31",
+  "quote": "This request claims normative restricted-source execution only, with natural-language correspondence, host tooling, the pinned Lean kernel, hashing and OS/hardware explicitly trusted.",
+  "start_byte": 3666,
+  "end_byte": 3849
+ },
+ {
+  "clause_id": "C32",
+  "quote": "No machine-code, compiler, runtime or physical-resource assurance is claimed.",
+  "start_byte": 3850,
+  "end_byte": 3927
+ }
+]
+REQUEST CITATION SCOPE (clause IDs belong only to this exact request):
+{"document": "tier2:tier2-source-facets-003:A23", "document_hash": "sha256:edac587ee935c4629d01ce2bef05d0d09893c86bf5a569784f5d3f432db7eed6"}
+PREVIOUS PROPOSAL (untrusted candidate; repair it without dropping requirements):
+{
+  "obligations": [
+    {
+      "id": "D1",
+      "revision": 1,
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "Deliver program.vscore.json containing exactly one admitted typed entry named solve, expressed as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and data-pipeline/0.3 serialization. Its input represents the JSON object {n,m,a,b} and its result represents a single exact mathematical integer. Input n is an integer from 0 through 500, m is a positive integer, and a and b are arbitrary signed integers without a magnitude bound. The specified structure and ordering are preserved. Arithmetic and any strings follow the normative unbounded-integer and Unicode-scalar semantics.",
+      "required": true,
+      "scope": ["delivery artifact", "typed solve entry", "input and output representations"],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "The delivered artifact is program.vscore.json and admits exactly one typed entry named solve under the specified source, semantics and serialization profiles.",
+        "The typed input represents n, m, a and b; the serialized result is an exact integer with the requested structure and ordering.",
+        "No finite magnitude bound is imposed on a or b; magnitudes such as 10^30 are supported.",
+        "Any string values use Unicode scalar values and scalar-codepoint lexicographic ordering."
+      ],
+      "sources": [
+        {"clause_id": "C2", "origin": "explicit", "interpretation": "Artifact and entry identity."},
+        {"clause_id": "C3", "origin": "explicit", "interpretation": "Typed JSON correspondence."},
+        {"clause_id": "C7", "origin": "explicit", "interpretation": "Input fields and mathematical domains."},
+        {"clause_id": "C12", "origin": "explicit", "interpretation": "Canonical source and normative profiles."},
+        {"clause_id": "C13", "origin": "explicit", "interpretation": "Structure and ordering preservation."},
+        {"clause_id": "C16", "origin": "explicit", "interpretation": "Mathematical integer representation."},
+        {"clause_id": "C17", "origin": "explicit", "interpretation": "Normative string semantics."},
+        {"clause_id": "C23", "origin": "explicit", "interpretation": "Preserve requirement identity."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "D1 declaration identity and required flag."}
+      ]
+    },
+    {
+      "id": "A1",
+      "revision": 1,
+      "kind": "precondition",
+      "role": "assumption",
+      "statement": "The supplier provides inputs satisfying the specified JSON schema with integer n, m, a and b, 0 <= n <= 500 and m > 0. The integers a and b have no additional bounds, and no additional preconditions are imposed.",
+      "required": true,
+      "scope": ["supplied solve inputs"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}],
+      "acceptance_criteria": [
+        "Each supplied input satisfies the specified schema, 0 <= n <= 500 and m > 0.",
+        "The assumption permits every signed integer a and b and adds no other restriction."
+      ],
+      "sources": [
+        {"clause_id": "C5", "origin": "explicit", "interpretation": "Explicit input-supplier assurance."},
+        {"clause_id": "C7", "origin": "explicit", "interpretation": "Stated schema and bounds."},
+        {"clause_id": "C18", "origin": "explicit", "interpretation": "No added preconditions."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "A1 assumption identity and required flag."}
+      ]
+    },
+    {
+      "id": "N1",
+      "revision": 1,
+      "kind": "explicit_non_goal",
+      "role": "exclusion",
+      "statement": "Behavior for malformed inputs outside the stated schema and bounds is not required.",
+      "required": true,
+      "scope": ["malformed inputs"],
+      "dependencies": [],
+      "acceptance_criteria": ["No functional obligation is asserted for malformed input."],
+      "sources": [
+        {"clause_id": "C6", "origin": "explicit", "interpretation": "Malformed-input behavior excluded."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "N1 exclusion identity and required flag."}
+      ]
+    },
+    {
+      "id": "O1",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "For every input satisfying A1, solve returns the exact integer sum Σ(i=0 to n-1) floor((a*i+b)/m). Each floor is the unique integer q satisfying q*m <= a*i+b < (q+1)*m, so rounding is toward negative infinity even for negative numerators. For n=0 the result is zero. The admitted implementation universally refines this complete mathematical specification and reproduces both public examples.",
+      "required": true,
+      "scope": ["all inputs satisfying A1"],
+      "dependencies": [
+        {"id": "D1", "relation": "uses_definition"},
+        {"id": "A1", "relation": "assumes"}
+      ],
+      "acceptance_criteria": [
+        "For every valid n, m, a and b, the returned integer equals Σ(i=0 to n-1) floor((a*i+b)/m).",
+        "For every summand, its quotient q satisfies q*m <= a*i+b < (q+1)*m.",
+        "For every valid m, a and b, n=0 produces zero.",
+        "Input {a:-2,b:1,m:3,n:4} produces -4; input {a:100,b:-99,m:7,n:0} produces 0.",
+        "Universal implementation refinement is established; example agreement alone is insufficient."
+      ],
+      "sources": [
+        {"clause_id": "C8", "origin": "explicit", "interpretation": "Exact universal floor-sum function."},
+        {"clause_id": "C9", "origin": "explicit", "interpretation": "Signed floor semantics."},
+        {"clause_id": "C10", "origin": "explicit", "interpretation": "Empty sum."},
+        {"clause_id": "C19", "origin": "explicit", "interpretation": "Preservation of public examples."},
+        {"clause_id": "C20", "origin": "explicit", "interpretation": "Concrete outputs and universal refinement."},
+        {"clause_id": "C22", "origin": "explicit", "interpretation": "Functional meaning unchanged."},
+        {"clause_id": "C26", "origin": "explicit", "interpretation": "Complete mathematical guarantee and refinement."},
+        {"clause_id": "C27", "origin": "explicit", "interpretation": "Examples cannot replace universal proof."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "O1 guarantee identity and required flag."}
+      ]
+    },
+    {
+      "id": "O2",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "The canonical solve entry has total, pure and deterministic admitted typed execution under normative Lean vscore-semantics/0.3 and data-pipeline/0.3. Every input satisfying A1 yields the specified result representation with exact structure and ordering, without additional input restrictions. Universal implementation refinement and delivery assurance are evaluated at the requested Tier 2 restricted_source vscore/0.3 boundary.",
+      "required": true,
+      "scope": ["admitted typed execution", "serialized input/output correspondence", "restricted-source delivery"],
+      "dependencies": [
+        {"id": "D1", "relation": "uses_definition"},
+        {"id": "A1", "relation": "assumes"}
+      ],
+      "acceptance_criteria": [
+        "Admitted typed execution terminates with a result and is pure and deterministic.",
+        "Every valid input has the required serialized output representation with exact structure and ordering.",
+        "No additional input bound or precondition is needed.",
+        "The artifact and universal refinement satisfy the requested Tier 2 restricted_source backend vscore/0.3 verification obligations, without asserting a lifecycle state in this proposal."
+      ],
+      "sources": [
+        {"clause_id": "C2", "origin": "explicit", "interpretation": "Admitted solve delivery."},
+        {"clause_id": "C3", "origin": "explicit", "interpretation": "Typed representation guarantee."},
+        {"clause_id": "C12", "origin": "explicit", "interpretation": "Normative execution and serialization."},
+        {"clause_id": "C13", "origin": "explicit", "interpretation": "Exact representation preservation."},
+        {"clause_id": "C14", "origin": "explicit", "interpretation": "Totality, purity and determinism."},
+        {"clause_id": "C18", "origin": "explicit", "interpretation": "Full specified domain."},
+        {"clause_id": "C21", "origin": "explicit", "interpretation": "Canonical restricted-source revision."},
+        {"clause_id": "C24", "origin": "explicit", "interpretation": "Revised typed pure source properties."},
+        {"clause_id": "C25", "origin": "explicit", "interpretation": "Retain prior delivery assurance."},
+        {"clause_id": "C26", "origin": "explicit", "interpretation": "Universal implementation refinement."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "O2 identity, required flag and requested endpoint."}
+      ]
+    },
+    {
+      "id": "S1",
+      "revision": 1,
+      "kind": "safety_property",
+      "role": "guarantee",
+      "statement": "The solve source performs no external I/O, does not read benchmark files, and does not mutate input values. Its admitted typed execution is pure, using a language without external-effect constructors.",
+      "required": true,
+      "scope": ["solve source", "all admitted typed executions"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}],
+      "acceptance_criteria": [
+        "No admitted execution performs external I/O or reads benchmark files.",
+        "Input values remain immutable throughout execution.",
+        "The admitted source uses the specified effect-free language semantics."
+      ],
+      "sources": [
+        {"clause_id": "C4", "origin": "explicit", "interpretation": "No I/O or benchmark access."},
+        {"clause_id": "C14", "origin": "explicit", "interpretation": "Pure execution."},
+        {"clause_id": "C15", "origin": "explicit", "interpretation": "Immutability and absence of effect constructors."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "S1 safety identity and required flag."}
+      ]
+    },
+    {
+      "id": "S2",
+      "revision": 1,
+      "kind": "safety_property",
+      "role": "guarantee",
+      "statement": "All arithmetic used to compute the floor sum is exact unbounded mathematical integer arithmetic without floating point, finite-width overflow, or precision loss.",
+      "required": true,
+      "scope": ["all floor-sum arithmetic", "all inputs satisfying A1"],
+      "dependencies": [
+        {"id": "D1", "relation": "uses_definition"},
+        {"id": "A1", "relation": "assumes"}
+      ],
+      "acceptance_criteria": [
+        "No floating-point arithmetic is used.",
+        "All intermediate arithmetic and the returned sum use exact unbounded integer semantics.",
+        "Arbitrarily large signed a and b introduce no overflow or rounding loss."
+      ],
+      "sources": [
+        {"clause_id": "C8", "origin": "explicit", "interpretation": "Exact sum."},
+        {"clause_id": "C11", "origin": "explicit", "interpretation": "Floating point prohibited."},
+        {"clause_id": "C16", "origin": "explicit", "interpretation": "Unbounded mathematical integer arithmetic."},
+        {"clause_id": "C29", "origin": "explicit", "interpretation": "S2 safety identity and required flag."}
+      ]
+    },
+    {
+      "id": "N2",
+      "revision": 1,
+      "kind": "explicit_non_goal",
+      "role": "exclusion",
+      "statement": "Runtime campaigns and machine-code, compiler, runtime and physical-resource assurance are outside the requested scope. Assurance is limited to normative restricted-source execution, explicitly trusting natural-language correspondence, host tooling, the pinned Lean kernel, hashing and OS/hardware.",
+      "required": true,
+      "scope": ["verification boundary", "excluded assurance and campaigns"],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "No runtime campaign is required.",
+        "No machine-code, compiler, runtime or physical-resource assurance is asserted.",
+        "The assurance boundary records the explicitly trusted correspondence, tooling, kernel, hashing and OS/hardware."
+      ],
+      "sources": [
+        {"clause_id": "C30", "origin": "explicit", "interpretation": "Runtime campaigns excluded."},
+        {"clause_id": "C31", "origin": "explicit", "interpretation": "Restricted-source boundary and explicit trust."},
+        {"clause_id": "C32", "origin": "explicit", "interpretation": "Excluded assurance layers."}
+      ]
+    }
+  ],
+  "category_review": {
+    "entities": "D1 declares the canonical artifact, admitted solve entry, typed JSON correspondence and normative value semantics.",
+    "preconditions": "A1 records only the explicit supplied-input schema and bounds.",
+    "postconditions": "O1 specifies the complete universal signed floor sum; O2 specifies total pure deterministic typed execution and serialization delivery.",
+    "invariants": "Input immutability is covered by S1; no other invariant is stated.",
+    "safety_properties": "S1 excludes effects and mutation; S2 requires exact unbounded arithmetic without floating point.",
+    "liveness_properties": "Execution totality is covered by O2.",
+    "resource_constraints": "No physical-resource constraint or assurance is requested.",
+    "error_semantics": "Malformed-input behavior is excluded by N1.",
+    "explicit_non_goals": "N1 excludes malformed-input behavior; N2 excludes runtime campaigns and assurance outside the restricted-source boundary.",
+    "ambiguities": "None requiring resolution."
+  },
+  "clauses": [
+    {"clause_id": "C1", "disposition": "context", "refs": [], "note": "Task identifier and title."},
+    {"clause_id": "C2", "disposition": "obligations", "refs": ["D1", "O2"], "note": ""},
+    {"clause_id": "C3", "disposition": "obligations", "refs": ["D1", "O2"], "note": ""},
+    {"clause_id": "C4", "disposition": "obligations", "refs": ["S1"], "note": ""},
+    {"clause_id": "C5", "disposition": "obligations", "refs": ["A1"], "note": ""},
+    {"clause_id": "C6", "disposition": "exclusion", "refs": ["N1"], "note": ""},
+    {"clause_id": "C7", "disposition": "obligations", "refs": ["D1", "A1"], "note": ""},
+    {"clause_id": "C8", "disposition": "obligations", "refs": ["O1", "S2"], "note": ""},
+    {"clause_id": "C9", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C10", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C11", "disposition": "obligations", "refs": ["S2"], "note": ""},
+    {"clause_id": "C12", "disposition": "obligations", "refs": ["D1", "O2"], "note": ""},
+    {"clause_id": "C13", "disposition": "obligations", "refs": ["D1", "O2"], "note": ""},
+    {"clause_id": "C14", "disposition": "obligations", "refs": ["O2", "S1"], "note": ""},
+    {"clause_id": "C15", "disposition": "obligations", "refs": ["S1"], "note": ""},
+    {"clause_id": "C16", "disposition": "obligations", "refs": ["D1", "S2"], "note": ""},
+    {"clause_id": "C17", "disposition": "obligations", "refs": ["D1"], "note": ""},
+    {"clause_id": "C18", "disposition": "obligations", "refs": ["A1", "O2"], "note": ""},
+    {"clause_id": "C19", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C20", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C21", "disposition": "obligations", "refs": ["O2"], "note": ""},
+    {"clause_id": "C22", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C23", "disposition": "obligations", "refs": ["D1", "A1", "N1", "O1", "O2", "S1", "S2"], "note": "Listed IDs, roles and required flags preserved."},
+    {"clause_id": "C24", "disposition": "obligations", "refs": ["O2"], "note": ""},
+    {"clause_id": "C25", "disposition": "obligations", "refs": ["O2"], "note": ""},
+    {"clause_id": "C26", "disposition": "obligations", "refs": ["O1", "O2"], "note": ""},
+    {"clause_id": "C27", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C28", "disposition": "context", "refs": [], "note": "Offsets identify revised source text; citations use supervisor manifest IDs."},
+    {"clause_id": "C29", "disposition": "obligations", "refs": ["D1", "A1", "N1", "O1", "O2", "S1", "S2"], "note": "Requirement identities and requested verification endpoint preserved without claiming achieved lifecycle status."},
+    {"clause_id": "C30", "disposition": "exclusion", "refs": ["N2"], "note": ""},
+    {"clause_id": "C31", "disposition": "exclusion", "refs": ["N2"], "note": "Explicit formal assurance boundary and trusted components."},
+    {"clause_id": "C32", "disposition": "exclusion", "refs": ["N2"], "note": ""}
+  ],
+  "assumptions": [
+    {
+      "id": "A1",
+      "supplied_by": "input supplier",
+      "discharged_at": "solve invocation, where supplied inputs satisfy the stated JSON schema and bounds"
+    }
+  ],
+  "ambiguities": [],
+  "selected_defaults": []
+}
+Your previous proposal was rejected by the validator:
+- clause 22: N1 must use the exclusion disposition
+- clause 28: N1 must use the exclusion disposition
+PROPOSAL FIELD SHAPES (from the current artifact schemas; repair the JSON, preserve the request):
+{
+ "kind_and_role_are_separate_fields": [
+  {
+   "kind": "entity",
+   "role": "declaration"
+  },
+  {
+   "kind": "precondition",
+   "role": "assumption"
+  },
+  {
+   "kind": "postcondition",
+   "role": "guarantee"
+  },
+  {
+   "kind": "invariant",
+   "role": "guarantee"
+  },
+  {
+   "kind": "safety_property",
+   "role": "guarantee"
+  },
+  {
+   "kind": "liveness_property",
+   "role": "guarantee"
+  },
+  {
+   "kind": "resource_constraint",
+   "role": "guarantee"
+  },
+  {
+   "kind": "error_semantics",
+   "role": "guarantee"
+  },
+  {
+   "kind": "explicit_non_goal",
+   "role": "exclusion"
+  },
+  {
+   "kind": "ambiguity",
+   "role": "open_question"
+  }
+ ],
+ "obligation_fields": [
+  "id",
+  "kind",
+  "role",
+  "statement",
+  "required",
+  "scope",
+  "dependencies",
+  "acceptance_criteria",
+  "sources"
+ ],
+ "request_source_item": {
+  "clause_id": "<current request manifest ID>",
+  "origin": "explicit or inferred",
+  "interpretation": "<authored meaning of this citation>"
+ },
+ "request_clause_item": {
+  "clause_id": "<current request manifest ID>",
+  "disposition": "obligations/exclusion/ambiguity/context",
+  "refs": [
+   "<authored existing obligation ID>"
+  ],
+  "note": "<required for context>"
+ },
+ "citation_rules": "Prefer clause_id only. quote is optional with an ID, but if present must equal the exact manifest quote. IDs identify only the current request; attachments require document and a verbatim quote without clause_id. Legacy quote-only citations remain exact substrings; never unescape model text.",
+ "dependencies_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "relation": {
+    "enum": [
+     "assumes",
+     "uses_definition",
+     "uses_proof",
+     "requires_witness",
+     "refines",
+     "requires_bridge",
+     "blocked_by"
+    ]
+   }
+  },
+  "required": [
+   "id",
+   "relation"
+  ]
+ },
+ "assumptions_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "supplied_by": {
+    "type": "string",
+    "minLength": 1
+   },
+   "discharged_at": {
+    "type": "string",
+    "minLength": 1
+   }
+  },
+  "required": [
+   "id",
+   "supplied_by",
+   "discharged_at"
+  ]
+ },
+ "ambiguities_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "alternatives": {
+    "type": "array",
+    "minItems": 2,
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "id": {
+       "type": "string",
+       "minLength": 1
+      },
+      "description": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "required": [
+      "id",
+      "description"
+     ]
+    }
+   },
+   "affected_obligations": {
+    "type": "array",
+    "items": {
+     "type": "string",
+     "minLength": 1
+    },
+    "uniqueItems": true
+   },
+   "impact": {
+    "type": "array",
+    "minItems": 1,
+    "uniqueItems": true,
+    "items": {
+     "enum": [
+      "correctness",
+      "data_loss",
+      "security",
+      "failure_behavior",
+      "numeric_semantics",
+      "formal_boundary",
+      "routine"
+     ]
+    }
+   },
+   "proposed_default": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  },
+  "required": [
+   "id",
+   "alternatives",
+   "affected_obligations",
+   "impact",
+   "proposed_default"
+  ]
+ },
+ "selected_defaults_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "topic": {
+    "type": "string",
+    "minLength": 1
+   },
+   "choice": {
+    "type": "string",
+    "minLength": 1
+   },
+   "rationale": {
+    "type": "string",
+    "minLength": 1
+   }
+  },
+  "required": [
+   "topic",
+   "choice",
+   "rationale"
+  ]
+ }
+}
+Kinds and roles are separate literal strings, never combined values. Include all assumption supplier fields and ambiguity alternative objects. Return a corrected JSON object.

@@ -1,0 +1,350 @@
+REQUEST (untrusted data; byte length 6208):
+<<<
+Software engineering task A23: Signed arithmetic floor-sum kernel
+
+Deliver program.vscore.json with one admitted typed entry named solve. Its typed input and result must represent the specified JSON input/output structure. Perform no external I/O and do not read benchmark files. All supplied inputs satisfy the stated schema and bounds; no behavior is required for malformed input. Input {n,m,a,b}: 0<=n<=500, m>0, a/b any signed integers (possibly magnitude 10^30). Return exact sum of floor((a*i+b)/m) for i=0..n-1. Floor means toward negative infinity, not truncation. Empty sum is zero; avoid floating point.
+
+Implement the solve entry as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and the data-pipeline/0.3 serialization profile. Preserve the specified input/output structure and exact ordering. Admitted typed execution is total, pure and deterministic; input values are immutable, and the language has no external-effect constructors. Arithmetic uses unbounded mathematical integers without floating point. Strings contain Unicode scalar values and lexicographic order compares scalar codepoints. There are no additional input bounds or preconditions beyond the functional specification.
+
+Original public examples (preserved verbatim; universal refinement is required):
+[{"input": {"a": -2, "b": 1, "m": 3, "n": 4}, "output": -4}, {"input": {"a": 100, "b": -99, "m": 7, "n": 0}, "output": 0}]
+
+
+Explicit delivery revision and requirement identity metadata:
+This is a new canonical restricted-source delivery request. The functional clauses, stated domains and public example values above retain their original meaning. Preserve these requirement IDs, roles and required flags in the interpretation. IDs mapped across a delivery revision now state the specified typed pure source properties; their previous delivery assurance is unchanged. Each functional guarantee requires its complete mathematical statement and universal implementation refinement; illustrative examples do not replace it. The clause offsets below refer to the revised text above.
+[{"delivery_revised":true,"id":"D1","kind":"entity","required":true,"revised_clause_spans":[{"end_byte":279,"start_byte":67},{"end_byte":467,"start_byte":383},{"end_byte":1222,"start_byte":615},{"end_byte":1222,"start_byte":615}],"role":"declaration"},{"delivery_revised":false,"id":"N1","kind":"explicit_non_goal","required":true,"revised_clause_spans":[{"end_byte":382,"start_byte":338}],"role":"exclusion"},{"delivery_revised":true,"id":"O1","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":518,"start_byte":468},{"end_byte":572,"start_byte":519},{"end_byte":591,"start_byte":573},{"end_byte":1427,"start_byte":1224}],"role":"guarantee"},{"delivery_revised":true,"id":"O2","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":279,"start_byte":67},{"end_byte":1222,"start_byte":615}],"role":"guarantee"},{"delivery_revised":false,"id":"A1","kind":"precondition","required":true,"revised_clause_spans":[{"end_byte":337,"start_byte":280},{"end_byte":467,"start_byte":383}],"role":"assumption"},{"delivery_revised":true,"id":"S1","kind":"safety_property","required":true,"revised_clause_spans":[{"end_byte":279,"start_byte":67},{"end_byte":279,"start_byte":67},{"end_byte":1222,"start_byte":615}],"role":"guarantee"},{"delivery_revised":false,"id":"S2","kind":"safety_property","required":true,"revised_clause_spans":[{"end_byte":613,"start_byte":592},{"end_byte":518,"start_byte":468}],"role":"guarantee"}]
+Requested endpoint: Tier 2 / restricted_source, backend vscore/0.3, END_TO_END_VERIFIED. Runtime campaigns are not requested. This request claims normative restricted-source execution only, with natural-language correspondence, host tooling, the pinned Lean kernel, hashing and OS/hardware explicitly trusted. No machine-code, compiler, runtime or physical-resource assurance is claimed.
+
+Mandatory requested source-facet specification:
+This is a frozen request constraint, not accepted obligation IR or proof evidence. Every listed original required guarantee retains the globally requested source delivery: canonical file program.vscore.json, one typed entry solve of arity 1, and all seven closed source properties below. Include the exact source requirements in its formal contract; a mathematical result-existence or equality theorem cannot replace entry identity, purity, input preservation, effect restrictions or exact non-floating-point semantics. For every value_required=true row also preserve the complete functional formula and universal source implementation refinement as a mixed source/value guarantee, including functional safety properties and invariants. Value facets are required by default regardless of category. Only the explicitly classified operational IDs below are source-only, retaining their source requirements rather than being replaced by value equalities. Assumptions, exclusions and separate non-vacuity witnesses are not source-policy rows. These constraints will be independently checked against kernel-reconstructed contract facets before proof, after acceptance and at closure.
+{"source_only_operational_ids":["S1","S2"],"value_required_default":true}
+{"format":"verislop.required-source-facets/0.1","obligations":{"O1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O2":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"S1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":false},"S2":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":false}},"schema_version":"0.1"}
+
+>>>
+
+REQUEST CLAUSE MANIFEST (supervisor-owned exact quotes and UTF-8 byte spans):
+[
+ {
+  "clause_id": "C1",
+  "quote": "Software engineering task A23: Signed arithmetic floor-sum kernel",
+  "start_byte": 0,
+  "end_byte": 65
+ },
+ {
+  "clause_id": "C2",
+  "quote": "Deliver program.vscore.json with one admitted typed entry named solve.",
+  "start_byte": 67,
+  "end_byte": 137
+ },
+ {
+  "clause_id": "C3",
+  "quote": "Its typed input and result must represent the specified JSON input/output structure.",
+  "start_byte": 138,
+  "end_byte": 222
+ },
+ {
+  "clause_id": "C4",
+  "quote": "Perform no external I/O and do not read benchmark files.",
+  "start_byte": 223,
+  "end_byte": 279
+ },
+ {
+  "clause_id": "C5",
+  "quote": "All supplied inputs satisfy the stated schema and bounds;",
+  "start_byte": 280,
+  "end_byte": 337
+ },
+ {
+  "clause_id": "C6",
+  "quote": "no behavior is required for malformed input.",
+  "start_byte": 338,
+  "end_byte": 382
+ },
+ {
+  "clause_id": "C7",
+  "quote": "Input {n,m,a,b}: 0<=n<=500, m>0, a/b any signed integers (possibly magnitude 10^30).",
+  "start_byte": 383,
+  "end_byte": 467
+ },
+ {
+  "clause_id": "C8",
+  "quote": "Return exact sum of floor((a*i+b)/m) for i=0..n-1.",
+  "start_byte": 468,
+  "end_byte": 518
+ },
+ {
+  "clause_id": "C9",
+  "quote": "Floor means toward negative infinity, not truncation.",
+  "start_byte": 519,
+  "end_byte": 572
+ },
+ {
+  "clause_id": "C10",
+  "quote": "Empty sum is zero;",
+  "start_byte": 573,
+  "end_byte": 591
+ },
+ {
+  "clause_id": "C11",
+  "quote": "avoid floating point.",
+  "start_byte": 592,
+  "end_byte": 613
+ },
+ {
+  "clause_id": "C12",
+  "quote": "Implement the solve entry as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and the data-pipeline/0.3 serialization profile.",
+  "start_byte": 615,
+  "end_byte": 762
+ },
+ {
+  "clause_id": "C13",
+  "quote": "Preserve the specified input/output structure and exact ordering.",
+  "start_byte": 763,
+  "end_byte": 828
+ },
+ {
+  "clause_id": "C14",
+  "quote": "Admitted typed execution is total, pure and deterministic;",
+  "start_byte": 829,
+  "end_byte": 887
+ },
+ {
+  "clause_id": "C15",
+  "quote": "input values are immutable, and the language has no external-effect constructors.",
+  "start_byte": 888,
+  "end_byte": 969
+ },
+ {
+  "clause_id": "C16",
+  "quote": "Arithmetic uses unbounded mathematical integers without floating point.",
+  "start_byte": 970,
+  "end_byte": 1041
+ },
+ {
+  "clause_id": "C17",
+  "quote": "Strings contain Unicode scalar values and lexicographic order compares scalar codepoints.",
+  "start_byte": 1042,
+  "end_byte": 1131
+ },
+ {
+  "clause_id": "C18",
+  "quote": "There are no additional input bounds or preconditions beyond the functional specification.",
+  "start_byte": 1132,
+  "end_byte": 1222
+ },
+ {
+  "clause_id": "C19",
+  "quote": "Original public examples (preserved verbatim;",
+  "start_byte": 1224,
+  "end_byte": 1269
+ },
+ {
+  "clause_id": "C20",
+  "quote": "universal refinement is required):\n[{\"input\": {\"a\": -2, \"b\": 1, \"m\": 3, \"n\": 4}, \"output\": -4}, {\"input\": {\"a\": 100, \"b\": -99, \"m\": 7, \"n\": 0}, \"output\": 0}]",
+  "start_byte": 1270,
+  "end_byte": 1427
+ },
+ {
+  "clause_id": "C21",
+  "quote": "Explicit delivery revision and requirement identity metadata:\nThis is a new canonical restricted-source delivery request.",
+  "start_byte": 1430,
+  "end_byte": 1551
+ },
+ {
+  "clause_id": "C22",
+  "quote": "The functional clauses, stated domains and public example values above retain their original meaning.",
+  "start_byte": 1552,
+  "end_byte": 1653
+ },
+ {
+  "clause_id": "C23",
+  "quote": "Preserve these requirement IDs, roles and required flags in the interpretation.",
+  "start_byte": 1654,
+  "end_byte": 1733
+ },
+ {
+  "clause_id": "C24",
+  "quote": "IDs mapped across a delivery revision now state the specified typed pure source properties;",
+  "start_byte": 1734,
+  "end_byte": 1825
+ },
+ {
+  "clause_id": "C25",
+  "quote": "their previous delivery assurance is unchanged.",
+  "start_byte": 1826,
+  "end_byte": 1873
+ },
+ {
+  "clause_id": "C26",
+  "quote": "Each functional guarantee requires its complete mathematical statement and universal implementation refinement;",
+  "start_byte": 1874,
+  "end_byte": 1985
+ },
+ {
+  "clause_id": "C27",
+  "quote": "illustrative examples do not replace it.",
+  "start_byte": 1986,
+  "end_byte": 2026
+ },
+ {
+  "clause_id": "C28",
+  "quote": "The clause offsets below refer to the revised text above.",
+  "start_byte": 2027,
+  "end_byte": 2084
+ },
+ {
+  "clause_id": "C29",
+  "quote": "[{\"delivery_revised\":true,\"id\":\"D1\",\"kind\":\"entity\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":279,\"start_byte\":67},{\"end_byte\":467,\"start_byte\":383},{\"end_byte\":1222,\"start_byte\":615},{\"end_byte\":1222,\"start_byte\":615}],\"role\":\"declaration\"},{\"delivery_revised\":false,\"id\":\"N1\",\"kind\":\"explicit_non_goal\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":382,\"start_byte\":338}],\"role\":\"exclusion\"},{\"delivery_revised\":true,\"id\":\"O1\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":518,\"start_byte\":468},{\"end_byte\":572,\"start_byte\":519},{\"end_byte\":591,\"start_byte\":573},{\"end_byte\":1427,\"start_byte\":1224}],\"role\":\"guarantee\"},{\"delivery_revised\":true,\"id\":\"O2\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":279,\"start_byte\":67},{\"end_byte\":1222,\"start_byte\":615}],\"role\":\"guarantee\"},{\"delivery_revised\":false,\"id\":\"A1\",\"kind\":\"precondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":337,\"start_byte\":280},{\"end_byte\":467,\"start_byte\":383}],\"role\":\"assumption\"},{\"delivery_revised\":true,\"id\":\"S1\",\"kind\":\"safety_property\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":279,\"start_byte\":67},{\"end_byte\":279,\"start_byte\":67},{\"end_byte\":1222,\"start_byte\":615}],\"role\":\"guarantee\"},{\"delivery_revised\":false,\"id\":\"S2\",\"kind\":\"safety_property\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":613,\"start_byte\":592},{\"end_byte\":518,\"start_byte\":468}],\"role\":\"guarantee\"}]\nRequested endpoint: Tier 2 / restricted_source, backend vscore/0.3, END_TO_END_VERIFIED.",
+  "start_byte": 2085,
+  "end_byte": 3628
+ },
+ {
+  "clause_id": "C30",
+  "quote": "Runtime campaigns are not requested.",
+  "start_byte": 3629,
+  "end_byte": 3665
+ },
+ {
+  "clause_id": "C31",
+  "quote": "This request claims normative restricted-source execution only, with natural-language correspondence, host tooling, the pinned Lean kernel, hashing and OS/hardware explicitly trusted.",
+  "start_byte": 3666,
+  "end_byte": 3849
+ },
+ {
+  "clause_id": "C32",
+  "quote": "No machine-code, compiler, runtime or physical-resource assurance is claimed.",
+  "start_byte": 3850,
+  "end_byte": 3927
+ },
+ {
+  "clause_id": "C33",
+  "quote": "Mandatory requested source-facet specification:\nThis is a frozen request constraint, not accepted obligation IR or proof evidence.",
+  "start_byte": 3929,
+  "end_byte": 4059
+ },
+ {
+  "clause_id": "C34",
+  "quote": "Every listed original required guarantee retains the globally requested source delivery: canonical file program.vscore.json, one typed entry solve of arity 1, and all seven closed source properties below.",
+  "start_byte": 4060,
+  "end_byte": 4264
+ },
+ {
+  "clause_id": "C35",
+  "quote": "Include the exact source requirements in its formal contract;",
+  "start_byte": 4265,
+  "end_byte": 4326
+ },
+ {
+  "clause_id": "C36",
+  "quote": "a mathematical result-existence or equality theorem cannot replace entry identity, purity, input preservation, effect restrictions or exact non-floating-point semantics.",
+  "start_byte": 4327,
+  "end_byte": 4496
+ },
+ {
+  "clause_id": "C37",
+  "quote": "For every value_required=true row also preserve the complete functional formula and universal source implementation refinement as a mixed source/value guarantee, including functional safety properties and invariants.",
+  "start_byte": 4497,
+  "end_byte": 4713
+ },
+ {
+  "clause_id": "C38",
+  "quote": "Value facets are required by default regardless of category.",
+  "start_byte": 4714,
+  "end_byte": 4774
+ },
+ {
+  "clause_id": "C39",
+  "quote": "Only the explicitly classified operational IDs below are source-only, retaining their source requirements rather than being replaced by value equalities.",
+  "start_byte": 4775,
+  "end_byte": 4928
+ },
+ {
+  "clause_id": "C40",
+  "quote": "Assumptions, exclusions and separate non-vacuity witnesses are not source-policy rows.",
+  "start_byte": 4929,
+  "end_byte": 5015
+ },
+ {
+  "clause_id": "C41",
+  "quote": "These constraints will be independently checked against kernel-reconstructed contract facets before proof, after acceptance and at closure.",
+  "start_byte": 5016,
+  "end_byte": 5155
+ },
+ {
+  "clause_id": "C42",
+  "quote": "{\"source_only_operational_ids\":[\"S1\",\"S2\"],\"value_required_default\":true}\n{\"format\":\"verislop.required-source-facets/0.1\",\"obligations\":{\"O1\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":true},\"O2\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":true},\"S1\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":false},\"S2\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":false}},\"schema_version\":\"0.1\"}",
+  "start_byte": 5156,
+  "end_byte": 6207
+ }
+]
+REQUEST CITATION SCOPE (clause IDs belong only to this exact request):
+{"document": "tier2:tier2-source-facets-006:A23", "document_hash": "sha256:7e8c0d17e78afc93ed267ed2738c4d8d2f739a551f7fe20ff302cecbf8fcd83b"}
+REQUIRED SOURCE FACETS (frozen specification constraint; not accepted IR or proof evidence):
+{
+ "format": "verislop.required-source-facets/0.1",
+ "obligations": {
+  "O1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O2": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "S1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": false
+  },
+  "S2": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": false
+  }
+ },
+ "schema_version": "0.1"
+}
+Retain every policy obligation ID as a required guarantee with its complete requested behavior. Each row fixes the canonical file, entry, arity and closed source properties for that ID. value_required=true requires the complete functional value proposition as well as the source facets; a mathematical existence result, True, reflexive equality or an unrelated entry cannot replace them. Do not convert these requirements into assumptions, declarations, exclusions or optional guarantees. The policy supplies no algorithm, candidate source, expected output, accepted statement or lifecycle state.
+Use the policy's actual obligation IDs rather than renaming them or merging away required IDs. Interpret their source properties faithfully under the same guarantees and preserve all public request clauses, examples, branch guards and typed input/output requirements. SourceBoundary and exact source discharge are formalization/bridge steps, not facts the interpreter may assert as already established.

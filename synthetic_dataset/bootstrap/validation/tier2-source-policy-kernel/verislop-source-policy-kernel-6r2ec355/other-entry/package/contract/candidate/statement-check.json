@@ -1,0 +1,178 @@
+{
+  "bounded_refutation": null,
+  "compile": {
+    "errors": [],
+    "isolation": {
+      "filesystem_backend": "bubblewrap",
+      "filesystem_read_isolation": true,
+      "filesystem_write_isolation": true,
+      "inherited_file_descriptors": "stdin/stdout/stderr only",
+      "ipc_namespace": true,
+      "network_namespace": true,
+      "note": "Mount/PID/IPC containment; system runtimes and explicit read-only grants remain readable. Kernel, bubblewrap and runtime contents are trusted; no seccomp or aggregate cgroup limits.",
+      "pid_namespace": true,
+      "private_proc": true,
+      "process_group_kill_on_timeout": true,
+      "read_only_paths": [
+        "/usr",
+        "/bin",
+        "/sbin",
+        "/lib",
+        "/lib64",
+        "/etc/ld.so.cache",
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1"
+      ],
+      "resource_limits": [
+        "RLIMIT_AS",
+        "RLIMIT_CPU",
+        "RLIMIT_FSIZE",
+        "RLIMIT_CORE"
+      ],
+      "scrubbed_environment": true,
+      "staged_working_directory": true,
+      "writable_host_paths": [
+        "<stage>"
+      ]
+    },
+    "ok": true,
+    "sorry_positions": [
+      {
+        "column": 8,
+        "line": 188
+      },
+      {
+        "column": 8,
+        "line": 189
+      }
+    ],
+    "wall_ms": 301
+  },
+  "critique": null,
+  "defeq": [
+    {
+      "id": "G2",
+      "result": {
+        "defeq": true,
+        "ok": true,
+        "typechecks": true
+      }
+    },
+    {
+      "id": "value:VeriSlopAST.ValueSpec",
+      "result": {
+        "defeq": true,
+        "ok": true,
+        "typechecks": true
+      }
+    },
+    {
+      "id": "G1",
+      "result": {
+        "defeq": true,
+        "ok": true,
+        "typechecks": true
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "claims": [],
+      "code": "SOURCE_FACETS_REQUIRED",
+      "details": {
+        "authority": "request constraint only; accepted statements come from Lean",
+        "missing": [
+          "a bound SourceBoundary Contract with the exact entry/file/arity and all closed properties"
+        ],
+        "reconstructed_representation": "source_facets",
+        "repairable": true,
+        "required_source_policy": {
+          "arity": 1,
+          "entry": "plus",
+          "file": "program.vscore.json",
+          "properties": [
+            "typed_total",
+            "deterministic",
+            "input_preserved",
+            "no_external_io",
+            "no_floating_point",
+            "pure_data",
+            "restricted_runtime_only"
+          ],
+          "value_required": false
+        }
+      },
+      "message": "G1: required source facets are missing or mismatched: a bound SourceBoundary Contract with the exact entry/file/arity and all closed properties",
+      "obligations": [
+        "G1"
+      ],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "SOURCE_FACETS_REQUIRED",
+      "details": {
+        "authority": "request constraint only; accepted statements come from Lean",
+        "missing": [
+          "a bound SourceBoundary Contract with the exact entry/file/arity and all closed properties",
+          "a functional value formula using the endpoint constrained by the exact named source entry"
+        ],
+        "reconstructed_representation": "source_facets",
+        "repairable": true,
+        "required_source_policy": {
+          "arity": 1,
+          "entry": "plus",
+          "file": "program.vscore.json",
+          "properties": [
+            "typed_total",
+            "deterministic",
+            "input_preserved",
+            "no_external_io",
+            "no_floating_point",
+            "pure_data",
+            "restricted_runtime_only"
+          ],
+          "value_required": true
+        }
+      },
+      "message": "G2: required source facets are missing or mismatched: a bound SourceBoundary Contract with the exact entry/file/arity and all closed properties; a functional value formula using the endpoint constrained by the exact named source entry",
+      "obligations": [
+        "G2"
+      ],
+      "severity": "blocking"
+    }
+  ],
+  "frontend_defeq": [
+    {
+      "id": "body:_vs_body_plus",
+      "result": {
+        "defeq": true,
+        "ok": true,
+        "typechecks": true
+      }
+    },
+    {
+      "id": "statement:Spec",
+      "result": {
+        "defeq": true,
+        "ok": true,
+        "typechecks": true
+      }
+    },
+    {
+      "id": "statement:ValueSpec",
+      "result": {
+        "defeq": true,
+        "ok": true,
+        "typechecks": true
+      }
+    },
+    {
+      "id": "value:ValueSpec",
+      "result": {
+        "defeq": true,
+        "ok": true,
+        "typechecks": true
+      }
+    }
+  ]
+}

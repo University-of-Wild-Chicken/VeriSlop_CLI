@@ -1,0 +1,184 @@
+--- generic-baseline-bootstrap_tier2.py
++++ bootstrap_tier2.py
+@@ -8,6 +8,7 @@
+ 
+ import argparse
+ from collections import Counter
++from contextlib import contextmanager
+ from datetime import datetime, timezone
+ import os
+ from pathlib import Path
+@@ -112,6 +113,46 @@
+                 if item.severity in ("blocking", "infrastructure")]
+     if blocking:
+         raise ValueError("Frozen simulation configuration does not resolve: " + canonical.dumps(blocking).decode())
++
++
++@contextmanager
++def _frozen_provider_context(configuration: Path):
++    """Select only authenticated cohort profiles for a read-only native observation."""
++    configuration = Path(configuration).absolute()
++    cohort = configuration.parent
++    protocol_bytes = _regular(cohort / "protocol.json")
++    protocol = canonical.loads(protocol_bytes)
++    record = canonical.loads(_regular(cohort / "preregistration.json"))
++    if (configuration.name != "config.json" or protocol.get("format") != FORMAT
++            or record.get("format") != FORMAT
++            or record.get("protocol_sha256") != canonical.digest(protocol_bytes)
++            or any(not isinstance(protocol[key], str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", protocol[key])
++                   for key in ("source_root", "input_root", "request_set_root"))
++            or any(record.get(key) != protocol[key] for key in ("source_root", "input_root", "request_set_root"))
++            or canonical.digest_json(protocol["input_files"]) != protocol["input_root"]
++            or protocol.get("endpoint_profiles_path") != PROFILES_INPUT
++            or protocol.get("endpoint_profiles_sha256") != protocol["input_files"].get(PROFILES_INPUT)
++            or "config.json" not in protocol["input_files"] or PROFILES_INPUT not in protocol["input_files"]):
++        raise ValueError("INPUT_MUTATION: frozen provider preregistration differs")
++    for name, expected in protocol["input_files"].items():
++        if not isinstance(name, str):
++            raise ValueError("INPUT_MUTATION: frozen provider input path is invalid")
++        path = Path(name)
++        if (path.is_absolute() or not path.parts
++                or any(part in (".", "..") for part in path.parts) or path.as_posix() != name
++                or canonical.digest(_regular(cohort / path)) != expected):
++            raise ValueError("INPUT_MUTATION: frozen provider input inventory differs")
++    validate_provider_inputs(configuration, cohort / PROFILES_INPUT)
++    key = "VERISLOP_CONFIG_HOME"
++    previous = os.environ.get(key)
++    os.environ[key] = str(cohort / "provider-home")
++    try:
++        yield
++    finally:
++        if previous is None:
++            os.environ.pop(key, None)
++        else:
++            os.environ[key] = previous
+ 
+ 
+ def source_inventory(repo: Path | None = None) -> dict[str, str]:
+@@ -1058,24 +1099,31 @@
+ 
+ def native_audit(pkg, report: dict, configuration: Path | None = None) -> dict:
+     """Read-only validation of CURRENT registered native closure, not a rescore."""
+-    from verislop import schemas, view, review
++    from verislop import schemas, view, review, lifecycle
+     from verislop.backends import vscore3_closure
+ 
+     issues, snapshot = [], None
++    native_package = pkg is not None and hasattr(pkg, "root")
++    obligations = report.get("obligations", {})
+     if schemas.validate("run-report-v3", report):
+         issues.append("Native report does not satisfy the registered Tier 2 report schema")
+-    if pkg is not None and hasattr(pkg, "root"):
++    if native_package:
++        obligations = {}
+         try:
+             overlay = view.derive(pkg)
+             current = {oid: {"role": rec["role"], "kind": rec["kind"], "revision": rec["revision"], "required": rec["required"],
+                             "outcomes": {milestone: life["outcome"] for milestone, life in rec["lifecycle"].items()}}
+                        for oid, rec in overlay["obligations"].items()}
++            obligations = current
+             recorded = {oid: {key: row[key] for key in ("role", "kind", "revision", "required", "outcomes")}
+                         for oid, row in report.get("obligations", {}).items()}
+             if current != recorded:
+                 issues.append("Native report changes an obligation identity/requiredness/current outcome")
+         except Exception as exc:
+             issues.append("Cannot reconstruct current native obligation view: " + str(exc))
++    if not isinstance(obligations, dict):
++        issues.append("Native obligation inventory is not a record map")
++        obligations = {}
+     try:
+         snapshot = vscore3_closure.mechanical_snapshot(pkg)
+     except Exception as exc:
+@@ -1089,9 +1137,28 @@
+             issues.append("Report differs from exact current native mechanical snapshot")
+     elif report.get("mechanical_status") == "VERIFIED":
+         issues.append("Verified native report has no current mechanical execution")
+-    required = {oid: rec for oid, rec in report.get("obligations", {}).items() if rec.get("required")}
+-    guarantee_ids = [oid for oid, rec in required.items() if rec.get("role") == "guarantee"]
+-    complete = bool(guarantee_ids) and all(required[oid].get("outcomes", {}).get("END_TO_END_VERIFIED") == "PASS" for oid in guarantee_ids)
++    valid_obligations, applicability = {}, {}
++    for oid, rec in obligations.items():
++        try:
++            if (not isinstance(oid, str) or not isinstance(rec, dict)
++                    or rec.get("role") not in lifecycle.ROLES
++                    or not isinstance(rec.get("kind"), str) or not rec["kind"]
++                    or type(rec.get("revision")) is not int or rec["revision"] < 1
++                    or type(rec.get("required")) is not bool
++                    or not isinstance(rec.get("outcomes"), dict)
++                    or set(rec["outcomes"]) != set(lifecycle.MILESTONES)
++                    or any(value not in lifecycle.OUTCOMES for value in rec["outcomes"].values())):
++                raise ValueError("missing or invalid identity/requiredness/lifecycle field")
++            applicability[oid] = lifecycle.applicability({**rec, "id": oid})
++            valid_obligations[oid] = rec
++        except Exception as exc:
++            issues.append(f"Cannot determine registered applicability for {oid}: {exc}")
++    required = {oid: rec for oid, rec in valid_obligations.items() if rec["required"]}
++    all_guarantees = [oid for oid, rec in required.items() if rec["role"] == "guarantee"]
++    guarantee_ids = [oid for oid in all_guarantees if applicability[oid]["END_TO_END_VERIFIED"][0]]
++    non_vacuity_ids = [oid for oid in all_guarantees if required[oid]["kind"] == "non_vacuity"]
++    complete = (len(valid_obligations) == len(obligations) and bool(guarantee_ids)
++                and all(required[oid]["outcomes"]["END_TO_END_VERIFIED"] == "PASS" for oid in guarantee_ids))
+     if report.get("terminal_status") == "VERIFIED":
+         tier = report.get("tier", {})
+         if (tier.get("requested") != 2 or tier.get("target") != "vscore"
+@@ -1107,20 +1174,33 @@
+                 or snapshot["determinism"].get("mismatches") != []
+                 or any(c["required"] and c["outcome"] != "PASS" for c in snapshot["claims"])):
+             issues.append("Verified terminal lacks two deterministic clean builds and all required mechanical claims")
++        graph = {row["claim_id"]: row for row in snapshot["claims"]} if snapshot else {}
++        for oid, rec in required.items():
++            milestones = [m for m in lifecycle.CONTRACT_MILESTONES if applicability[oid][m][0]]
++            if oid in guarantee_ids:
++                milestones.append("END_TO_END_VERIFIED")
++            for milestone in milestones:
++                claim = graph.get(lifecycle.claim_id(milestone, oid, rec["revision"]), {})
++                if (rec["outcomes"][milestone] != "PASS" or claim.get("required") is not True
++                        or claim.get("outcome") != "PASS"):
++                    issues.append(f"Required current native claim is missing or has not passed: {milestone}:{oid}@{rec['revision']}")
+         recorded_review = report.get("review", {})
+         if (not recorded_review.get("configured") or set(recorded_review.get("checkpoints", {})) != {"formal_contract", "release"}
+                 or any(value != "REVIEW_ACCEPTED" for value in recorded_review.get("checkpoints", {}).values())):
+             issues.append("Configured concrete formal-contract and release review gates are missing")
++        if native_package and configuration is None:
++            issues.append("Frozen cohort provider context is missing for current release revalidation")
+     if snapshot is not None and configuration is not None:
+         try:
+             stored = pkg.path("closure") / "review-config.json"
+             if load(stored) != load(configuration):
+                 raise ValueError("release configuration differs from the frozen cohort")
+-            gate = review.gate(pkg, stored)  # Read-only certificate/projection checks; no role call.
+-            recorded_gate = report.get("review", {})
+-            if (recorded_gate.get("configured") != gate["configured"]
+-                    or recorded_gate.get("checkpoints") != gate["checkpoints"]
+-                    or recorded_gate.get("diagnostics") != [d.to_json() for d in gate["diagnostics"]]):
++            with _frozen_provider_context(configuration):
++                gate = review.gate(pkg, stored)  # Read-only certificate/projection checks; no role call.
++            published_gate = {**gate, "diagnostics": [d.to_json() for d in gate["diagnostics"]]}
++            if (report.get("review", {}) != published_gate
++                    or report.get("review_target") != gate.get("review_target")
++                    or report.get("review_projection", {}).get("reuse") != gate.get("projection_reuse", {})):
+                 raise ValueError("release review record differs from current bound consensus certificates")
+             actual_release = ("INFRASTRUCTURE_FAILURE" if any(d.severity == "infrastructure" for d in gate["diagnostics"])
+                               else "BLOCKED" if gate["diagnostics"] else "ACCEPTED")
+@@ -1132,9 +1212,10 @@
+             "mechanical_status": snapshot["mechanical_status"] if snapshot else "BLOCKED",
+             "release_status": report.get("release_status", "BLOCKED"),
+             "required_obligations": len(required), "required_guarantees": len(guarantee_ids),
++            "all_required_guarantees": len(all_guarantees), "required_non_vacuity_witnesses": len(non_vacuity_ids),
+             "required_e2e_passed": sum(required[oid].get("outcomes", {}).get("END_TO_END_VERIFIED") == "PASS" for oid in guarantee_ids),
+             "all_required_e2e": complete, "mechanical_claims": snapshot["claims"] if snapshot else [],
+-            "per_obligation_outcomes": {oid: rec.get("outcomes", {}) for oid, rec in report.get("obligations", {}).items()},
++            "per_obligation_outcomes": {oid: rec.get("outcomes", {}) for oid, rec in valid_obligations.items()},
+             "builds": snapshot["builds"] if snapshot else report.get("builds", []),
+             "determinism": snapshot["determinism"] if snapshot else report.get("determinism", {}),
+             "closure_root": snapshot["closure_root"] if snapshot else None,
+@@ -1170,7 +1251,8 @@
+     origin = response_audit(cohort, task)
+     native = native_audit(pkg, report, cohort / "config.json") if pkg and report else {"status": "BLOCK", "issues": ["Native terminal report is absent"],
+         "mechanical_status": "BLOCKED", "release_status": "BLOCKED", "required_obligations": 0,
+-        "required_guarantees": 0, "required_e2e_passed": 0, "all_required_e2e": False,
++        "required_guarantees": 0, "all_required_guarantees": 0, "required_non_vacuity_witnesses": 0,
++        "required_e2e_passed": 0, "all_required_e2e": False,
+         "mechanical_claims": [], "per_obligation_outcomes": {}, "builds": [], "determinism": {},
+         "closure_root": None, "mechanical_result": None}
+     issues.extend(origin["issues"])
