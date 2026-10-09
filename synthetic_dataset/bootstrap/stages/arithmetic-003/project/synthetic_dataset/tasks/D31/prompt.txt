@@ -1,0 +1,8 @@
+Software engineering task D31: Markdown fenced-block extractor
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {text:string}; split on LF preserving final empty line. Outside a fence, an opener has 0..3 ASCII spaces, at least three identical backticks or at least three tildes, then arbitrary info text. A backtick opener is invalid if info contains any backtick; tilde info unrestricted. Trim info using Python str.strip(). Inside, a closer has 0..3 spaces, only same marker repeated at least opener length, then spaces/tabs only. Other fences do not nest and are ordinary content. Emit [{info,start,end,text,closed}] in encounter order, zero-based line numbers; text joins body lines with LF without adding a newline, end is closing line or null at EOF, closed false for unclosed block. Four-space-indented fences are ordinary text. Empty final line belongs to an unclosed block if present in split input.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"text": "before\n```py\na\n~~~\n```\nafter"}, "output": [{"closed": true, "end": 4, "info": "py", "start": 1, "text": "a\n~~~"}]}, {"input": {"text": "~~~x\na\n"}, "output": [{"closed": false, "end": null, "info": "x", "start": 0, "text": "a\n"}]}]

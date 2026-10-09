@@ -1,0 +1,235 @@
+{
+  "arm_summaries": {
+    "raw": {
+      "case_slots_scored": 56,
+      "cases_passed": 56,
+      "clean_builds": 0,
+      "completed_tasks": 5,
+      "executed_observations": 112,
+      "input_tokens": null,
+      "model_calls": 5,
+      "native_statuses": {
+        "ARTIFACT": 5
+      },
+      "native_tested_tasks": 0,
+      "output_tokens": null,
+      "passed_observations": 112,
+      "passed_tested_guarantees": 0,
+      "required_tested_guarantees": 0,
+      "statuses": {
+        "SUCCESS": 5
+      },
+      "successful_clean_builds": 0,
+      "successful_tasks": 5,
+      "total_case_slots": 1157,
+      "total_tasks": 100
+    },
+    "verislop": {
+      "case_slots_scored": 44,
+      "cases_passed": 0,
+      "clean_builds": 0,
+      "completed_tasks": 4,
+      "executed_observations": 0,
+      "input_tokens": null,
+      "model_calls": 61,
+      "native_statuses": {
+        "BLOCKED": 4
+      },
+      "native_tested_tasks": 0,
+      "output_tokens": null,
+      "passed_observations": 0,
+      "passed_tested_guarantees": 0,
+      "required_tested_guarantees": 0,
+      "statuses": {
+        "BLOCKED": 4
+      },
+      "successful_clean_builds": 0,
+      "successful_tasks": 0,
+      "total_case_slots": 1157,
+      "total_tasks": 100
+    }
+  },
+  "authority": "supplemental diagnosis; existing completed scores unchanged; no final full-corpus result",
+  "complete_pairs": 4,
+  "completed_arms": 9,
+  "completed_strict_failures": [
+    {
+      "artifact_present": false,
+      "executed_observations": 0,
+      "model_calls": 3,
+      "native_tested": false,
+      "primary_diagnostic": {
+        "claims": [],
+        "code": "INVALID_CANDIDATE",
+        "message": "clause 5: Q1 must use the ambiguity disposition",
+        "obligations": [],
+        "severity": "blocking"
+      },
+      "score_path": "artifacts/D19/verislop/score.json",
+      "score_sha256": "sha256:ce2b579d3e5840ea4c654abd70e504032d4c98a487543cf3c9a48b85f34c47aa",
+      "stages": [
+        {
+          "codes": [
+            "INVALID_CANDIDATE"
+          ],
+          "seconds": 606,
+          "stage": "interpret",
+          "status": "BLOCKED"
+        }
+      ],
+      "task": "D19"
+    },
+    {
+      "artifact_present": false,
+      "executed_observations": 0,
+      "model_calls": 19,
+      "native_tested": false,
+      "primary_diagnostic": {
+        "claims": [],
+        "code": "INVALID_CANDIDATE",
+        "message": "unparseable formalizer response: obligations: must preserve exact active frozen IDs; missing=['A1', 'D1', 'I1', 'O1', 'O2', 'O3', 'O4', 'O5', 'O6', 'O7', 'R1'], extra=[]",
+        "obligations": [],
+        "severity": "blocking"
+      },
+      "score_path": "artifacts/D21/verislop/score.json",
+      "score_sha256": "sha256:05940608db885fbc1351ef043b7cf6df435e6a83812f9dd586f4be6af53649e7",
+      "stages": [
+        {
+          "codes": [],
+          "seconds": 0,
+          "source": "mechanical revalidation of unchanged recorded interpretation",
+          "stage": "interpret",
+          "status": "PASS"
+        },
+        {
+          "codes": [
+            "INVALID_CANDIDATE"
+          ],
+          "seconds": 268,
+          "stage": "formalize",
+          "status": "BLOCKED"
+        }
+      ],
+      "task": "D21"
+    },
+    {
+      "artifact_present": false,
+      "executed_observations": 0,
+      "model_calls": 19,
+      "native_tested": false,
+      "primary_diagnostic": {
+        "claims": [],
+        "code": "INVALID_CANDIDATE",
+        "message": "unparseable formalizer response: 'lean_source'",
+        "obligations": [],
+        "severity": "blocking"
+      },
+      "score_path": "artifacts/G03/verislop/score.json",
+      "score_sha256": "sha256:7b3848b31fa935c2acf46f4d07ac3b6a239f8cebb49b67cd2a4ba5da2fe99a24",
+      "stages": [
+        {
+          "codes": [],
+          "seconds": 0,
+          "source": "mechanical revalidation of unchanged recorded interpretation",
+          "stage": "interpret",
+          "status": "PASS"
+        },
+        {
+          "codes": [
+            "INVALID_CANDIDATE"
+          ],
+          "seconds": 364,
+          "stage": "formalize",
+          "status": "BLOCKED"
+        }
+      ],
+      "task": "G03"
+    },
+    {
+      "artifact_present": false,
+      "executed_observations": 0,
+      "model_calls": 20,
+      "native_tested": false,
+      "primary_diagnostic": {
+        "claims": [],
+        "code": "INVALID_CANDIDATE",
+        "message": "unparseable formalizer response: proposal: expected an object with exactly ['encoding', 'obligations', 'predicates', 'records', 'symbols', 'theorems', 'witness_obligations']",
+        "obligations": [],
+        "severity": "blocking"
+      },
+      "score_path": "artifacts/G13/verislop/score.json",
+      "score_sha256": "sha256:d227adef53e919a3219879e70fb9507cdbd4f0c0395318f16af1f26b1c9dad60",
+      "stages": [
+        {
+          "codes": [],
+          "seconds": 0,
+          "source": "mechanical revalidation of unchanged recorded interpretation",
+          "stage": "interpret",
+          "status": "PASS"
+        },
+        {
+          "codes": [
+            "INVALID_CANDIDATE"
+          ],
+          "seconds": 325,
+          "stage": "formalize",
+          "status": "BLOCKED"
+        }
+      ],
+      "task": "G13"
+    }
+  ],
+  "findings": [
+    {
+      "finding": "Formal frontend coverage does not match general corpus JSON tasks. It limits recursive/dynamic values, mixed nullable outputs and necessary operations. Model gap reports are diagnoses, not proof of impossibility.",
+      "source_refs": [
+        "verislop/agents.py:439",
+        "verislop/agents.py:445",
+        "verislop/agents.py:554",
+        "verislop/formal_frontend.py:53"
+      ]
+    },
+    {
+      "finding": "Instructions require gap reporting, but response assembly only accepts typed AST or lean_source/formalization. No structured gap branch exists. Reports consequently become INVALID_CANDIDATE and schema repair attempts.",
+      "source_refs": [
+        "verislop/agents.py:448",
+        "verislop/agents.py:518",
+        "verislop/agents.py:593"
+      ]
+    },
+    {
+      "finding": "Repair regenerates within the unchanged language, with checker feedback and preserved context. It cannot itself install new trusted sorts, operations, interpreters or test bridges. Increasing retries cannot supply missing execution semantics.",
+      "source_refs": [
+        "verislop/agents.py:573",
+        "verislop/recovery.py:22"
+      ]
+    },
+    {
+      "finding": "D19 failed interpretation schema validation after three attempts: Q1 used an obligation disposition instead of ambiguity. Interpretation-stage errors are outside outer strict contract recovery.",
+      "source_refs": [
+        "verislop/agents.py:303",
+        "verislop/recovery.py:57"
+      ]
+    }
+  ],
+  "format": "verislop.sol-full-corpus-stop-diagnosis/0.1",
+  "interrupted_arm": {
+    "arm": "verislop",
+    "final_retained_path": "UNSUBMITTED-D16-final-0073.txt",
+    "final_sha256": "sha256:6691aefcc26a0b963f182fea33b930fd7a9b21a5973fb1d8504064b07b21b385",
+    "final_submitted": false,
+    "included_as_completed_failure": false,
+    "purpose": "formalize",
+    "request_id": "0007",
+    "task": "D16"
+  },
+  "limits": [
+    "Only four pairs completed; no full-corpus rate is estimated.",
+    "Four completed strict arms produced no implementation and zero test observations. Missing artifacts are not concrete implementation counterexamples.",
+    "D16 interruption is user-directed and is not a completed strict failure.",
+    "No models, graders or Lean checks were rerun for this diagnosis; source and completed results were not changed."
+  ],
+  "progress_sha256": "sha256:16611d91d3eb0574a07348b22eaa2d2c5bade60f241952cb8661f179b61e97b2",
+  "protocol_sha256": "sha256:cbd2fe6ca6746ad58352c2a3cd63304e563a2a4697503f2b2c8f150b682b3799",
+  "status": "USER_STOPPED_INCOMPLETE"
+}

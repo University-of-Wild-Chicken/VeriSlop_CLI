@@ -1,0 +1,8 @@
+Software engineering task G20: Gap-aware idempotent event-log materializer
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {events}, each {seq,delta}, positive sequence and integer delta. Start total=0,next=1. The first arrival for each sequence is permanently authoritative. Identical repeats return "duplicate", unequal repeats "conflict", with no state change. A new arrival is buffered, then apply and remove every contiguous buffered event starting at next, incrementing next. Its result is "applied" if its sequence was consumed by this flush, otherwise "buffered". Return {results,next,total,pending}; pending sorted [seq,delta] pairs. Applied events remain remembered for duplicate/conflict detection.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"events": [{"delta": 5, "seq": 2}, {"delta": 3, "seq": 1}, {"delta": 5, "seq": 2}, {"delta": 7, "seq": 2}, {"delta": -1, "seq": 4}]}, "output": {"next": 3, "pending": [[4, -1]], "results": ["buffered", "applied", "duplicate", "conflict", "buffered"], "total": 8}}, {"input": {"events": []}, "output": {"next": 1, "pending": [], "results": [], "total": 0}}]

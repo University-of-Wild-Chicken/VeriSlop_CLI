@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:review-ballot:0.1",
+  "title": "Advisory reviewer ballot, never formal proof evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checkpoint": {
+      "enum": [
+        "interpretation",
+        "formal_contract",
+        "implementation",
+        "release"
+      ]
+    },
+    "review_target_root": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "tier_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewer_instance_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requested_model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "returned_model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "verdict": {
+      "enum": [
+        "ACCEPT",
+        "REJECT",
+        "ABSTAIN"
+      ]
+    },
+    "reviewed_obligations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "finding_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "unresolved_blocking_findings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "transcript_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "transcript_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "round": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "slot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "transcript_prefix_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "supersedes_ballot_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "campaign_id",
+    "checkpoint",
+    "review_target_root",
+    "tier_id",
+    "reviewer_instance_id",
+    "provider_ref",
+    "requested_model",
+    "returned_model",
+    "verdict",
+    "reviewed_obligations",
+    "finding_refs",
+    "unresolved_blocking_findings",
+    "limitations",
+    "rationale",
+    "transcript_ref",
+    "transcript_hash",
+    "round",
+    "slot_id",
+    "transcript_prefix_hash",
+    "supersedes_ballot_ref"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "ACCEPT"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "unresolved_blocking_findings": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ]
+}

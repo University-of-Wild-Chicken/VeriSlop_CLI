@@ -1,0 +1,104 @@
+{
+  "campaign_id": "rc-0001-20261008T232755Z-c4cd78",
+  "checkpoint": "formal_contract",
+  "config": {
+    "agents": {
+      "author": {
+        "max_output_tokens": 8192,
+        "model_ref": "gpt-6.1-sol",
+        "provider": "simulation",
+        "tool_profile": "candidate_writer"
+      },
+      "critic": {
+        "max_output_tokens": 8192,
+        "model_ref": "gpt-6.1-sol",
+        "provider": "simulation",
+        "tool_profile": "review_readonly"
+      }
+    },
+    "bridge_tier": 0,
+    "endpoint": "test_campaign",
+    "providers": {
+      "simulation": {
+        "adapter": "openai_compatible",
+        "api_family": "chat_completions",
+        "concurrency": 1,
+        "credential_ref": "env:VERISLOP_COLLABORATION_UNUSED",
+        "endpoint_profile": "collaboration-simulation",
+        "request_timeout_seconds": null
+      }
+    },
+    "release": {
+      "require_all_review_tiers": true,
+      "require_mechanical_pass": true,
+      "require_requested_bridge_tier": true
+    },
+    "review": {
+      "budgets": {
+        "max_calls_per_instance": 24,
+        "max_provider_retries": 0,
+        "max_repair_rounds": 2,
+        "max_total_tokens": 524288,
+        "max_wall_seconds_per_tier": 0
+      },
+      "checkpoints": [
+        "formal_contract",
+        "release"
+      ],
+      "require_fixed_model_snapshot": false,
+      "restart_after_repair": "first_tier",
+      "review_tiers": [
+        {
+          "consensus": {
+            "blocking_findings_veto": true,
+            "max_abstentions": 0,
+            "max_soft_rejects": 0,
+            "mode": "unanimous",
+            "require_all_responses": true
+          },
+          "id": "R0",
+          "reviewers": [
+            {
+              "agent": "critic",
+              "count": 1,
+              "focus": "counterexamples"
+            }
+          ]
+        }
+      ]
+    },
+    "roles": {
+      "formalizer": "author",
+      "implementer": "author",
+      "interpreter": "author",
+      "prover": "author",
+      "repairer": "author"
+    },
+    "schema_version": "0.1"
+  },
+  "review_target_root": "sha256:ab7e6cbb92fe99cabe417942004a9f585ec797cd3c4e1f13cebd29fc00c3fa73",
+  "schema_version": "0.1",
+  "target_components": {
+    "adapter_versions": "0.1.0",
+    "agent_profiles": {
+      "critic": {
+        "max_output_tokens": 8192,
+        "model_ref": "gpt-6.1-sol",
+        "provider": "simulation",
+        "tool_profile": "review_readonly"
+      }
+    },
+    "candidate_root": "sha256:dbab575e0cf6fc3fc13c4b929aa5caee602b8ad510fbfd662e4a2d82c7c47af0",
+    "checkpoint": "formal_contract",
+    "evidence_package_root": "sha256:324319fcd1722d55e22c5440cb9a4254f41a29265aef01e3cad51c730a0e7579",
+    "packet": "sha256:7fd86f020371afc34d4b10dccbf7c5adad0ecaf2780d8fd65a60750b74cd23ad",
+    "prompt_template": "sha256:f050067879cf44a78a948229f4a38f1e4d83b5a641b20324fa72743791747b86",
+    "public_claims": {
+      "claims": "sha256:f35095c7ca4678baf5a28fcc3f43fb48c4a7850346b2afa6e2f633b5f62fb9ec"
+    },
+    "resolved_models": {
+      "critic": "gpt-6.1-sol"
+    },
+    "review_config": "sha256:9fa9b32a4224eced04524a0d90eef9e1d757c2867891b36da880696da6c8bf25"
+  }
+}

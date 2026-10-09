@@ -1,0 +1,8 @@
+Software engineering task A27: Deterministic topological order or shortest cycle
+
+Implement solution.py with a single solve(data) function. data and the return value must be JSON-compatible. Use Python 3 standard library only; perform no external I/O and do not read benchmark files. All supplied inputs satisfy the stated schema and bounds; no behavior is required for malformed input. Input {n,edges:[[from,to],...]}, 0<=n<=8, vertices 0..n-1, directed edges including duplicates/self-loops. If acyclic return {order,cycle:null}, with lexicographically smallest topological order. Otherwise return {order:null,cycle}, where cycle is a simple directed cycle with first vertex repeated at end, rotated to its smallest vertex; minimize edge count then lexicographic sequence. Duplicate edges have no effect.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"edges": [[0, 2], [1, 2]], "n": 3}, "output": {"cycle": null, "order": [0, 1, 2]}}, {"input": {"edges": [[0, 1], [1, 0], [2, 2]], "n": 3}, "output": {"cycle": [2, 2], "order": null}}]

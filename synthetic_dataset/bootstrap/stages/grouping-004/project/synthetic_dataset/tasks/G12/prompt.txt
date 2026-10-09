@@ -1,0 +1,8 @@
+Software engineering task G12: Critical-path slack for a dependency DAG
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {jobs}, each distinct ASCII id with positive duration and existing deps (duplicates ignored). Assume unlimited workers. Earliest start=max dependency finish, or zero. Makespan=max finish, or zero. Latest finish=min immediate successor latest start, or makespan for a sink; latest start is latest finish minus duration. Return {makespan,jobs:[{id,start,finish,slack}]}, sorted by ID, slack=latest start-earliest start. Return null for any dependency cycle.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"jobs": [{"deps": [], "duration": 1, "id": "b"}, {"deps": [], "duration": 2, "id": "a"}, {"deps": ["a", "b"], "duration": 1, "id": "c"}]}, "output": {"jobs": [{"finish": 2, "id": "a", "slack": 0, "start": 0}, {"finish": 1, "id": "b", "slack": 1, "start": 0}, {"finish": 3, "id": "c", "slack": 0, "start": 2}], "makespan": 3}}, {"input": {"jobs": [{"deps": ["b"], "duration": 1, "id": "a"}, {"deps": ["a"], "duration": 1, "id": "b"}]}, "output": null}]

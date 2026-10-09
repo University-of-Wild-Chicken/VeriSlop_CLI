@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:evidence:0.1",
+  "title": "Registered mechanical verifier evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "evidence_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "closure_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_root_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "verifier_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verifier_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "execution_environment": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "invocation": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "raw_result_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "raw_result_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "exit_code": {
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "BLOCK",
+        "INFRASTRUCTURE_FAILURE"
+      ]
+    },
+    "scope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "trusted_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "evidence_id",
+    "closure_id",
+    "claim_id",
+    "input_root_hash",
+    "verifier_id",
+    "verifier_hash",
+    "execution_environment",
+    "invocation",
+    "raw_result_ref",
+    "raw_result_hash",
+    "exit_code",
+    "status",
+    "scope",
+    "trusted_dependencies"
+  ]
+}

@@ -1,0 +1,986 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None requiring resolution.",
+    "entities": "JSON graph input, directed edges, source, and ordered distance list.",
+    "error_semantics": "No invalid-input behavior required under the conformity assumption.",
+    "explicit_non_goals": "None stated.",
+    "invariants": "No separate invariant stated.",
+    "liveness_properties": "None separately stated.",
+    "postconditions": "Required Python interface, JSON serialization, finite shortest-walk distances, null for unreachable vertices, negative-cycle propagation, and public examples.",
+    "preconditions": "Caller supplies conforming inputs.",
+    "resource_constraints": "Python standard library only; no explicit runtime or memory bound.",
+    "safety_properties": "Unreachable negative cycles have no effect; purity, determinism, no external I/O, and no cross-call state."
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "Accept the specified graph representation, including parallel edges and self-loops."
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "input graph"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 375,
+          "interpretation": "Graph input domain.",
+          "origin": "explicit",
+          "start_byte": 301
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 673,
+          "interpretation": "Permitted edge configurations.",
+          "origin": "explicit",
+          "start_byte": 631
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Input is a JSON object with n, source, and edges; n is 1 through 10, and each directed edge [u,v,cost] has integer cost from -6 through 9. Parallel edges and self-loops are supported."
+    }
+  ],
+  "error_semantics": [],
+  "explicit_non_goals": [],
+  "invariants": [],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "solution.py exposes solve(data).",
+        "The output is JSON-serializable and has exactly n entries.",
+        "Entry v corresponds to vertex v and preserves the specified structure and ordering."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "function interface and output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 116,
+          "interpretation": "Required file and entry point.",
+          "origin": "explicit",
+          "start_byte": 77
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 420,
+          "interpretation": "Output shape and meaning.",
+          "origin": "explicit",
+          "start_byte": 376
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 300,
+          "interpretation": "Output serialization.",
+          "origin": "explicit",
+          "start_byte": 270
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 927,
+          "interpretation": "JSON interface.",
+          "origin": "explicit",
+          "start_byte": 854
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 993,
+          "interpretation": "Vertex-index ordering and structure.",
+          "origin": "explicit",
+          "start_byte": 928
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 805,
+          "interpretation": "Python version and interface.",
+          "origin": "explicit",
+          "start_byte": 729
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Provide a Python 3 function solve(data) in solution.py receiving the specified JSON value and returning a JSON-serializable length-n list, ordered by vertex index, with distances from source."
+    },
+    {
+      "acceptance_criteria": [
+        "For every vertex with no directed walk from source, its output entry is null."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "unreachable vertices"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 451,
+          "interpretation": "Unreachable distance representation.",
+          "origin": "explicit",
+          "start_byte": 421
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Every vertex unreachable from source has output null."
+    },
+    {
+      "acceptance_criteria": [
+        "Mark cycle vertices and all vertices reachable from them as \"-inf\" whenever the cycle is reachable from source.",
+        "This rule also applies to source if such a cycle can reach source."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "vertices downstream of source-reachable negative cycles"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 545,
+          "interpretation": "Negative-cycle propagation.",
+          "origin": "explicit",
+          "start_byte": 452
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Every vertex reachable from a negative-cost cycle reachable from source has output string \"-inf\"."
+    },
+    {
+      "acceptance_criteria": [
+        "Each finite output equals the minimum cost over directed walks from source.",
+        "The initial source distance is zero; negative-cycle propagation takes precedence when applicable."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "finite distances"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 598,
+          "interpretation": "Finite shortest-walk semantics.",
+          "origin": "explicit",
+          "start_byte": 546
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 630,
+          "interpretation": "Initial empty-walk cost.",
+          "origin": "explicit",
+          "start_byte": 599
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each reachable vertex outside negative-cycle propagation, return its minimum integer walk cost from source, using zero as the cost of the initial empty walk at source."
+    },
+    {
+      "acceptance_criteria": [
+        "For n=5, source=0, edges=[[0,1,2],[1,2,-3],[2,1,1],[2,3,4],[4,4,-1]], return [0,\"-inf\",\"-inf\",\"-inf\",null].",
+        "For n=3, source=0, edges=[[1,1,-1]], return [0,null,null]."
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O4",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "S1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "public examples"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 1286,
+          "interpretation": "Required example behavior; held-out scoring supplies evaluation context.",
+          "origin": "explicit",
+          "start_byte": 995
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The supplied public examples produce their exact listed outputs."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "The caller supplies a conforming input."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at Each solve(data) invocation by supplying an input conforming to the specification.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at Each solve(data) invocation by supplying an input conforming to the specification.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at Each solve(data) invocation by supplying an input conforming to the specification.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at Each solve(data) invocation by supplying an input conforming to the specification.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "all invocations"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 269,
+          "interpretation": "Explicit input conformity assumption.",
+          "origin": "explicit",
+          "start_byte": 228
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Inputs conform to the specification."
+    }
+  ],
+  "request_ref": "tasks/G03/prompt.txt",
+  "resource_constraints": [
+    {
+      "acceptance_criteria": [
+        "No third-party library dependency is required or used."
+      ],
+      "dependencies": [],
+      "id": "R1",
+      "kind": "resource_constraint",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "implementation dependencies"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 154,
+          "interpretation": "Allowed dependencies.",
+          "origin": "explicit",
+          "start_byte": 117
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 853,
+          "interpretation": "Repeated dependency restriction.",
+          "origin": "explicit",
+          "start_byte": 806
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Use only the Python standard library."
+    }
+  ],
+  "safety_properties": [
+    {
+      "acceptance_criteria": [
+        "An unreachable negative cycle cannot cause any vertex to be marked \"-inf\" or change any distance."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "S1",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "unreachable negative cycles"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 727,
+          "interpretation": "Reachability boundary for negative-cycle effects.",
+          "origin": "explicit",
+          "start_byte": 674
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Negative cycles unreachable from source do not affect the output."
+    },
+    {
+      "acceptance_criteria": [
+        "Equal inputs yield equal outputs independently of call history.",
+        "No file reads, network operations, printing, external I/O, or retained cross-call state occur.",
+        "Calling solve has no externally observable side effects."
+      ],
+      "dependencies": [],
+      "id": "S2",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/G03/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all invocations"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 227,
+          "interpretation": "Prohibited effects and persistent state.",
+          "origin": "explicit",
+          "start_byte": 155
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 805,
+          "interpretation": "Purity and determinism.",
+          "origin": "explicit",
+          "start_byte": 729
+        },
+        {
+          "document_hash": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+          "document_ref": "tasks/G03/prompt.txt",
+          "end_byte": 853,
+          "interpretation": "External I/O prohibition.",
+          "origin": "explicit",
+          "start_byte": 806
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "solve is pure and deterministic, performs no external I/O, reads no files, uses no network, prints nothing, and retains no state across calls."
+    }
+  ],
+  "schema_version": "0.1"
+}

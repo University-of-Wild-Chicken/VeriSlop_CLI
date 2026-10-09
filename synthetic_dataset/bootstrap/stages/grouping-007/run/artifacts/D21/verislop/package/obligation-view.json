@@ -1,0 +1,1000 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "D1": {
+      "acceptance_criteria": [
+        "The specified input schema and domain are represented without narrowing valid inputs."
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-ee05dc3b3637725005106fae650c4557"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "specified input domain"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "specified input domain"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 366,
+          "interpretation": "Defines the supported input domain.",
+          "origin": "explicit",
+          "start_byte": 238
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Input is an object containing events with string group, integer time and integer-or-null value, integer start and end, positive integer width, and fill equal to none or previous, with start <= end."
+    },
+    "I1": {
+      "acceptance_criteria": [
+        "Previous is isolated between groups.",
+        "After processing a nonempty bucket, previous equals that bucket's sum even when zero.",
+        "Processing any empty bucket leaves previous unchanged.",
+        "Pre-start events never initialize or update previous."
+      ],
+      "dependencies": [
+        {
+          "id": "O4",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "I1",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-32c74a40b153fc76a73d9474e3664c98"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "per-group traversal state"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "per-group traversal state"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 732,
+          "interpretation": "Nonempty buckets update previous.",
+          "origin": "explicit",
+          "start_byte": 673
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 888,
+          "interpretation": "Empty buckets preserve previous.",
+          "origin": "explicit",
+          "start_byte": 853
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 929,
+          "interpretation": "Pre-start events cannot seed previous.",
+          "origin": "explicit",
+          "start_byte": 889
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1051,
+          "interpretation": "Zero is a valid previous sum.",
+          "origin": "explicit",
+          "start_byte": 993
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each group, previous begins absent and is updated only by nonempty emitted buckets to their sum, including zero sums; empty buckets preserve it and events before start never seed it."
+    },
+    "O1": {
+      "acceptance_criteria": [
+        "solution.py exposes solve(data).",
+        "Repeated calls with equal valid inputs yield equal outputs.",
+        "Execution has no externally observable side effects.",
+        "Input and output use JSON-compatible Python values."
+      ],
+      "dependencies": [],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-c016ffb44b730f3fc9a7ba65cb100142"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: UNSUPPORTED_CAPABILITY",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-ed7c04d6ce850eeeb1b277c4898d3df7"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "solve interface and execution"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solve interface and execution"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 134,
+          "interpretation": "Required file, function and purity.",
+          "origin": "explicit",
+          "start_byte": 79
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 186,
+          "interpretation": "JSON-compatible interface.",
+          "origin": "explicit",
+          "start_byte": 135
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1129,
+          "interpretation": "Python 3 and determinism.",
+          "origin": "explicit",
+          "start_byte": 1053
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1251,
+          "interpretation": "JSON-serializable return value.",
+          "origin": "explicit",
+          "start_byte": 1178
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Provide a pure deterministic Python 3 solve(data) function in solution.py receiving JSON-compatible Python input and returning a JSON-serializable value."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "Groups equal sorted unique event group names.",
+        "Out-of-range-only groups remain represented whenever buckets exist.",
+        "No events implies no groups and an empty output."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-8997e9218c2da55a8a4a25e14ae664ec"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "group enumeration"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "group enumeration"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 474,
+          "interpretation": "Complete sorted group enumeration.",
+          "origin": "explicit",
+          "start_byte": 367
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Enumerate all distinct group names appearing anywhere in events in lexicographic order, including groups whose events are all outside the requested interval."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "Every group has exactly the specified increasing bucket starts.",
+        "The last bucket may be shorter than width.",
+        "Events on a bucket's left boundary belong to it; events on its right boundary do not.",
+        "When start equals end, output is empty."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-97c671fd6b86392054b264f44ad620b6"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "bucket enumeration and event membership"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "bucket enumeration and event membership"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 534,
+          "interpretation": "Bucket progression for each group.",
+          "origin": "explicit",
+          "start_byte": 475
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 610,
+          "interpretation": "Strict end bound and half-open bucket intervals.",
+          "origin": "explicit",
+          "start_byte": 535
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For every enumerated group emit bucket starts start+k*width for nonnegative integers k with bucket start strictly below end; each bucket covers [bucketStart,min(bucketStart+width,end))."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "count equals the number of qualifying non-null event occurrences.",
+        "sum equals the exact integer sum of qualifying values.",
+        "Null events contribute neither count nor sum.",
+        "Out-of-range events contribute neither count nor sum.",
+        "Duplicate qualifying events each increase count and contribute their value."
+      ],
+      "dependencies": [
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-334b38ab55d0a19ca06097ca3163d4d0"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "bucket aggregation"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "bucket aggregation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 645,
+          "interpretation": "Sum qualifying values only.",
+          "origin": "explicit",
+          "start_byte": 611
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 672,
+          "interpretation": "Count the same qualifying values.",
+          "origin": "explicit",
+          "start_byte": 646
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1051,
+          "interpretation": "Duplicates are counted.",
+          "origin": "explicit",
+          "start_byte": 993
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each group bucket, count and sum precisely all occurrences of events of that group whose time belongs to the bucket and whose value is non-null; duplicate occurrences each contribute independently."
+    },
+    "O5": {
+      "acceptance_criteria": [
+        "Positive-count buckets return their sum in either fill mode.",
+        "Zero-count buckets return null in fill none.",
+        "Zero-count buckets in fill previous return the latest earlier nonempty sum within the same group.",
+        "A bucket containing only null-valued events is empty for filling purposes.",
+        "Before the first nonempty bucket, fill previous returns null."
+      ],
+      "dependencies": [
+        {
+          "id": "O4",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-24ca402d1c81307e12b947f341f789f8"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "bucket values and causal filling"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "bucket values and causal filling"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 732,
+          "interpretation": "Nonempty bucket value.",
+          "origin": "explicit",
+          "start_byte": 673
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 852,
+          "interpretation": "Empty bucket values for both fill modes.",
+          "origin": "explicit",
+          "start_byte": 733
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "A bucket with positive count has value equal to its sum. An empty bucket has null value for fill none; for fill previous it has the most recent earlier nonempty bucket sum for that same group, or null if no such bucket exists."
+    },
+    "O6": {
+      "acceptance_criteria": [
+        "Each output object contains the specified group, start, count and value fields.",
+        "Rows are ordered first by group and then by increasing bucket start.",
+        "There is exactly one row for every enumerated group bucket."
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O5",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-723a089ce0cef11bbbb7d742121a036e"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "returned value"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "returned value"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 992,
+          "interpretation": "Output shape and ordering.",
+          "origin": "explicit",
+          "start_byte": 930
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1317,
+          "interpretation": "Preserve exact structure and ordering.",
+          "origin": "explicit",
+          "start_byte": 1252
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Return a list of objects with group, start, count and value fields in lexicographic group order, then increasing bucket-start order, preserving the specified input/output structure."
+    },
+    "O7": {
+      "acceptance_criteria": [
+        "The first example returns group a rows at starts 0, 2 and 4 with counts 2, 0 and 0 and values 0, 0 and 0.",
+        "The second example returns a single group z row at start 0 with count 0 and value null."
+      ],
+      "dependencies": [
+        {
+          "id": "O6",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "I1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no registered verifier has evaluated this milestone",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-15f42d0b61ff0e00ab1d0883d49dd832"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "public example inputs"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "public example inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1891,
+          "interpretation": "Concrete required example behavior.",
+          "origin": "explicit",
+          "start_byte": 1319
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Reproduce both public examples exactly, including propagation of a zero sum and null filling for a group with only a pre-start event."
+    },
+    "R1": {
+      "acceptance_criteria": [
+        "No third-party libraries are required.",
+        "No external I/O occurs."
+      ],
+      "dependencies": [],
+      "id": "R1",
+      "kind": "resource_constraint",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-7bcc08147ea02a487be7bfda0d76e4aa"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: UNSUPPORTED_CAPABILITY",
+          "scope": [
+            "formal statement check of a rejected formalization candidate"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-75ae6b258a812fe791d3bf2e14f0f8c8"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "implementation and execution"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "implementation and execution"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 237,
+          "interpretation": "Library and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 187
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1177,
+          "interpretation": "Repeated library and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 1130
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Use only Python standard-library facilities and perform no external I/O."
+    }
+  },
+  "roots": {
+    "contract_candidate_root": "sha256:0fb9950eef205a4552c5c0c2432dd373f23e2978e74a27d66d1e1e38c90a4b82",
+    "interpretation_root": "sha256:fced655dc596ee6575736cb884ecdbbf29d10ed424036877051ca5f2df8d64b3"
+  },
+  "schema_version": "0.1"
+}

@@ -1,0 +1,8 @@
+Software engineering task D25: Stable multiset record reconciliation
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {before:[objects],after:[objects],key:string}; every row has key. Traverse before rows in order and match each to the earliest still-unused after row whose key is structurally equal, with booleans distinct from numbers and object key order ignored. For each match emit {before:index,after:index,changed:[field names]} where changed is sorted union of field names whose presence differs or whose JSON values differ structurally. Duplicate key occurrences are paired one-for-one, never by best similarity. Return {matched:[matches in before order],removed:[unmatched before indices],added:[unused after indices]}, removed/added ascending. Missing field differs from present null. Rows are not mutated.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"after": [{"k": 1, "x": 2}], "before": [{"k": 1, "x": 1}, {"k": 1, "x": 2}], "key": "k"}, "output": {"added": [], "matched": [{"after": 0, "before": 0, "changed": ["x"]}], "removed": [1]}}, {"input": {"after": [{"k": 1}], "before": [{"k": true}], "key": "k"}, "output": {"added": [0], "matched": [], "removed": [0]}}]

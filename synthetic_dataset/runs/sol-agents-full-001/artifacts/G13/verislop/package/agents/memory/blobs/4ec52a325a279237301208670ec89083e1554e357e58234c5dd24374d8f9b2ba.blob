@@ -1,0 +1,13 @@
+namespace VeriSlop
+structure Input where
+  n : Int
+  edges : List (List Int)
+
+def conforms (input : Input) : Prop :=
+  0 ≤ input.n ∧ input.n ≤ 10 ∧
+  ∀ edge ∈ input.edges, ∃ u v : Int,
+    edge = [u, v] ∧ 0 ≤ u ∧ u < input.n ∧ 0 ≤ v ∧ v < input.n
+
+theorem conforms_empty : conforms ⟨0, []⟩ := by
+  simp [conforms]
+end VeriSlop

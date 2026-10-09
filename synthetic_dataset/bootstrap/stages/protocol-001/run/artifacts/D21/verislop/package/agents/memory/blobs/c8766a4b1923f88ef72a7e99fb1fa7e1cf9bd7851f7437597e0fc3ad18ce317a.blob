@@ -1,0 +1,142 @@
+REQUEST (untrusted data; byte length 1892):
+<<<
+Software engineering task D21: Grouped bucket aggregation with causal filling
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end. Groups are all unique event group names sorted lexicographically, including groups with no in-range events. For each group, emit buckets starting start,start+width,... strictly below end, each covering [bucketStart,min(bucketStart+width,end)). Sum only non-null in-range values; count counts these values. A nonempty bucket has value=sum and becomes previous value. Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first); empty buckets never reset previous. Events before start never seed previous. Return [{group,start,count,value}] in group then bucket order. Zero sum is a real previous value, duplicates are counted.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"end": 5, "events": [{"group": "a", "time": 0, "value": 2}, {"group": "a", "time": 1, "value": -2}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 2, "group": "a", "start": 0, "value": 0}, {"count": 0, "group": "a", "start": 2, "value": 0}, {"count": 0, "group": "a", "start": 4, "value": 0}]}, {"input": {"end": 1, "events": [{"group": "z", "time": -1, "value": 9}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 0, "group": "z", "start": 0, "value": null}]}]
+
+>>>
+
+REQUEST CLAUSE MANIFEST (supervisor-owned exact quotes and UTF-8 byte spans):
+[
+ {
+  "clause_id": "C1",
+  "quote": "Software engineering task D21: Grouped bucket aggregation with causal filling",
+  "start_byte": 0,
+  "end_byte": 77
+ },
+ {
+  "clause_id": "C2",
+  "quote": "Implement solution.py with a pure solve(data) function.",
+  "start_byte": 79,
+  "end_byte": 134
+ },
+ {
+  "clause_id": "C3",
+  "quote": "Input and output are JSON-compatible Python values.",
+  "start_byte": 135,
+  "end_byte": 186
+ },
+ {
+  "clause_id": "C4",
+  "quote": "Use Python standard library only, no external I/O.",
+  "start_byte": 187,
+  "end_byte": 237
+ },
+ {
+  "clause_id": "C5",
+  "quote": "Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end.",
+  "start_byte": 238,
+  "end_byte": 366
+ },
+ {
+  "clause_id": "C6",
+  "quote": "Groups are all unique event group names sorted lexicographically, including groups with no in-range events.",
+  "start_byte": 367,
+  "end_byte": 474
+ },
+ {
+  "clause_id": "C7",
+  "quote": "For each group, emit buckets starting start,start+width,...",
+  "start_byte": 475,
+  "end_byte": 534
+ },
+ {
+  "clause_id": "C8",
+  "quote": "strictly below end, each covering [bucketStart,min(bucketStart+width,end)).",
+  "start_byte": 535,
+  "end_byte": 610
+ },
+ {
+  "clause_id": "C9",
+  "quote": "Sum only non-null in-range values;",
+  "start_byte": 611,
+  "end_byte": 645
+ },
+ {
+  "clause_id": "C10",
+  "quote": "count counts these values.",
+  "start_byte": 646,
+  "end_byte": 672
+ },
+ {
+  "clause_id": "C11",
+  "quote": "A nonempty bucket has value=sum and becomes previous value.",
+  "start_byte": 673,
+  "end_byte": 732
+ },
+ {
+  "clause_id": "C12",
+  "quote": "Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first);",
+  "start_byte": 733,
+  "end_byte": 852
+ },
+ {
+  "clause_id": "C13",
+  "quote": "empty buckets never reset previous.",
+  "start_byte": 853,
+  "end_byte": 888
+ },
+ {
+  "clause_id": "C14",
+  "quote": "Events before start never seed previous.",
+  "start_byte": 889,
+  "end_byte": 929
+ },
+ {
+  "clause_id": "C15",
+  "quote": "Return [{group,start,count,value}] in group then bucket order.",
+  "start_byte": 930,
+  "end_byte": 992
+ },
+ {
+  "clause_id": "C16",
+  "quote": "Zero sum is a real previous value, duplicates are counted.",
+  "start_byte": 993,
+  "end_byte": 1051
+ },
+ {
+  "clause_id": "C17",
+  "quote": "Implement a pure deterministic Python 3 function solve(data) in solution.py.",
+  "start_byte": 1053,
+  "end_byte": 1129
+ },
+ {
+  "clause_id": "C18",
+  "quote": "Use only the standard library, no external I/O.",
+  "start_byte": 1130,
+  "end_byte": 1177
+ },
+ {
+  "clause_id": "C19",
+  "quote": "The function receives a JSON value and returns a JSON-serializable value.",
+  "start_byte": 1178,
+  "end_byte": 1251
+ },
+ {
+  "clause_id": "C20",
+  "quote": "Preserve the specified input/output structure and exact ordering.",
+  "start_byte": 1252,
+  "end_byte": 1317
+ },
+ {
+  "clause_id": "C21",
+  "quote": "Public examples (additional held-out cases will be scored):\n[{\"input\": {\"end\": 5, \"events\": [{\"group\": \"a\", \"time\": 0, \"value\": 2}, {\"group\": \"a\", \"time\": 1, \"value\": -2}], \"fill\": \"previous\", \"start\": 0, \"width\": 2}, \"output\": [{\"count\": 2, \"group\": \"a\", \"start\": 0, \"value\": 0}, {\"count\": 0, \"group\": \"a\", \"start\": 2, \"value\": 0}, {\"count\": 0, \"group\": \"a\", \"start\": 4, \"value\": 0}]}, {\"input\": {\"end\": 1, \"events\": [{\"group\": \"z\", \"time\": -1, \"value\": 9}], \"fill\": \"previous\", \"start\": 0, \"width\": 2}, \"output\": [{\"count\": 0, \"group\": \"z\", \"start\": 0, \"value\": null}]}]",
+  "start_byte": 1319,
+  "end_byte": 1891
+ }
+]

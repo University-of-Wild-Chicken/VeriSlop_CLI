@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:bridge-artifacts:0.1",
+  "title": "Exact bridge artifact slots bound to a frozen plan",
+  "$comment": "All hashes and sizes are assertions until the supervisor independently reads the actual regular files. Runtime checks enforce exact plan-slot coverage, unique canonical safe paths, roles, node ownership, no symlinks/hardlinks, and hashes. This manifest carries no execution or verification status.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "format": { "const": "verislop.bridge-artifacts/0.1" },
+    "bridge_id": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+    "plan_hash": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" },
+    "artifacts": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/artifact" } }
+  },
+  "required": ["schema_version", "format", "bridge_id", "plan_hash", "artifacts"],
+  "$defs": {
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "slot_id": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+        "role": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+        "path": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path" },
+        "size": { "type": "integer", "minimum": 0 },
+        "sha256": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" }
+      },
+      "required": ["slot_id", "role", "path", "size", "sha256"]
+    }
+  }
+}

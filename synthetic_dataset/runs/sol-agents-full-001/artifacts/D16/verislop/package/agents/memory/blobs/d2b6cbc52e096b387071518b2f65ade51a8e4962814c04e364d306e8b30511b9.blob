@@ -1,0 +1,463 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "Input contains value and schema; schema nodes use object, array, string, integer, boolean, or null types. Input and output are JSON-compatible Python values.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "The interface accepts the specified value/schema structure and produces JSON-serializable output.",
+   "All six specified schema types are represented."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "D2",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "Object schemas support optional properties maps, required name lists, and an additional boolean whose omitted value is true.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Omitting additional permits unknown properties.",
+   "Properties and required are optional schema fields."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Provide a pure deterministic Python 3 solve(data) function in solution.py.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "solution.py exposes solve(data).",
+   "Repeated equivalent inputs produce equivalent outputs with identical diagnostic ordering.",
+   "Calling solve does not mutate caller-owned input or schema."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Visit known object property names in sorted order. Insert a deep copy of a missing property's default and recursively validate it. If no default exists, emit required for a missing required property; otherwise skip it. Recursively validate present known properties.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "Q1",
+    "relation": "blocked_by"
+   }
+  ],
+  "acceptance_criteria": [
+   "Known properties are processed in sorted name order.",
+   "Defaults take precedence over missing-required diagnostics.",
+   "Inserted mutable defaults share no mutable storage with schema defaults.",
+   "Present and inserted known properties undergo recursive validation.",
+   "Missing optional properties without defaults are absent from the returned value."
+  ],
+  "blocked_by": [
+   "Q1"
+  ]
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Recursively validate array elements from left to right using schema.items.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Element validation follows increasing index order.",
+   "Each element uses the items schema and its index-based pointer."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Diagnostic paths are JSON Pointers: escape ~ as ~0 and / as ~1 in each path segment, and use the empty string for the root.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Root diagnostics use ''.",
+   "Nested pointers concatenate slash-prefixed escaped segments.",
+   "Literal ~ and / in property names are escaped as ~0 and ~1 respectively."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Return an object containing value as the default-filled value and errors as diagnostics in the specified traversal order, preserving the requested interface structure and ordering.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Return structure is {value: transformed value, errors: diagnostic list}.",
+   "Each diagnostic has path and error fields.",
+   "The errors list preserves sorted object traversal, subsequent additional diagnostics, left-to-right array traversal, and range-before-enum ordering."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O6",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Satisfy both public examples: insert a=2 and retain z=1 with only /z additional; preserve [true,4] with /0 type followed by /1 range.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "The first example returns value {a:2,z:1} and errors [{error:'additional',path:'/z'}].",
+   "The second example returns value [true,4] and errors [{error:'type',path:'/0'},{error:'range',path:'/1'}]."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I1",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "Validate defaults even when they are invalid, and preserve all inserted defaults despite validation errors.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Invalid defaults produce their applicable validation diagnostics.",
+   "Validation errors never undo inserted defaults, including defaults inserted recursively."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "R1",
+  "kind": "resource_constraint",
+  "role": "guarantee",
+  "statement": "Use only the Python standard library and perform no external I/O.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No third-party dependencies are used.",
+   "Execution performs no external I/O."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "E1",
+  "kind": "error_semantics",
+  "role": "guarantee",
+  "statement": "Check node type, treating booleans as distinct from integers. A mismatch emits exactly a type diagnostic at that node, preserves its value, and stops validation below or within that node.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Boolean values fail integer validation.",
+   "A mismatched node emits {path: node pointer, error: 'type'}.",
+   "A mismatched node is unchanged and produces no descendant, range, or enum diagnostics."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "E2",
+  "kind": "error_semantics",
+  "role": "guarantee",
+  "statement": "After known-property processing, emit additional diagnostics for unknown properties present in the original object, sorted by name, only when additional is false; retain those properties.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D2",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Unknown original properties remain in the output.",
+   "additional:false yields one additional diagnostic per unknown original property in sorted order after known-property diagnostics.",
+   "additional:true or omitted additional yields no additional diagnostics."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "E3",
+  "kind": "error_semantics",
+  "role": "guarantee",
+  "statement": "For type-matching integers, enforce inclusive minimum and maximum bounds and emit range on violation. Subsequently check scalar enum membership and emit enum on violation.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "Q2",
+    "relation": "blocked_by"
+   }
+  ],
+  "acceptance_criteria": [
+   "Integers equal to either bound pass that bound.",
+   "An integer outside an applicable bound emits range.",
+   "A scalar outside its enum emits enum.",
+   "If both checks fail, range precedes enum."
+  ],
+  "blocked_by": [
+   "Q2"
+  ]
+ },
+ {
+  "id": "Q1",
+  "kind": "ambiguity",
+  "role": "open_question",
+  "statement": "Clarify whether required names absent from properties are checked, and where their diagnostics occur in sorted traversal.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Specify whether traversal covers properties names alone or the union of properties and required names."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "Q2",
+  "kind": "ambiguity",
+  "role": "open_question",
+  "statement": "Clarify enum equality between booleans and numeric values, for which Python equality can conflate distinct JSON types.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Specify whether true matches 1 and false matches 0 in enum membership."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "D2",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D2",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [
+   "Q1"
+  ],
+  "binding": null,
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O6",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O6",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "I1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "R1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "R1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "E1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "E1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "E2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "E2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "E3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [
+   "Q2"
+  ],
+  "binding": null,
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "Q1",
+  "role": "open_question",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "Q1"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "Q2",
+  "role": "open_question",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "Q2"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+[]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Software engineering task D16: Recursive schema defaults with deterministic diagnostics
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {value:JSON,schema:node}. Schema type is object,array,string,integer,boolean,null. Boolean is not integer. Type mismatch emits {path,error:'type'} and leaves that node unchanged without descending. Object schema has optional properties map, required name list, additional bool default true. Visit property names in sorted order: missing property with default is inserted by deep copy then validated; otherwise missing required emits 'required'; otherwise skip. Validate present known properties recursively, then emit 'additional' for unknown original properties in sorted order when additional:false, retaining them. Arrays validate items left to right via schema.items. Integer minimum/maximum inclusive violations emit 'range', then scalar enum membership violations emit 'enum'. Defaults may themselves be invalid. Paths are JSON Pointers with ~ and / escaped; root ''. Return {value:default-filled value,errors:[diagnostics in traversal order]}; validation errors do not roll back defaults.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"schema": {"additional": false, "properties": {"a": {"default": 2, "type": "integer"}}, "required": ["a"], "type": "object"}, "value": {"z": 1}}, "output": {"errors": [{"error": "additional", "path": "/z"}], "value": {"a": 2, "z": 1}}}, {"input": {"schema": {"items": {"maximum": 3, "type": "integer"}, "type": "array"}, "value": [true, 4]}, "output": {"errors": [{"error": "type", "path": "/0"}, {"error": "range", "path": "/1"}], "value": [true, 4]}}]
+
+>>>
+PREVIOUS CANDIDATE (untrusted source and binding proposal; repair rather than weaken):
+{
+ "lean_source": "-- unparseable formalizer response\n",
+ "formalization": {
+  "error": "unparseable formalizer response: 'lean_source'"
+ }
+}
+PREVIOUS UNPARSEABLE FORMALIZER RESPONSE (untrusted candidate; fix the envelope):
+{"status":"unsupported","reason":"A faithful executable contract cannot be represented by the stated typed AST frontend or Python generated-test bridge. D1 requires arbitrary recursive JSON values and recursive schemas with six distinct node types. D2 requires optional schema fields and dynamic property maps. Active guarantees require recursive validation, sorted dynamic object keys, JSON Pointer escaping, deep-copy and non-mutation behavior, and preservation of arbitrary JSON values. The frontend excludes arbitrary JSON, recursive records, sorting, and the required string escaping operations. Fixed records or bounded examples would narrow the frozen specification, and opaque Lean cannot satisfy the required TESTED assurance.","blocked_obligations":{"O2":["Q1"],"E3":["Q2"]},"open_questions":{"Q1":"Whether required names absent from properties are checked, and their diagnostic traversal positions.","Q2":"Whether enum equality distinguishes booleans from numeric values."},"required_extension":"An executable recursive JSON and schema model with optional fields, dynamic maps, sorted-key traversal, recursive validation, JSON Pointer escaping, and a bridge capable of checking Python purity, deep-copy behavior, and resource constraints."}
+The previous candidate was rejected by the statement checker:
+- unparseable formalizer response: 'lean_source'
+- CRITIC DIAGNOSTIC REPAIR: The formalizer response could not be parsed because the required lean_source field was missing. Return a parseable formalizer response containing lean_source with the actual Lean source and the required formalization data, rather than the error placeholder.
+CORRECTION ATTEMPT 2: inspect each diagnostic and return a changed complete proposal that fixes the rejected syntax or registered-language use while preserving all obligations. Returning the same rejected source and bindings does not repair it.
+AUTONOMOUS CRITIQUE (untrusted proposals; preserve every interpreted obligation):
+{"status": "REPAIR", "feedback": ["CRITIC DIAGNOSTIC REPAIR: The formalizer response could not be parsed because the required lean_source field was missing. Return a parseable formalizer response containing lean_source with the actual Lean source and the required formalization data, rather than the error placeholder."]}

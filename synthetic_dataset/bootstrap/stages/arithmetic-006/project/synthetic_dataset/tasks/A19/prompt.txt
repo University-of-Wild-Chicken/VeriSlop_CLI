@@ -1,0 +1,8 @@
+Software engineering task A19: Exact trailing-window heavy-hitter index
+
+Implement solution.py with a single solve(data) function. data and the return value must be JSON-compatible. Use Python 3 standard library only; perform no external I/O and do not read benchmark files. All supplied inputs satisfy the stated schema and bounds; no behavior is required for malformed input. Input {events:[[timestamp,key],...],queries:[[end,width,k],...]}, <=100 events, ASCII lowercase keys, nonnegative width and k. Events need not be ordered and duplicates count. For each query count keys with end-width < timestamp <= end; rank by descending count then key ascending, return top k [key,count] pairs. Return a list of these query results; zero-width windows are empty.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"events": [[1, "b"], [2, "a"], [2, "b"], [3, "a"]], "queries": [[3, 2, 2], [2, 1, 1], [3, 0, 5]]}, "output": [[["a", 2], ["b", 1]], [["a", 1]], []]}, {"input": {"events": [], "queries": [[4, 9, 3]]}, "output": [[]]}]

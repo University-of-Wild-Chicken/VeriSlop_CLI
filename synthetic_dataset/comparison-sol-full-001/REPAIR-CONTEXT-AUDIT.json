@@ -1,0 +1,90 @@
+{
+  "authority": "read-only supplemental audit; no inference or grading reruns",
+  "checks": [
+    {
+      "path": "artifacts/G03/verislop/mailbox/request-0004.json",
+      "raw_previous_response_section_present": true,
+      "request_id": "0004",
+      "role": "within-package repair",
+      "sha256": "sha256:2dcd4a98e25d07fe2e790b6769ad0b79e70bf8d34635f182d8dc6ae03bb93823",
+      "task": "G03"
+    },
+    {
+      "path": "artifacts/G03/verislop/mailbox/request-0008.json",
+      "raw_previous_response_section_present": false,
+      "request_id": "0008",
+      "role": "first request of fresh outer repair",
+      "sha256": "sha256:3bec6eba30c7cdbcfabe5f8ef3138039bc29b3cdd75a04cc302c82841099c5dd",
+      "task": "G03"
+    },
+    {
+      "path": "artifacts/G03/verislop/mailbox/request-0014.json",
+      "raw_previous_response_section_present": false,
+      "request_id": "0014",
+      "role": "first request of fresh outer repair",
+      "sha256": "sha256:de3293a8209559e526cbf099761b7a76ac3e6aada33089c8c9a593904563d429",
+      "task": "G03"
+    },
+    {
+      "path": "artifacts/G13/verislop/mailbox/request-0005.json",
+      "raw_previous_response_section_present": true,
+      "request_id": "0005",
+      "role": "within-package repair",
+      "sha256": "sha256:70ac177a4372761fbe3452b8c624c07c47db4bf3f105222a54ac74e49031bd1c",
+      "task": "G13"
+    },
+    {
+      "path": "artifacts/G13/verislop/mailbox/request-0009.json",
+      "raw_previous_response_section_present": false,
+      "request_id": "0009",
+      "role": "first request of fresh outer repair",
+      "sha256": "sha256:07260c8651c9a9963092818096ca66e239c75cd2ea889424804506d2e307cd95",
+      "task": "G13"
+    },
+    {
+      "path": "artifacts/G13/verislop/mailbox/request-0015.json",
+      "raw_previous_response_section_present": false,
+      "request_id": "0015",
+      "role": "first request of fresh outer repair",
+      "sha256": "sha256:a224390dacda34d1b799d3c1cc89290ec574cd90ce8c4e30352bbfaff646b9d6",
+      "task": "G13"
+    },
+    {
+      "path": "artifacts/D21/verislop/mailbox/request-0004.json",
+      "raw_previous_response_section_present": true,
+      "request_id": "0004",
+      "role": "within-package repair",
+      "sha256": "sha256:c48fad1bcc4900032650fb4d5797e1009dbe8bcfa88442e27526a2508a1054ac",
+      "task": "D21"
+    },
+    {
+      "path": "artifacts/D21/verislop/mailbox/request-0008.json",
+      "raw_previous_response_section_present": false,
+      "request_id": "0008",
+      "role": "first request of fresh outer repair",
+      "sha256": "sha256:c5d10ac3686b8efed56bd8c27b0a6f1c8b08fa39ed6226db54fd15f9010d83ef",
+      "task": "D21"
+    },
+    {
+      "path": "artifacts/D21/verislop/mailbox/request-0014.json",
+      "raw_previous_response_section_present": false,
+      "request_id": "0014",
+      "role": "first request of fresh outer repair",
+      "sha256": "sha256:e9186b064b698f33e20b2df2ad2e6f0da57dd142bf45b2815d07e83397e6ef5b",
+      "task": "D21"
+    }
+  ],
+  "findings": [
+    "Exact raw unsupported responses remain in same-package correction prompts but are absent from first outer-repair prompts.",
+    "recovery.seed transfers placeholder Lean source/bindings and previous critic memory; formalizer restoration searches only the current package.",
+    "autonomous.packet supplies placeholder source and parse diagnostics without the raw formalizer response. Bytes retained on disk therefore do not guarantee that fresh repair agents receive them."
+  ],
+  "format": "verislop.sol-repair-context-audit/0.1",
+  "qualification": "Unit supports None. The missing representation is an untagged nullable/mixed union preserving requested JSON; Except serializes tagged tuples. A model-stated domain gap alone is not a proof of impossibility.",
+  "source_refs": [
+    "verislop/recovery.py:226",
+    "verislop/recovery.py:247",
+    "verislop/agents.py:536",
+    "verislop/autonomous.py:50"
+  ]
+}

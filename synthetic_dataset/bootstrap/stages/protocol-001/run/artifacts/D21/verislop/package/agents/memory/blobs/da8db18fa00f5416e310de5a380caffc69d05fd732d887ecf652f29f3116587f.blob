@@ -1,0 +1,342 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "Input contains events with string group, integer time and integer-or-null value, integer start and end with start<=end, positive integer width, and fill equal to 'none' or 'previous'. Output is a JSON-compatible list of records with group,start,count,value.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Preserve the specified input domain and output fields.",
+   "Return a JSON-serializable value."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Provide a pure deterministic Python 3 solve(data) function in solution.py.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "solution.py exposes solve(data).",
+   "Equivalent inputs produce equivalent outputs.",
+   "The function is pure."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Enumerate all unique event group names lexicographically, including groups with no in-range events. For each group emit buckets at start+k*width for nonnegative integers k strictly below end, covering [bucketStart,min(bucketStart+width,end)). Return records in group then ascending bucket order.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Groups equal the sorted set of all event group names.",
+   "Bucket starts are exactly start+k*width<end for k>=0.",
+   "Intervals include their left boundary and exclude their clipped right boundary.",
+   "start=end produces no records.",
+   "Empty events produces no records.",
+   "Records contain group,start,count,value in the specified group then bucket order."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For each group and bucket, count every event occurrence in that group whose time lies in the bucket and whose value is non-null, and sum precisely those values. Duplicate occurrences contribute separately. A bucket is nonempty exactly when count>0, and its output value then equals the sum.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "count equals the number of qualifying non-null event occurrences.",
+   "Null and out-of-range values contribute neither count nor sum.",
+   "Duplicates contribute separately.",
+   "For count>0, value equals the sum, including zero and negative sums."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "A bucket with count zero has null value for fill='none'. For fill='previous', its value is the latest preceding nonempty bucket sum within that group, or null before the first nonempty bucket.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "I1",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Empty buckets retain count zero regardless of fill.",
+   "fill='none' gives null for every empty bucket.",
+   "fill='previous' gives the latest previous nonempty sum, including zero.",
+   "Before the first nonempty bucket, fill='previous' gives null."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Match both public examples exactly: cancelling a events produce count 2 and value 0 at start 0, then count-zero buckets at 2 and 4 filled with 0; the pre-start z event yields a count-zero bucket at 0 with null value.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O4",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "For a events (0,2),(1,-2), start=0,end=5,width=2,fill='previous', return [{group:'a',start:0,count:2,value:0},{group:'a',start:2,count:0,value:0},{group:'a',start:4,count:0,value:0}].",
+   "For z event (-1,9), start=0,end=1,width=2,fill='previous', return [{group:'z',start:0,count:0,value:null}]."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I1",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "Within each group, previous starts absent and after each bucket equals the sum of the latest nonempty emitted bucket processed so far, if one exists. Nonempty buckets update previous, including zero sums; empty buckets preserve it. Events before start never seed previous.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Previous is independent for each group.",
+   "Only nonempty emitted buckets update previous.",
+   "Zero remains a present previous value.",
+   "Empty buckets never reset previous.",
+   "Pre-start events never seed previous."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "S1",
+  "kind": "safety_property",
+  "role": "guarantee",
+  "statement": "Use only the Python standard library and perform no external I/O.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No third-party libraries are required.",
+   "No external I/O occurs."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "I1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "S1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "S1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+[]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Software engineering task D21: Grouped bucket aggregation with causal filling
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end. Groups are all unique event group names sorted lexicographically, including groups with no in-range events. For each group, emit buckets starting start,start+width,... strictly below end, each covering [bucketStart,min(bucketStart+width,end)). Sum only non-null in-range values; count counts these values. A nonempty bucket has value=sum and becomes previous value. Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first); empty buckets never reset previous. Events before start never seed previous. Return [{group,start,count,value}] in group then bucket order. Zero sum is a real previous value, duplicates are counted.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"end": 5, "events": [{"group": "a", "time": 0, "value": 2}, {"group": "a", "time": 1, "value": -2}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 2, "group": "a", "start": 0, "value": 0}, {"count": 0, "group": "a", "start": 2, "value": 0}, {"count": 0, "group": "a", "start": 4, "value": 0}]}, {"input": {"end": 1, "events": [{"group": "z", "time": -1, "value": 9}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 0, "group": "z", "start": 0, "value": null}]}]
+
+>>>
+PREVIOUS CANDIDATE (untrusted source and binding proposal; repair rather than weaken):
+{
+ "lean_source": "-- formalizer capability gap (untrusted report)\n",
+ "formalization": {
+  "capability_report": {
+   "encoding": "verislop.formalizer-capability-gap/0.1",
+   "obligation_ids": [
+    "D1",
+    "O1",
+    "O2",
+    "O3",
+    "O4",
+    "O5",
+    "I1",
+    "S1"
+   ],
+   "gaps": [
+    {
+     "obligation_ids": [
+      "O2"
+     ],
+     "feature": "Lexicographic comparison of strings",
+     "reason": "O2 requires all unique group names in lexicographic order for arbitrary Unicode strings. The term and formula grammar supports string equality, append, length and emptiness, but no lexicographic comparison or sorting operation.",
+     "attempted_representations": [
+      "A total fold over events can remove duplicate group names using string equality and filtering, but insertion into lexicographic order requires an unavailable string comparison.",
+      "An exact String representation preserves group names, but length and equality cannot determine lexicographic order. Requiring presorted input would add an unauthorized caller assumption."
+     ]
+    },
+    {
+     "obligation_ids": [
+      "O2",
+      "O3",
+      "O4",
+      "O5",
+      "I1"
+     ],
+     "feature": "Generation of an unbounded bucket sequence from integer bounds",
+     "reason": "The number of emitted buckets depends on end-start and width and can be arbitrarily large even for a single input event. The grammar has no integer range generation, recursion or iteration bounded by a numeric term. Therefore it cannot construct the required output list of all bucket starts strictly below end or carry previous values through that sequence.",
+     "attempted_representations": [
+      "Supported list folds can aggregate event occurrences and maintain accumulator records, but they iterate only over existing lists. A single event does not supply a list whose length covers an arbitrarily large number of buckets.",
+      "List append and list construction inside finitely nested total folds can expand lists, but for a fixed one-event input their output lengths remain bounded independently of end and width.",
+      "Adding a caller-provided bucket list or replacing integer bounds with a list would change the required Input fields and types."
+     ]
+    }
+   ]
+  }
+ },
+ "raw_response": "{\"encoding\":\"verislop.formalizer-capability-gap/0.1\",\"obligation_ids\":[\"D1\",\"O1\",\"O2\",\"O3\",\"O4\",\"O5\",\"I1\",\"S1\"],\"gaps\":[{\"obligation_ids\":[\"O2\"],\"feature\":\"Lexicographic comparison of strings\",\"reason\":\"O2 requires all unique group names in lexicographic order for arbitrary Unicode strings. The term and formula grammar supports string equality, append, length and emptiness, but no lexicographic comparison or sorting operation.\",\"attempted_representations\":[\"A total fold over events can remove duplicate group names using string equality and filtering, but insertion into lexicographic order requires an unavailable string comparison.\",\"An exact String representation preserves group names, but length and equality cannot determine lexicographic order. Requiring presorted input would add an unauthorized caller assumption.\"]},{\"obligation_ids\":[\"O2\",\"O3\",\"O4\",\"O5\",\"I1\"],\"feature\":\"Generation of an unbounded bucket sequence from integer bounds\",\"reason\":\"The number of emitted buckets depends on end-start and width and can be arbitrarily large even for a single input event. The grammar has no integer range generation, recursion or iteration bounded by a numeric term. Therefore it cannot construct the required output list of all bucket starts strictly below end or carry previous values through that sequence.\",\"attempted_representations\":[\"Supported list folds can aggregate event occurrences and maintain accumulator records, but they iterate only over existing lists. A single event does not supply a list whose length covers an arbitrarily large number of buckets.\",\"List append and list construction inside finitely nested total folds can expand lists, but for a fixed one-event input their output lengths remain bounded independently of end and width.\",\"Adding a caller-provided bucket list or replacing integer bounds with a list would change the required Input fields and types.\"]}]}",
+ "raw_response_snapshot": {
+  "path": "agents/memory/snapshots/00000006-b0751be3bbe553d9d1d5aeebe118c2a833de3f8c065fd28c5a4057b638e5d0b2.json",
+  "sha256": "sha256:b0751be3bbe553d9d1d5aeebe118c2a833de3f8c065fd28c5a4057b638e5d0b2",
+  "size": 855
+ }
+}
+EXACT PREVIOUS FORMALIZER RESPONSE (untrusted bytes restored from validated memory):
+{"encoding":"verislop.formalizer-capability-gap/0.1","obligation_ids":["D1","O1","O2","O3","O4","O5","I1","S1"],"gaps":[{"obligation_ids":["O2"],"feature":"Lexicographic comparison of strings","reason":"O2 requires all unique group names in lexicographic order for arbitrary Unicode strings. The term and formula grammar supports string equality, append, length and emptiness, but no lexicographic comparison or sorting operation.","attempted_representations":["A total fold over events can remove duplicate group names using string equality and filtering, but insertion into lexicographic order requires an unavailable string comparison.","An exact String representation preserves group names, but length and equality cannot determine lexicographic order. Requiring presorted input would add an unauthorized caller assumption."]},{"obligation_ids":["O2","O3","O4","O5","I1"],"feature":"Generation of an unbounded bucket sequence from integer bounds","reason":"The number of emitted buckets depends on end-start and width and can be arbitrarily large even for a single input event. The grammar has no integer range generation, recursion or iteration bounded by a numeric term. Therefore it cannot construct the required output list of all bucket starts strictly below end or carry previous values through that sequence.","attempted_representations":["Supported list folds can aggregate event occurrences and maintain accumulator records, but they iterate only over existing lists. A single event does not supply a list whose length covers an arbitrarily large number of buckets.","List append and list construction inside finitely nested total folds can expand lists, but for a fixed one-event input their output lengths remain bounded independently of end and width.","Adding a caller-provided bucket list or replacing integer bounds with a list would change the required Input fields and types."]}]}
+VERIFIED RESPONSE SNAPSHOT (context provenance only):
+{"path": "agents/memory/snapshots/00000006-b0751be3bbe553d9d1d5aeebe118c2a833de3f8c065fd28c5a4057b638e5d0b2.json", "sha256": "sha256:b0751be3bbe553d9d1d5aeebe118c2a833de3f8c065fd28c5a4057b638e5d0b2", "size": 855}
+PREVIOUS UNPARSEABLE FORMALIZER RESPONSE (untrusted candidate; fix the envelope):
+{"encoding":"verislop.formalizer-capability-gap/0.1","obligation_ids":["D1","O1","O2","O3","O4","O5","I1","S1"],"gaps":[{"obligation_ids":["O2"],"feature":"Lexicographic comparison of strings","reason":"O2 requires all unique group names in lexicographic order for arbitrary Unicode strings. The term and formula grammar supports string equality, append, length and emptiness, but no lexicographic comparison or sorting operation.","attempted_representations":["A total fold over events can remove duplicate group names using string equality and filtering, but insertion into lexicographic order requires an unavailable string comparison.","An exact String representation preserves group names, but length and equality cannot determine lexicographic order. Requiring presorted input would add an unauthorized caller assumption."]},{"obligation_ids":["O2","O3","O4","O5","I1"],"feature":"Generation of an unbounded bucket sequence from integer bounds","reason":"The number of emitted buckets depends on end-start and width and can be arbitrarily large even for a single input event. The grammar has no integer range generation, recursion or iteration bounded by a numeric term. Therefore it cannot construct the required output list of all bucket starts strictly below end or carry previous values through that sequence.","attempted_representations":["Supported list folds can aggregate event occurrences and maintain accumulator records, but they iterate only over existing lists. A single event does not supply a list whose length covers an arbitrarily large number of buckets.","List append and list construction inside finitely nested total folds can expand lists, but for a fixed one-event input their output lengths remain bounded independently of end and width.","Adding a caller-provided bucket list or replacing integer bounds with a list would change the required Input fields and types."]}]}
+The previous candidate was rejected by the statement checker:
+- Formalizer reported a capability gap; seek a faithful supported alternate representation without weakening any frozen obligation: {"encoding":"verislop.formalizer-capability-gap/0.1","gaps":[{"attempted_representations":["A total fold over events can remove duplicate group names using string equality and filtering, but insertion into lexicographic order requires an unavailable string comparison.","An exact String representation preserves group names, but length and equality cannot determine lexicographic order. Requiring presorted input would add an unauthorized caller assumption."],"feature":"Lexicographic comparison of strings","obligation_ids":["O2"],"reason":"O2 requires all unique group names in lexicographic order for arbitrary Unicode strings. The term and formula grammar supports string equality, append, length and emptiness, but no lexicographic comparison or sorting operation."},{"attempted_representations":["Supported list folds can aggregate event occurrences and maintain accumulator records, but they iterate only over existing lists. A single event does not supply a list whose length covers an arbitrarily large number of buckets.","List append and list construction inside finitely nested total folds can expand lists, but for a fixed one-event input their output lengths remain bounded independently of end and width.","Adding a caller-provided bucket list or replacing integer bounds with a list would change the required Input fields and types."],"feature":"Generation of an unbounded bucket sequence from integer bounds","obligation_ids":["O2","O3","O4","O5","I1"],"reason":"The number of emitted buckets depends on end-start and width and can be arbitrarily large even for a single input event. The grammar has no integer range generation, recursion or iteration bounded by a numeric term. Therefore it cannot construct the required output list of all bucket starts strictly below end or carry previous values through that sequence."}],"obligation_ids":["D1","O1","O2","O3","O4","O5","I1","S1"]}
+- CRITIC DIAGNOSTIC REPAIR: Retain the capability-gap envelope and every active obligation ID, but expand the attempted alternate representations for UNSUPPORTED_CAPABILITY. Exact nullable integers can be represented by result(error=Unit,ok=Int), preserving null and zero distinctly; this does not supply string comparison or integer-bounded list generation. For a single event {group:'a',time:0,value:1}, start=0,width=1,end=N, O2 requires N output records for arbitrarily large positive N. Finitely nested total folds over the one-element events list and fixed literal lists cannot generate output length depending without bound on N. Likewise, equality, append, length and emptiness do not provide Unicode lexicographic comparison for arbitrary group strings. Retain these precise gaps without replacing the input with presorted groups or caller-provided buckets. The raw Lean alternative must pass the same executable DSL gates, so unrestricted Lean recursion or sorting is not a supported repair. This is an unsupported representation search, not an implementation counterexample or proof of impossibility.
+CORRECTION ATTEMPT 2: inspect each diagnostic and return a changed complete proposal that fixes the rejected syntax or registered-language use while preserving all obligations. Returning the same rejected source and bindings does not repair it.
+AUTONOMOUS CRITIQUE (untrusted proposals; preserve every interpreted obligation):
+{"status": "REPAIR", "feedback": ["CRITIC DIAGNOSTIC REPAIR: Retain the capability-gap envelope and every active obligation ID, but expand the attempted alternate representations for UNSUPPORTED_CAPABILITY. Exact nullable integers can be represented by result(error=Unit,ok=Int), preserving null and zero distinctly; this does not supply string comparison or integer-bounded list generation. For a single event {group:'a',time:0,value:1}, start=0,width=1,end=N, O2 requires N output records for arbitrarily large positive N. Finitely nested total folds over the one-element events list and fixed literal lists cannot generate output length depending without bound on N. Likewise, equality, append, length and emptiness do not provide Unicode lexicographic comparison for arbitrary group strings. Retain these precise gaps without replacing the input with presorted groups or caller-provided buckets. The raw Lean alternative must pass the same executable DSL gates, so unrestricted Lean recursion or sorting is not a supported repair. This is an unsupported representation search, not an implementation counterexample or proof of impossibility."]}

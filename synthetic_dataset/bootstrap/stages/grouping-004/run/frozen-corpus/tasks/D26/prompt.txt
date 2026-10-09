@@ -1,0 +1,8 @@
+Software engineering task D26: Stable Unicode natural ordering
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {values:[strings]}; return sorted original strings. Tokenize each into maximal ASCII-digit [0-9]+ runs or maximal non-ASCII-digit runs. Numeric tokens compare by arbitrary-precision integer value, ignoring leading zeros. Text tokens compare by Python Unicode casefold lexicographic order. At a corresponding position numeric token sorts before text token. Tokens compare left-to-right; shorter equal token sequence sorts first. Completely equal token keys keep original input order (do not add spelling or zero-count tie breaks). Non-ASCII digits are text; empty string has no tokens. No locale, normalization, decimals or negative-number parsing. For this bounded task, every maximal ASCII-digit run has at most 1000 digits.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"values": ["a10", "A2", "a02", "a1", "a"]}, "output": ["a", "a1", "A2", "a02", "a10"]}, {"input": {"values": ["x٢", "x2", "x02", "X2"]}, "output": ["x2", "x02", "X2", "x٢"]}]

@@ -1,0 +1,8 @@
+Software engineering task D23: Structured log key-value lexer
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {text:string}. Parse whitespace-separated key=value pairs; separators are only ASCII space and tab. Key must match [A-Za-z_][A-Za-z0-9_]* immediately followed by '='. Unquoted values run until separator and may be empty; characters including '=' and quote are literal inside them. A value beginning double quote is quoted: spaces/tabs literal, close quote required, with only backslash escapes n,t,double quote,backslash mapped to newline,tab,quote,backslash. Closing quote must be followed by separator or EOF. Return {pairs:[[key,value]],last:{key:last value}}, preserving duplicate pairs. First error returns {error:'key'|'escape'|'quote'|'separator',offset:code-point index}: key begins at offending token; bad escape at escaped character (EOF=len); missing quote EOF=len; separator at first character after close quote. No partial pairs.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"text": "a=1 b=\"x y\" a=2"}, "output": {"last": {"a": "2", "b": "x y"}, "pairs": [["a", "1"], ["b", "x y"], ["a", "2"]]}}, {"input": {"text": "x=\"a\"b"}, "output": {"error": "separator", "offset": 5}}]

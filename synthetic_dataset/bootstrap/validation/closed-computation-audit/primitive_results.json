@@ -1,0 +1,37 @@
+[
+  {
+    "variant": "string_length",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "variant": "fdiv",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "variant": "dedup_strings",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "variant": "dedup_ints",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "variant": "sort_strings",
+    "exit": 1,
+    "output": "/tmp/verislop-generic-proof-audit-r6td8onk/sort_strings.lean:2:108: error: Tactic `decide` failed for proposition\n  ([\"beta\", \"amber\"].mergeSort fun a b => decide (a \u2264 b)) = [\"amber\", \"beta\"]\nbecause its `Decidable` instance\n  instDecidableEqList ([\"beta\", \"amber\"].mergeSort fun a b => decide (a \u2264 b)) [\"amber\", \"beta\"]\ndid not reduce to `isTrue` or `isFalse`.\n\nReduction got stuck at the `Decidable` instance\n  match [\"beta\", \"amber\"].mergeSort fun a b => decide (a \u2264 b) with\n  | [] =>\n    match [\"amber\", \"beta\"] with\n    | [] => isTrue \u22ef\n    | head :: tail => isFalse \u22ef\n  | a :: as =>\n    match [\"amber\", \"beta\"] with\n    | [] => isFalse \u22ef\n    | b :: bs =>\n      match decEq a b with\n      | isTrue hab =>\n        match as.hasDecEq bs with\n        | isTrue habs => isTrue \u22ef\n        | isFalse nabs => isFalse \u22ef\n      | isFalse nab => isFalse \u22ef\n"
+  },
+  {
+    "variant": "sort_ints",
+    "exit": 1,
+    "output": "/tmp/verislop-generic-proof-audit-r6td8onk/sort_ints.lean:2:83: error: Tactic `decide` failed for proposition\n  ([3, 1].mergeSort fun a b => decide (a \u2264 b)) = [1, 3]\nbecause its `Decidable` instance\n  instDecidableEqList ([3, 1].mergeSort fun a b => decide (a \u2264 b)) [1, 3]\ndid not reduce to `isTrue` or `isFalse`.\n\nReduction got stuck at the `Decidable` instance\n  match [3, 1].mergeSort fun a b => decide (a \u2264 b) with\n  | [] =>\n    match [1, 3] with\n    | [] => isTrue \u22ef\n    | head :: tail => isFalse \u22ef\n  | a :: as =>\n    match [1, 3] with\n    | [] => isFalse \u22ef\n    | b :: bs =>\n      match decEq a b with\n      | isTrue hab =>\n        match as.hasDecEq bs with\n        | isTrue habs => isTrue \u22ef\n        | isFalse nabs => isFalse \u22ef\n      | isFalse nab => isFalse \u22ef\n"
+  },
+  {
+    "variant": "fold_int",
+    "exit": 0,
+    "output": ""
+  }
+]

@@ -1,0 +1,8 @@
+Software engineering task G04: Deterministic shortest route with three tie breakers
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {n,edges,source,target}, n=1..10, directed edges [u,v,cost], positive integer costs 1..20. Return null if target is unreachable, otherwise {cost,path}, path a vertex list including endpoints. Choose by minimum total cost, then minimum edge count, then lexicographically smallest vertex list. Parallel edges and self-loops are allowed. source=target returns {cost:0,path:[source]}.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"edges": [[0, 1, 1], [1, 3, 1], [0, 2, 1], [2, 3, 1], [0, 3, 2]], "n": 4, "source": 0, "target": 3}, "output": {"cost": 2, "path": [0, 3]}}, {"input": {"edges": [[0, 2, 1], [2, 3, 1], [0, 1, 1], [1, 3, 1]], "n": 4, "source": 0, "target": 3}, "output": {"cost": 2, "path": [0, 1, 3]}}]

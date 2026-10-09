@@ -1,0 +1,18 @@
+{
+  "agent": "author",
+  "attempts": 1,
+  "context_window_tokens": null,
+  "error": null,
+  "instance": "raw/1",
+  "model_digest_sha256": null,
+  "purpose": "raw-coding",
+  "request_id": "/root/sol_full_corpus_harness/full_0001_g03_raw_0001",
+  "requested_model": "gpt-6.1-sol",
+  "response": "{\"files\":{\"solution.py\":\"def solve(data):\\n    n = data['n']\\n    edges = data['edges']\\n    distances = [None] * n\\n    distances[data['source']] = 0\\n    for _ in range(n - 1):\\n        changed = False\\n        for u, v, cost in edges:\\n            if distances[u] is not None:\\n                candidate = distances[u] + cost\\n                if distances[v] is None or candidate < distances[v]:\\n                    distances[v] = candidate\\n                    changed = True\\n        if not changed:\\n            break\\n    adjacency = [[] for _ in range(n)]\\n    affected = set()\\n    for u, v, cost in edges:\\n        adjacency[u].append(v)\\n        if distances[u] is not None and (distances[v] is None or distances[u] + cost < distances[v]):\\n            affected.add(v)\\n    pending = list(affected)\\n    while pending:\\n        u = pending.pop()\\n        for v in adjacency[u]:\\n            if v not in affected:\\n                affected.add(v)\\n                pending.append(v)\\n    return ['-inf' if v in affected else distances[v] for v in range(n)]\\n\"}}",
+  "returned_model": null,
+  "system": "You are a software engineering coding agent. Implement the entire requested task in Python 3. Return only one JSON object {\"files\":{\"solution.py\":\"<complete source>\"}}. Do not return explanations, tests or placeholders. Define solve(data) exactly as requested.",
+  "system_sha256": "sha256:ccc6fddc279d6fc98153d8f9bf6a8ef5763a9a0dedaeb66acb6618b7c3cdbacb",
+  "user": "Software engineering task G03: Negative-cycle propagation in shortest paths\n\nImplement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {n,source,edges}, n=1..10, edges [u,v,cost] with integer cost -6..9. Return a length-n distance list from source. Unreachable vertices are null. A vertex reachable from a negative-cost cycle that is itself reachable from source is \"-inf\". Other vertices have their minimum integer walk cost; source starts at distance zero. Parallel edges and self-loops are allowed; an unreachable negative cycle must not affect output.\n\nImplement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.\n\nPublic examples (additional held-out cases will be scored):\n[{\"input\": {\"edges\": [[0, 1, 2], [1, 2, -3], [2, 1, 1], [2, 3, 4], [4, 4, -1]], \"n\": 5, \"source\": 0}, \"output\": [0, \"-inf\", \"-inf\", \"-inf\", null]}, {\"input\": {\"edges\": [[1, 1, -1]], \"n\": 3, \"source\": 0}, \"output\": [0, null, null]}]\n",
+  "user_sha256": "sha256:4fdd2d671c8824e8de9e97f49948b9099777fbc4c9268e84b28d4f84b5ce8811",
+  "wall_ms": 107366
+}

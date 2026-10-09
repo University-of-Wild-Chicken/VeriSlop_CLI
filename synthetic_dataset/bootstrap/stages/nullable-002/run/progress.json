@@ -1,0 +1,471 @@
+{
+  "arms": {
+    "raw": {
+      "case_slots_scored": 0,
+      "cases_passed": 0,
+      "clean_builds": 0,
+      "completed_tasks": 0,
+      "executed_observations": 0,
+      "input_tokens": null,
+      "model_calls": 0,
+      "native_statuses": {},
+      "native_tested_tasks": 0,
+      "output_tokens": null,
+      "passed_observations": 0,
+      "passed_tested_guarantees": 0,
+      "required_tested_guarantees": 0,
+      "statuses": {},
+      "successful_clean_builds": 0,
+      "successful_tasks": 0,
+      "total_case_slots": 1157,
+      "total_tasks": 100
+    },
+    "verislop": {
+      "case_slots_scored": 12,
+      "cases_passed": 0,
+      "clean_builds": 0,
+      "completed_tasks": 1,
+      "executed_observations": 0,
+      "input_tokens": null,
+      "model_calls": 8,
+      "native_statuses": {
+        "BLOCKED": 1
+      },
+      "native_tested_tasks": 0,
+      "output_tokens": null,
+      "passed_observations": 0,
+      "passed_tested_guarantees": 0,
+      "required_tested_guarantees": 0,
+      "statuses": {
+        "BLOCKED": 1
+      },
+      "successful_clean_builds": 0,
+      "successful_tasks": 0,
+      "total_case_slots": 1157,
+      "total_tasks": 100
+    }
+  },
+  "complete": false,
+  "complete_pairs": 0,
+  "completed_arms": 1,
+  "dataset_root": "sha256:00e1b28846431c379cf8460d57d84897c5d0575ce49fa1481d7fb1ebc000c04e",
+  "format": "verislop.sol-full-corpus/0.1",
+  "model": "gpt-6.1-sol",
+  "model_identity_attested": false,
+  "paired": {},
+  "protocol_sha256": "sha256:18deb25aa3dbeb329e95c1ea2174649522fe1bf76324d7e9f194b8ae27a313aa",
+  "results": [
+    {
+      "active_package": "artifacts/D21/verislop/package",
+      "arm": "verislop",
+      "arm_evidence_root": "sha256:6ea261f1f3efa75081289645a7f48d35a1e4af0381df13be64e86775e4d80dd9",
+      "artifact_error": null,
+      "artifact_path": "artifacts/D21/verislop",
+      "artifact_present": false,
+      "category": "data",
+      "clean_builds": 0,
+      "cli_diagnostics": [
+        {
+          "claims": [],
+          "code": "UNSUPPORTED_CAPABILITY",
+          "details": {
+            "capability_report": {
+              "encoding": "verislop.formalizer-capability-gap/0.1",
+              "gaps": [
+                {
+                  "attempted_representations": [
+                    "Deduplicate all event group names using a list fold and equality-based filtering. This preserves membership established by null and out-of-range events, but produces encounter order rather than lexicographic order.",
+                    "Insert each distinct name into an accumulated list using nested folds. Insertion requires the missing String comparison; comparing lengths cannot order distinct equal-length names.",
+                    "Compare names against string literals or concatenated strings using equality. A finite acyclic expression contains only finitely many literal distinctions and cannot implement ordering for arbitrary Unicode names.",
+                    "Represent names as scalar lists or require presorted events. These alternatives change the actual input type or add caller restrictions. Raw Lean ordering also fails the requested executable DSL boundary."
+                  ],
+                  "feature": "Lexicographic comparison of arbitrary Unicode String values",
+                  "obligation_ids": [
+                    "O2",
+                    "O6"
+                  ],
+                  "reason": "Group names must remain actual strings and all distinct names must be emitted in Python lexicographic order. The admitted grammar provides string equality, concatenation, length and emptiness, but neither String ordering nor Unicode scalar extraction. Numeric lt and le cannot compare String values."
+                },
+                {
+                  "attempted_representations": [
+                    "Use folds, maps, filters and conditional expressions over events and literal lists. With a singleton event list, start=0 and width=1, each fixed acyclic expression has output length bounded independently of end, while the required length is end for arbitrary positive end.",
+                    "Use nested folds whose accumulators append or duplicate lists. Such expansion remains controlled by lengths of available lists; arithmetic on end cannot create an iteration source.",
+                    "Use record accumulators with previous:Option Int and output:List of records containing group:String,start:Int,count:Int,value:Option Int. Given bucket starts, event folds can count duplicate non-null occurrences, sum signed values with interval guards, initialize previous separately per group, retain Some 0 and preserve previous through empty buckets. This preserves the actual nullable structure but does not generate bucket starts.",
+                    "Fold over events to emit occupied buckets and fill intervening gaps. Expanding an arbitrarily long gap still requires numeric iteration, and omitting its empty buckets violates the specification.",
+                    "Supply bucket starts as another input field, bound the interval, or use raw Lean range generation. The first two alter the specified structure or domain; the last remains outside the required executable DSL acceptance gates."
+                  ],
+                  "feature": "Unbounded integer-controlled generation of bucket starts",
+                  "obligation_ids": [
+                    "O3",
+                    "O4",
+                    "O5",
+                    "O6",
+                    "I1"
+                  ],
+                  "reason": "For every established group, output must contain start+k*width for every nonnegative k with start+k*width<end, including empty buckets. The admitted language has no numeric iteration, range construction or recursion that generates a list from the integer interval."
+                }
+              ],
+              "obligation_ids": [
+                "D1",
+                "O1",
+                "O2",
+                "O3",
+                "O4",
+                "O5",
+                "O6",
+                "O7",
+                "I1",
+                "R1"
+              ]
+            },
+            "phase": "formalize",
+            "untrusted_report": true
+          },
+          "message": "Formalizer reported a capability gap; seek a faithful supported alternate representation without weakening any frozen obligation: {\"encoding\":\"verislop.formalizer-capability-gap/0.1\",\"gaps\":[{\"attempted_representations\":[\"Deduplicate all event group names using a list fold and equality-based filtering. This preserves membership established by null and out-of-range events, but produces encounter order rather than lexicographic order.\",\"Insert each distinct name into an accumulated list using nested folds. Insertion requires the missing String comparison; comparing lengths cannot order distinct equal-length names.\",\"Compare names against string literals or concatenated strings using equality. A finite acyclic expression contains only finitely many literal distinctions and cannot implement ordering for arbitrary Unicode names.\",\"Represent names as scalar lists or require presorted events. These alternatives change the actual input type or add caller restrictions. Raw Lean ordering also fails the requested executable DSL boundary.\"],\"feature\":\"Lexicographic comparison of arbitrary Unicode String values\",\"obligation_ids\":[\"O2\",\"O6\"],\"reason\":\"Group names must remain actual strings and all distinct names must be emitted in Python lexicographic order. The admitted grammar provides string equality, concatenation, length and emptiness, but neither String ordering nor Unicode scalar extraction. Numeric lt and le cannot compare String values.\"},{\"attempted_representations\":[\"Use folds, maps, filters and conditional expressions over events and literal lists. With a singleton event list, start=0 and width=1, each fixed acyclic expression has output length bounded independently of end, while the required length is end for arbitrary positive end.\",\"Use nested folds whose accumulators append or duplicate lists. Such expansion remains controlled by lengths of available lists; arithmetic on end cannot create an iteration source.\",\"Use record accumulators with previous:Option Int and output:List of records containing group:String,start:Int,count:Int,value:Option Int. Given bucket starts, event folds can count duplicate non-null occurrences, sum signed values with interval guards, initialize previous separately per group, retain Some 0 and preserve previous through empty buckets. This preserves the actual nullable structure but does not generate bucket starts.\",\"Fold over events to emit occupied buckets and fill intervening gaps. Expanding an arbitrarily long gap still requires numeric iteration, and omitting its empty buckets violates the specification.\",\"Supply bucket starts as another input field, bound the interval, or use raw Lean range generation. The first two alter the specified structure or domain; the last remains outside the required executable DSL acceptance gates.\"],\"feature\":\"Unbounded integer-controlled generation of bucket starts\",\"obligation_ids\":[\"O3\",\"O4\",\"O5\",\"O6\",\"I1\"],\"reason\":\"For every established group, output must contain start+k*width for every nonnegative k with start+k*width<end, including empty buckets. The admitted language has no numeric iteration, range construction or recursion that generates a list from the integer interval.\"}],\"obligation_ids\":[\"D1\",\"O1\",\"O2\",\"O3\",\"O4\",\"O5\",\"O6\",\"O7\",\"I1\",\"R1\"]}",
+          "obligations": [
+            "I1",
+            "O2",
+            "O3",
+            "O4",
+            "O5",
+            "O6"
+          ],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "VERIFIER_NOT_RUN",
+          "message": "no frozen challenge; run `verislop formalize` first",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "VERIFIER_NOT_RUN",
+          "message": "the implementation phase has not started (no frozen implementation claims)",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:endpoint"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:endpoint is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:determinism"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:determinism is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:clean-builds"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:clean-builds is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [
+            "CLOSURE:provenance"
+          ],
+          "code": "ORPHAN_CLAIM",
+          "message": "required finalization claim CLOSURE:provenance is absent or invalid",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "REVIEW_NOT_RUN",
+          "message": "review checkpoint formal_contract is configured as a release gate but has not run",
+          "obligations": [],
+          "severity": "blocking"
+        },
+        {
+          "claims": [],
+          "code": "REVIEW_NOT_RUN",
+          "message": "review checkpoint release is configured as a release gate but has not run",
+          "obligations": [],
+          "severity": "blocking"
+        }
+      ],
+      "cli_report": "artifacts/D21/verislop/package/report.json",
+      "cli_stages": [
+        {
+          "codes": [],
+          "seconds": 300,
+          "stage": "interpret",
+          "status": "PASS"
+        },
+        {
+          "codes": [
+            "UNSUPPORTED_CAPABILITY"
+          ],
+          "seconds": 344,
+          "stage": "formalize",
+          "status": "BLOCKED"
+        }
+      ],
+      "dataset_root": "sha256:00e1b28846431c379cf8460d57d84897c5d0575ce49fa1481d7fb1ebc000c04e",
+      "entry_file": null,
+      "executed_observations": 0,
+      "generation_seconds": 644.381,
+      "grading_infrastructure_errors": [],
+      "held_out_results": [
+        {
+          "id": "D21-H01",
+          "observations": [
+            {
+              "id": "D21-H01",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H01",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-H02",
+          "observations": [
+            {
+              "id": "D21-H02",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H02",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-H03",
+          "observations": [
+            {
+              "id": "D21-H03",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H03",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-H04",
+          "observations": [
+            {
+              "id": "D21-H04",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H04",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-H05",
+          "observations": [
+            {
+              "id": "D21-H05",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H05",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-H06",
+          "observations": [
+            {
+              "id": "D21-H06",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H06",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-H07",
+          "observations": [
+            {
+              "id": "D21-H07",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H07",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-H08",
+          "observations": [
+            {
+              "id": "D21-H08",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H08",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-H09",
+          "observations": [
+            {
+              "id": "D21-H09",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H09",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-H10",
+          "observations": [
+            {
+              "id": "D21-H10",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-H10",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        }
+      ],
+      "hidden_passed": 0,
+      "hidden_total": 10,
+      "last_model_purpose": "critic",
+      "native_status": "BLOCKED",
+      "native_tested": false,
+      "observations_sha256": "sha256:bdaafa205a38160e11a49cc4e738d62d97c1c14df4f93de6c3028d039ac23723",
+      "origin_audit_passed": true,
+      "origin_audit_sha256": "sha256:db9859d2efcad7e1b7b1f105153ae3f96bda83c3d0fc87f50eb4c6782a91eaac",
+      "pair_index": 2,
+      "passed_observations": 0,
+      "passed_tested_guarantees": 0,
+      "protocol_sha256": "sha256:18deb25aa3dbeb329e95c1ea2174649522fe1bf76324d7e9f194b8ae27a313aa",
+      "public_passed": 0,
+      "public_results": [
+        {
+          "id": "D21-P01",
+          "observations": [
+            {
+              "id": "D21-P01",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-P01",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        },
+        {
+          "id": "D21-P02",
+          "observations": [
+            {
+              "id": "D21-P02",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            },
+            {
+              "id": "D21-P02",
+              "reason": "missing unambiguous solve(data) artifact",
+              "status": "FAIL"
+            }
+          ],
+          "status": "FAIL"
+        }
+      ],
+      "public_total": 2,
+      "recovery": {
+        "consumed_rounds": 0,
+        "enabled": true,
+        "exhausted": false,
+        "max_rounds": 2,
+        "packages": [
+          "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/nullable-002/run/artifacts/D21/verislop/package"
+        ]
+      },
+      "required_tested_guarantees": 0,
+      "source_hashes": {},
+      "source_root": "sha256:5863628b4a3ba546c5a5ca7adbc3e73f863fac4e0f26975b64408c10d53dec39",
+      "strict_cli_success": false,
+      "successful_clean_builds": 0,
+      "successful_task": false,
+      "task": "D21",
+      "task_id": "D21",
+      "timed_out": false,
+      "title": "Grouped bucket aggregation with causal filling",
+      "usage": {
+        "calls": 8,
+        "input_tokens": null,
+        "max_calls": 128,
+        "max_response_bytes": 1048576,
+        "output_bytes": 39579,
+        "output_tokens": null,
+        "requested_model": "gpt-6.1-sol",
+        "responses": 8,
+        "token_usage_available": false,
+        "transport": "collaboration",
+        "transport_errors": 0,
+        "unknown_usage_calls": 8
+      },
+      "worker_exit_code": 2,
+      "workflow_status": "BLOCKED"
+    }
+  ],
+  "source_root": "sha256:5863628b4a3ba546c5a5ca7adbc3e73f863fac4e0f26975b64408c10d53dec39",
+  "status": "BOOTSTRAP_TERMINATED"
+}

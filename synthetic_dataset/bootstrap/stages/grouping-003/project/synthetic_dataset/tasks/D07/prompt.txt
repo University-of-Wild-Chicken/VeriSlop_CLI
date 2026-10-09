@@ -1,0 +1,8 @@
+Software engineering task D07: Strict multiline CSV parser
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {text:string}; return {rows:[[strings]]}. Comma separates fields; LF or CRLF separates records outside quoted fields; bare CR outside quotes is error. Quote may begin only at field start. In quoted fields comma/CR/LF are literal; double quote escapes a quote. Closing quote must be followed by comma, record end or EOF. Empty input has no rows, a final record terminator does not add a phantom row, but a blank record is ['']. Leading/trailing empty comma fields are preserved. Errors discard all rows: {error:'bare_cr'|'after_quote'|'quote_in_field'|'unclosed_quote',offset:code-point index}; unclosed quote offset is len(text), other offsets identify offending character. No whitespace trimming.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"text": "a,\"b\n c\",\r\n"}, "output": {"rows": [["a", "b\n c", ""]]}}, {"input": {"text": "\"x\" y"}, "output": {"error": "after_quote", "offset": 3}}]

@@ -1,0 +1,711 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None; input and output structure and signed floor semantics are specified",
+    "entities": "JSON object containing n, m, a and b; scalar integer result",
+    "error_semantics": "Malformed-input behavior explicitly excluded",
+    "explicit_non_goals": "Malformed-input handling",
+    "invariants": "None separately stated",
+    "liveness_properties": "None separately stated",
+    "postconditions": "Exact signed floor sum, empty sum zero, single pure deterministic solve function",
+    "preconditions": "Supplier guarantees valid schema and bounds",
+    "resource_constraints": "No runtime or memory bound stated",
+    "safety_properties": "Standard library only, no external I/O or benchmark reads, no floating point"
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "The input structure is {n,m,a,b}.",
+        "The returned value is a scalar integer, preserving the specified output structure."
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/A23/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "solve input and output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 175,
+          "interpretation": "JSON compatibility",
+          "origin": "explicit",
+          "start_byte": 125
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 456,
+          "interpretation": "Input fields and integer domain",
+          "origin": "explicit",
+          "start_byte": 372
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 802,
+          "interpretation": "JSON input and serializable output",
+          "origin": "explicit",
+          "start_byte": 729
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 868,
+          "interpretation": "Preserve specified structure and ordering; the scalar result has no collection ordering",
+          "origin": "explicit",
+          "start_byte": 803
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The input is a JSON-compatible object with integer fields n, m, a and b; the output is a JSON-serializable integer."
+    }
+  ],
+  "error_semantics": [],
+  "explicit_non_goals": [
+    {
+      "acceptance_criteria": [
+        "No validation, error response or numerical result is required for malformed inputs."
+      ],
+      "dependencies": [],
+      "id": "N1",
+      "kind": "explicit_non_goal",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/A23/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an explicit exclusion is retained as metadata and prohibits stronger claims",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "exclusion",
+      "scope": [
+        "inputs violating the stated schema or bounds"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 371,
+          "interpretation": "Explicit malformed-input exclusion",
+          "origin": "explicit",
+          "start_byte": 327
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Behavior for malformed inputs is outside the required scope."
+    }
+  ],
+  "invariants": [],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "The result equals the mathematical floor sum for every valid input.",
+        "Negative quotients are rounded toward negative infinity, never truncated toward zero.",
+        "n=0 returns 0.",
+        "Input {a:-2,b:1,m:3,n:4} returns -4.",
+        "Input {a:100,b:-99,m:7,n:0} returns 0."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/A23/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all inputs satisfying A1"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 507,
+          "interpretation": "Exact floor-sum result",
+          "origin": "explicit",
+          "start_byte": 457
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 561,
+          "interpretation": "Signed floor semantics",
+          "origin": "explicit",
+          "start_byte": 508
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 580,
+          "interpretation": "Empty-sum behavior",
+          "origin": "explicit",
+          "start_byte": 562
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 1052,
+          "interpretation": "Required public examples and applicability to held-out valid inputs",
+          "origin": "explicit",
+          "start_byte": 870
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For every supplied valid input, return the exact integer sum of floor((a*i+b)/m) over i from 0 through n-1, with floor toward negative infinity and the empty sum equal to zero."
+    },
+    {
+      "acceptance_criteria": [
+        "solution.py provides the single requested solve(data) function.",
+        "Identical input values yield identical returned values.",
+        "The function does not mutate its input or depend on mutable external state."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/A23/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "solution.py and solve(data)"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 124,
+          "interpretation": "File and single-function interface",
+          "origin": "explicit",
+          "start_byte": 67
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 680,
+          "interpretation": "Python 3, purity and determinism",
+          "origin": "explicit",
+          "start_byte": 604
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Implement solution.py exposing a single pure deterministic Python 3 function solve(data)."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "Every supplied input has the stated fields and integer types.",
+        "0<=n<=500 and m>0.",
+        "Signed a and b are supported without imposing a smaller magnitude limit."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by input supplier and discharged at solve invocation, through supplied inputs satisfying the stated schema and bounds",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by input supplier and discharged at solve invocation, through supplied inputs satisfying the stated schema and bounds",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/A23/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by input supplier and discharged at solve invocation, through supplied inputs satisfying the stated schema and bounds",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by input supplier and discharged at solve invocation, through supplied inputs satisfying the stated schema and bounds",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "supplied inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 326,
+          "interpretation": "Explicit supplied-input validity assumption",
+          "origin": "explicit",
+          "start_byte": 269
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 456,
+          "interpretation": "Schema and bounds",
+          "origin": "explicit",
+          "start_byte": 372
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Supplied inputs satisfy the schema: integer n with 0<=n<=500, positive integer m, and signed integer a and b, including magnitudes of 10^30."
+    }
+  ],
+  "request_ref": "tasks/A23/prompt.txt",
+  "resource_constraints": [],
+  "safety_properties": [
+    {
+      "acceptance_criteria": [
+        "No third-party libraries are required.",
+        "Execution performs no external I/O.",
+        "Benchmark files are never read."
+      ],
+      "dependencies": [],
+      "id": "S1",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/A23/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "implementation and execution"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 211,
+          "interpretation": "Standard-library restriction",
+          "origin": "explicit",
+          "start_byte": 176
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 268,
+          "interpretation": "External I/O and benchmark-reading prohibition",
+          "origin": "explicit",
+          "start_byte": 212
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 728,
+          "interpretation": "Repeated library and I/O restrictions",
+          "origin": "explicit",
+          "start_byte": 681
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Use only the Python 3 standard library, perform no external I/O, and never read benchmark files."
+    },
+    {
+      "acceptance_criteria": [
+        "No floating-point conversion or arithmetic is used in the computation.",
+        "Large signed values retain exact precision."
+      ],
+      "dependencies": [],
+      "id": "S2",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tasks/A23/prompt.txt"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all arithmetic used to compute the result"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 602,
+          "interpretation": "Floating-point prohibition",
+          "origin": "explicit",
+          "start_byte": 581
+        },
+        {
+          "document_hash": "sha256:4210b881ec112b3ceaf86658d8a931f6d4dea05689a85d3e7e72aed9da3911dd",
+          "document_ref": "tasks/A23/prompt.txt",
+          "end_byte": 507,
+          "interpretation": "Exact numerical result",
+          "origin": "explicit",
+          "start_byte": 457
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Compute the floor sum using exact integer arithmetic without floating point."
+    }
+  ],
+  "schema_version": "0.1"
+}

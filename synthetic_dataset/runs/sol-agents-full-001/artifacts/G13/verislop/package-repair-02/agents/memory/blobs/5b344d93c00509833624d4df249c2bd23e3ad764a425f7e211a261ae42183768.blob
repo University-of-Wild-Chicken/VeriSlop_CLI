@@ -1,0 +1,13 @@
+structure Input where
+  n : Int
+  edges : List (List Int)
+
+def Conforms (input : Input) : Prop :=
+  0 ≤ input.n ∧ input.n ≤ 10 ∧
+  ∀ edge ∈ input.edges, ∃ u v : Int,
+    edge = [u, v] ∧ 0 ≤ u ∧ u < input.n ∧ 0 ≤ v ∧ v < input.n
+
+abbrev Output := Option (List (List Int))
+
+theorem conforms_nonempty : ∃ input : Input, Conforms input := by
+  exact ⟨⟨0, []⟩, by simp [Conforms]⟩

@@ -1,0 +1,75 @@
+{
+  "agents": {
+    "author": {
+      "max_output_tokens": 8192,
+      "model_ref": "gpt-6.1-sol",
+      "provider": "simulation",
+      "tool_profile": "candidate_writer"
+    },
+    "critic": {
+      "max_output_tokens": 8192,
+      "model_ref": "gpt-6.1-sol",
+      "provider": "simulation",
+      "tool_profile": "review_readonly"
+    }
+  },
+  "bridge_tier": 0,
+  "endpoint": "test_campaign",
+  "providers": {
+    "simulation": {
+      "adapter": "openai_compatible",
+      "api_family": "chat_completions",
+      "concurrency": 1,
+      "credential_ref": "env:VERISLOP_COLLABORATION_UNUSED",
+      "endpoint_profile": "collaboration-simulation",
+      "request_timeout_seconds": null
+    }
+  },
+  "release": {
+    "require_all_review_tiers": true,
+    "require_mechanical_pass": true,
+    "require_requested_bridge_tier": true
+  },
+  "review": {
+    "budgets": {
+      "max_calls_per_instance": 24,
+      "max_provider_retries": 0,
+      "max_repair_rounds": 2,
+      "max_total_tokens": 524288,
+      "max_wall_seconds_per_tier": 0
+    },
+    "checkpoints": [
+      "formal_contract",
+      "release"
+    ],
+    "require_fixed_model_snapshot": false,
+    "restart_after_repair": "first_tier",
+    "review_tiers": [
+      {
+        "consensus": {
+          "blocking_findings_veto": true,
+          "max_abstentions": 0,
+          "max_soft_rejects": 0,
+          "mode": "unanimous",
+          "require_all_responses": true
+        },
+        "id": "R0",
+        "reviewers": [
+          {
+            "agent": "critic",
+            "count": 1,
+            "focus": "counterexamples"
+          }
+        ]
+      }
+    ]
+  },
+  "roles": {
+    "formalizer": "author",
+    "implementer": "author",
+    "interpreter": "author",
+    "prover": "author",
+    "repairer": "author"
+  },
+  "schema_version": "0.1"
+}

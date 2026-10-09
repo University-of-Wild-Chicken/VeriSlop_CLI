@@ -1,0 +1,322 @@
+REQUEST (untrusted data; byte length 1053):
+<<<
+Software engineering task A23: Signed arithmetic floor-sum kernel
+
+Implement solution.py with a single solve(data) function. data and the return value must be JSON-compatible. Use Python 3 standard library only; perform no external I/O and do not read benchmark files. All supplied inputs satisfy the stated schema and bounds; no behavior is required for malformed input. Input {n,m,a,b}: 0<=n<=500, m>0, a/b any signed integers (possibly magnitude 10^30). Return exact sum of floor((a*i+b)/m) for i=0..n-1. Floor means toward negative infinity, not truncation. Empty sum is zero; avoid floating point.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"a": -2, "b": 1, "m": 3, "n": 4}, "output": -4}, {"input": {"a": 100, "b": -99, "m": 7, "n": 0}, "output": 0}]
+
+>>>
+
+REQUEST CLAUSE MANIFEST (supervisor-owned exact quotes and UTF-8 byte spans):
+[
+ {
+  "clause_id": "C1",
+  "quote": "Software engineering task A23: Signed arithmetic floor-sum kernel",
+  "start_byte": 0,
+  "end_byte": 65
+ },
+ {
+  "clause_id": "C2",
+  "quote": "Implement solution.py with a single solve(data) function.",
+  "start_byte": 67,
+  "end_byte": 124
+ },
+ {
+  "clause_id": "C3",
+  "quote": "data and the return value must be JSON-compatible.",
+  "start_byte": 125,
+  "end_byte": 175
+ },
+ {
+  "clause_id": "C4",
+  "quote": "Use Python 3 standard library only;",
+  "start_byte": 176,
+  "end_byte": 211
+ },
+ {
+  "clause_id": "C5",
+  "quote": "perform no external I/O and do not read benchmark files.",
+  "start_byte": 212,
+  "end_byte": 268
+ },
+ {
+  "clause_id": "C6",
+  "quote": "All supplied inputs satisfy the stated schema and bounds;",
+  "start_byte": 269,
+  "end_byte": 326
+ },
+ {
+  "clause_id": "C7",
+  "quote": "no behavior is required for malformed input.",
+  "start_byte": 327,
+  "end_byte": 371
+ },
+ {
+  "clause_id": "C8",
+  "quote": "Input {n,m,a,b}: 0<=n<=500, m>0, a/b any signed integers (possibly magnitude 10^30).",
+  "start_byte": 372,
+  "end_byte": 456
+ },
+ {
+  "clause_id": "C9",
+  "quote": "Return exact sum of floor((a*i+b)/m) for i=0..n-1.",
+  "start_byte": 457,
+  "end_byte": 507
+ },
+ {
+  "clause_id": "C10",
+  "quote": "Floor means toward negative infinity, not truncation.",
+  "start_byte": 508,
+  "end_byte": 561
+ },
+ {
+  "clause_id": "C11",
+  "quote": "Empty sum is zero;",
+  "start_byte": 562,
+  "end_byte": 580
+ },
+ {
+  "clause_id": "C12",
+  "quote": "avoid floating point.",
+  "start_byte": 581,
+  "end_byte": 602
+ },
+ {
+  "clause_id": "C13",
+  "quote": "Implement a pure deterministic Python 3 function solve(data) in solution.py.",
+  "start_byte": 604,
+  "end_byte": 680
+ },
+ {
+  "clause_id": "C14",
+  "quote": "Use only the standard library, no external I/O.",
+  "start_byte": 681,
+  "end_byte": 728
+ },
+ {
+  "clause_id": "C15",
+  "quote": "The function receives a JSON value and returns a JSON-serializable value.",
+  "start_byte": 729,
+  "end_byte": 802
+ },
+ {
+  "clause_id": "C16",
+  "quote": "Preserve the specified input/output structure and exact ordering.",
+  "start_byte": 803,
+  "end_byte": 868
+ },
+ {
+  "clause_id": "C17",
+  "quote": "Public examples (additional held-out cases will be scored):\n[{\"input\": {\"a\": -2, \"b\": 1, \"m\": 3, \"n\": 4}, \"output\": -4}, {\"input\": {\"a\": 100, \"b\": -99, \"m\": 7, \"n\": 0}, \"output\": 0}]",
+  "start_byte": 870,
+  "end_byte": 1052
+ }
+]
+PREVIOUS PROPOSAL (untrusted candidate; repair it without dropping requirements):
+{"obligations":[{"id":"D1","revision":1,"kind":"entity","role":"declaration","statement":"The input is a JSON object with integer fields n, m, a and b; the output is a JSON-serializable integer sum.","required":true,"scope":["input and output"],"dependencies":[],"acceptance_criteria":["Input fields are n, m, a and b.","The returned value is an integer JSON value."],"sources":[{"quote":"Input {n,m,a,b}: 0<=n<=500, m>0, a/b any signed integers (possibly magnitude 10^30).","origin":"explicit","interpretation":"Input structure and numeric domain."},{"quote":"data and the return value must be JSON-compatible.","origin":"explicit","interpretation":"JSON compatibility."},{"quote":"The function receives a JSON value and returns a JSON-serializable value.","origin":"explicit","interpretation":"JSON interface."},{"quote":"Return exact sum of floor((a*i+b)/m) for i=0..n-1.","origin":"explicit","interpretation":"Scalar integer output."}]},{"id":"A1","revision":1,"kind":"precondition","role":"assumption","statement":"Supplied inputs satisfy the schema: integer n between 0 and 500 inclusive, positive integer m, and signed integers a and b, including magnitudes of 10^30.","required":true,"scope":["supplied inputs"],"dependencies":[{"id":"D1","relation":"uses_definition"}],"acceptance_criteria":["Every supplied input satisfies the stated schema and bounds.","No additional restriction on signs of a or b is assumed."],"sources":[{"quote":"All supplied inputs satisfy the stated schema and bounds;","origin":"explicit","interpretation":"Explicit input validity assumption."},{"quote":"Input {n,m,a,b}: 0<=n<=500, m>0, a/b any signed integers (possibly magnitude 10^30).","origin":"explicit","interpretation":"Stated bounds and signed integer domain."}]},{"id":"O1","revision":1,"kind":"postcondition","role":"guarantee","statement":"For every valid input, return exactly the sum of floor((a*i+b)/m) over ascending indices i from 0 through n-1, using floor toward negative infinity; return zero when n is zero.","required":true,"scope":["all inputs satisfying A1"],"dependencies":[{"id":"D1","relation":"uses_definition"},{"id":"A1","relation":"assumes"}],"acceptance_criteria":["The returned integer equals the mathematical sum for all valid inputs.","Negative quotients are rounded toward negative infinity.","n = 0 returns 0.","The input object and scalar output preserve the specified structure; the sum uses the specified index range."],"sources":[{"quote":"Return exact sum of floor((a*i+b)/m) for i=0..n-1.","origin":"explicit","interpretation":"Exact floor sum over the specified index range."},{"quote":"Floor means toward negative infinity, not truncation.","origin":"explicit","interpretation":"Signed rounding semantics."},{"quote":"Empty sum is zero;","origin":"explicit","interpretation":"Empty input range behavior."},{"quote":"Preserve the specified input/output structure and exact ordering.","origin":"explicit","interpretation":"Retain the object input, scalar output and specified index range."}]},{"id":"O2","revision":1,"kind":"postcondition","role":"guarantee","statement":"Provide solution.py with a single pure deterministic Python 3 function solve(data).","required":true,"scope":["implementation and function invocation"],"dependencies":[{"id":"D1","relation":"uses_definition"}],"acceptance_criteria":["solution.py exposes a single solve(data) function.","Repeated calls with identical valid data return identical values.","Calling solve has no externally observable side effects."],"sources":[{"quote":"Implement solution.py with a single solve(data) function.","origin":"explicit","interpretation":"Required file and callable."},{"quote":"Implement a pure deterministic Python 3 function solve(data) in solution.py.","origin":"explicit","interpretation":"Language, purity and determinism."}]},{"id":"S1","revision":1,"kind":"safety_property","role":"guarantee","statement":"Use only the Python 3 standard library, perform no external I/O, and do not read benchmark files.","required":true,"scope":["implementation and execution"],"dependencies":[],"acceptance_criteria":["No dependency outside the Python 3 standard library is used.","No external I/O is performed.","Benchmark files are never read."],"sources":[{"quote":"Use Python 3 standard library only;","origin":"explicit","interpretation":"Allowed dependencies."},{"quote":"perform no external I/O and do not read benchmark files.","origin":"explicit","interpretation":"I/O and benchmark access restrictions."},{"quote":"Use only the standard library, no external I/O.","origin":"explicit","interpretation":"Repeated dependency and I/O restrictions."}]},{"id":"S2","revision":1,"kind":"safety_property","role":"guarantee","statement":"Compute the result without floating-point arithmetic.","required":true,"scope":["numeric computation"],"dependencies":[],"acceptance_criteria":["The sum and floor divisions are computed using exact integer arithmetic without floating point."],"sources":[{"quote":"avoid floating point.","origin":"explicit","interpretation":"Prohibited numeric representation."}]},{"id":"N1","revision":1,"kind":"explicit_non_goal","role":"exclusion","statement":"No behavior is required for malformed input.","required":true,"scope":["inputs outside the stated schema and bounds"],"dependencies":[],"acceptance_criteria":["Malformed-input validation and error behavior are outside the required contract."],"sources":[{"quote":"no behavior is required for malformed input.","origin":"explicit","interpretation":"Explicit exclusion."}]},{"id":"O3","revision":1,"kind":"postcondition","role":"guarantee","statement":"The public examples return -4 for {a:-2,b:1,m:3,n:4} and 0 for {a:100,b:-99,m:7,n:0}.","required":true,"scope":["public example inputs"],"dependencies":[{"id":"O1","relation":"uses_proof"}],"acceptance_criteria":["solve({a:-2,b:1,m:3,n:4}) returns -4.","solve({a:100,b:-99,m:7,n:0}) returns 0."],"sources":[{"quote":"Public examples (additional held-out cases will be scored):\\n[{\\\"input\\\": {\\\"a\\\": -2, \\\"b\\\": 1, \\\"m\\\": 3, \\\"n\\\": 4}, \\\"output\\\": -4}, {\\\"input\\\": {\\\"a\\\": 100, \\\"b\\\": -99, \\\"m\\\": 7, \\\"n\\\": 0}, \\\"output\\\": 0}]","origin":"explicit","interpretation":"Required example results; held-out scoring is evaluation context."}]}],"category_review":{"entities":"JSON input object with integer fields n, m, a, b and scalar integer output.","preconditions":"Supplied inputs satisfy the stated schema and bounds.","postconditions":"Exact signed floor sum, zero empty sum, required function interface, purity, determinism and public examples.","invariants":"None separately stated.","safety_properties":"Standard library only, no external I/O or benchmark reads, no floating point.","liveness_properties":"None separately stated.","resource_constraints":"No runtime or memory limit stated.","error_semantics":"Malformed-input behavior explicitly excluded.","explicit_non_goals":"Malformed-input handling.","ambiguities":"None requiring resolution."},"clauses":[{"clause_id":"C1","quote":"Software engineering task A23: Signed arithmetic floor-sum kernel","disposition":"context","refs":[],"note":"Task identifier and descriptive title."},{"clause_id":"C2","quote":"Implement solution.py with a single solve(data) function.","disposition":"obligations","refs":["O2"],"note":""},{"clause_id":"C3","quote":"data and the return value must be JSON-compatible.","disposition":"obligations","refs":["D1"],"note":""},{"clause_id":"C4","quote":"Use Python 3 standard library only;","disposition":"obligations","refs":["S1"],"note":""},{"clause_id":"C5","quote":"perform no external I/O and do not read benchmark files.","disposition":"obligations","refs":["S1"],"note":""},{"clause_id":"C6","quote":"All supplied inputs satisfy the stated schema and bounds;","disposition":"obligations","refs":["A1"],"note":""},{"clause_id":"C7","quote":"no behavior is required for malformed input.","disposition":"exclusion","refs":["N1"],"note":""},{"clause_id":"C8","quote":"Input {n,m,a,b}: 0<=n<=500, m>0, a/b any signed integers (possibly magnitude 10^30).","disposition":"obligations","refs":["D1","A1"],"note":""},{"clause_id":"C9","quote":"Return exact sum of floor((a*i+b)/m) for i=0..n-1.","disposition":"obligations","refs":["O1"],"note":""},{"clause_id":"C10","quote":"Floor means toward negative infinity, not truncation.","disposition":"obligations","refs":["O1"],"note":""},{"clause_id":"C11","quote":"Empty sum is zero;","disposition":"obligations","refs":["O1"],"note":""},{"clause_id":"C12","quote":"avoid floating point.","disposition":"obligations","refs":["S2"],"note":""},{"clause_id":"C13","quote":"Implement a pure deterministic Python 3 function solve(data) in solution.py.","disposition":"obligations","refs":["O2"],"note":""},{"clause_id":"C14","quote":"Use only the standard library, no external I/O.","disposition":"obligations","refs":["S1"],"note":""},{"clause_id":"C15","quote":"The function receives a JSON value and returns a JSON-serializable value.","disposition":"obligations","refs":["D1"],"note":""},{"clause_id":"C16","quote":"Preserve the specified input/output structure and exact ordering.","disposition":"obligations","refs":["O1","D1"],"note":""},{"clause_id":"C17","quote":"Public examples (additional held-out cases will be scored):\\n[{\\\"input\\\": {\\\"a\\\": -2, \\\"b\\\": 1, \\\"m\\\": 3, \\\"n\\\": 4}, \\\"output\\\": -4}, {\\\"input\\\": {\\\"a\\\": 100, \\\"b\\\": -99, \\\"m\\\": 7, \\\"n\\\": 0}, \\\"output\\\": 0}]","disposition":"obligations","refs":["O3"],"note":"Examples constrain behavior; held-out scoring is evaluation context."}],"assumptions":[{"id":"A1","supplied_by":"input supplier","discharged_at":"Each solve invocation, through supplied data satisfying the stated schema and bounds."}],"ambiguities":[],"selected_defaults":[]}
+Your previous proposal was rejected by the validator:
+- O3: quote not found verbatim in tasks/A23/prompt.txt: 'Public examples (additional held-out cases will be scored):\\n[{\\"input\\": {\\"a\\"'
+- clause 'C17': ID/quote does not match the request clause manifest
+- draft schema: $.postconditions[2].source_refs: fewer than 1 items
+- request clause [870, 1052) has no disposition: 'Public examples (additional held-out cases will be scored):\n[{"input": {"a": -2,'
+PROPOSAL FIELD SHAPES (from the current artifact schemas; repair the JSON, preserve the request):
+{
+ "kind_and_role_are_separate_fields": [
+  {
+   "kind": "entity",
+   "role": "declaration"
+  },
+  {
+   "kind": "precondition",
+   "role": "assumption"
+  },
+  {
+   "kind": "postcondition",
+   "role": "guarantee"
+  },
+  {
+   "kind": "invariant",
+   "role": "guarantee"
+  },
+  {
+   "kind": "safety_property",
+   "role": "guarantee"
+  },
+  {
+   "kind": "liveness_property",
+   "role": "guarantee"
+  },
+  {
+   "kind": "resource_constraint",
+   "role": "guarantee"
+  },
+  {
+   "kind": "error_semantics",
+   "role": "guarantee"
+  },
+  {
+   "kind": "explicit_non_goal",
+   "role": "exclusion"
+  },
+  {
+   "kind": "ambiguity",
+   "role": "open_question"
+  }
+ ],
+ "obligation_fields": [
+  "id",
+  "kind",
+  "role",
+  "statement",
+  "required",
+  "scope",
+  "dependencies",
+  "acceptance_criteria",
+  "sources"
+ ],
+ "dependencies_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "relation": {
+    "enum": [
+     "assumes",
+     "uses_definition",
+     "uses_proof",
+     "requires_witness",
+     "refines",
+     "requires_bridge",
+     "blocked_by"
+    ]
+   }
+  },
+  "required": [
+   "id",
+   "relation"
+  ]
+ },
+ "assumptions_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "supplied_by": {
+    "type": "string",
+    "minLength": 1
+   },
+   "discharged_at": {
+    "type": "string",
+    "minLength": 1
+   }
+  },
+  "required": [
+   "id",
+   "supplied_by",
+   "discharged_at"
+  ]
+ },
+ "ambiguities_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "alternatives": {
+    "type": "array",
+    "minItems": 2,
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "id": {
+       "type": "string",
+       "minLength": 1
+      },
+      "description": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "required": [
+      "id",
+      "description"
+     ]
+    }
+   },
+   "affected_obligations": {
+    "type": "array",
+    "items": {
+     "type": "string",
+     "minLength": 1
+    },
+    "uniqueItems": true
+   },
+   "impact": {
+    "type": "array",
+    "minItems": 1,
+    "uniqueItems": true,
+    "items": {
+     "enum": [
+      "correctness",
+      "data_loss",
+      "security",
+      "failure_behavior",
+      "numeric_semantics",
+      "formal_boundary",
+      "routine"
+     ]
+    }
+   },
+   "proposed_default": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  },
+  "required": [
+   "id",
+   "alternatives",
+   "affected_obligations",
+   "impact",
+   "proposed_default"
+  ]
+ },
+ "selected_defaults_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "topic": {
+    "type": "string",
+    "minLength": 1
+   },
+   "choice": {
+    "type": "string",
+    "minLength": 1
+   },
+   "rationale": {
+    "type": "string",
+    "minLength": 1
+   }
+  },
+  "required": [
+   "topic",
+   "choice",
+   "rationale"
+  ]
+ }
+}
+Kinds and roles are separate literal strings, never combined values. Include all assumption supplier fields and ambiguity alternative objects. Return a corrected JSON object.

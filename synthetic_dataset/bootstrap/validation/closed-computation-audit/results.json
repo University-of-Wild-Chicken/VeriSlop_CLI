@@ -1,0 +1,27 @@
+[
+  {
+    "variant": "plain_rfl",
+    "exit": 1,
+    "output": "/tmp/verislop-generic-proof-audit-r6td8onk/plain_rfl.lean:12:18: error: Tactic `rfl` failed: The left-hand side\n  catalogue [\"beta\", \"amber\", \"beta\"]\nis not definitionally equal to the right-hand side\n  [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }]\n\ncase left\n\u22a2 catalogue [\"beta\", \"amber\", \"beta\"] =\n    [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }]\n"
+  },
+  {
+    "variant": "plain_decide",
+    "exit": 1,
+    "output": "/tmp/verislop-generic-proof-audit-r6td8onk/plain_decide.lean:12:2: error: failed to synthesize\n  Decidable\n    (catalogue [\"beta\", \"amber\", \"beta\"] =\n        [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }] \u2227\n      folded = 8)\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.\n"
+  },
+  {
+    "variant": "plain_kernel",
+    "exit": 1,
+    "output": "/tmp/verislop-generic-proof-audit-r6td8onk/plain_kernel.lean:12:2: error: failed to synthesize\n  Decidable\n    (catalogue [\"beta\", \"amber\", \"beta\"] =\n        [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }] \u2227\n      folded = 8)\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.\n"
+  },
+  {
+    "variant": "derived_decide",
+    "exit": 1,
+    "output": "/tmp/verislop-generic-proof-audit-r6td8onk/derived_decide.lean:12:2: error: Tactic `decide` failed for proposition\n  catalogue [\"beta\", \"amber\", \"beta\"] =\n      [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }] \u2227\n    folded = 8\nbecause its `Decidable` instance\n  instDecidableAnd\ndid not reduce to `isTrue` or `isFalse`.\n\nAfter unfolding the instances `instDecidableAnd` and `instDecidableEqList`, reduction got stuck at the `Decidable` instance\n  match catalogue [\"beta\", \"amber\", \"beta\"] with\n  | [] =>\n    match [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }] with\n    | [] => isTrue \u22ef\n    | head :: tail => isFalse \u22ef\n  | a :: as =>\n    match [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }] with\n    | [] => isFalse \u22ef\n    | b :: bs =>\n      match decEq a b with\n      | isTrue hab =>\n        match as.hasDecEq bs with\n        | isTrue habs => isTrue \u22ef\n        | isFalse nabs => isFalse \u22ef\n      | isFalse nab => isFalse \u22ef\n"
+  },
+  {
+    "variant": "derived_kernel",
+    "exit": 1,
+    "output": "/tmp/verislop-generic-proof-audit-r6td8onk/derived_kernel.lean:12:2: error: Tactic `decide` failed for proposition\n  catalogue [\"beta\", \"amber\", \"beta\"] =\n      [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }] \u2227\n    folded = 8\nbecause its `Decidable` instance\n  instDecidableAnd\ndid not reduce to `isTrue` or `isFalse`.\n\nReduction got stuck at the `Decidable` instance\n  match catalogue [\"beta\", \"amber\", \"beta\"] with\n  | [] =>\n    match [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }] with\n    | [] => isTrue \u22ef\n    | head :: tail => isFalse \u22ef\n  | a :: as =>\n    match [{ label := \"amber\", quotient := some 1 }, { label := \"beta\", quotient := some 1 }] with\n    | [] => isFalse \u22ef\n    | b :: bs =>\n      match decEq a b with\n      | isTrue hab =>\n        match as.hasDecEq bs with\n        | isTrue habs => isTrue \u22ef\n        | isFalse nabs => isFalse \u22ef\n      | isFalse nab => isFalse \u22ef\n"
+  }
+]

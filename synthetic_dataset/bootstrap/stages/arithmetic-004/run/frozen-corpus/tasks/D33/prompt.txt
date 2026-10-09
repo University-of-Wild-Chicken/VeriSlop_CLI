@@ -1,0 +1,8 @@
+Software engineering task D33: Canonical structural JSON delta
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {before:JSON,after:JSON}; return deterministic JSON Pointer patch operation array using add/remove/replace. Equal JSON means object key order ignored, numbers numeric, bool distinct. For two objects: remove keys only in before in sorted order, recursively diff common keys in sorted order, then add keys only in after in sorted order. For two arrays: recursively diff common indices ascending, then remove surplus before indices descending, then add surplus after indices ascending using numeric pointers (not '-'). Other unequal type/value pairs emit one replace at current pointer, root ''. Escape pointer key ~ to ~0 and / to ~1. Values in operations are complete after values. Array positions align by index, with no LCS/move heuristics. Patches must apply sequentially to before and reconstruct after.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"after": {"a": 3, "b": 4}, "before": {"a": 1, "z": 2}}, "output": [{"op": "remove", "path": "/z"}, {"op": "replace", "path": "/a", "value": 3}, {"op": "add", "path": "/b", "value": 4}]}, {"input": {"after": [1], "before": [1, 2, 3]}, "output": [{"op": "remove", "path": "/2"}, {"op": "remove", "path": "/1"}]}]

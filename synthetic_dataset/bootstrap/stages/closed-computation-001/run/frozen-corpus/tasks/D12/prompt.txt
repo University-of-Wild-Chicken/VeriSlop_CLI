@@ -1,0 +1,8 @@
+Software engineering task D12: Run-length stream normalization and slicing
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {runs:[{count:JSON,value:JSON}],start:int,end:int}. Reject first count that is not an integer (boolean is invalid) or is negative: {error:'count',run:index}. Remove zero-count runs and merge adjacent runs with structurally equal values (boolean distinct from number, object order ignored), preserving values. Return {runs:normalized runs,length:sum counts,slice:expanded half-open interval}. Clamp each requested endpoint below zero to zero and above total length through ordinary intersection; end<=start returns empty. Counts may be huge, but requested interval length is at most 100; never expand outside that slice.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"end": 4, "runs": [{"count": 2, "value": "a"}, {"count": 0, "value": "b"}, {"count": 3, "value": "a"}], "start": 1}, "output": {"length": 5, "runs": [{"count": 5, "value": "a"}], "slice": ["a", "a", "a"]}}, {"input": {"end": 2, "runs": [{"count": true, "value": 0}], "start": 0}, "output": {"error": "count", "run": 0}}]

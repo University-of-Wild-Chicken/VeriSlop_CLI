@@ -1,0 +1,344 @@
+REQUEST (untrusted data; byte length 1892):
+<<<
+Software engineering task D21: Grouped bucket aggregation with causal filling
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end. Groups are all unique event group names sorted lexicographically, including groups with no in-range events. For each group, emit buckets starting start,start+width,... strictly below end, each covering [bucketStart,min(bucketStart+width,end)). Sum only non-null in-range values; count counts these values. A nonempty bucket has value=sum and becomes previous value. Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first); empty buckets never reset previous. Events before start never seed previous. Return [{group,start,count,value}] in group then bucket order. Zero sum is a real previous value, duplicates are counted.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"end": 5, "events": [{"group": "a", "time": 0, "value": 2}, {"group": "a", "time": 1, "value": -2}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 2, "group": "a", "start": 0, "value": 0}, {"count": 0, "group": "a", "start": 2, "value": 0}, {"count": 0, "group": "a", "start": 4, "value": 0}]}, {"input": {"end": 1, "events": [{"group": "z", "time": -1, "value": 9}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 0, "group": "z", "start": 0, "value": null}]}]
+
+>>>
+
+REQUEST CLAUSE MANIFEST (supervisor-owned exact quotes and UTF-8 byte spans):
+[
+ {
+  "clause_id": "C1",
+  "quote": "Software engineering task D21: Grouped bucket aggregation with causal filling",
+  "start_byte": 0,
+  "end_byte": 77
+ },
+ {
+  "clause_id": "C2",
+  "quote": "Implement solution.py with a pure solve(data) function.",
+  "start_byte": 79,
+  "end_byte": 134
+ },
+ {
+  "clause_id": "C3",
+  "quote": "Input and output are JSON-compatible Python values.",
+  "start_byte": 135,
+  "end_byte": 186
+ },
+ {
+  "clause_id": "C4",
+  "quote": "Use Python standard library only, no external I/O.",
+  "start_byte": 187,
+  "end_byte": 237
+ },
+ {
+  "clause_id": "C5",
+  "quote": "Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end.",
+  "start_byte": 238,
+  "end_byte": 366
+ },
+ {
+  "clause_id": "C6",
+  "quote": "Groups are all unique event group names sorted lexicographically, including groups with no in-range events.",
+  "start_byte": 367,
+  "end_byte": 474
+ },
+ {
+  "clause_id": "C7",
+  "quote": "For each group, emit buckets starting start,start+width,...",
+  "start_byte": 475,
+  "end_byte": 534
+ },
+ {
+  "clause_id": "C8",
+  "quote": "strictly below end, each covering [bucketStart,min(bucketStart+width,end)).",
+  "start_byte": 535,
+  "end_byte": 610
+ },
+ {
+  "clause_id": "C9",
+  "quote": "Sum only non-null in-range values;",
+  "start_byte": 611,
+  "end_byte": 645
+ },
+ {
+  "clause_id": "C10",
+  "quote": "count counts these values.",
+  "start_byte": 646,
+  "end_byte": 672
+ },
+ {
+  "clause_id": "C11",
+  "quote": "A nonempty bucket has value=sum and becomes previous value.",
+  "start_byte": 673,
+  "end_byte": 732
+ },
+ {
+  "clause_id": "C12",
+  "quote": "Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first);",
+  "start_byte": 733,
+  "end_byte": 852
+ },
+ {
+  "clause_id": "C13",
+  "quote": "empty buckets never reset previous.",
+  "start_byte": 853,
+  "end_byte": 888
+ },
+ {
+  "clause_id": "C14",
+  "quote": "Events before start never seed previous.",
+  "start_byte": 889,
+  "end_byte": 929
+ },
+ {
+  "clause_id": "C15",
+  "quote": "Return [{group,start,count,value}] in group then bucket order.",
+  "start_byte": 930,
+  "end_byte": 992
+ },
+ {
+  "clause_id": "C16",
+  "quote": "Zero sum is a real previous value, duplicates are counted.",
+  "start_byte": 993,
+  "end_byte": 1051
+ },
+ {
+  "clause_id": "C17",
+  "quote": "Implement a pure deterministic Python 3 function solve(data) in solution.py.",
+  "start_byte": 1053,
+  "end_byte": 1129
+ },
+ {
+  "clause_id": "C18",
+  "quote": "Use only the standard library, no external I/O.",
+  "start_byte": 1130,
+  "end_byte": 1177
+ },
+ {
+  "clause_id": "C19",
+  "quote": "The function receives a JSON value and returns a JSON-serializable value.",
+  "start_byte": 1178,
+  "end_byte": 1251
+ },
+ {
+  "clause_id": "C20",
+  "quote": "Preserve the specified input/output structure and exact ordering.",
+  "start_byte": 1252,
+  "end_byte": 1317
+ },
+ {
+  "clause_id": "C21",
+  "quote": "Public examples (additional held-out cases will be scored):\n[{\"input\": {\"end\": 5, \"events\": [{\"group\": \"a\", \"time\": 0, \"value\": 2}, {\"group\": \"a\", \"time\": 1, \"value\": -2}], \"fill\": \"previous\", \"start\": 0, \"width\": 2}, \"output\": [{\"count\": 2, \"group\": \"a\", \"start\": 0, \"value\": 0}, {\"count\": 0, \"group\": \"a\", \"start\": 2, \"value\": 0}, {\"count\": 0, \"group\": \"a\", \"start\": 4, \"value\": 0}]}, {\"input\": {\"end\": 1, \"events\": [{\"group\": \"z\", \"time\": -1, \"value\": 9}], \"fill\": \"previous\", \"start\": 0, \"width\": 2}, \"output\": [{\"count\": 0, \"group\": \"z\", \"start\": 0, \"value\": null}]}]",
+  "start_byte": 1319,
+  "end_byte": 1891
+ }
+]
+PREVIOUS PROPOSAL (untrusted candidate; repair it without dropping requirements):
+{"obligations":[{"id":"D1","revision":1,"kind":"entity","role":"declaration","statement":"The input contains events with string group, integer time and integer-or-null value, integer start and end with start <= end, positive integer width, and fill equal to none or previous.","required":true,"scope":["input domain"],"dependencies":[],"acceptance_criteria":["The specified valid input domain is represented without additional restrictions."],"sources":[{"quote":"Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end.","origin":"explicit","interpretation":"Specified input schema and domain."}]},{"id":"O1","revision":1,"kind":"postcondition","role":"guarantee","statement":"Provide a pure deterministic Python 3 solve(data) function in solution.py accepting JSON-compatible Python values and returning a JSON-serializable value.","required":true,"scope":["function interface"],"dependencies":[],"acceptance_criteria":["solution.py exposes solve(data).","Repeated calls on the same input return the same result.","The function is pure and its output is JSON-serializable."],"sources":[{"quote":"Implement solution.py with a pure solve(data) function.","origin":"explicit","interpretation":"Required file and interface."},{"quote":"Implement a pure deterministic Python 3 function solve(data) in solution.py.","origin":"explicit","interpretation":"Language, purity and determinism."},{"quote":"Input and output are JSON-compatible Python values.","origin":"explicit","interpretation":"Value compatibility."},{"quote":"The function receives a JSON value and returns a JSON-serializable value.","origin":"explicit","interpretation":"Serialization contract."}]},{"id":"R1","revision":1,"kind":"resource_constraint","role":"guarantee","statement":"Use only the Python standard library and perform no external I/O.","required":true,"scope":["implementation and invocation"],"dependencies":[],"acceptance_criteria":["No third-party dependencies are required.","solve performs no external I/O."],"sources":[{"quote":"Use Python standard library only, no external I/O.","origin":"explicit","interpretation":"Dependency and I/O constraints."},{"quote":"Use only the standard library, no external I/O.","origin":"explicit","interpretation":"Repeated dependency and I/O constraints."}]},{"id":"O2","revision":1,"kind":"postcondition","role":"guarantee","statement":"Identify every unique group appearing in events, including groups with no in-range events, and order groups lexicographically.","required":true,"scope":["group enumeration"],"dependencies":[{"id":"D1","relation":"uses_definition"}],"acceptance_criteria":["Groups equal the lexicographically sorted distinct event group names.","Out-of-range and null-valued events still establish group membership."],"sources":[{"quote":"Groups are all unique event group names sorted lexicographically, including groups with no in-range events.","origin":"explicit","interpretation":"Complete ordered group enumeration."}]},{"id":"O3","revision":1,"kind":"postcondition","role":"guarantee","statement":"For each group emit one bucket at start + k*width for every nonnegative integer k whose bucket start is strictly below end. Each bucket covers its half-open interval ending at min(bucketStart+width,end).","required":true,"scope":["bucket enumeration and membership"],"dependencies":[{"id":"D1","relation":"uses_definition"},{"id":"O2","relation":"uses_proof"}],"acceptance_criteria":["Bucket starts are exactly start,start+width,... below end.","A bucket includes its lower endpoint and excludes its upper endpoint.","The final interval is truncated at end.","start=end emits no buckets."],"sources":[{"quote":"For each group, emit buckets starting start,start+width,...","origin":"explicit","interpretation":"Bucket start progression."},{"quote":"strictly below end, each covering [bucketStart,min(bucketStart+width,end)).","origin":"explicit","interpretation":"Half-open membership and end truncation."}]},{"id":"O4","revision":1,"kind":"postcondition","role":"guarantee","statement":"For each group and bucket, sum and count precisely its non-null in-range event values, retaining every duplicate occurrence.","required":true,"scope":["aggregation"],"dependencies":[{"id":"O3","relation":"uses_proof"}],"acceptance_criteria":["count is the number of non-null events belonging to the group and bucket.","sum is their integer sum.","Null and out-of-range values contribute neither sum nor count.","Duplicate events contribute separately."],"sources":[{"quote":"Sum only non-null in-range values;","origin":"explicit","interpretation":"Sum eligibility."},{"quote":"count counts these values.","origin":"explicit","interpretation":"Count eligibility."},{"quote":"Zero sum is a real previous value, duplicates are counted.","origin":"explicit","interpretation":"Duplicate multiplicity."}]},{"id":"I1","revision":1,"kind":"invariant","role":"guarantee","statement":"Within each group's bucket sequence, previous starts absent and becomes the sum whenever a bucket has positive count; empty buckets preserve it. Zero is a valid previous sum, and events before start cannot initialize it.","required":true,"scope":["per-group causal fill state"],"dependencies":[{"id":"O4","relation":"uses_proof"}],"acceptance_criteria":["Previous equals the latest earlier nonempty bucket sum or is absent before one exists.","Empty buckets never reset previous.","A nonempty bucket summing to zero updates previous to zero.","No event before start seeds previous."],"sources":[{"quote":"A nonempty bucket has value=sum and becomes previous value.","origin":"explicit","interpretation":"State update on positive count."},{"quote":"empty buckets never reset previous.","origin":"explicit","interpretation":"Persistence across empty buckets."},{"quote":"Events before start never seed previous.","origin":"explicit","interpretation":"Causal initial state."},{"quote":"Zero sum is a real previous value, duplicates are counted.","origin":"explicit","interpretation":"Zero remains a valid state."}]},{"id":"O5","revision":1,"kind":"postcondition","role":"guarantee","statement":"A bucket with positive count returns its sum as value. A bucket with zero count returns null under fill none; under fill previous it returns the latest previous nonempty bucket sum, or null before the first nonempty bucket.","required":true,"scope":["bucket values"],"dependencies":[{"id":"O4","relation":"uses_proof"},{"id":"I1","relation":"uses_proof"}],"acceptance_criteria":["Positive count implies value equals bucket sum.","Zero count with fill none implies value is null.","Zero count with fill previous implies value equals previous when present and null otherwise.","Filling does not alter count."],"sources":[{"quote":"A nonempty bucket has value=sum and becomes previous value.","origin":"explicit","interpretation":"Nonempty output value."},{"quote":"Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first);","origin":"explicit","interpretation":"Empty output value by fill mode."}]},{"id":"O6","revision":1,"kind":"postcondition","role":"guarantee","statement":"Return a list of records with group,start,count,value fields in lexicographic group order followed by increasing bucket-start order, preserving the specified structure.","required":true,"scope":["output structure and order"],"dependencies":[{"id":"O2","relation":"uses_proof"},{"id":"O3","relation":"uses_proof"},{"id":"O5","relation":"uses_proof"}],"acceptance_criteria":["Every emitted bucket yields a record containing exactly group,start,count,value.","Records follow group order and then bucket order.","An empty event list or start=end produces an empty result list."],"sources":[{"quote":"Return [{group,start,count,value}] in group then bucket order.","origin":"explicit","interpretation":"Output records and ordering."},{"quote":"Preserve the specified input/output structure and exact ordering.","origin":"explicit","interpretation":"Structural fidelity."}]},{"id":"O7","revision":1,"kind":"postcondition","role":"guarantee","statement":"Reproduce both public examples: group a yields count 2 and value 0 at start 0, then count 0 and value 0 at starts 2 and 4; group z with only an event before start yields count 0 and null at start 0.","required":true,"scope":["public example cases"],"dependencies":[{"id":"O6","relation":"uses_proof"}],"acceptance_criteria":["The first example returns the three specified a records.","The second example returns the specified z record."],"sources":[{"quote":"Zero sum is a real previous value, duplicates are counted.","origin":"explicit","interpretation":"First example's zero carry behavior."},{"quote":"Events before start never seed previous.","origin":"explicit","interpretation":"Second example's absent previous value."}]}],"category_review":{"entities":"Specified event input, bucket records and per-group previous sum.","preconditions":"No separate caller assumptions; the request defines the valid input domain.","postconditions":"Pure deterministic interface, complete groups and buckets, aggregation, fill behavior, ordered records and examples.","invariants":"Previous tracks only the latest nonempty in-range bucket sum within each group.","safety_properties":"No separately stated safety requirements.","liveness_properties":"None stated.","resource_constraints":"Standard library only; no external I/O.","error_semantics":"Invalid-input behavior is not specified.","explicit_non_goals":"None stated.","ambiguities":"None affecting the specified valid-input behavior."},"clauses":[{"clause_id":"C1","quote":"Software engineering task D21: Grouped bucket aggregation with causal filling","disposition":"context","refs":[],"note":"Task title."},{"clause_id":"C2","quote":"Implement solution.py with a pure solve(data) function.","disposition":"obligations","refs":["O1"],"note":""},{"clause_id":"C3","quote":"Input and output are JSON-compatible Python values.","disposition":"obligations","refs":["O1"],"note":""},{"clause_id":"C4","quote":"Use Python standard library only, no external I/O.","disposition":"obligations","refs":["R1"],"note":""},{"clause_id":"C5","quote":"Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end.","disposition":"obligations","refs":["D1"],"note":""},{"clause_id":"C6","quote":"Groups are all unique event group names sorted lexicographically, including groups with no in-range events.","disposition":"obligations","refs":["O2"],"note":""},{"clause_id":"C7","quote":"For each group, emit buckets starting start,start+width,...","disposition":"obligations","refs":["O3"],"note":""},{"clause_id":"C8","quote":"strictly below end, each covering [bucketStart,min(bucketStart+width,end)).","disposition":"obligations","refs":["O3"],"note":""},{"clause_id":"C9","quote":"Sum only non-null in-range values;","disposition":"obligations","refs":["O4"],"note":""},{"clause_id":"C10","quote":"count counts these values.","disposition":"obligations","refs":["O4"],"note":""},{"clause_id":"C11","quote":"A nonempty bucket has value=sum and becomes previous value.","disposition":"obligations","refs":["I1","O5"],"note":""},{"clause_id":"C12","quote":"Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first);","disposition":"obligations","refs":["O5"],"note":""},{"clause_id":"C13","quote":"empty buckets never reset previous.","disposition":"obligations","refs":["I1"],"note":""},{"clause_id":"C14","quote":"Events before start never seed previous.","disposition":"obligations","refs":["I1"],"note":""},{"clause_id":"C15","quote":"Return [{group,start,count,value}] in group then bucket order.","disposition":"obligations","refs":["O6"],"note":""},{"clause_id":"C16","quote":"Zero sum is a real previous value, duplicates are counted.","disposition":"obligations","refs":["I1","O4"],"note":""},{"clause_id":"C17","quote":"Implement a pure deterministic Python 3 function solve(data) in solution.py.","disposition":"obligations","refs":["O1"],"note":""},{"clause_id":"C18","quote":"Use only the standard library, no external I/O.","disposition":"obligations","refs":["R1"],"note":""},{"clause_id":"C19","quote":"The function receives a JSON value and returns a JSON-serializable value.","disposition":"obligations","refs":["O1"],"note":""},{"clause_id":"C20","quote":"Preserve the specified input/output structure and exact ordering.","disposition":"obligations","refs":["O6"],"note":""},{"clause_id":"C21","quote":"Public examples (additional held-out cases will be scored):\\n[{\\\"input\\\": {\\\"end\\\": 5, \\\"events\\\": [{\\\"group\\\": \\\"a\\\", \\\"time\\\": 0, \\\"value\\\": 2}, {\\\"group\\\": \\\"a\\\", \\\"time\\\": 1, \\\"value\\\": -2}], \\\"fill\\\": \\\"previous\\\", \\\"start\\\": 0, \\\"width\\\": 2}, \\\"output\\\": [{\\\"count\\\": 2, \\\"group\\\": \\\"a\\\", \\\"start\\\": 0, \\\"value\\\": 0}, {\\\"count\\\": 0, \\\"group\\\": \\\"a\\\", \\\"start\\\": 2, \\\"value\\\": 0}, {\\\"count\\\": 0, \\\"group\\\": \\\"a\\\", \\\"start\\\": 4, \\\"value\\\": 0}]}, {\\\"input\\\": {\\\"end\\\": 1, \\\"events\\\": [{\\\"group\\\": \\\"z\\\", \\\"time\\\": -1, \\\"value\\\": 9}], \\\"fill\\\": \\\"previous\\\", \\\"start\\\": 0, \\\"width\\\": 2}, \\\"output\\\": [{\\\"count\\\": 0, \\\"group\\\": \\\"z\\\", \\\"start\\\": 0, \\\"value\\\": null}]}]","disposition":"obligations","refs":["O7"],"note":"Both public cases are required behavioral examples; held-out scoring is evaluation context."}],"assumptions":[],"ambiguities":[],"selected_defaults":[]}
+Your previous proposal was rejected by the validator:
+- clause 'C21': ID/quote does not match the request clause manifest
+- request clause [1319, 1891) has no disposition: 'Public examples (additional held-out cases will be scored):\n[{"input": {"end": 5'
+PROPOSAL FIELD SHAPES (from the current artifact schemas; repair the JSON, preserve the request):
+{
+ "kind_and_role_are_separate_fields": [
+  {
+   "kind": "entity",
+   "role": "declaration"
+  },
+  {
+   "kind": "precondition",
+   "role": "assumption"
+  },
+  {
+   "kind": "postcondition",
+   "role": "guarantee"
+  },
+  {
+   "kind": "invariant",
+   "role": "guarantee"
+  },
+  {
+   "kind": "safety_property",
+   "role": "guarantee"
+  },
+  {
+   "kind": "liveness_property",
+   "role": "guarantee"
+  },
+  {
+   "kind": "resource_constraint",
+   "role": "guarantee"
+  },
+  {
+   "kind": "error_semantics",
+   "role": "guarantee"
+  },
+  {
+   "kind": "explicit_non_goal",
+   "role": "exclusion"
+  },
+  {
+   "kind": "ambiguity",
+   "role": "open_question"
+  }
+ ],
+ "obligation_fields": [
+  "id",
+  "kind",
+  "role",
+  "statement",
+  "required",
+  "scope",
+  "dependencies",
+  "acceptance_criteria",
+  "sources"
+ ],
+ "dependencies_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "relation": {
+    "enum": [
+     "assumes",
+     "uses_definition",
+     "uses_proof",
+     "requires_witness",
+     "refines",
+     "requires_bridge",
+     "blocked_by"
+    ]
+   }
+  },
+  "required": [
+   "id",
+   "relation"
+  ]
+ },
+ "assumptions_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "supplied_by": {
+    "type": "string",
+    "minLength": 1
+   },
+   "discharged_at": {
+    "type": "string",
+    "minLength": 1
+   }
+  },
+  "required": [
+   "id",
+   "supplied_by",
+   "discharged_at"
+  ]
+ },
+ "ambiguities_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "alternatives": {
+    "type": "array",
+    "minItems": 2,
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "id": {
+       "type": "string",
+       "minLength": 1
+      },
+      "description": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "required": [
+      "id",
+      "description"
+     ]
+    }
+   },
+   "affected_obligations": {
+    "type": "array",
+    "items": {
+     "type": "string",
+     "minLength": 1
+    },
+    "uniqueItems": true
+   },
+   "impact": {
+    "type": "array",
+    "minItems": 1,
+    "uniqueItems": true,
+    "items": {
+     "enum": [
+      "correctness",
+      "data_loss",
+      "security",
+      "failure_behavior",
+      "numeric_semantics",
+      "formal_boundary",
+      "routine"
+     ]
+    }
+   },
+   "proposed_default": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  },
+  "required": [
+   "id",
+   "alternatives",
+   "affected_obligations",
+   "impact",
+   "proposed_default"
+  ]
+ },
+ "selected_defaults_item": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+   "topic": {
+    "type": "string",
+    "minLength": 1
+   },
+   "choice": {
+    "type": "string",
+    "minLength": 1
+   },
+   "rationale": {
+    "type": "string",
+    "minLength": 1
+   }
+  },
+  "required": [
+   "topic",
+   "choice",
+   "rationale"
+  ]
+ }
+}
+Kinds and roles are separate literal strings, never combined values. Include all assumption supplier fields and ambiguity alternative objects. Return a corrected JSON object.

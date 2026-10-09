@@ -1,0 +1,204 @@
+{
+  "obligations": [
+    {
+      "id": "D1",
+      "revision": 1,
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "The input is a JSON-compatible object containing left and right arrays of objects, a string key, and mode equal to inner, left, or full. The output is a JSON-serializable array of objects with left and right members.",
+      "required": true,
+      "scope": ["input and output"],
+      "dependencies": [],
+      "acceptance_criteria": ["The specified input schema and result-array schema are preserved.", "Each output member contains left and right values that are input rows or the specified null placeholders."],
+      "sources": [
+        {"quote": "Input {left:[objects],right:[objects],key:string,mode:'inner'|'left'|'full'}.", "origin": "explicit", "interpretation": "Input schema."},
+        {"quote": "Input and output are JSON-compatible Python values.", "origin": "explicit", "interpretation": "Value domain."},
+        {"quote": "Return the result array;", "origin": "explicit", "interpretation": "Output container."},
+        {"quote": "The function receives a JSON value and returns a JSON-serializable value.", "origin": "explicit", "interpretation": "Serialization boundary."}
+      ]
+    },
+    {
+      "id": "O1",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "solution.py exposes a pure deterministic Python 3 solve(data) function that returns the requested join result without mutating its input.",
+      "required": true,
+      "scope": ["solve(data)"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}],
+      "acceptance_criteria": ["The callable solve exists in solution.py and executes under Python 3.", "Repeated calls with equal inputs return equal results.", "Calling solve leaves its input value unchanged."],
+      "sources": [
+        {"quote": "Implement solution.py with a pure solve(data) function.", "origin": "explicit", "interpretation": "Module, entry point, and purity."},
+        {"quote": "Implement a pure deterministic Python 3 function solve(data) in solution.py.", "origin": "explicit", "interpretation": "Runtime and deterministic behavior."},
+        {"quote": "Implement a pure deterministic Python 3 function solve(data) in solution.py.", "origin": "inferred", "justification": "Purity requires avoiding observable mutation of caller-owned input.", "interpretation": "Input remains unchanged."}
+      ]
+    },
+    {
+      "id": "R1",
+      "revision": 1,
+      "kind": "resource_constraint",
+      "role": "guarantee",
+      "statement": "The implementation uses only Python's standard library and performs no external I/O.",
+      "required": true,
+      "scope": ["implementation and execution"],
+      "dependencies": [],
+      "acceptance_criteria": ["No third-party library is required.", "Execution performs no external I/O."],
+      "sources": [
+        {"quote": "Use Python standard library only, no external I/O.", "origin": "explicit", "interpretation": "Dependency and I/O restrictions."},
+        {"quote": "Use only the standard library, no external I/O.", "origin": "explicit", "interpretation": "Repeated restriction."}
+      ]
+    },
+    {
+      "id": "O2",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "Rows match exactly when both have a non-null value at the named key and those values are structurally equal. Equality distinguishes booleans from numbers and ignores object member order; numeric cross-representation equality awaits Q1.",
+      "required": true,
+      "scope": ["all left/right row pairs", "nested key values"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}, {"id": "Q1", "relation": "blocked_by"}],
+      "acceptance_criteria": ["Missing keys and null key values never match any row, including another missing or null key.", "Boolean values never match numeric values, including inside structured key values.", "Objects with equal members match regardless of member order.", "Structural equality applies recursively to key values.", "Integer-versus-floating-point numeric equality follows the resolution of Q1."],
+      "sources": [
+        {"quote": "Join by exact structurally equal key values;", "origin": "explicit", "interpretation": "Structural matching rule."},
+        {"quote": "booleans distinct from numeric, object order ignored.", "origin": "explicit", "interpretation": "Boolean distinction and object-order independence."},
+        {"quote": "Missing or null key never matches, including another null.", "origin": "explicit", "interpretation": "Nonmatching key cases."}
+      ]
+    },
+    {
+      "id": "O3",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "For each left row, in left input order, emit one object containing that left row and each matching right row, in right input order. Preserve every occurrence and the full Cartesian multiplicity of duplicate matches.",
+      "required": true,
+      "scope": ["matched output rows in every mode"],
+      "dependencies": [{"id": "O2", "relation": "uses_proof"}],
+      "acceptance_criteria": ["Each matching pair of input row occurrences contributes exactly one output object.", "Matched output objects are ordered first by left occurrence index and then by right occurrence index.", "A matching group with m left occurrences and n right occurrences contributes m*n output objects."],
+      "sources": [
+        {"quote": "For each left row in input order emit {left:row,right:matched row} for every matching right row in right input order, preserving duplicate Cartesian multiplicities.", "origin": "explicit", "interpretation": "Pair emission, stable order, and multiplicities."}
+      ]
+    },
+    {
+      "id": "O4",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "An unmatched left row contributes exactly one object with that row as left and null as right in left and full modes, at its position in the left-row traversal; it contributes no object in inner mode.",
+      "required": true,
+      "scope": ["unmatched left row occurrences"],
+      "dependencies": [{"id": "O2", "relation": "uses_proof"}],
+      "acceptance_criteria": ["Every unmatched left occurrence is emitted once in left/full modes with right:null.", "No unmatched left occurrence is emitted in inner mode.", "Unmatched left output respects left input order relative to matched left groups."],
+      "sources": [
+        {"quote": "Unmatched left rows emit right:null only in left/full modes.", "origin": "explicit", "interpretation": "Mode-dependent unmatched-left handling."},
+        {"quote": "For each left row in input order emit {left:row,right:matched row} for every matching right row in right input order, preserving duplicate Cartesian multiplicities.", "origin": "explicit", "interpretation": "Left traversal order."},
+        {"quote": "Preserve the specified input/output structure and exact ordering.", "origin": "explicit", "interpretation": "Unmatched rows retain the specified placement."}
+      ]
+    },
+    {
+      "id": "O5",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "In full mode, after all left-row output, append exactly one object for each unmatched right occurrence in right input order, with left null and right equal to that row. Other modes omit unmatched right rows.",
+      "required": true,
+      "scope": ["unmatched right row occurrences"],
+      "dependencies": [{"id": "O2", "relation": "uses_proof"}],
+      "acceptance_criteria": ["A right occurrence is unmatched precisely when no left occurrence matches it.", "Full mode appends every unmatched right occurrence once, preserving its input order.", "Each appended object has left:null and the original right row.", "Inner and left modes emit no unmatched-right objects."],
+      "sources": [
+        {"quote": "Full mode then appends every unmatched right row in input order with left:null.", "origin": "explicit", "interpretation": "Full-mode suffix."},
+        {"quote": "Input {left:[objects],right:[objects],key:string,mode:'inner'|'left'|'full'}.", "origin": "explicit", "interpretation": "Supported join modes."}
+      ]
+    },
+    {
+      "id": "O6",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "Return the complete result array with row fields preserved inside separate left/right members, without merging fields or deduplicating rows or output pairs.",
+      "required": true,
+      "scope": ["returned result"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}, {"id": "O3", "relation": "uses_proof"}, {"id": "O4", "relation": "uses_proof"}, {"id": "O5", "relation": "uses_proof"}],
+      "acceptance_criteria": ["Output rows contain the complete original row values under their respective left/right members.", "No fields from distinct rows are merged.", "No duplicate input occurrence or output pair is removed.", "The result array follows the ordering specified by O3, O4, and O5."],
+      "sources": [
+        {"quote": "Return the result array;", "origin": "explicit", "interpretation": "Return the join array."},
+        {"quote": "no row fields are merged or deduplicated.", "origin": "explicit", "interpretation": "Preserve separate rows and duplicates."},
+        {"quote": "Preserve the specified input/output structure and exact ordering.", "origin": "explicit", "interpretation": "Preserve structure and ordering."}
+      ]
+    },
+    {
+      "id": "O7",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "The two public examples produce their stated outputs exactly: the full join emits two numeric matches, the unmatched null-key left row, and the unmatched missing-key right row; the boolean-versus-number inner join returns an empty array.",
+      "required": true,
+      "scope": ["public examples"],
+      "dependencies": [{"id": "O6", "relation": "uses_proof"}],
+      "acceptance_criteria": ["For the first example the result is [{\"left\":{\"k\":1},\"right\":{\"k\":1,\"v\":\"a\"}},{\"left\":{\"k\":1},\"right\":{\"k\":1,\"v\":\"b\"}},{\"left\":{\"k\":null},\"right\":null},{\"left\":null,\"right\":{}}].", "For the second example the result is []."],
+      "sources": [
+        {"quote": "[{\"input\": {\"key\": \"k\", \"left\": [{\"k\": 1}, {\"k\": null}], \"mode\": \"full\", \"right\": [{\"k\": 1, \"v\": \"a\"}, {\"k\": 1, \"v\": \"b\"}, {}]}, \"output\": [{\"left\": {\"k\": 1}, \"right\": {\"k\": 1, \"v\": \"a\"}}, {\"left\": {\"k\": 1}, \"right\": {\"k\": 1, \"v\": \"b\"}}, {\"left\": {\"k\": null}, \"right\": null}, {\"left\": null, \"right\": {}}]}, {\"input\": {\"key\": \"k\", \"left\": [{\"k\": true}], \"mode\": \"inner\", \"right\": [{\"k\": 1}]}, \"output\": []}]", "origin": "explicit", "interpretation": "Concrete expected results."}
+      ]
+    },
+    {
+      "id": "Q1",
+      "revision": 1,
+      "kind": "ambiguity",
+      "role": "open_question",
+      "statement": "Does exact structural equality treat equal-valued integers and floating-point numbers, such as 1 and 1.0, as equal?",
+      "required": true,
+      "scope": ["numeric key values, including nested values"],
+      "dependencies": [],
+      "acceptance_criteria": ["Resolve whether equal numeric values with different Python numeric representations match."],
+      "sources": [
+        {"quote": "Join by exact structurally equal key values;", "origin": "explicit", "interpretation": "Exact equality does not explicitly define cross-representation number equality."},
+        {"quote": "booleans distinct from numeric, object order ignored.", "origin": "explicit", "interpretation": "Numbers are distinguished from booleans, but integer/float equality is unspecified."}
+      ]
+    }
+  ],
+  "category_review": {
+    "entities": "JSON-compatible join input and result-array schema.",
+    "preconditions": "No explicit caller assumptions; the input schema is declared without inventing malformed-input handling.",
+    "postconditions": "Pure deterministic entry point, structural matching, stable duplicate-preserving output, mode-specific unmatched rows, preserved row structure, and public examples.",
+    "invariants": "No separate execution invariant requested.",
+    "safety_properties": "Purity and preservation of caller input are covered by O1.",
+    "liveness_properties": "No separate liveness requirement stated.",
+    "resource_constraints": "Standard library only and no external I/O.",
+    "error_semantics": "No behavior for inputs outside the declared schema is specified.",
+    "explicit_non_goals": "No separate explicit non-goals; no merging or deduplication is a required output property.",
+    "ambiguities": "Numeric equality across integer and floating-point representations requires resolution."
+  },
+  "clauses": [
+    {"clause_id": "C1", "quote": "Software engineering task D19: Stable duplicate-preserving relational join", "disposition": "obligations", "refs": ["O3"], "note": "Task label also identifies required stability and duplicate preservation."},
+    {"clause_id": "C2", "quote": "Implement solution.py with a pure solve(data) function.", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C3", "quote": "Input and output are JSON-compatible Python values.", "disposition": "obligations", "refs": ["D1"], "note": ""},
+    {"clause_id": "C4", "quote": "Use Python standard library only, no external I/O.", "disposition": "obligations", "refs": ["R1"], "note": ""},
+    {"clause_id": "C5", "quote": "Input {left:[objects],right:[objects],key:string,mode:'inner'|'left'|'full'}.", "disposition": "obligations", "refs": ["D1"], "note": ""},
+    {"clause_id": "C6", "quote": "Join by exact structurally equal key values;", "disposition": "obligations", "refs": ["O2", "Q1"], "note": "Structural matching is required; numeric representation equality remains open."},
+    {"clause_id": "C7", "quote": "booleans distinct from numeric, object order ignored.", "disposition": "obligations", "refs": ["O2"], "note": ""},
+    {"clause_id": "C8", "quote": "Missing or null key never matches, including another null.", "disposition": "obligations", "refs": ["O2"], "note": ""},
+    {"clause_id": "C9", "quote": "For each left row in input order emit {left:row,right:matched row} for every matching right row in right input order, preserving duplicate Cartesian multiplicities.", "disposition": "obligations", "refs": ["O3"], "note": ""},
+    {"clause_id": "C10", "quote": "Unmatched left rows emit right:null only in left/full modes.", "disposition": "obligations", "refs": ["O4"], "note": ""},
+    {"clause_id": "C11", "quote": "Full mode then appends every unmatched right row in input order with left:null.", "disposition": "obligations", "refs": ["O5"], "note": ""},
+    {"clause_id": "C12", "quote": "Return the result array;", "disposition": "obligations", "refs": ["D1", "O6"], "note": ""},
+    {"clause_id": "C13", "quote": "no row fields are merged or deduplicated.", "disposition": "obligations", "refs": ["O6"], "note": ""},
+    {"clause_id": "C14", "quote": "Implement a pure deterministic Python 3 function solve(data) in solution.py.", "disposition": "obligations", "refs": ["O1"], "note": ""},
+    {"clause_id": "C15", "quote": "Use only the standard library, no external I/O.", "disposition": "obligations", "refs": ["R1"], "note": ""},
+    {"clause_id": "C16", "quote": "The function receives a JSON value and returns a JSON-serializable value.", "disposition": "obligations", "refs": ["D1"], "note": ""},
+    {"clause_id": "C17", "quote": "Preserve the specified input/output structure and exact ordering.", "disposition": "obligations", "refs": ["O3", "O4", "O5", "O6"], "note": ""},
+    {"clause_id": "C18", "quote": "Public examples (additional held-out cases will be scored):\n[{\"input\": {\"key\": \"k\", \"left\": [{\"k\": 1}, {\"k\": null}], \"mode\": \"full\", \"right\": [{\"k\": 1, \"v\": \"a\"}, {\"k\": 1, \"v\": \"b\"}, {}]}, \"output\": [{\"left\": {\"k\": 1}, \"right\": {\"k\": 1, \"v\": \"a\"}}, {\"left\": {\"k\": 1}, \"right\": {\"k\": 1, \"v\": \"b\"}}, {\"left\": {\"k\": null}, \"right\": null}, {\"left\": null, \"right\": {}}]}, {\"input\": {\"key\": \"k\", \"left\": [{\"k\": true}], \"mode\": \"inner\", \"right\": [{\"k\": 1}]}, \"output\": []}]", "disposition": "obligations", "refs": ["O7"], "note": "Examples impose exact outputs; held-out scoring is evaluation context."}
+  ],
+  "assumptions": [],
+  "ambiguities": [
+    {
+      "id": "Q1",
+      "alternatives": [
+        {"id": "numeric_value", "description": "Integers and floating-point numbers match when their numeric values are exactly equal; booleans remain distinct."},
+        {"id": "numeric_type", "description": "Integers and floating-point numbers are structurally distinct even when their numeric values are equal; booleans remain distinct."}
+      ],
+      "affected_obligations": ["O2", "O3", "O4", "O5", "O6"],
+      "impact": ["correctness", "numeric_semantics"],
+      "proposed_default": null
+    }
+  ],
+  "selected_defaults": []
+}

@@ -1,0 +1,8 @@
+Software engineering task G18: Temporal key-value reads with equal-time overwrite
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {events}, with nondecreasing integer at timestamps. Events {op:"set",at,key,value}, {op:"delete",at,key}, or {op:"get",at,key,asof}, integer values and asof<=at. A get sees only preceding writes in input order at timestamps <=asof; latest timestamp wins, and equal timestamps use the last preceding write. Missing/deleted values return null. Return {reads,state}: reads contains only get responses, state contains current nondeleted keys after all events. Reads do not create keys. Repeated deletion is valid.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"events": [{"at": 1, "key": "x", "op": "set", "value": 1}, {"at": 1, "key": "x", "op": "set", "value": 2}, {"asof": 1, "at": 1, "key": "x", "op": "get"}, {"at": 2, "key": "x", "op": "delete"}, {"asof": 1, "at": 2, "key": "x", "op": "get"}, {"asof": 2, "at": 2, "key": "x", "op": "get"}]}, "output": {"reads": [2, 2, null], "state": {}}}, {"input": {"events": [{"asof": 0, "at": 0, "key": "x", "op": "get"}]}, "output": {"reads": [null], "state": {}}}]

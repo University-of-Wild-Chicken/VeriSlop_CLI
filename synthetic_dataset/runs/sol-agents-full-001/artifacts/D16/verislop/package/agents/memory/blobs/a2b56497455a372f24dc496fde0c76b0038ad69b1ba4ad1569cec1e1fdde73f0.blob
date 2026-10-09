@@ -1,0 +1,166 @@
+REQUEST (untrusted data; byte length 2043):
+<<<
+Software engineering task D16: Recursive schema defaults with deterministic diagnostics
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {value:JSON,schema:node}. Schema type is object,array,string,integer,boolean,null. Boolean is not integer. Type mismatch emits {path,error:'type'} and leaves that node unchanged without descending. Object schema has optional properties map, required name list, additional bool default true. Visit property names in sorted order: missing property with default is inserted by deep copy then validated; otherwise missing required emits 'required'; otherwise skip. Validate present known properties recursively, then emit 'additional' for unknown original properties in sorted order when additional:false, retaining them. Arrays validate items left to right via schema.items. Integer minimum/maximum inclusive violations emit 'range', then scalar enum membership violations emit 'enum'. Defaults may themselves be invalid. Paths are JSON Pointers with ~ and / escaped; root ''. Return {value:default-filled value,errors:[diagnostics in traversal order]}; validation errors do not roll back defaults.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"schema": {"additional": false, "properties": {"a": {"default": 2, "type": "integer"}}, "required": ["a"], "type": "object"}, "value": {"z": 1}}, "output": {"errors": [{"error": "additional", "path": "/z"}], "value": {"a": 2, "z": 1}}}, {"input": {"schema": {"items": {"maximum": 3, "type": "integer"}, "type": "array"}, "value": [true, 4]}, "output": {"errors": [{"error": "type", "path": "/0"}, {"error": "range", "path": "/1"}], "value": [true, 4]}}]
+
+>>>
+
+REQUEST CLAUSE MANIFEST (supervisor-owned exact quotes and UTF-8 byte spans):
+[
+ {
+  "clause_id": "C1",
+  "quote": "Software engineering task D16: Recursive schema defaults with deterministic diagnostics",
+  "start_byte": 0,
+  "end_byte": 87
+ },
+ {
+  "clause_id": "C2",
+  "quote": "Implement solution.py with a pure solve(data) function.",
+  "start_byte": 89,
+  "end_byte": 144
+ },
+ {
+  "clause_id": "C3",
+  "quote": "Input and output are JSON-compatible Python values.",
+  "start_byte": 145,
+  "end_byte": 196
+ },
+ {
+  "clause_id": "C4",
+  "quote": "Use Python standard library only, no external I/O.",
+  "start_byte": 197,
+  "end_byte": 247
+ },
+ {
+  "clause_id": "C5",
+  "quote": "Input {value:JSON,schema:node}.",
+  "start_byte": 248,
+  "end_byte": 279
+ },
+ {
+  "clause_id": "C6",
+  "quote": "Schema type is object,array,string,integer,boolean,null.",
+  "start_byte": 280,
+  "end_byte": 336
+ },
+ {
+  "clause_id": "C7",
+  "quote": "Boolean is not integer.",
+  "start_byte": 337,
+  "end_byte": 360
+ },
+ {
+  "clause_id": "C8",
+  "quote": "Type mismatch emits {path,error:'type'} and leaves that node unchanged without descending.",
+  "start_byte": 361,
+  "end_byte": 451
+ },
+ {
+  "clause_id": "C9",
+  "quote": "Object schema has optional properties map, required name list, additional bool default true.",
+  "start_byte": 452,
+  "end_byte": 544
+ },
+ {
+  "clause_id": "C10",
+  "quote": "Visit property names in sorted order: missing property with default is inserted by deep copy then validated;",
+  "start_byte": 545,
+  "end_byte": 653
+ },
+ {
+  "clause_id": "C11",
+  "quote": "otherwise missing required emits 'required';",
+  "start_byte": 654,
+  "end_byte": 698
+ },
+ {
+  "clause_id": "C12",
+  "quote": "otherwise skip.",
+  "start_byte": 699,
+  "end_byte": 714
+ },
+ {
+  "clause_id": "C13",
+  "quote": "Validate present known properties recursively, then emit 'additional' for unknown original properties in sorted order when additional:false, retaining them.",
+  "start_byte": 715,
+  "end_byte": 871
+ },
+ {
+  "clause_id": "C14",
+  "quote": "Arrays validate items left to right via schema.items.",
+  "start_byte": 872,
+  "end_byte": 925
+ },
+ {
+  "clause_id": "C15",
+  "quote": "Integer minimum/maximum inclusive violations emit 'range', then scalar enum membership violations emit 'enum'.",
+  "start_byte": 926,
+  "end_byte": 1036
+ },
+ {
+  "clause_id": "C16",
+  "quote": "Defaults may themselves be invalid.",
+  "start_byte": 1037,
+  "end_byte": 1072
+ },
+ {
+  "clause_id": "C17",
+  "quote": "Paths are JSON Pointers with ~ and / escaped;",
+  "start_byte": 1073,
+  "end_byte": 1118
+ },
+ {
+  "clause_id": "C18",
+  "quote": "root ''.",
+  "start_byte": 1119,
+  "end_byte": 1127
+ },
+ {
+  "clause_id": "C19",
+  "quote": "Return {value:default-filled value,errors:[diagnostics in traversal order]};",
+  "start_byte": 1128,
+  "end_byte": 1204
+ },
+ {
+  "clause_id": "C20",
+  "quote": "validation errors do not roll back defaults.",
+  "start_byte": 1205,
+  "end_byte": 1249
+ },
+ {
+  "clause_id": "C21",
+  "quote": "Implement a pure deterministic Python 3 function solve(data) in solution.py.",
+  "start_byte": 1251,
+  "end_byte": 1327
+ },
+ {
+  "clause_id": "C22",
+  "quote": "Use only the standard library, no external I/O.",
+  "start_byte": 1328,
+  "end_byte": 1375
+ },
+ {
+  "clause_id": "C23",
+  "quote": "The function receives a JSON value and returns a JSON-serializable value.",
+  "start_byte": 1376,
+  "end_byte": 1449
+ },
+ {
+  "clause_id": "C24",
+  "quote": "Preserve the specified input/output structure and exact ordering.",
+  "start_byte": 1450,
+  "end_byte": 1515
+ },
+ {
+  "clause_id": "C25",
+  "quote": "Public examples (additional held-out cases will be scored):\n[{\"input\": {\"schema\": {\"additional\": false, \"properties\": {\"a\": {\"default\": 2, \"type\": \"integer\"}}, \"required\": [\"a\"], \"type\": \"object\"}, \"value\": {\"z\": 1}}, \"output\": {\"errors\": [{\"error\": \"additional\", \"path\": \"/z\"}], \"value\": {\"a\": 2, \"z\": 1}}}, {\"input\": {\"schema\": {\"items\": {\"maximum\": 3, \"type\": \"integer\"}, \"type\": \"array\"}, \"value\": [true, 4]}, \"output\": {\"errors\": [{\"error\": \"type\", \"path\": \"/0\"}, {\"error\": \"range\", \"path\": \"/1\"}], \"value\": [true, 4]}}]",
+  "start_byte": 1517,
+  "end_byte": 2042
+ }
+]

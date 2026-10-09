@@ -1,0 +1,1158 @@
+{
+  "artifact_kind": "obligation_view",
+  "evidence_integrity_problems": [],
+  "note": "derived join of semantic records and registered evidence; `state` is a display projection in the fixed order END_TO_END_VERIFIED > TESTED > LINKED > IMPLEMENTED > PROVED > TYPECHECKED > FORMALIZED > INTERPRETED, not an assurance ranking",
+  "obligations": {
+    "D1": {
+      "acceptance_criteria": [
+        "The declared input domain matches the specified field names, types and bounds."
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-a666f1178198ee8073da2471259a6125"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-c5142dd40748aa5c428e13f12b4f8ccc"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "specified input domain"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-335f32be6b3723a266848ef87b057704"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "specified input domain"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 366,
+          "interpretation": "Specified input structure and domain.",
+          "origin": "explicit",
+          "start_byte": 238
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "The input is an object with events, start, end, width and fill; each event has a string group, integer time and integer or null value. start and end are integers, width is a positive integer, fill is 'none' or 'previous', and start <= end."
+    },
+    "I1": {
+      "acceptance_criteria": [
+        "previous is initially unset independently for each group.",
+        "A count-positive bucket outputs its sum and updates previous even when its sum is zero.",
+        "A count-zero bucket leaves previous unchanged.",
+        "Pre-start events cannot seed previous."
+      ],
+      "dependencies": [
+        {
+          "id": "O4",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "I1",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-32367fe2c79cf75951eff22a742787d0"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-9344c6c90180701cedbbfa67bda53c34"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "ascending bucket processing within each group"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-7f027a01f71893e773166f5f84d19f85"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-bfee198efff61c5b2446df3cf1ae54c1"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "ascending bucket processing within each group"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 732,
+          "interpretation": "Nonempty bucket value and previous update.",
+          "origin": "explicit",
+          "start_byte": 673
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 888,
+          "interpretation": "Empty buckets preserve previous.",
+          "origin": "explicit",
+          "start_byte": 853
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 929,
+          "interpretation": "Pre-start events cannot seed previous.",
+          "origin": "explicit",
+          "start_byte": 889
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1051,
+          "interpretation": "Zero is a valid previous sum.",
+          "origin": "explicit",
+          "start_byte": 993
+        }
+      ],
+      "state": "PROVED",
+      "statement": "Within each group, previous begins unset and tracks the sum of the latest earlier bucket with count greater than zero. Processing a nonempty bucket sets its value and previous to its sum, including zero; empty buckets preserve previous. Events before start never initialize previous."
+    },
+    "O1": {
+      "acceptance_criteria": [
+        "solution.py exposes solve(data).",
+        "Repeated calls with equivalent inputs produce identical results without observable side effects.",
+        "The result is JSON-serializable."
+      ],
+      "dependencies": [],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-f8583d343541c0622dd2f6f3ddc493bd"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-11dfca4eeb01dcdd94eff645eec4126d"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "function interface and execution"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-980788fc5279bbb3881faabd267cf0a1"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: PROOF_UNRESOLVED",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-7dc2e2c4fb7b56ded08a849db8d033ba"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "function interface and execution"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 134,
+          "interpretation": "Function location, name and purity.",
+          "origin": "explicit",
+          "start_byte": 79
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 186,
+          "interpretation": "JSON-compatible interface.",
+          "origin": "explicit",
+          "start_byte": 135
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1129,
+          "interpretation": "Python 3, purity and determinism.",
+          "origin": "explicit",
+          "start_byte": 1053
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1251,
+          "interpretation": "JSON input and serializable output.",
+          "origin": "explicit",
+          "start_byte": 1178
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "Provide a pure deterministic Python 3 solve(data) function in solution.py accepting JSON-compatible Python input and returning a JSON-serializable value."
+    },
+    "O2": {
+      "acceptance_criteria": [
+        "Groups equal the lexicographically sorted set of group names in events.",
+        "Out-of-range events still contribute group names.",
+        "An empty events list yields no groups and an empty result."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-950874a4ea0f39cda0c4ecf9b3ed098a"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-e20ff585d86512df147eb0836b9160be"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "all input events"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-d630382f651079ce280a5a8d7808e33b"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-b4fdc3d3f12b446cb40b5a411f7f5937"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all input events"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 474,
+          "interpretation": "Group membership and ordering.",
+          "origin": "explicit",
+          "start_byte": 367
+        }
+      ],
+      "state": "PROVED",
+      "statement": "Determine groups from every event's group name, deduplicate names and sort them lexicographically, retaining groups whose events are all outside the requested range."
+    },
+    "O3": {
+      "acceptance_criteria": [
+        "Every group has exactly the specified ascending bucket starts.",
+        "The final bucket is clipped at end.",
+        "start = end yields no buckets.",
+        "A time at a bucket's upper endpoint belongs to the following bucket if present; a time equal to end belongs to no bucket."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-6f6cb825c488db9a8634c51626456209"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-b8624b29db7a4c5fe52e7ef513c794b9"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "each group and requested interval"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-01ae9d5484ae6b6456e4fd8b9457b72b"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-e6868afc8cdb23d8abdcb29d3f5b4834"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "each group and requested interval"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 534,
+          "interpretation": "Bucket start progression for each group.",
+          "origin": "explicit",
+          "start_byte": 475
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 610,
+          "interpretation": "Strict endpoint limit and half-open bucket coverage.",
+          "origin": "explicit",
+          "start_byte": 535
+        }
+      ],
+      "state": "PROVED",
+      "statement": "For each group generate bucket starts start + k*width for all nonnegative integers k whose starts are strictly below end. Each bucket covers [bucketStart,min(bucketStart+width,end))."
+    },
+    "O4": {
+      "acceptance_criteria": [
+        "count equals the number of qualifying event occurrences.",
+        "sum equals the exact integer sum of qualifying values.",
+        "Null values and times outside [start,end) contribute neither sum nor count.",
+        "Duplicate occurrences contribute independently.",
+        "A bucket containing only null-valued events has count zero."
+      ],
+      "dependencies": [
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-0d7c071e24034e2f549ac2ac11739d24"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-3d71fe7eaf483664ec974cbfc3f66f5b"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "each generated bucket"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-b3f6022d908fbb219c3b1ac385a207fa"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-12c54ab3a92754761fac8744037c13a2"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "each generated bucket"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 645,
+          "interpretation": "Non-null in-range aggregation.",
+          "origin": "explicit",
+          "start_byte": 611
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 672,
+          "interpretation": "Count uses the same qualifying values.",
+          "origin": "explicit",
+          "start_byte": 646
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1051,
+          "interpretation": "Duplicates are counted.",
+          "origin": "explicit",
+          "start_byte": 993
+        }
+      ],
+      "state": "PROVED",
+      "statement": "For each bucket sum and count all events of its group whose times fall in the bucket and whose values are non-null. Count each duplicate event occurrence separately."
+    },
+    "O5": {
+      "acceptance_criteria": [
+        "fill 'none' produces null for every empty bucket.",
+        "fill 'previous' uses the latest preceding nonempty bucket sum.",
+        "Empty buckets before the first nonempty bucket output null.",
+        "A preceding sum of zero fills subsequent empty buckets with zero."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "I1",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-6dae4018b0b0fb90c461a07dd0958683"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-f935ecd64e5f560696930bbb33c04fb9"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "buckets with count zero"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-15a94dd0fc35a32fd06ffd0c46ab7de3"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-631aeab7dfa54a1206c056f7c3b1a5b0"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "buckets with count zero"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 852,
+          "interpretation": "Fill modes and initial null behavior.",
+          "origin": "explicit",
+          "start_byte": 733
+        }
+      ],
+      "state": "PROVED",
+      "statement": "An empty bucket outputs null under fill 'none'. Under fill 'previous', it outputs the latest previous nonempty bucket sum for the same group, or null if none exists."
+    },
+    "O6": {
+      "acceptance_criteria": [
+        "Each record has the specified group name, bucket start, qualifying count and computed value.",
+        "The list preserves group then bucket ordering.",
+        "The specified input and output structures are preserved."
+      ],
+      "dependencies": [
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O4",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "I1",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O5",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-c4f90240de335a18a0341fed6908dbd3"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-7a0f00d9ed4445bf6a118d506fb6aec7"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "returned value"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-84c42791e3c9088bf5af248b513079db"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-682b681e40b2c91c630fad30396de5f7"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "returned value"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 992,
+          "interpretation": "Output record structure and ordering.",
+          "origin": "explicit",
+          "start_byte": 930
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1317,
+          "interpretation": "Exact structure and ordering preservation.",
+          "origin": "explicit",
+          "start_byte": 1252
+        }
+      ],
+      "state": "PROVED",
+      "statement": "Return a list of objects with exactly group, start, count and value fields, one per generated group bucket, ordered first by lexicographic group and then ascending bucket start."
+    },
+    "O7": {
+      "acceptance_criteria": [
+        "The first example returns exactly the three specified a-group records.",
+        "The second example returns exactly the specified z-group record."
+      ],
+      "dependencies": [
+        {
+          "id": "O6",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-f52f8f3daefa08f5be310881030b6fd3"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-d35b62a952368dd1419c637974982d57"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "public example inputs"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-9d872cf47525d99c9c2647417eb95d12"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: PROOF_UNRESOLVED",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-9276e95c379ecc14918aee6fd926e65b"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "public example inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1891,
+          "interpretation": "Concrete zero-sum carry-forward and pre-start exclusion examples.",
+          "origin": "explicit",
+          "start_byte": 1319
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "Match both public examples: the a-group zero-sum bucket has count 2 and value 0 followed by empty buckets at starts 2 and 4 with value 0; the z-group with only a pre-start event has a single bucket at start 0 with count 0 and value null."
+    },
+    "S1": {
+      "acceptance_criteria": [
+        "No third-party library is required.",
+        "Execution performs no external I/O."
+      ],
+      "dependencies": [],
+      "id": "S1",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [
+            "evidence:ev-ce84df35e2f813b493ebbd05ac46cbdc"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.formal-statement-checker",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "formal statement bound and checked; not proved"
+          ]
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "evidence:ev-bb4234d738b18a24cdcc97ea727178e3"
+          ],
+          "outcome": "PASS",
+          "reason": "explicit interpretation recorded with provenance, schema and coverage checks",
+          "scope": [
+            "recorded interpretation of the request; not proof of intent",
+            "implementation and all solve executions"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [
+            "evidence:ev-4c9b305ee6edf092496924b35c3534d7"
+          ],
+          "outcome": "FAIL",
+          "reason": "blocked: PROOF_UNRESOLVED",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "reference-model theorem (Lean); not an implementation theorem"
+          ]
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "no frozen claim authorizes evidence for this milestone",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [
+            "evidence:ev-ebb1e44e1ec06c3effa6c17aaf5669f0"
+          ],
+          "outcome": "PASS",
+          "reason": "registered evidence from verislop.lean-acceptance",
+          "scope": [
+            "contract input root sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+            "certificate sha256:6e148b83a87354a5a2e6d70b40ff4e0e9dce4880ea254e237991e18bb65d8b18",
+            "kernel-replayed declaration matching the frozen challenge"
+          ]
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "implementation and all solve executions"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 237,
+          "interpretation": "Library and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 187
+        },
+        {
+          "document_hash": "sha256:1e1a8ccb008420489eab50ddfe73e1632b674ccb2202aeced608a233f7ac3296",
+          "document_ref": "tasks/D21/prompt.txt",
+          "end_byte": 1177,
+          "interpretation": "Repeated library and I/O restrictions.",
+          "origin": "explicit",
+          "start_byte": 1130
+        }
+      ],
+      "state": "TYPECHECKED",
+      "statement": "Use only the Python standard library and perform no external I/O."
+    }
+  },
+  "roots": {
+    "contract_input_root": "sha256:6cf0b4e9116382b3a302e071f23d07a4646d90de9729f190e7ccebf5cd8d7c84",
+    "interpretation_root": "sha256:3c849d94cf54b56911e345e63ce3fe6a5099b78f915253fba24fd95ef55481b8"
+  },
+  "schema_version": "0.1"
+}

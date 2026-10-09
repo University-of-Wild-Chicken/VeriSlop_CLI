@@ -1,0 +1,8 @@
+Software engineering task D30: Virtual symlink-aware path resolver
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {path:absolute string,links:{absolute canonical path:target string},max_hops:nonnegative int}. Resolve lexically from root, processing components left to right. Empty and '.' components disappear; '..' removes previous resolved component or stays at root. After appending each normal component, if its current absolute path is a link, remove that component and prepend the link target components to pending components. Relative target starts from link's parent; absolute target resets resolved prefix to root. Follow links even if later '..' would remove them. Every link traversal increments hops; if hops exceeds max_hops return {error:'symlink_limit'} including cycles. Success {path:canonical absolute path,hops:int}. No filesystem access, existence checks or trailing-slash preservation. Targets may be empty.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"links": {"/a/link": "../b/c"}, "max_hops": 5, "path": "/a/link/../x"}, "output": {"hops": 1, "path": "/b/x"}}, {"input": {"links": {"/a": "/b", "/b": "/a"}, "max_hops": 2, "path": "/a"}, "output": {"error": "symlink_limit"}}]

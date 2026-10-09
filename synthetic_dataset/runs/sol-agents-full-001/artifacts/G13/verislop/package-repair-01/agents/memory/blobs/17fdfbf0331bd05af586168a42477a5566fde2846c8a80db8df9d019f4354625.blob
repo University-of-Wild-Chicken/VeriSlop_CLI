@@ -1,0 +1,353 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The input is a JSON object with n and edges, where n is an integer from 0 through 10 and edges contains directed pairs [u,v].",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Recognize n and edges as the specified graph input.",
+   "Interpret each [u,v] as a directed edge from u to v."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "A1",
+  "kind": "precondition",
+  "role": "assumption",
+  "statement": "All supplied inputs conform to the specification.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "The caller supplies inputs conforming to the specified graph input domain."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Provide a pure deterministic Python 3 function solve(data) in solution.py that receives the specified JSON input and returns a JSON-serializable value.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "solution.py exposes solve(data).",
+   "Repeated calls with equivalent input produce equivalent output.",
+   "The returned value is JSON-serializable."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Treat duplicate directed edges as a single edge throughout cycle detection and transitive reduction.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Adding or removing duplicate copies of an edge does not change the result."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For an acyclic graph, return precisely the unique original edges [u,v] for which no alternate u-to-v path of at least two edges exists, sorted lexicographically by u then v.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   },
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "An original edge is retained if and only if there is no alternate path from its source to its destination using at least two edges.",
+   "The output contains no added edges or duplicate edges.",
+   "The output is a list of two-element lists sorted by source and then destination.",
+   "An edgeless graph, including n=0, returns an empty list."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For an acyclic input, the returned graph preserves all directed reachability, contains no redundant edges, and represents isolated vertices implicitly without separate output entries.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   },
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "For every vertex pair, reachability in the output equals reachability in the input.",
+   "Removing any returned edge would destroy reachability between its endpoints.",
+   "Isolated vertices produce no separate entries in the output."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Match both public examples: the graph with edges [0,1], [1,2] and duplicate [0,2] returns [[0,1],[1,2]], and the single self-loop graph returns null.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "E1",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "solve({\"edges\":[[0,1],[1,2],[0,2],[0,2]],\"n\":3}) returns [[0,1],[1,2]].",
+   "solve({\"edges\":[[0,0]],\"n\":1}) returns None."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "S1",
+  "kind": "safety_property",
+  "role": "guarantee",
+  "statement": "Use only the Python standard library, perform no external I/O, and neither read files, use the network, print, nor retain state across calls.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No nonstandard-library dependency is used.",
+   "No file reading, network access, printing or other external I/O occurs.",
+   "No state is retained across calls."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "E1",
+  "kind": "error_semantics",
+  "role": "guarantee",
+  "statement": "Return null whenever any directed cycle exists anywhere in the graph, including a self-loop or a cycle in a disconnected component.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Every graph containing a directed cycle returns Python None, serialized as JSON null.",
+   "Cycle detection covers the entire graph.",
+   "A self-loop causes a null result."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "A1",
+  "role": "assumption",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "A1",
+   "predicate": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "S1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "S1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "E1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "E1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ }
+]
+ASSUMPTION SUPPLIERS:
+[{"discharged_at": "Each solve(data) invocation, by supplying input conforming to the specification.", "id": "A1", "supplied_by": "caller"}]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+["A1"]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Software engineering task G13: Transitive reduction with global cycle checks
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {n,edges}, n=0..10, directed [u,v]; duplicates are ignored. Return null if any cycle exists. Otherwise return sorted unique edges [u,v] retained by the DAG transitive reduction: retain an edge exactly when there is no alternate u-to-v path using at least two edges. Preserve reachability, include no redundant edges, and keep isolated vertices implicit.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"edges": [[0, 1], [1, 2], [0, 2], [0, 2]], "n": 3}, "output": [[0, 1], [1, 2]]}, {"input": {"edges": [[0, 0]], "n": 1}, "output": null}]
+
+>>>
+PREVIOUS CANDIDATE (untrusted source and binding proposal; repair rather than weaken):
+{
+ "lean_source": "-- unparseable formalizer response\n",
+ "formalization": {
+  "error": "unparseable formalizer response: proposal: expected an object with exactly ['encoding', 'obligations', 'predicates', 'records', 'symbols', 'theorems', 'witness_obligations']"
+ }
+}
+The previous candidate was rejected by the statement checker:
+- INVALID_CANDIDATE: unparseable formalizer response: proposal: expected an object with exactly ['encoding', 'obligations', 'predicates', 'records', 'symbols', 'theorems', 'witness_obligations']
+- VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first
+- VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)
+- ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid
+- ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid
+- ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid
+- ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid
+- REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run
+- REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run
+- CRITIC DIAGNOSTIC REPAIR: Replace the unparseable formalizer response with an object containing exactly the required top-level fields: encoding, obligations, predicates, records, symbols, theorems, and witness_obligations. Populate these fields with the formalization of the required graph contract; the current error object and placeholder Lean comment cannot be parsed as a proposal.
+CORRECTION ATTEMPT 1: inspect each diagnostic and return a changed complete proposal that fixes the rejected syntax or registered-language use while preserving all obligations. Returning the same rejected source and bindings does not repair it.
+AUTONOMOUS CRITIQUE (untrusted proposals; preserve every interpreted obligation):
+{"status": "REPAIR", "feedback": ["CRITIC DIAGNOSTIC REPAIR: Replace the unparseable formalizer response with an object containing exactly the required top-level fields: encoding, obligations, predicates, records, symbols, theorems, and witness_obligations. Populate these fields with the formalization of the required graph contract; the current error object and placeholder Lean comment cannot be parsed as a proposal."]}

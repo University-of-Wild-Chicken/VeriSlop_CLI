@@ -1,0 +1,8 @@
+Software engineering task G26: Per-key trailing debounce with exact tie ordering
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {delay,events,until}, positive delay, nondecreasing events {at,key,value}, integer values, until>=last event time (or zero for none). Each event replaces its key pending value and sets deadline=at+delay. Before processing an event emit all deadlines <=its at in order (deadline,key); ties at the event timestamp emit BEFORE that event. After events advance only to until. Return emitted [{at:deadline,key,value}] in emission order. Keys debounce independently, and replacement must not leave stale timers that emit overwritten values.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"delay": 2, "events": [{"at": 0, "key": "a", "value": 1}, {"at": 1, "key": "a", "value": 2}, {"at": 3, "key": "a", "value": 3}], "until": 5}, "output": [{"at": 3, "key": "a", "value": 2}, {"at": 5, "key": "a", "value": 3}]}, {"input": {"delay": 2, "events": [{"at": 0, "key": "b", "value": 2}, {"at": 0, "key": "a", "value": 1}], "until": 2}, "output": [{"at": 2, "key": "a", "value": 1}, {"at": 2, "key": "b", "value": 2}]}]

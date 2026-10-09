@@ -1,0 +1,8 @@
+Software engineering task D17: Conflict-detecting path unflattening
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {items:[{path:[string keys],value:JSON}]}. Build an object tree from paths. Empty path fails {error:'empty_path',item:index}. Every supplied value is a leaf even if it is an object. At first conflict: exact duplicate path or a new path that is a prefix of any prior path returns {error:'duplicate_or_prefix',item:index}; a prior path that is a strict prefix of new path returns {error:'prefix',item:index}. Otherwise construct missing intermediate objects. Success {document:tree,flat:[{path,value}]}: flatten the constructed tree recursively in sorted key order, treating empty objects and all nonobjects as leaves. Supplied object leaves are recursively flattened on output, although they remain indivisible for insertion conflict detection. Empty input yields document {} and flat [{path:[],value:{}}]. Keys including empty, slash and tilde are literal.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"items": [{"path": ["b", "x"], "value": 2}, {"path": ["a"], "value": {}}]}, "output": {"document": {"a": {}, "b": {"x": 2}}, "flat": [{"path": ["a"], "value": {}}, {"path": ["b", "x"], "value": 2}]}}, {"input": {"items": [{"path": ["a"], "value": {}}, {"path": ["a", "b"], "value": 1}]}, "output": {"error": "prefix", "item": 1}}]

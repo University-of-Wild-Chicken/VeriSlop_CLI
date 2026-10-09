@@ -1,0 +1,8 @@
+Software engineering task A26: Deadline-profit scheduling with stable choice
+
+Implement solution.py with a single solve(data) function. data and the return value must be JSON-compatible. Use Python 3 standard library only; perform no external I/O and do not read benchmark files. All supplied inputs satisfy the stated schema and bounds; no behavior is required for malformed input. Input {jobs:[[deadline,profit],...]}, <=14 unit-duration jobs, nonnegative integer deadlines and signed profits. Select jobs admitting slots 1..k no later than each deadline. Maximize total profit, then lexicographically minimize ascending selected original indices. Return {profit,indices,schedule}; schedule is selected indices sorted by (deadline,index), not a second optimization objective. Empty selection is allowed.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"jobs": [[1, 5], [1, 5], [2, 1]]}, "output": {"indices": [0, 2], "profit": 6, "schedule": [0, 2]}}, {"input": {"jobs": [[0, 100], [1, -1]]}, "output": {"indices": [], "profit": 0, "schedule": []}}]

@@ -1,0 +1,8 @@
+Software engineering task G16: Byte-weighted LRU with atomic replacement rejection
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {capacity,events}, nonnegative capacity. Events: {op:"put",key,value,size}, {op:"get",key}, {op:"delete",key}. Keys ASCII, values integers, sizes positive. A put larger than capacity returns false and changes nothing, including an existing value or recency. Other puts remove an existing key, evict least-recently-used keys until the new size fits, insert as most recent, and return true. Hit get returns value and makes key most recent; miss returns null. Delete returns existence and removes key. Return {results,order,used}; order is LRU to MRU.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"capacity": 3, "events": [{"key": "a", "op": "put", "size": 2, "value": 1}, {"key": "b", "op": "put", "size": 1, "value": 2}, {"key": "a", "op": "get"}, {"key": "c", "op": "put", "size": 2, "value": 3}]}, "output": {"order": ["c"], "results": [true, true, 1, true], "used": 2}}, {"input": {"capacity": 2, "events": [{"key": "a", "op": "put", "size": 1, "value": 7}, {"key": "a", "op": "put", "size": 3, "value": 9}, {"key": "a", "op": "get"}]}, "output": {"order": ["a"], "results": [true, false, 7], "used": 1}}]

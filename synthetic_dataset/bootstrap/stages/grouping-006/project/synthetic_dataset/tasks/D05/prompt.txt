@@ -1,0 +1,8 @@
+Software engineering task D05: Base-coordinate three-way edit merge
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {base:string,left:[edits],right:[edits]}, edit {start,end,text} uses Python Unicode code-point half-open offsets into base. Each side is individually valid, ordered by (start,end), and has no internally conflicting edits. Identical edits on both sides coalesce. Two nonidentical edits conflict if their positive-length spans overlap, both insert at the same point, or an insertion is strictly inside the other span. Insertions at replacement boundaries do not conflict. Return {conflicts:[[left index,right index]]} in left-then-right index order if any conflict; otherwise {text:merged}. Merge edits by ascending (start,end), placing insertions before positive spans with the same start. Both endpoints 0 and len(base) are valid.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"base": "abcdef", "left": [{"end": 3, "start": 1, "text": "X"}], "right": [{"end": 3, "start": 3, "text": "!"}]}, "output": {"text": "aX!def"}}, {"input": {"base": "abcd", "left": [{"end": 3, "start": 1, "text": "X"}], "right": [{"end": 2, "start": 2, "text": "Y"}]}, "output": {"conflicts": [[0, 0]]}}]

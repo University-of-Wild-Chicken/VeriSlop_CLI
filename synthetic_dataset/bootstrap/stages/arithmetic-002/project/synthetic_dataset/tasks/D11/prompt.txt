@@ -1,0 +1,8 @@
+Software engineering task D11: Priority interval-map normalization
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {ranges:[{start:int,end:int,priority:int,value:JSON}]}, with start<=end. Ranges are half-open; zero-length ranges have no effect. At every covered point select the covering range with highest priority, and among equal priorities the latest input index. Return maximal ordered nonempty {start,end,value} segments, omitting uncovered gaps. Adjacent selected segments with structurally equal JSON values coalesce even if winners differ; boolean differs from numeric, object key order does not matter. Endpoints can be negative, values can be null; do not enumerate individual coordinate points.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"ranges": [{"end": 10, "priority": 1, "start": 0, "value": "a"}, {"end": 5, "priority": 2, "start": 3, "value": "b"}]}, "output": [{"end": 3, "start": 0, "value": "a"}, {"end": 5, "start": 3, "value": "b"}, {"end": 10, "start": 5, "value": "a"}]}, {"input": {"ranges": [{"end": 2, "priority": 1, "start": 0, "value": 0}, {"end": 3, "priority": 1, "start": 1, "value": 0}]}, "output": [{"end": 3, "start": 0, "value": 0}]}]

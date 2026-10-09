@@ -1,0 +1,8 @@
+Software engineering task G11: Bounded-worker dependency scheduler
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {workers,jobs}; workers=1..4. Each job {id,duration,deps} has a distinct ASCII ID, duration 1..8, and existing dependency IDs (deduplicate deps). At time zero no job is complete. Whenever jobs finish, process all completions at that timestamp before assigning free workers. Choose ready unstarted jobs by increasing ID, without preemption; duration determines finish time. Return null for a dependency cycle. Otherwise return {makespan,jobs:[{id,start,finish}]}, jobs sorted by ID; an empty input has makespan zero.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"jobs": [{"deps": [], "duration": 1, "id": "b"}, {"deps": [], "duration": 2, "id": "a"}, {"deps": ["a", "b"], "duration": 1, "id": "c"}], "workers": 2}, "output": {"jobs": [{"finish": 2, "id": "a", "start": 0}, {"finish": 1, "id": "b", "start": 0}, {"finish": 3, "id": "c", "start": 2}], "makespan": 3}}, {"input": {"jobs": [], "workers": 1}, "output": {"jobs": [], "makespan": 0}}]

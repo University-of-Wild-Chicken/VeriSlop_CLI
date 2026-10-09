@@ -1,0 +1,8 @@
+Software engineering task G15: Dynamic connectivity with reference-counted edges
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {n,events}, n=1..10. Events are ["add",u,v], ["remove",u,v], ["query",u,v], or ["count"]. Edges are undirected and reference-counted: every add increments multiplicity, remove decrements only if positive, and an edge exists iff its multiplicity is positive. Self-loops are permitted. Return the query results in event order: Boolean connectivity for query, integer whole-graph component count for count. Every vertex is connected to itself, including isolated vertices.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"events": [["add", 0, 1], ["add", 0, 1], ["remove", 0, 1], ["query", 0, 1], ["remove", 0, 1], ["query", 0, 1], ["count"]], "n": 3}, "output": [true, false, 3]}, {"input": {"events": [["remove", 0, 0], ["query", 0, 0], ["count"]], "n": 1}, "output": [true, 1]}]

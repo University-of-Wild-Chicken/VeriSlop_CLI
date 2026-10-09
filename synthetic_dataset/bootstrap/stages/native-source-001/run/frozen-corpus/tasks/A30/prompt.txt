@@ -1,0 +1,8 @@
+Software engineering task A30: Exact rational polynomial interpolation queries
+
+Implement solution.py with a single solve(data) function. data and the return value must be JSON-compatible. Use Python 3 standard library only; perform no external I/O and do not read benchmark files. All supplied inputs satisfy the stated schema and bounds; no behavior is required for malformed input. Input {points:[[x,y],...],queries:[x,...]}, at most 8 points with distinct integer x coordinates and at most 30 integer queries; all input integers have absolute value<=10^12. Interpolate the unique polynomial of degree strictly below number of points through every point, then return its value at each query in input order as reduced [numerator,positive_denominator] fraction pairs. No floating-point interpolation or rounding. Point order is arbitrary; queries may repeat or equal point coordinates. For no points define the zero polynomial; for no queries return [].
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"points": [[0, 1], [1, 4], [2, 9]], "queries": [-1, 3]}, "output": [[0, 1], [16, 1]]}, {"input": {"points": [[2, 1], [0, 0]], "queries": [-1, 1, 2]}, "output": [[-1, 2], [1, 2], [1, 1]]}]

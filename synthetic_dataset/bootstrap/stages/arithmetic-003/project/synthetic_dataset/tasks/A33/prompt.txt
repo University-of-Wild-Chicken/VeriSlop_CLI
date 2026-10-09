@@ -1,0 +1,8 @@
+Software engineering task A33: Difference constraints canonical feasible potential
+
+Implement solution.py with a single solve(data) function. data and the return value must be JSON-compatible. Use Python 3 standard library only; perform no external I/O and do not read benchmark files. All supplied inputs satisfy the stated schema and bounds; no behavior is required for malformed input. Input {n,constraints:[[u,v,c],...]}, 0<=n<=40; each means x[v]-x[u]<=c with signed integer c. Add a virtual source with weight-zero edges to every vertex. If any negative cycle exists return {feasible:false,potential:null}. Otherwise return {feasible:true,potential:[...]}, using exact shortest-path distances from this source, not an arbitrary feasible assignment. Distances are nonpositive; isolated vertices are zero.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"constraints": [[0, 1, -2], [1, 2, 1], [0, 2, 5]], "n": 3}, "output": {"feasible": true, "potential": [0, -2, -1]}}, {"input": {"constraints": [[0, 1, -1], [1, 0, -1]], "n": 2}, "output": {"feasible": false, "potential": null}}]

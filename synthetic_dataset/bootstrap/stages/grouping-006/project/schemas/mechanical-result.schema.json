@@ -1,0 +1,1576 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:mechanical-result:0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "format": {
+      "const": "verislop.mechanical-result/0.2"
+    },
+    "closure_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "closure_root": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "mechanical_status": {
+      "enum": [
+        "VERIFIED",
+        "BLOCKED",
+        "INFRASTRUCTURE_FAILURE"
+      ]
+    },
+    "backend": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "const": "verislop.backend.vscore/0.1"
+        },
+        "tier": {
+          "const": 2
+        },
+        "target": {
+          "const": "vscore"
+        },
+        "endpoint": {
+          "const": "restricted_source"
+        },
+        "backend_version": {
+          "const": "0.1"
+        },
+        "language": {
+          "const": "vscore/0.1"
+        },
+        "semantics": {
+          "const": "vscore-semantics/0.1"
+        },
+        "relation_template": {
+          "const": "vscore.reference_refinement/0.1"
+        },
+        "end_to_end_eligible": {
+          "const": true
+        },
+        "testing": {
+          "const": "unsupported"
+        },
+        "claims_format": {
+          "const": "0.2"
+        },
+        "producers": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "IMPLEMENTED": {
+              "type": "string",
+              "minLength": 1
+            },
+            "LINKED": {
+              "type": "string",
+              "minLength": 1
+            },
+            "TESTED": {
+              "type": "string",
+              "minLength": 1
+            },
+            "semantic_edge": {
+              "type": "string",
+              "minLength": 1
+            },
+            "structural": {
+              "type": "string",
+              "minLength": 1
+            },
+            "END_TO_END_VERIFIED": {
+              "type": "string",
+              "minLength": 1
+            },
+            "closure": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "IMPLEMENTED",
+            "LINKED",
+            "TESTED",
+            "semantic_edge",
+            "structural",
+            "END_TO_END_VERIFIED",
+            "closure"
+          ]
+        },
+        "property_fragment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "excluded_surfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "tier",
+        "target",
+        "endpoint",
+        "backend_version",
+        "language",
+        "semantics",
+        "relation_template",
+        "end_to_end_eligible",
+        "testing",
+        "claims_format",
+        "producers",
+        "property_fragment",
+        "limitations",
+        "excluded_surfaces"
+      ]
+    },
+    "endpoint": {
+      "const": "restricted_source"
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tier": {
+          "const": 2
+        },
+        "target": {
+          "const": "vscore"
+        },
+        "endpoint": {
+          "const": "restricted_source"
+        },
+        "backend": {
+          "const": "verislop.backend.vscore/0.1"
+        },
+        "language": {
+          "const": "vscore/0.1"
+        },
+        "semantics": {
+          "const": "vscore-semantics/0.1"
+        },
+        "require_state": {
+          "type": "string",
+          "minLength": 1
+        },
+        "require_tests": {
+          "const": false
+        },
+        "bridge_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tier_default_applied": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tier",
+        "target",
+        "endpoint",
+        "backend",
+        "language",
+        "semantics",
+        "require_state",
+        "require_tests",
+        "bridge_id",
+        "tier_default_applied"
+      ]
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outcome": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "PENDING",
+              "STALE",
+              "UNSUPPORTED",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "verifier": {
+            "type": "string",
+            "minLength": 1
+          },
+          "root_kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "input_root": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "premises": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "claim_id",
+          "outcome",
+          "required",
+          "verifier",
+          "root_kind",
+          "input_root",
+          "premises",
+          "evidence_refs",
+          "reason"
+        ]
+      }
+    },
+    "builds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "build": {
+            "enum": [
+              "A",
+              "B"
+            ]
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "closure_root": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "producer": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "verifier_id": {
+                "const": "verislop.closure"
+              },
+              "verifier_hash": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "verifier_id",
+              "verifier_hash"
+            ]
+          },
+          "outputs": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "contract_receipt": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "format": {
+                    "const": "verislop.contract-import-replay/0.1"
+                  },
+                  "source_contract_root": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "source_ir_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "source_certificate_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "accepted_contract_replayed": {
+                    "const": true
+                  },
+                  "semantic_bridge_acceptance": {
+                    "const": false
+                  },
+                  "checked_artifacts": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "source": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      },
+                      "olean": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      },
+                      "environment_export": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      },
+                      "profile": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      },
+                      "statements": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "olean",
+                      "environment_export",
+                      "profile",
+                      "statements"
+                    ]
+                  },
+                  "verifiers": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "verislop.lean-acceptance": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      },
+                      "verislop.reifier": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      },
+                      "verislop.bridge-contract-importer": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      }
+                    },
+                    "required": [
+                      "verislop.lean-acceptance",
+                      "verislop.reifier",
+                      "verislop.bridge-contract-importer"
+                    ]
+                  }
+                },
+                "required": [
+                  "format",
+                  "source_contract_root",
+                  "source_ir_hash",
+                  "source_certificate_hash",
+                  "accepted_contract_replayed",
+                  "semantic_bridge_acceptance",
+                  "checked_artifacts",
+                  "verifiers"
+                ]
+              },
+              "contract_artifacts": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source": {
+                    "$ref": "urn:verislop:schema:acceptance-certificate:0.1#/$defs/artifact"
+                  },
+                  "olean": {
+                    "$ref": "urn:verislop:schema:acceptance-certificate:0.1#/$defs/artifact"
+                  },
+                  "environment_export": {
+                    "$ref": "urn:verislop:schema:acceptance-certificate:0.1#/$defs/artifact"
+                  },
+                  "profile": {
+                    "$ref": "urn:verislop:schema:acceptance-certificate:0.1#/$defs/artifact"
+                  },
+                  "statements": {
+                    "$ref": "urn:verislop:schema:acceptance-certificate:0.1#/$defs/artifact"
+                  }
+                },
+                "required": [
+                  "source",
+                  "olean",
+                  "environment_export",
+                  "profile",
+                  "statements"
+                ]
+              },
+              "contract_obligations": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "revision": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "kind": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "representation": {
+                      "enum": [
+                        "contract_dsl",
+                        "lean_expr",
+                        "typed_metadata",
+                        "none"
+                      ]
+                    },
+                    "lean_symbol": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "statement_hash": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "typechecked": {
+                      "enum": [
+                        "PASS",
+                        "FAIL",
+                        "NOT_APPLICABLE",
+                        "PENDING"
+                      ]
+                    },
+                    "proved": {
+                      "enum": [
+                        "PASS",
+                        "FAIL",
+                        "NOT_APPLICABLE",
+                        "PENDING"
+                      ]
+                    },
+                    "axioms": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "codes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "uses_proof": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "witnesses": {}
+                  },
+                  "required": [
+                    "revision",
+                    "kind",
+                    "role",
+                    "representation",
+                    "lean_symbol",
+                    "statement_hash",
+                    "typechecked",
+                    "proved",
+                    "axioms",
+                    "codes",
+                    "uses_proof",
+                    "witnesses"
+                  ]
+                }
+              },
+              "accepted_ir": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "semantic_build": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "format": {
+                    "const": "verislop.vscore-build/0.1"
+                  },
+                  "lean_toolchain": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "pin": {
+                        "type": "string"
+                      },
+                      "version": {
+                        "type": "string"
+                      },
+                      "githash": {
+                        "type": "string"
+                      },
+                      "lean_binary_sha256": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "pin",
+                      "version",
+                      "githash",
+                      "lean_binary_sha256"
+                    ]
+                  },
+                  "kernel_tool_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "kernel_tool_version": {
+                    "type": "string"
+                  },
+                  "toolchain_olean_closure": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "compiles": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "ok": {
+                          "type": "boolean"
+                        },
+                        "errors": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "sorries": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "timed_out": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "ok",
+                        "errors",
+                        "sorries"
+                      ]
+                    }
+                  },
+                  "modules": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    }
+                  },
+                  "replayed_constants": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "export_digest": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "proposition_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "proposition_closure_size": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "edge_axioms": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "implementation_ir_digest": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "isolation": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "staged_working_directory": {
+                        "type": "boolean"
+                      },
+                      "scrubbed_environment": {
+                        "type": "boolean"
+                      },
+                      "process_group_kill_on_timeout": {
+                        "type": "boolean"
+                      },
+                      "network_namespace": {
+                        "type": "boolean"
+                      },
+                      "filesystem_read_isolation": {
+                        "type": "boolean"
+                      },
+                      "filesystem_write_isolation": {
+                        "type": "boolean"
+                      },
+                      "pid_namespace": {
+                        "type": "boolean"
+                      },
+                      "ipc_namespace": {
+                        "type": "boolean"
+                      },
+                      "private_proc": {
+                        "type": "boolean"
+                      },
+                      "resource_limits": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "filesystem_backend": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "inherited_file_descriptors": {
+                        "type": "string"
+                      },
+                      "note": {
+                        "type": "string"
+                      },
+                      "read_only_paths": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "writable_host_paths": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "staged_working_directory",
+                      "scrubbed_environment",
+                      "process_group_kill_on_timeout",
+                      "network_namespace",
+                      "filesystem_read_isolation",
+                      "filesystem_write_isolation",
+                      "pid_namespace",
+                      "ipc_namespace",
+                      "private_proc",
+                      "resource_limits",
+                      "filesystem_backend",
+                      "inherited_file_descriptors",
+                      "note",
+                      "read_only_paths",
+                      "writable_host_paths"
+                    ]
+                  }
+                },
+                "required": [
+                  "format",
+                  "lean_toolchain",
+                  "kernel_tool_hash",
+                  "kernel_tool_version",
+                  "toolchain_olean_closure",
+                  "compiles",
+                  "modules",
+                  "replayed_constants",
+                  "export_digest",
+                  "proposition_hash",
+                  "proposition_closure_size",
+                  "edge_axioms",
+                  "implementation_ir_digest",
+                  "isolation"
+                ]
+              },
+              "goal": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "semantic_certificate": {
+                "$ref": "#/$defs/semantic_certificate"
+              },
+              "implementation_ir": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "module_parts": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    ".olean": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    ".olean.private": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    ".olean.server": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    }
+                  },
+                  "required": [
+                    ".olean"
+                  ]
+                }
+              },
+              "materialization_inventory": {
+                "$ref": "urn:verislop:schema:vscore-materialization:0.1"
+              },
+              "link_record": {
+                "$ref": "urn:verislop:schema:link-record:0.2"
+              },
+              "nonfinal_outcomes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim_id": {
+                      "type": "string"
+                    },
+                    "outcome": {
+                      "enum": [
+                        "PASS",
+                        "FAIL",
+                        "PENDING",
+                        "STALE",
+                        "UNSUPPORTED",
+                        "NOT_APPLICABLE"
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "verifier": {
+                      "type": "string"
+                    },
+                    "root_kind": {
+                      "type": "string"
+                    },
+                    "input_root": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "premises": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "claim_id",
+                    "outcome",
+                    "required",
+                    "verifier",
+                    "root_kind",
+                    "input_root",
+                    "premises"
+                  ]
+                }
+              },
+              "provenance_graph": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "claim_id": {
+                      "type": "string"
+                    },
+                    "premises": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "verifier": {
+                      "type": "string"
+                    },
+                    "root_kind": {
+                      "type": "string"
+                    },
+                    "input_root": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "scope": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "trusted_dependencies": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "claim_id",
+                    "premises",
+                    "verifier",
+                    "root_kind",
+                    "input_root",
+                    "scope",
+                    "trusted_dependencies"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "contract_receipt",
+              "contract_artifacts",
+              "contract_obligations",
+              "accepted_ir",
+              "semantic_build",
+              "goal",
+              "semantic_certificate",
+              "implementation_ir",
+              "module_parts",
+              "materialization_inventory",
+              "link_record",
+              "nonfinal_outcomes",
+              "provenance_graph"
+            ]
+          },
+          "execution": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "wall_ms": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "wall_ms"
+            ]
+          }
+        },
+        "required": [
+          "build",
+          "ok",
+          "errors"
+        ]
+      }
+    },
+    "determinism": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "compared": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "mismatches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "output": {
+                "type": "string",
+                "minLength": 1
+              },
+              "build_A": {},
+              "build_B": {}
+            },
+            "required": [
+              "output",
+              "build_A",
+              "build_B"
+            ]
+          }
+        },
+        "excluded_nondeterministic_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "compared",
+        "mismatches",
+        "excluded_nondeterministic_fields"
+      ]
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outcome": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "verifier": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "claim_id",
+          "outcome",
+          "evidence",
+          "verifier",
+          "reason"
+        ]
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verified": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "trusted": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "undeclared": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "verified",
+        "trusted",
+        "undeclared"
+      ]
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verified_surface": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "trusted_surface": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "excluded_surface": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "interpretation": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "verified_surface",
+        "trusted_surface",
+        "excluded_surface",
+        "interpretation"
+      ]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "enum": [
+              "blocking",
+              "infrastructure",
+              "warning",
+              "info"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "obligations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "details": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "code",
+          "severity",
+          "message",
+          "obligations",
+          "claims"
+        ]
+      }
+    },
+    "execution_inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "role",
+          "size",
+          "sha256"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "closure_id",
+    "attempt_id",
+    "closure_root",
+    "mechanical_status",
+    "backend",
+    "endpoint",
+    "parameters",
+    "claims",
+    "builds",
+    "determinism",
+    "provenance",
+    "dependencies",
+    "boundary",
+    "diagnostics",
+    "execution_inventory"
+  ],
+  "$defs": {
+    "semantic_certificate": {
+      "title": "Registered VSCore checker output for one semantic edge",
+      "$comment": "Produced only by verislop.vscore-checker after kernel replay of the verifier-owned library, the accepted contract module, the generated goal and the candidate proof module in two isolated builds. Its claims hold only together with the referenced evidence record, which binds the semantic-edge root and the current checker hash. It assigns no lifecycle milestone.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1"
+        },
+        "format": {
+          "const": "verislop.vscore-edge-certificate/0.1"
+        },
+        "bridge_id": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+        },
+        "edge_id": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+        },
+        "claim_id": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+        },
+        "template": {
+          "const": "vscore.reference_refinement/0.1"
+        },
+        "tier": {
+          "const": 2
+        },
+        "endpoint": {
+          "const": "restricted_source"
+        },
+        "language": {
+          "const": "vscore/0.1"
+        },
+        "semantics": {
+          "const": "vscore-semantics/0.1"
+        },
+        "plan_hash": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        },
+        "artifacts_hash": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        },
+        "semantic_edge_root": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        },
+        "accepted_ir": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        },
+        "acceptance_certificate": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "slot_id": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+                },
+                "sha256": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+                }
+              },
+              "required": [
+                "slot_id",
+                "sha256"
+              ]
+            },
+            "proof_source": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "slot_id": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+                },
+                "sha256": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+                }
+              },
+              "required": [
+                "slot_id",
+                "sha256"
+              ]
+            },
+            "relation": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "slot_id": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+                },
+                "sha256": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+                }
+              },
+              "required": [
+                "slot_id",
+                "sha256"
+              ]
+            },
+            "model": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "slot_id": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+                },
+                "sha256": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+                }
+              },
+              "required": [
+                "slot_id",
+                "sha256"
+              ]
+            },
+            "profile": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "slot_id": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+                },
+                "sha256": {
+                  "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+                }
+              },
+              "required": [
+                "slot_id",
+                "sha256"
+              ]
+            }
+          },
+          "required": [
+            "source",
+            "proof_source",
+            "relation",
+            "model",
+            "profile"
+          ]
+        },
+        "proposition_hash": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        },
+        "theorem": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "module": {
+              "const": "VeriSlopBridgeProof"
+            },
+            "symbol": {
+              "const": "VeriSlopBridgeProof.edge"
+            },
+            "proposition": {
+              "const": "VeriSlopBridgeGoal.EdgeProp"
+            },
+            "axioms": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "module",
+            "symbol",
+            "proposition",
+            "axioms"
+          ]
+        },
+        "statement_identity": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "symbols": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "symbol": {
+                "type": "string",
+                "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "entry": {
+                "type": "string",
+                "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "lean_decl": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "symbol",
+              "entry",
+              "lean_decl"
+            ]
+          }
+        },
+        "obligations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "accepted_statement_hash": {
+                "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+              },
+              "accepted_theorem": {
+                "type": "string"
+              },
+              "transfer": {
+                "type": "string"
+              },
+              "transfer_theorem": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "revision",
+              "accepted_statement_hash",
+              "accepted_theorem",
+              "transfer",
+              "transfer_theorem"
+            ]
+          }
+        },
+        "goal": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path"
+            },
+            "sha256": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+            }
+          },
+          "required": [
+            "path",
+            "sha256"
+          ]
+        },
+        "accepted_modules": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "module": {
+                "type": "string"
+              },
+              "path": {
+                "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path"
+              },
+              "sha256": {
+                "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+              }
+            },
+            "required": [
+              "module",
+              "path",
+              "sha256"
+            ]
+          }
+        },
+        "implementation_ir": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path"
+            },
+            "sha256": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+            }
+          },
+          "required": [
+            "path",
+            "sha256"
+          ]
+        },
+        "builds": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path"
+              },
+              "sha256": {
+                "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ]
+          }
+        },
+        "checker": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "verifier_id": {
+              "const": "verislop.vscore-checker"
+            },
+            "verifier_hash": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+            }
+          },
+          "required": [
+            "verifier_id",
+            "verifier_hash"
+          ]
+        },
+        "kernel_tool_hash": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        },
+        "lean_toolchain": {
+          "type": "string"
+        },
+        "semantic_acceptance": {
+          "const": true
+        },
+        "assigns_end_to_end_verified": {
+          "const": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "format",
+        "bridge_id",
+        "edge_id",
+        "claim_id",
+        "template",
+        "tier",
+        "endpoint",
+        "language",
+        "semantics",
+        "plan_hash",
+        "artifacts_hash",
+        "semantic_edge_root",
+        "accepted_ir",
+        "acceptance_certificate",
+        "inputs",
+        "proposition_hash",
+        "theorem",
+        "statement_identity",
+        "symbols",
+        "obligations",
+        "goal",
+        "accepted_modules",
+        "implementation_ir",
+        "builds",
+        "checker",
+        "kernel_tool_hash",
+        "lean_toolchain",
+        "semantic_acceptance",
+        "assigns_end_to_end_verified"
+      ]
+    }
+  }
+}

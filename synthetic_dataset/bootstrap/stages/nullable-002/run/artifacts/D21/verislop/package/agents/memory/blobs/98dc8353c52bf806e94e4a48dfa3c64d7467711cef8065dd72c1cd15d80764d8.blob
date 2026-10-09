@@ -1,0 +1,336 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "Input contains events with string group, integer time and integer-or-null value; integer start and end with start<=end; positive integer width; and fill equal to none or previous.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Represent the specified input domain without additional restrictions."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Provide a pure deterministic Python 3 solve(data) function in solution.py receiving JSON-compatible Python values and returning a JSON-serializable value.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "solution.py exposes solve(data) in Python 3.",
+   "Repeated calls with identical input yield identical results.",
+   "The function is pure and returns JSON-serializable output."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Enumerate all distinct event group names lexicographically, including groups having no in-range events.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "Groups equal sorted distinct names from all events.",
+   "Null-valued and out-of-range events still establish group membership."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every group emit buckets starting start+k*width for nonnegative integers k while strictly below end, covering [bucketStart,min(bucketStart+width,end)).",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Bucket starts are exactly start,start+width,... below end.",
+   "Intervals include their lower endpoint and exclude their upper endpoint.",
+   "The final interval is truncated at end.",
+   "start=end yields no buckets."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For each group and bucket, sum and count precisely the non-null event values within its interval, counting duplicate occurrences separately.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "count equals the number of eligible event occurrences.",
+   "sum equals their integer sum.",
+   "Null values and out-of-range events contribute neither sum nor count.",
+   "Duplicates contribute separately."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "A bucket with positive count returns its sum. A bucket with zero count returns null for fill none, or the latest previous nonempty bucket sum for fill previous, with null before the first nonempty bucket.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O4",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "I1",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Positive count yields value=sum.",
+   "Zero count with fill none yields null.",
+   "Zero count with fill previous yields previous when present, otherwise null.",
+   "Filling leaves count at zero."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O6",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Return a list of records containing group,start,count,value, ordered by lexicographic group then increasing bucket start, preserving the specified structure.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O5",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Each emitted bucket produces exactly one record with group,start,count,value.",
+   "Records follow group then bucket order.",
+   "Empty events or start=end produce an empty list."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O7",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Reproduce both public examples: the a example returns count 2 and value 0 at start 0, then count 0 and value 0 at starts 2 and 4; the z example returns count 0 and null at start 0.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O6",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "The first example returns exactly its three specified records.",
+   "The second example returns exactly its single specified record."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I1",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "Each group independently starts with no previous sum. Processing a nonempty bucket sets previous to its sum, including zero; processing an empty bucket preserves previous. Events before start never initialize previous.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O4",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "Before a bucket, previous is the latest earlier nonempty bucket sum or absent.",
+   "After a nonempty bucket, previous equals that bucket's sum.",
+   "Empty buckets preserve previous.",
+   "Zero is retained as a valid previous value.",
+   "Pre-start events cannot seed previous."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "R1",
+  "kind": "resource_constraint",
+  "role": "guarantee",
+  "statement": "Use only the Python standard library and perform no external I/O.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No third-party dependencies.",
+   "No external I/O."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O6",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O6",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O7",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O7",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "I1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "R1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "R1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except/Option sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+[]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Software engineering task D21: Grouped bucket aggregation with causal filling
+
+Implement solution.py with a pure solve(data) function. Input and output are JSON-compatible Python values. Use Python standard library only, no external I/O. Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end. Groups are all unique event group names sorted lexicographically, including groups with no in-range events. For each group, emit buckets starting start,start+width,... strictly below end, each covering [bucketStart,min(bucketStart+width,end)). Sum only non-null in-range values; count counts these values. A nonempty bucket has value=sum and becomes previous value. Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first); empty buckets never reset previous. Events before start never seed previous. Return [{group,start,count,value}] in group then bucket order. Zero sum is a real previous value, duplicates are counted.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"end": 5, "events": [{"group": "a", "time": 0, "value": 2}, {"group": "a", "time": 1, "value": -2}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 2, "group": "a", "start": 0, "value": 0}, {"count": 0, "group": "a", "start": 2, "value": 0}, {"count": 0, "group": "a", "start": 4, "value": 0}]}, {"input": {"end": 1, "events": [{"group": "z", "time": -1, "value": 9}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 0, "group": "z", "start": 0, "value": null}]}]
+
+>>>

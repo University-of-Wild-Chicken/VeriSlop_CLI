@@ -1,0 +1,144 @@
+{
+  "artifact_kind": "run_package",
+  "artifacts": {},
+  "completed_stages": [
+    "interpret"
+  ],
+  "contract_candidate_root": "sha256:8f0b5cbe341d30c1cbd5b4028b2c6bd91c27073c922e6f7fa3789de17ba42e74",
+  "created_at": "2026-10-08T21:26:15Z",
+  "recovery_root": "package",
+  "requested": {
+    "endpoint": "test_campaign",
+    "policy": "strict",
+    "require_state": "TESTED",
+    "schema_version": "0.1",
+    "target": "python",
+    "tier": 0
+  },
+  "run_id": "package-repair-01",
+  "run_parameters": {
+    "attachments": [],
+    "bindings_candidate": null,
+    "bridge_candidate_dir": null,
+    "bridge_id": null,
+    "bridge_proposal": null,
+    "budget_seconds": 0,
+    "cases": 32,
+    "config": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/sol-agents-full-001/config.json",
+    "draft_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/sol-agents-full-001/artifacts/D21/verislop/package-repair-01/draft.json",
+    "endpoint": "test_campaign",
+    "formalization_candidate": null,
+    "implementation_candidate": null,
+    "ledger_candidate": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/sol-agents-full-001/artifacts/D21/verislop/package-repair-01/interpretation.json",
+    "mode": "software",
+    "non_interactive": true,
+    "policy": "strict",
+    "prompt_file": "/home/augustus/VeriSlop_CLI/synthetic_dataset/runs/sol-agents-full-001/artifacts/D21/verislop/package-repair-01/request/prompt.txt",
+    "proof_candidate": null,
+    "recovery_context": {
+      "autonomous_critique": {
+        "attempt": 3,
+        "diagnostics": [],
+        "encoding": "verislop.autonomous-critique/0.1",
+        "feedback": [
+          "CRITIC DIAGNOSTIC REPAIR: Return a parseable formalizer response containing the required lean_source field with actual Lean source and a schema-conforming formalization object. The current response fails parsing because lean_source is missing; the placeholder comment provides no formalization."
+        ],
+        "milestone_authority": false,
+        "phase": "formalize",
+        "results": [
+          {
+            "agent": "critic",
+            "checked": null,
+            "instance": "critic/formalize/3/R0/group-1/critic/1",
+            "proposal": {
+              "corrections": [
+                {
+                  "artifact": "formalization.json",
+                  "diagnostic_index": 0,
+                  "explanation": "Return a parseable formalizer response containing the required lean_source field with actual Lean source and a schema-conforming formalization object. The current response fails parsing because lean_source is missing; the placeholder comment provides no formalization."
+                }
+              ],
+              "counterexamples": [],
+              "encoding": "verislop.autonomous-critique/0.1",
+              "verdict": "REPAIR"
+            },
+            "status": "REPAIR",
+            "tier": "R0"
+          }
+        ],
+        "status": "REPAIR",
+        "tiers": [
+          {
+            "abstains": 0,
+            "accepts": 0,
+            "blocking_findings": [
+              "critic/formalize/3/R0/group-1/critic/1"
+            ],
+            "members": 1,
+            "missing": [],
+            "reasons": [
+              "unresolved blocking findings veto: critic/formalize/3/R0/group-1/critic/1"
+            ],
+            "rejects": 1,
+            "result": "CHANGES_REQUESTED",
+            "tier": "R0"
+          }
+        ]
+      },
+      "counterexamples": [],
+      "feedback": [
+        "INVALID_CANDIDATE: unparseable formalizer response: 'lean_source'",
+        "VERIFIER_NOT_RUN: no frozen challenge; run `verislop formalize` first",
+        "VERIFIER_NOT_RUN: the implementation phase has not started (no frozen implementation claims)",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:endpoint is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:provenance is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:clean-builds is absent or invalid",
+        "ORPHAN_CLAIM: required finalization claim CLOSURE:determinism is absent or invalid",
+        "REVIEW_NOT_RUN: review checkpoint formal_contract is configured as a release gate but has not run",
+        "REVIEW_NOT_RUN: review checkpoint release is configured as a release gate but has not run",
+        "CRITIC DIAGNOSTIC REPAIR: Return a parseable formalizer response containing the required lean_source field with actual Lean source and a schema-conforming formalization object. The current response fails parsing because lean_source is missing; the placeholder comment provides no formalization."
+      ],
+      "interpretation_root": "sha256:d1fae6965be09dbff64042e5192b15e81b65c360ff2e2962e85cb9cbb2124762",
+      "memory_snapshot_ref": {
+        "path": "agents/memory/snapshots/00000019-78165fb86277d326424c88659a20affa6eec173e9e7102e953f51432598b26f3.json",
+        "sha256": "sha256:78165fb86277d326424c88659a20affa6eec173e9e7102e953f51432598b26f3",
+        "size": 693
+      },
+      "previous_candidate": {
+        "formalization": {
+          "error": "unparseable formalizer response: 'lean_source'"
+        },
+        "lean_source": "-- unparseable formalizer response\n"
+      },
+      "rejected_stage": "formalize"
+    },
+    "repair_rounds": 2,
+    "repository_revision": null,
+    "request_ref": "tasks/D21/prompt.txt",
+    "require_state": "TESTED",
+    "resolve": [],
+    "seed": 20261008,
+    "target": "python",
+    "tests_flag": "require_tests",
+    "tier": 0
+  },
+  "schema_version": "0.1",
+  "stage_history": [
+    {
+      "codes": [],
+      "seconds": 0,
+      "source": "mechanical revalidation of unchanged recorded interpretation",
+      "stage": "interpret",
+      "status": "PASS"
+    },
+    {
+      "codes": [
+        "INVALID_CANDIDATE"
+      ],
+      "seconds": 287,
+      "stage": "formalize",
+      "status": "BLOCKED"
+    }
+  ],
+  "verislop_version": "0.1.0"
+}

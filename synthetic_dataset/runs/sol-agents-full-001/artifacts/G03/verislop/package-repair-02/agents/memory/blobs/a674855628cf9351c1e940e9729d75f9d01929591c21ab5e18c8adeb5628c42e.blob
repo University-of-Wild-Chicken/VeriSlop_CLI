@@ -1,0 +1,364 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "Input is a JSON object with n, source, and edges; n is 1 through 10, and each directed edge [u,v,cost] has integer cost from -6 through 9. Parallel edges and self-loops are supported.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Accept the specified graph representation, including parallel edges and self-loops."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "A1",
+  "kind": "precondition",
+  "role": "assumption",
+  "statement": "Inputs conform to the specification.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "The caller supplies a conforming input."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Provide a Python 3 function solve(data) in solution.py receiving the specified JSON value and returning a JSON-serializable length-n list, ordered by vertex index, with distances from source.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "solution.py exposes solve(data).",
+   "The output is JSON-serializable and has exactly n entries.",
+   "Entry v corresponds to vertex v and preserves the specified structure and ordering."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Every vertex unreachable from source has output null.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "For every vertex with no directed walk from source, its output entry is null."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "Every vertex reachable from a negative-cost cycle reachable from source has output string \"-inf\".",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Mark cycle vertices and all vertices reachable from them as \"-inf\" whenever the cycle is reachable from source.",
+   "This rule also applies to source if such a cycle can reach source."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For each reachable vertex outside negative-cycle propagation, return its minimum integer walk cost from source, using zero as the cost of the initial empty walk at source.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Each finite output equals the minimum cost over directed walks from source.",
+   "The initial source distance is zero; negative-cycle propagation takes precedence when applicable."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The supplied public examples produce their exact listed outputs.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "O2",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O3",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "O4",
+    "relation": "uses_proof"
+   },
+   {
+    "id": "S1",
+    "relation": "uses_proof"
+   }
+  ],
+  "acceptance_criteria": [
+   "For n=5, source=0, edges=[[0,1,2],[1,2,-3],[2,1,1],[2,3,4],[4,4,-1]], return [0,\"-inf\",\"-inf\",\"-inf\",null].",
+   "For n=3, source=0, edges=[[1,1,-1]], return [0,null,null]."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "S1",
+  "kind": "safety_property",
+  "role": "guarantee",
+  "statement": "Negative cycles unreachable from source do not affect the output.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "An unreachable negative cycle cannot cause any vertex to be marked \"-inf\" or change any distance."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "S2",
+  "kind": "safety_property",
+  "role": "guarantee",
+  "statement": "solve is pure and deterministic, performs no external I/O, reads no files, uses no network, prints nothing, and retains no state across calls.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Equal inputs yield equal outputs independently of call history.",
+   "No file reads, network operations, printing, external I/O, or retained cross-call state occur.",
+   "Calling solve has no externally observable side effects."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "R1",
+  "kind": "resource_constraint",
+  "role": "guarantee",
+  "statement": "Use only the Python standard library.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "No third-party library dependency is required or used."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "A1",
+  "role": "assumption",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "A1",
+   "predicate": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "S1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "S1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "S2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "S2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "R1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "R1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ }
+]
+ASSUMPTION SUPPLIERS:
+[{"discharged_at": "Each solve(data) invocation by supplying an input conforming to the specification.", "id": "A1", "supplied_by": "caller"}]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 0,
+ "target": "python",
+ "endpoint": "test_campaign",
+ "require_state": "TESTED",
+ "policy": "strict"
+}
+This request requires executable downstream obligations. The current Python generated-test bridge admits the stated Nat/Int/Bool/Unit/String/List/fixed-record/nullary-enumeration/Except sorts and registered arithmetic/list/record formulas. It does not admit arbitrary JSON semantics. Opaque Lean acceptance cannot satisfy this requested assurance. Preserve the actual specification and report a faithful unsupported domain rather than replacing it with a vacuous supported model.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+["A1"]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Software engineering task G03: Negative-cycle propagation in shortest paths
+
+Implement solution.py with solve(data). Use only the Python standard library. Do not read files, use the network, print, or retain state across calls. All inputs conform to this specification; return JSON-compatible values. Input {n,source,edges}, n=1..10, edges [u,v,cost] with integer cost -6..9. Return a length-n distance list from source. Unreachable vertices are null. A vertex reachable from a negative-cost cycle that is itself reachable from source is "-inf". Other vertices have their minimum integer walk cost; source starts at distance zero. Parallel edges and self-loops are allowed; an unreachable negative cycle must not affect output.
+
+Implement a pure deterministic Python 3 function solve(data) in solution.py. Use only the standard library, no external I/O. The function receives a JSON value and returns a JSON-serializable value. Preserve the specified input/output structure and exact ordering.
+
+Public examples (additional held-out cases will be scored):
+[{"input": {"edges": [[0, 1, 2], [1, 2, -3], [2, 1, 1], [2, 3, 4], [4, 4, -1]], "n": 5, "source": 0}, "output": [0, "-inf", "-inf", "-inf", null]}, {"input": {"edges": [[1, 1, -1]], "n": 3, "source": 0}, "output": [0, null, null]}]
+
+>>>
+PREVIOUS CANDIDATE (untrusted source and binding proposal; repair rather than weaken):
+{
+ "lean_source": "-- unparseable formalizer response\n",
+ "formalization": {
+  "error": "unparseable formalizer response: 'NoneType' object has no attribute 'encode'"
+ }
+}
+PREVIOUS UNPARSEABLE FORMALIZER RESPONSE (untrusted candidate; fix the envelope):
+{"status":"unsupported_domain","reason":"A faithful executable contract for the frozen obligations cannot be expressed in the specified typed AST and admitted Python generated-test bridge.","gaps":[{"obligations":["D1","A1"],"description":"The input edges are JSON arrays [u,v,cost] with positional meaning. The frontend provides homogeneous lists and named records, but no fixed heterogeneous tuple or registered conversion preserving these arrays and their exact representation."},{"obligations":["O1","O2","O3","O4","O5","S1"],"description":"Each output entry is an integer, JSON null, or the exact string \"-inf\". The specified sort grammar lacks this scalar union and JSON null. Unit, String, records, and Except do not supply the required JSON representation; replacing entries with tagged records, strings, or result values would change observable behavior."},{"obligations":["S2","R1"],"description":"The formula grammar cannot state Python file placement, dependency restrictions, absence of external I/O, or absence of retained cross-call state. Pure mathematical function semantics alone do not establish these implementation requirements."}],"preserved_obligations":["D1","A1","O1","O2","O3","O4","O5","S1","S2","R1"],"required_extension":"Provide registered executable representations for positional edge triples and distance entries serialized exactly as integer, null, or \"-inf\", together with implementation checks for solution.py, purity, external I/O, retained state, and standard-library-only dependencies. All frozen graph semantics, examples, and assumption satisfiability requirements remain required.","lean_source":null,"formalization":null}
+The previous candidate was rejected by the statement checker:
+- unparseable formalizer response: 'NoneType' object has no attribute 'encode'
+- CRITIC DIAGNOSTIC REPAIR: Repair INVALID_CANDIDATE: the formalizer response fails to parse with 'NoneType' object has no attribute 'encode'. Return a parseable formalizer response with a non-null string lean_source containing actual Lean declarations and a schema-conforming formalization, replacing the error object and placeholder comment.
+CORRECTION ATTEMPT 2: inspect each diagnostic and return a changed complete proposal that fixes the rejected syntax or registered-language use while preserving all obligations. Returning the same rejected source and bindings does not repair it.
+AUTONOMOUS CRITIQUE (untrusted proposals; preserve every interpreted obligation):
+{"status": "REPAIR", "feedback": ["CRITIC DIAGNOSTIC REPAIR: Repair INVALID_CANDIDATE: the formalizer response fails to parse with 'NoneType' object has no attribute 'encode'. Return a parseable formalizer response with a non-null string lean_source containing actual Lean declarations and a schema-conforming formalization, replacing the error object and placeholder comment."]}

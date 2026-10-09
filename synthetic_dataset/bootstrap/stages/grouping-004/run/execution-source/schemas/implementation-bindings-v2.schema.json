@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:implementation-bindings:0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "format": {
+      "const": "verislop.implementation-bindings/0.2"
+    },
+    "artifact_kind": {
+      "const": "implementation_bindings"
+    },
+    "backend": {
+      "const": "verislop.backend.vscore/0.1"
+    },
+    "accepted_ir": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "bridge_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "source_slot": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "binding_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          },
+          "symbol": {
+            "type": "string",
+            "minLength": 1
+          },
+          "entry": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "binding_id",
+          "symbol",
+          "entry"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "artifact_kind",
+    "backend",
+    "accepted_ir",
+    "bridge_id",
+    "source_slot",
+    "bindings"
+  ]
+}
