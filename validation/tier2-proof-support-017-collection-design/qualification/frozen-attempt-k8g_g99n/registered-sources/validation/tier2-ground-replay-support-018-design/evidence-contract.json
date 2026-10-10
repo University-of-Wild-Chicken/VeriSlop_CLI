@@ -1,0 +1,92 @@
+{
+  "schema_version": "0.1",
+  "format": "verislop.ground-replay-support-evidence-contract/0.1",
+  "design_id": "tier2-ground-replay-support-018-design",
+  "status": "PENDING",
+  "evidence_exists": false,
+  "authority": "Actual registered verifier executions against frozen hashed inputs; this draft is not evidence.",
+  "input_manifest_required_entries": [
+    "qualification claims, pass/block predicates and public provenance targets",
+    "unrelated fixture sources, contracts, carrier profiles, assignments and expected dispositions",
+    "negative control source/mutation recipes and exact expected rejection boundaries",
+    "ground replay implementation, strategy generator and selected recipe/rule bytes",
+    "normative VSCore 0.3 sources and model/profile descriptors",
+    "kernel/export/replay/checker implementations and verifier registry",
+    "accepted contract and source/goal/correspondence module sources and parts",
+    "toolchain pin, required toolchain olean closure, dependency locks and environment identity",
+    "current policy, axiom allowlist, budgets, deadline and isolation settings",
+    "diagnostic retention format and finite bounds",
+    "declared TCB and permitted nondeterministic fields"
+  ],
+  "verifier_registry_proposals": [
+    {"id": "V-GR-REPLAY-COMPARISON", "status": "UNREGISTERED", "implementation_path": null, "sha256": null, "claim_ids": ["C-GR-001", "C-GR-002"]},
+    {"id": "V-GR-KERNEL-AUDIT", "status": "UNREGISTERED", "implementation_path": null, "sha256": null, "claim_ids": ["C-GR-003"]},
+    {"id": "V-GR-DEPENDENCY-AUDIT", "status": "UNREGISTERED", "implementation_path": null, "sha256": null, "claim_ids": ["C-GR-004"]},
+    {"id": "V-GR-LIMITS-AUDIT", "status": "UNREGISTERED", "implementation_path": null, "sha256": null, "claim_ids": ["C-GR-005"]},
+    {"id": "V-GR-DIAGNOSTIC-AUDIT", "status": "UNREGISTERED", "implementation_path": null, "sha256": null, "claim_ids": ["C-GR-006"]},
+    {"id": "V-GR-NEGATIVE-CONTROLS", "status": "UNREGISTERED", "implementation_path": null, "sha256": null, "claim_ids": ["C-GR-007"]},
+    {"id": "V-GR-CLEAN-BUILDS", "status": "UNREGISTERED", "implementation_path": null, "sha256": null, "claim_ids": ["C-GR-008"]}
+  ],
+  "verifier_registration_rule": "Before qualification, bind a deterministic actual executable and implementation SHA-256 to each claim, with exact PASS/BLOCK/INFRASTRUCTURE_FAILURE exit-code mappings. Multiple proposed IDs may resolve to one shared verifier implementation only when all claim-specific predicates remain explicit and frozen. No LLM output or manual judgment discharges a claim.",
+  "required_evidence_envelope": {
+    "fields": ["schema_version", "closure_id", "claim_id", "input_root_hash", "verifier_id", "verifier_hash", "execution_environment", "raw_result_ref", "raw_result_hash", "exit_code", "status"],
+    "status_values": ["PASS", "BLOCK", "INFRASTRUCTURE_FAILURE"],
+    "bindings": "Every raw result and referenced artifact has exact bytes/hash/size and a safe relative path. Evidence with another root, verifier hash or environment is stale and blocking.",
+    "immutability": "Generated evidence is write-once. Repairs create a new candidate/root; never edit generated observations."
+  },
+  "ground_observation_required_evidence": {
+    "original_inputs": ["strict assignment wire and accepted binder sorts", "accepted original formula/ref/hash", "original grounded expression/hash", "source/profile/AST/certificate/bridge bindings"],
+    "proof_construction": ["strategy ID and exact recipe source/hash", "eligibility/selection decision and bound inputs", "polarity attempt order", "exact emitted theorem source/hash", "compiler exit/status/sorry positions and bounded diagnostics", "remaining shared budget at attempt start/end"],
+    "normalization": ["normalized proof-state expression/hash if explicitly represented", "exact permitted definitions/rewrite correspondence inventory", "checked correspondence statement/proof/module identities", "transitive proof dependency audit excluding forbidden oracles"],
+    "kernel_acceptance": [
+      "Exact theorem name VeriSlopReviewProbe.result, original E or Not E type/hash, safe declaration, empty level parameters and no unresolved constants.",
+      "Independent complete staged-module kernel import/replay result with actual module part hashes.",
+      "One exact ground-result defeq check with ok, typechecks and defeq all true.",
+      "Supervisor-derived goal statement comparison and existing accepted theorem/transfer structural checks, without consuming transfer/guarantee proof as the observation oracle.",
+      "Exact reexported source AST equal to delivered canonical bytes.",
+      "Allowed toolchain import roots and bound actual toolchain olean closure.",
+      "No non-runtime safe/unsafe/partial replay omission beyond the unchanged existing rule.",
+      "Result theorem axiom inventory satisfying the unchanged axiom policy.",
+      "Result proof and normalization proof dependency closures with zero forbidden observation dependencies.",
+      "Normative library source identities unchanged after replay."
+    ],
+    "status_rule": "Only after every required acceptance check passes: exact E gives predicate true and NOT_REPRODUCED; exact Not E gives predicate false and CONFIRMED. No other result yields an observed Boolean.",
+    "milestone_limit": "These observations establish finite review results only; they do not assign TESTED or END_TO_END_VERIFIED or prove universal refinement."
+  },
+  "compiler_diagnostics_design": {
+    "purpose": "Retain the evidence currently discarded when both polarity attempts fail, without falsely identifying a computational cause.",
+    "proposed_fields": ["strategy_id", "polarity", "attempt_index", "probe_source_hash", "compiler_exit_code", "compiler_ok", "timed_out", "sorry_positions", "errors", "messages", "retained_rows", "available_rows", "retained_utf8_bytes", "available_utf8_bytes_if_known", "truncated", "underlying_process_output_truncated", "bounded_raw_result_ref_if_available", "bounded_raw_result_hash_if_available"],
+    "proposed_max_retained_rows_per_polarity": 8,
+    "proposed_max_utf8_bytes_per_row": 512,
+    "proposed_max_total_diagnostic_utf8_bytes": 8192,
+    "bound_status": "PENDING. These are proposed caps on retained explanatory content, not increased process-output limits or a new authority. Freeze and qualify their precise encoder before implementation admission.",
+    "selection_rule": "Retain the first bounded rows in original compiler order. Preserve original polarity and attempt identity. Normalize only declared machine-specific path prefixes for a separate deterministic comparison field; preserve the original bounded raw bytes/hash where the current process result makes them available.",
+    "truncation_rule": "Mark every retention truncation explicitly. Record known original row/byte counts; use null when underlying process truncation makes the total unknown. A hash of already truncated process output must never be labeled a complete compiler-output hash.",
+    "failure_rule": "Diagnostic formatting cannot change a probe's polarity/status. A required diagnostic capture failure blocks its qualification claim; inability to retain diagnostics must not fabricate a definitive observation.",
+    "public_wording": "Use proof construction unresolved or the existing diagnostic. Attribute an individual cause only when actual bounded compiler evidence supports it."
+  },
+  "tcb_policy": {
+    "delta_required": [],
+    "declared_existing_components_to_bind": ["pinned Lean kernel/checker", "kernel replay/export and expression audit tooling", "supervisor canonicalization/hash and orchestration", "isolation/OS/filesystem", "hardware", "already declared accepted interpretation boundary"],
+    "candidate_generator": "Untrusted proof proposer. Checked source-only readable rendering is not a new trusted evaluator.",
+    "dependency_audit": "Any new verifier code remains an explicitly identified existing orchestration/audit component; kernel observation authority cannot move to its host computation. A new trusted semantic/oracle component is disallowed. Required dependencies must be classified by current declared TCB categories before freezing.",
+    "no_new_axioms": true
+  },
+  "two_clean_build_expectations": {
+    "required": 2,
+    "isolation": "Fresh independent directories from the same frozen qualification input tree; no unrecorded cached goal/probe artifact reuse.",
+    "compare": ["selected recipe/rule", "proof theorem types and admitted proof dependency inventory", "module/dependency inventory and reproducible hashes", "source/AST/statement and correspondence bindings", "fixture/control statuses", "claim-status set", "provenance paths"],
+    "permitted_nondeterminism_to_freeze": ["elapsed wall time", "timestamps", "temporary directory path prefixes in diagnostic display"],
+    "unexplained_difference": "NONDETERMINISM and BLOCKED"
+  },
+  "final_report_expectations": {
+    "required_fields": ["closure_id", "input_root_hash", "state", "claim_counts", "claim_evidence_refs", "build_counts", "determinism", "correspondence_counts", "witness_counts", "provenance", "dependencies", "blocking_reasons", "infrastructure_errors", "verified_surface", "trusted_surface", "excluded_surface"],
+    "states": ["VERIFIED", "BLOCKED", "INFRASTRUCTURE_FAILURE"],
+    "required_claim_unresolved": "BLOCKED",
+    "tool_unavailable_or_registered_verifier_crash": "INFRASTRUCTURE_FAILURE when it prevents completion independently of claim truth; preserve existing observed failures",
+    "scope_wording": "VERIFIED means only the declared frozen finite qualification surface passed under the unchanged explicit TCB. It does not establish incident-task correctness or universal ground decidability.",
+    "current_draft_run_state": null,
+    "current_draft_claims_passed": 0,
+    "current_draft_evidence_generated": false
+  }
+}

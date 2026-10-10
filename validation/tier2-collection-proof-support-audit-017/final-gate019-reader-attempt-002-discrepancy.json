@@ -1,0 +1,84 @@
+{
+  "actual_bridge_consumed_records": {
+    "ev-16fdc0e984b9f6f4aabe29f458ad628f": {
+      "claim_id": "BRIDGE:structure:implementation",
+      "input_root": "sha256:bba61f5dc19b933a162f4efc532e273249481fd2986570fd8315a0ef3a25a37b",
+      "raw_path": "validation/tier2-proof-support-017-collection-design/qualification/frozen-attempt-egfasmab/package/closure/executions/attempt-9f1df592d931416ab1adad26/consumed/ev-16fdc0e984b9f6f4aabe29f458ad628f/raw.json",
+      "raw_sha256": "sha256:f9d276b15cdd99b01c3b59a46b7663477a1737109c6f3437038bf04e1c7de96f",
+      "record_path": "validation/tier2-proof-support-017-collection-design/qualification/frozen-attempt-egfasmab/package/closure/executions/attempt-9f1df592d931416ab1adad26/consumed/ev-16fdc0e984b9f6f4aabe29f458ad628f/record.json",
+      "record_sha256": "sha256:ac15309fb05555ee880f09703b29aeddcb0d60d2ada50313b8153a7bbf06e275",
+      "status": "PASS",
+      "verifier_hash": "sha256:c360e8ed61a11fee25a19fbe828121610da1eea169535088012f8d3f93e362da",
+      "verifier_id": "verislop.bridge-preparation"
+    },
+    "ev-d0454c6940c2c3c826711f0df4157b50": {
+      "claim_id": "BRIDGE:implementation:vscore-refinement",
+      "input_root": "sha256:730a72ec58a7c85f85113eee751670119c6d55a24d673eb691fef2a418f29281",
+      "raw_path": "validation/tier2-proof-support-017-collection-design/qualification/frozen-attempt-egfasmab/package/closure/executions/attempt-9f1df592d931416ab1adad26/consumed/ev-d0454c6940c2c3c826711f0df4157b50/raw.json",
+      "raw_sha256": "sha256:ea31ded154f01dc778b10a2196344e7923c628af2d1b5ddfd5bae00663b83cc8",
+      "record_path": "validation/tier2-proof-support-017-collection-design/qualification/frozen-attempt-egfasmab/package/closure/executions/attempt-9f1df592d931416ab1adad26/consumed/ev-d0454c6940c2c3c826711f0df4157b50/record.json",
+      "record_sha256": "sha256:f06345c4cee9abf6e49570763d60d493d529ae04d328071da12c8ea7aa8ca06e",
+      "status": "PASS",
+      "verifier_hash": "sha256:2490b571e8576da634efe05b63681dd28f45c473d662ffd82dd66ac4af382ddb",
+      "verifier_id": "verislop.vscore3-checker"
+    }
+  },
+  "actual_claim_results": {
+    "AUD017-01-FREEZE": "PASS",
+    "AUD017-02-CATALOG": "PASS",
+    "AUD017-03-EXACT-NAMES": "PASS",
+    "AUD017-04-GENERATED-PACKAGE": "BLOCKED",
+    "AUD017-05-SEMANTIC-BRIDGE": "PASS",
+    "AUD017-06-CLOSURE-AND-PORTABILITY": "PASS",
+    "AUD017-07-RECORD-AND-BOUNDARY": "BLOCKED"
+  },
+  "actual_exec_session_id": 17066,
+  "audit_id": "tier2-collection-proof-support-audit-017",
+  "before_edit": true,
+  "binding_sha256": "sha256:d01c5a6e780a3ce7e65534d845b2f23251c8f9d6639b8f6c6a169700671875b9",
+  "blocked_report_sha256": "sha256:574af2dbe7f54e8fcd32a3e84bc6180f057ccd8e0f9045820fcffefeab7a5df7",
+  "failing_comparisons": [
+    {
+      "actual_value": [],
+      "code_binding": "gate019-prepared-observations-04-06-correction-002.json retains unresolved_required_preparation_findings:[]; plan decision unknown_is_blocking and claim04 prohibit unresolved findings.",
+      "correction": "Check exact existing array type and len(array)==0; nonempty findings still block.",
+      "identifier": "AUD017-04: All12 original representation mismatches preserved and exactly corrected",
+      "incorrect_reader_expected_value": 0,
+      "registered_expected_semantics": "Zero unresolved required findings; the actual immutable correction002 field is an array, so its length must equal0. All five other correction linkage comparisons were true."
+    },
+    {
+      "actual_value": "General EvidenceStore pool resolves60 required refs; two bridge-local refs are absent from that general pool but retained as exact validated consumed records.",
+      "correction": "Keep the general registered pool; only if a required ref is absent resolve its exact current execution/consumed/<eid>/record.json and raw.json, checking frozen inventory hashes, content-addressed identity, evidence schema, raw hash/claim ID, current verifier/hash/root/PASS/trust and all premises. Missing or invalid records still block.",
+      "frozen_code_lines": [
+        "verislop/backends/vscore3_closure.py:193-224 internal bridge_artifacts/semantic_edge pools and evaluate_claim",
+        "verislop/backends/vscore3_closure.py:845-854 validates retained consumed content-addressed ID/raw hash/claim identity",
+        "verislop/bridges/check.py:248-263 validates bridge-local certificate ref/schema/raw identity",
+        "verislop/evidence.py:159-184 validates general record/raw evidence"
+      ],
+      "identifier": "AUD017-07: Every required evidence/raw result/current verifier hash/root/premise is bound without orphan claims",
+      "incorrect_reader_expected_value": "All62 required refs resolve through package EvidenceStore.by_id alone.",
+      "registered_expected_semantics": "Every required reference binds its actual current record/raw/root/verifier/premises; bridge-local evidence is selected from the frozen internal pools and retained in the execution consumed inventory."
+    }
+  ],
+  "format": "verislop.read-only-audit-reader-discrepancy/1",
+  "frozen_implementation_hashes": {
+    "verislop/backends/vscore3_closure.py": "sha256:0e96a496e5341b9a4cce0d5a1bb73c85c8afbca09f2d98ec049e13fe9a43d80f",
+    "verislop/bridges/check.py": "sha256:7277f450fbe430c9073d9140bf348e3c17209adee7b3e0cd307da6ec01952887",
+    "verislop/canonical.py": "sha256:cfb396e4cade0245a14aec541e98afdebbbf4e41c177ecc9b4c8c3a648ea5f47",
+    "verislop/claimcheck.py": "sha256:c8cb40477609949014a88ba2874ba8595f5ce033e0348d6d030c6fc2e00c3e75",
+    "verislop/evidence.py": "sha256:1507b296ca4694451e00170d37fdf48c6a7dc5f556cb68d0831c6ea98bd52363",
+    "verislop/schemas.py": "sha256:9ef85d5aeb1373211e1b9a7de7628b0cba7cd18fdd1eedcde5f5ea5743c7fd85"
+  },
+  "new_attempt": "003; read-only same seven claims, once after correction",
+  "observed_at_utc": "2026-10-10T12:47:13.143384+00:00",
+  "observed_exit_code": 2,
+  "qualification": false,
+  "qualification_attempt": "gate019",
+  "reader_attempt": "002",
+  "registered_acceptance_predicates_changed": false,
+  "same_finite_check_count": 41,
+  "script_sha256": "sha256:6fcac7fc3fe1e7147d505b14620cc6b364980c748ad54c88145242811e54c7ad",
+  "stderr_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "sha256:e9036d201abb63e053bea72794c71d677d1b0621f15519087f9180aa463e7817",
+  "target_or_evidence_changed": false
+}

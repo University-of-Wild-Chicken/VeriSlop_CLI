@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "expansion": {"legacy_singletons": "Every U+0020..U+007E except U+0022 and U+005C", "control_singletons": "Every U+0000..U+001F and U+007F..U+009F"},
+  "positive": [
+    {"id": "empty", "scalars": [], "expected_lean": "\"\""},
+    {"id": "quote", "scalars": [34], "expected_lean": "\"\\\"\""},
+    {"id": "backslash", "scalars": [92], "expected_lean": "\"\\\\\""},
+    {"id": "escaped_whitespace", "scalars": [9, 10, 13], "expected_lean": "\"\\t\\n\\r\""},
+    {"id": "nul_hex_neighbor", "scalars": [0, 48, 97, 65, 102, 70], "expected_lean": "\"\\x000aAfF\""},
+    {"id": "escape_text", "scalars": [92, 110, 92, 117, 49, 50, 51, 52, 92, 120, 48, 48], "expected_lean": "\"\\\\n\\\\u1234\\\\x00\""},
+    {"id": "literal_gap_text", "scalars": [92, 10, 32, 32, 97], "expected_lean": "\"\\\\\\n  a\""},
+    {"id": "injection_text", "scalars": [34, 10, 97, 120, 105, 111, 109, 32, 120, 32, 58, 32, 70, 97, 108, 115, 101, 10, 45, 45, 92]},
+    {"id": "ascii_control_boundary", "scalars": [31, 32, 33, 34, 35, 91, 92, 93, 126, 127, 128, 159, 160]},
+    {"id": "latin_e_acute", "scalars": [233], "expected_lean": "\"\\u00e9\""},
+    {"id": "decomposed_e_acute", "scalars": [101, 769], "expected_lean": "\"e\\u0301\""},
+    {"id": "utf8_two_three_boundary", "scalars": [2047, 2048]},
+    {"id": "before_surrogates", "scalars": [55295], "expected_lean": "\"\\ud7ff\""},
+    {"id": "after_surrogates", "scalars": [57344], "expected_lean": "\"\\ue000\""},
+    {"id": "bmp_noncharacters", "scalars": [64976, 65007, 65534, 65535]},
+    {"id": "bmp_astral_boundary", "scalars": [65535, 65536]},
+    {"id": "astral_noncharacters", "scalars": [131070, 131071, 1114110, 1114111]},
+    {"id": "max_scalar", "scalars": [1114111]},
+    {"id": "cjk", "scalars": [27721, 23383]},
+    {"id": "rtl_and_marks", "scalars": [1488, 1489, 8206, 8207, 8238]},
+    {"id": "line_separators_bom", "scalars": [8232, 8233, 65279]},
+    {"id": "emoji_zwj", "scalars": [128105, 8205, 128187, 65039]},
+    {"id": "mixed_escape_scalar_boundaries", "scalars": [0, 34, 92, 10, 233, 55295, 57344, 65535, 65536, 1114111, 70]}
+  ],
+  "invalid": [
+    {"id": "surrogate_low_bound", "codepoints": [55296]},
+    {"id": "high_surrogate_upper", "codepoints": [56319]},
+    {"id": "low_surrogate_lower", "codepoints": [56320]},
+    {"id": "surrogate_high_bound", "codepoints": [57343]},
+    {"id": "paired_surrogate_text", "codepoints": [55357, 56832]},
+    {"id": "surrogate_in_mixed_text", "codepoints": [97, 233, 55296, 98]}
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "claims": {
+      "items": {
+        "properties": {
+          "status": {
+            "enum": [
+              "VERIFIED",
+              "BLOCKED",
+              "INFRASTRUCTURE_FAILURE"
+            ]
+          }
+        },
+        "required": [
+          "claim_id",
+          "registered_verifier",
+          "original_statement",
+          "original_pass_condition",
+          "status",
+          "actual_predicates",
+          "inputs",
+          "evidence",
+          "trusted_dependencies",
+          "blocking_reasons"
+        ],
+        "type": "object"
+      },
+      "maxItems": 18,
+      "minItems": 18,
+      "type": "array"
+    },
+    "decision": {
+      "properties": {
+        "exit_code": {
+          "enum": [
+            0,
+            1,
+            2
+          ]
+        },
+        "manual_override_allowed": {
+          "const": false
+        }
+      },
+      "required": [
+        "exit_code",
+        "manual_override_allowed"
+      ],
+      "type": "object"
+    },
+    "format": {
+      "const": "verislop.support018-final-reconciliation/1"
+    },
+    "status": {
+      "enum": [
+        "VERIFIED",
+        "BLOCKED",
+        "INFRASTRUCTURE_FAILURE"
+      ]
+    }
+  },
+  "required": [
+    "format",
+    "closure_id",
+    "status",
+    "verifier_id",
+    "verifier_sha256",
+    "specification_sha256",
+    "source_root",
+    "input_root",
+    "claims",
+    "guards",
+    "phase_receipts",
+    "evidence",
+    "dependencies",
+    "scope",
+    "decision"
+  ],
+  "title": "Support018 final mechanical reconciliation",
+  "type": "object"
+}

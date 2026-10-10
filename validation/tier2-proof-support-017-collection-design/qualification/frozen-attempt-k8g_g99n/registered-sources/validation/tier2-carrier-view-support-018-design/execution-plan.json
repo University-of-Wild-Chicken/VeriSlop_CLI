@@ -1,0 +1,59 @@
+{
+  "format": "verislop.carrier-view-execution-plan/0.1",
+  "id": "tier2-carrier-view-support-018",
+  "status": "PENDING",
+  "specification_first": true,
+  "original_design_plan": "evidence-plan.json",
+  "activation_receipt": "validation/tier2-support-018-activation/source-hold-release-017.json",
+  "activation_receipt_sha256": "aa6eee8d1e4eb4625bcc6fc1b9b59f46f17b02336823c5cec452985acbe00626",
+  "implementation": "synthetic_dataset/tools/bootstrap_tier2_carrier_view.py",
+  "integration": "synthetic_dataset/tools/bootstrap_tier2.py:_carrier_binding and TRANSPORT_FILES only",
+  "test_verifier": "tests/test_tier2_carrier_views.py",
+  "evidence_runner": "validation/tier2-carrier-view-support-018-implementation/verify_carrier_views.py",
+  "generic_specification": "docs/bootstrap-tier2-carrier-views.md",
+  "channel_adapter": "validation/tier2-carrier-view-support-018-implementation/channel_probe.py",
+  "fixture_families": {
+    "F-001": "Small/empty opaque fields, whitespace/newline variants.",
+    "F-002": "HEAD + fixed 16-character synthetic pattern repeated 70000 times + final TAIL; unrelated system field uses that pattern 1024 times. Raw single-line carrier exceeds 1 MiB.",
+    "F-003": "Synthetic metadata packet with an evidence-shaped field longer than 300 KiB, unknown keys, prefix/suffix prose and instruction-like strings; no live task content.",
+    "F-004": "Public ASCII/accent/astral/combining/NFC-NFD/U+2028/control/backslash/quotation corpus repeated 2000 times.",
+    "F-005": "All controls U+0000..U+001F, slash/backslash/quote/astral corpus repeated 1000 times; large opaque metadata envelopes retain linear fallback.",
+    "F-006": "Frozen cap/reserve boundary widths, tails of one through six characters, and empty-field EOF."
+  },
+  "negative_controls": ["N-001", "N-002", "N-003", "N-004", "N-005", "N-006", "N-007", "N-008", "N-009", "N-010", "N-011", "N-012", "N-013", "N-014", "N-015", "N-016"],
+  "verifier_registration": "Before execution freeze implementation/test/runner/doc/design hashes and fixture parameter definitions in the implementation input manifest. Test method mappings cover the 8 claim IDs and all 16 controls.",
+  "checks": {
+    "CV-001": "Own-path open audit, raw hash/native metadata controls and symlink/extra-selector rejection.",
+    "CV-002": "Exact slices versus original strings, strict parser rejection, mutation and Unicode-offset controls.",
+    "CV-003": "Independent reconstruction verifier, >1MiB complete sequence, gap/conflict/tail/cursor/hash-only controls.",
+    "CV-004": "Encoded cap/reserve and no-progress controls plus root-retained actual exec_command channel probe. Local tests alone are insufficient.",
+    "CV-005": "Compact field inventory plus full linear fallback preserves unrelated nested envelope and all unknown/prefix/suffix data.",
+    "CV-006": "UTF-8/code-point/escape round trips and boundary widths without normalization or replacement.",
+    "CV-007": "Native exact byte/hash binding, sole carrier literal, helper-free inline recipe, unchanged transport algorithm AST/configuration, no ACCEPT/lifecycle authority.",
+    "CV-008": "Repeated viewer output determinism locally; remains unresolved until parent new-root two isolated builds and comparisons."
+  },
+  "intended_channel": {
+    "tool": "exec_command",
+    "max_output_tokens": 16384,
+    "encoded_stdout_cap_bytes": 8192,
+    "metadata_reserve_bytes": 2048,
+    "truncation_probe_max_output_tokens": 100,
+    "retry_same_start_char": 0,
+    "retry_encoded_stdout_cap_bytes": 4096,
+    "retry_metadata_reserve_bytes": 2048,
+    "retry_max_output_tokens": 16384,
+    "actual_delivery_status": "PENDING",
+    "no_token_byte_equivalence_assumed": true
+  },
+  "frozen_boundaries": {
+    "exact_field_domain": "Well-formed Unicode scalar text admitted by the existing canonical carrier parser.",
+    "nested_navigation": "Full linear fallback only in version 0.1; no nested reserialization or section omission.",
+    "explicit_task_data_reads": "One exact allowed literal own-carrier path only; no helper/workspace/sibling context.",
+    "lifecycle_changes": [],
+    "trust_additions": [],
+    "model_calls": 0,
+    "native_runs": 0,
+    "current_or_sealed_run_mutations": false
+  },
+  "execution_policy": "Retain every executed attempt's input hashes, stdout/stderr, exit and result. Failure evidence is append-only; a corrected implementation gets a new attempt manifest. No inherited PASS from held root. All unexecuted or externally pending components have explicit unresolved disposition."
+}

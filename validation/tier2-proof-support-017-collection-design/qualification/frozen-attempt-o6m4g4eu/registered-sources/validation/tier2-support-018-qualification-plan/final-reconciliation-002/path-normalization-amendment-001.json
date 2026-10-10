@@ -1,0 +1,70 @@
+{
+  "actual_qualification_runs": 0,
+  "before_wrapper_implementation": true,
+  "change": "Authenticate an existing regular repository amendment with no symlink components, resolve its canonical repository identity, and persist authenticated.relative_to(ROOT).as_posix().",
+  "claims_affected": [
+    "Q018-01",
+    "Q018-18"
+  ],
+  "closure_id": "support018-final-current-root-002",
+  "concrete_defect": "An absolute repository --amendment is authenticated but persisted as an absolute claims_plan; the current reconciler rejects that noncanonical relative input path.",
+  "control_method": "AST-extract only the path-authentication helper into a standalone namespace; no wrapper main/import, preparation, test/build/model/channel, or qualification invocation.",
+  "development_controls": [
+    {
+      "expected": "accepted same canonical relative path",
+      "id": "P001",
+      "input": "relative regular repository input"
+    },
+    {
+      "expected": "accepted same canonical relative path",
+      "id": "P002",
+      "input": "absolute regular repository input"
+    },
+    {
+      "expected": "accepted same canonical relative path",
+      "id": "P003",
+      "input": "redundant dot path to same input"
+    },
+    {
+      "expected": "accepted same canonical relative path",
+      "id": "P004",
+      "input": "internal parent traversal to same input"
+    },
+    {
+      "expected": "rejected",
+      "id": "P005",
+      "input": "absolute outside repository"
+    },
+    {
+      "expected": "rejected",
+      "id": "P006",
+      "input": "relative traversal outside repository"
+    },
+    {
+      "expected": "rejected",
+      "id": "P007",
+      "input": "missing repository file"
+    },
+    {
+      "expected": "rejected",
+      "id": "P008",
+      "input": "repository directory"
+    },
+    {
+      "expected": "rejected",
+      "id": "P009",
+      "input": "symlink leaf to repository file"
+    },
+    {
+      "expected": "rejected",
+      "id": "P010",
+      "input": "symlink directory to repository directory"
+    }
+  ],
+  "format": "verislop.support018-root002-claims-path-amendment/1",
+  "input_policy": "Relative CLI paths are interpreted against the process working directory. Absolute paths are also accepted if they resolve to a regular input inside ROOT. Missing files, directories, symlink components, and escaped resolved paths are rejected before identity collection/freeze.",
+  "predicate_changes": [],
+  "qualification_authority": false,
+  "root001_modified": false,
+  "status": "PROSPECTIVE_NOT_RUN"
+}

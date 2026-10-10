@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "claims": {
+      "items": {
+        "properties": {
+          "status": {
+            "enum": [
+              "VERIFIED",
+              "BLOCKED",
+              "INFRASTRUCTURE_FAILURE"
+            ]
+          }
+        },
+        "required": [
+          "claim_id",
+          "original_statement",
+          "original_pass_condition",
+          "registered_target_verifier",
+          "status",
+          "actual_predicates",
+          "blocking_reasons",
+          "trusted_dependencies"
+        ],
+        "type": "object"
+      },
+      "maxItems": 18,
+      "minItems": 18,
+      "type": "array"
+    },
+    "exit_code": {
+      "enum": [
+        0,
+        1,
+        2
+      ]
+    },
+    "format": {
+      "const": "verislop.support018-independent-audit-report/1"
+    },
+    "manual_override_allowed": {
+      "const": false
+    },
+    "status": {
+      "enum": [
+        "VERIFIED",
+        "BLOCKED",
+        "INFRASTRUCTURE_FAILURE"
+      ]
+    }
+  },
+  "required": [
+    "format",
+    "audit_id",
+    "closure_id",
+    "status",
+    "exit_code",
+    "source_root",
+    "input_root",
+    "verifier_id",
+    "verifier_hash",
+    "specification_hash",
+    "claims",
+    "claim_counts",
+    "groups",
+    "evidence",
+    "dependencies",
+    "categories",
+    "excluded_surface",
+    "build_counts",
+    "determinism",
+    "provenance",
+    "correspondence",
+    "witnesses",
+    "infrastructure_errors",
+    "manual_override_allowed",
+    "interpretation"
+  ],
+  "title": "Support018 independent finite audit",
+  "type": "object"
+}

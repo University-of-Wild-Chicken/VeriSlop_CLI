@@ -1,0 +1,79 @@
+{
+  "actual_channel_calls": 0,
+  "actual_tests_executed": 0,
+  "claims_sha256": "sha256:dc2e31e939daaec8dfc7265c05eb0d854b13e17d7650f1eae41540d0f7b15a01",
+  "driver_stage_boundary": "This is a regression suite runner. Its statusPASS cannot alone discharge all18 claims. Root must separately register and reconcile actual channel/ground/control/kernel/build/retention/engineering-record/provenance evidence for their affected claims under the final current root. No extra subjective review is requested.",
+  "engineer_changes_still_active": true,
+  "final_exact_test_inventory_registered": false,
+  "findings": [
+    {
+      "affected_claim_ids": [
+        "Q018-01",
+        "Q018-02",
+        "Q018-18"
+      ],
+      "counterexamples": [
+        "INPUT-MANIFEST-MUTATION",
+        "PREREGISTRATION-MUTATION",
+        "SOURCE-FREEZE-MUTATION",
+        "UNBOUND-DRIVER-MUTATION"
+      ],
+      "id": "DREV018-01",
+      "mechanism": "The initial loaded manifest/prereg/freeze hash bindings are not reread or compared at completion. Driver/spec/freeze input membership is not mandated. A selfhash-free manifest necessarily needs an external exact digest binding.",
+      "novel_evidence_type": "Actual copied-driver guard execution with before/after external-file digests and returned report fields.",
+      "observed": "run returned0 and wrote statusPASS,qualification_inputs_unchanged=true even though an external qualification binding file changed during the mock runner. Source/test name/hash maps remained equal.",
+      "recommendation": "Require driver/spec/source-freeze and complete actual registered relevant inputs in the manifest. Record exact regular nonindirect driver/spec/freeze/manifest/prereg paths/hashes atentry; recheck every one after suite and before reporting. Manifest/prereg self-binding remains external to avoid cycles. Derive qualification_inputs_unchanged from actual equality, and retain a failing current result on mutation. Do not turn input mutation into PASS or discard prior raw guard evidence.",
+      "severity": "blocking"
+    },
+    {
+      "affected_claim_ids": [
+        "Q018-02",
+        "Q018-03"
+      ],
+      "counterexamples": [
+        "COLLECTION-ONLY"
+      ],
+      "id": "DREV018-02",
+      "novel_evidence_type": "Actual collect guard execution on a declared mockcollection-only suite, with exact missing mandatory-module inventory.",
+      "observed": "collect accepted a one-identity collection suite omitting eleven of the twelve planned mandatory modules. A spec registeredcount matching this narrowed suite would satisfy run's identity/count comparison.",
+      "recommendation": "Enforce all twelve mandatory planner regression modules and their retained required identity floor, plus exact final carrier/ground/Unicode additions once engineers stop. Independently bind that finalized required-ID/module inventory before qualification. Matching a selfselected reduced count is insufficient. The final suite count/order remains newly computed; no old98 or planning144 count inheritance.",
+      "severity": "blocking"
+    },
+    {
+      "affected_claim_ids": [
+        "Q018-02"
+      ],
+      "counterexamples": [
+        "SKIP-MARKER"
+      ],
+      "id": "DREV018-03",
+      "novel_evidence_type": "Actual collect guard execution on a synthetic identity carrying __unittest_skip__=true.",
+      "observed": "Nonexecuting collect accepted the explicit skip marker. Actual runtime result comparison would reject a real skip, so this is not an observed actual suite falsePASS.",
+      "recommendation": "Reject class/instance/method skip markers in preflight, after setting collection optin before import. Reserve collection optin/evidence environment keys against arbitrary test_environment override; verify optin inventory before execution.",
+      "severity": "preflight_gap"
+    }
+  ],
+  "format": "verislop.support018-driver-review-findings/1",
+  "frozen_claim_definitions": "validation/tier2-support-018-qualification-plan/qualification-plan.json",
+  "full_current_source_root_frozen": false,
+  "guards_that_rejected_finite_controls": [
+    "EMPTY-SUITE",
+    "DUPLICATE-IDENTITY",
+    "WRONG-REGISTERED-HASH",
+    "FAKE-FROZEN-SOURCE",
+    "INCOMPLETE-RESULT",
+    "SOURCE-MUTATION",
+    "LEGACY-PASS-ONLY"
+  ],
+  "legacy_behavior": "Existing legacy run-result caused FileExistsError at final publication, not inherited PASS. Reject preexisting invocation/results before expensive execution as a routine write-once precondition; no new closure claim is needed.",
+  "model_calls": 0,
+  "native_fixture_builds": 0,
+  "patch_owner": "Root owns qualification/gate.py. This agent wrote only append-only review paths and sends recommendations; no conflicting edit.",
+  "qualification_status": null,
+  "review_id": "driver-review-001",
+  "review_mode": "Finite mechanical guard preflight only, actual code functions with isolated unrelated files and mock loader/runner; no production driver edit or testqualification PASS.",
+  "reviewed_driver_sha256": "sha256:00c2140272416f765fc0362593145687429d7f2e3a6c9fefc4af5a04df313903",
+  "stop_rule": "Freeze original findings/evidence. Root prospective repair requires a new actual driver hash and new preexecution registration; no prior mock guard outcome is qualification evidence.",
+  "task_inputs": false,
+  "testqualification_PASS_asserted": false
+}

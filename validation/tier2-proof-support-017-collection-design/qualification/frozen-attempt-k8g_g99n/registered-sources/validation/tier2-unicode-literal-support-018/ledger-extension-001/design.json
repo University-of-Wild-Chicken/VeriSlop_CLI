@@ -1,0 +1,38 @@
+{
+  "format": "verislop.unicode018-kernel-ledger-extension-design/1",
+  "status": "PROSPECTIVE_NOT_RUN",
+  "execution_started": false,
+  "actual_lean_builds": 0,
+  "actual_lean_tests": 0,
+  "model_calls": 0,
+  "prior_verifier_sha256": "985020601ccc8fd0c3c5fd858c80e15a41785638d9aeb29b3e95bacbb1bd84b6",
+  "prior_verifier_copy": "ledger-extension-001/prior/verify.py",
+  "authority": "validation/tier2-support-018-qualification-plan/final-reconciliation-001/repair-001/amendment.json",
+  "reason": "Normalized kernel export JSON alone does not establish a retained actual kernel invocation; each positive compiler invocation needs its immediately following actual kernel process record and raw request/response/tool/staged-part bindings.",
+  "unchanged": ["production renderer", "source grammar", "DSL and scalar domains", "policy and resource limits", "finite semantic claim predicates", "all prior development result bytes"],
+  "requested_options": {
+    "timeout": "Actual numeric timeout kwarg passed to sandbox.run; 30 seconds for kernel invocations",
+    "memory_mb": "Actual sandbox.run memory_mb kwarg: 24576 for -M8192, because unchanged Lean heap8192 plus unchanged virtual-address headroom16384",
+    "require_network_isolation": "Actual boolean sandbox.run kwarg",
+    "require_filesystem_isolation": "Actual boolean sandbox.run kwarg",
+    "read_only_paths": "Actual sandbox.run explicit read_only_paths kwargs converted to absolute path strings; kernel grants the pinned toolchain prefix"
+  },
+  "kernel_evidence": {
+    "request": {"path": "process-NN.request.json", "sha256": "SHA256 of actual sandbox cwd/request.json bytes", "bytes": "actual byte count"},
+    "response": {"path": "process-NN.response.json", "sha256": "SHA256 of actual sandbox cwd/response.json bytes", "bytes": "actual byte count"},
+    "kernel_tool": {"path": "process-NN.VeriSlopKernel.lean", "sha256": "SHA256 of actual sandbox cwd/copied VeriSlopKernel.lean bytes", "bytes": "actual byte count"},
+    "staged_module_parts": {"module": "VeriSlopContract", "parts": "Actual filename -> SHA256 map read from request.search_dir after sandbox.run returns"}
+  },
+  "staged_part_retention": "Copy each actual stage module part without changes into process-NN.stage/FILENAME; filenames are VeriSlopContract.olean, optionally VeriSlopContract.olean.server and VeriSlopContract.olean.private. The raw legacy fixture currently produces only VeriSlopContract.olean. Parts map filenames are unprefixed and must match retained compiler artifact filenames/hashes.",
+  "recording_order": [
+    "Capture actual argv, cwd and requested kwargs at wrapper entry",
+    "Call the existing original sandbox.run unchanged",
+    "Retain actual stdout/stderr bytes and actual numeric returncode, timeout, wall_seconds and isolation before inspecting staging outputs",
+    "For actual --run invocation only, read/copy actual request.json, response.json and copied VeriSlopKernel.lean after sandbox.run returns while leanbridge's temporary cwd is alive",
+    "Read request.search_dir and hash/copy actual staged module parts; never manufacture response bytes from the normalized export",
+    "Require each positive compiler row's actual kernel row to occur immediately afterward before accepting its exported Expr correspondence"
+  ],
+  "response_normalization": "Only leanbridge.run_kernel_tool's existing import.modules row whose name equals ['VeriSlopContract'] has olean replaced by '<staged candidate module>'. Raw request/search_dir, raw response, actual cwd and actual argv remain unchanged in retained process evidence.",
+  "validation_allowed_now": ["static Python AST parse", "narrow generic mocked filesystem-shape checks explicitly labelled MOCK_ONLY; no Lean process or semantic truth claim"],
+  "later_qualification": "Parent must freeze the new verifier/design/registration hash and run the full182-row corpus in two fresh rounds plus all five actual Lean negative checks under the final repository root. No prior development pass is inherited."
+}

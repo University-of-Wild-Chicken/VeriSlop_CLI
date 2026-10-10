@@ -1,0 +1,70 @@
+{
+  "channel": {
+    "argv_template": [
+      "{python}",
+      "validation/tier2-support-018-qualification-plan/scripts/verify-channel-records-v2.py",
+      "--capture-root",
+      "{capture_root}",
+      "--index",
+      "capture-index.json",
+      "--index-sha256",
+      "{index_sha256}",
+      "--frozen-case-plan",
+      "channel-case-plan.json",
+      "--frozen-case-plan-sha256",
+      "{case_plan_sha256}",
+      "--closure-id",
+      "{closure_id}",
+      "--input-root-hash",
+      "{input_root_hash}",
+      "--source-root-hash",
+      "{source_root_hash}",
+      "--producer-hash",
+      "{producer_hash}",
+      "--orchestrator-hash",
+      "{orchestrator_hash}"
+    ],
+    "capture_root": "validation/tier2-support-018-qualification/channel-actual",
+    "case_plan": "channel-case-plan.json",
+    "case_plan_sha256": "sha256:60b379805897bd8509145619071ed8ddfb0efe202c9f1d1e3506f940dacd59e5",
+    "comparator": "validation/tier2-support-018-qualification-plan/scripts/verify-channel-records-v2.py",
+    "comparator_receipt": "validation/tier2-support-018-qualification/channel-actual/comparator-actual-process-receipt.json",
+    "index": "capture-index.json",
+    "orchestrator": "validation/tier2-support-018-qualification/channel-orchestrator.js",
+    "producer": "synthetic_dataset/tools/bootstrap_tier2_carrier_view.py",
+    "result": "validation/tier2-support-018-qualification/channel-actual/channel-result.json"
+  },
+  "closure_id": "BIND_FINAL_CLOSURE_ID",
+  "format": "verislop.support018-finalizer-registration/1",
+  "invocation": {
+    "accepted_exit_code": 0,
+    "argv": [
+      "python",
+      "validation/tier2-support-018-qualification-plan/final-reconciliation-001/reconcile.py",
+      "--qualification-root",
+      "validation/tier2-support-018-qualification"
+    ],
+    "output": "final-reconciliation"
+  },
+  "producer_paths": [
+    "validation/tier2-support-018-qualification/gate.py",
+    "validation/tier2-support-018-qualification/prepare-inputs.py",
+    "validation/tier2-support-018-qualification/execute-phases.py",
+    "validation/tier2-carrier-view-support-018-implementation/verify_carrier_views.py",
+    "validation/tier2-unicode-literal-support-018/verify.py",
+    "validation/tier2-ground-replay-support-018-design/qualification.py",
+    "validation/tier2-ground-replay-support-018-design/unit_controls.py"
+  ],
+  "report_schema": {
+    "path": "validation/tier2-support-018-qualification-plan/final-reconciliation-001/report-schema.json",
+    "sha256": "BIND_ACTUAL_BYTES"
+  },
+  "specification": {
+    "path": "validation/tier2-support-018-qualification-plan/final-reconciliation-001/specification.json",
+    "sha256": "BIND_ACTUAL_BYTES"
+  },
+  "verifier": {
+    "path": "validation/tier2-support-018-qualification-plan/final-reconciliation-001/reconcile.py",
+    "sha256": "BIND_AFTER_CODE"
+  }
+}

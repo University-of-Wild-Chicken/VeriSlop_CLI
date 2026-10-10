@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "lean_negative_sources": [
+    {"id": "unsupported_escape_q", "source": "def bad : String := \"\\q\"\n", "expected_error_fragment": "invalid escape sequence"},
+    {"id": "incomplete_hex_x", "source": "def bad : String := \"\\x0\"\n", "expected_error_fragment": "invalid hexadecimal numeral"},
+    {"id": "incomplete_hex_u", "source": "def bad : String := \"\\u123\"\n", "expected_error_fragment": "invalid hexadecimal numeral"},
+    {"id": "unsupported_eight_digit_U", "source": "def bad : String := \"\\U0001f600\"\n", "expected_error_fragment": "invalid escape sequence"},
+    {"id": "unequal_unicode_literals", "source": "theorem bad : (\"\\u00e9\" : String) = \"e\\u0301\" := by rfl\n", "expected_error_fragment": "rfl"}
+  ],
+  "surrogate_policy": "Lean backslash-u surrogate syntax is not expected to be rejected by its lexer: Char.ofNat may replace it. The renderer must reject invalid Python surrogate text before producing any Lean source.",
+  "no_inference": "Rejected malformed syntax does not establish rejection of every malformed literal or universal soundness"
+}

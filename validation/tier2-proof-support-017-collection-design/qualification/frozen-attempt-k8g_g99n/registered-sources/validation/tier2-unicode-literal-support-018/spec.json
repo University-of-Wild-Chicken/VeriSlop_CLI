@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "closure_id": "tier2-unicode-literal-support-018-development-4",
+  "phase": "prospective-specification-before-renderer-edit-and-verification",
+  "surface": ["verislop/targets/vscore_source.py:lean_string", "shared vscore/vscore2/vscore3 Printer literal aliases"],
+  "contract": {
+    "input": "Python str containing Unicode scalar values only",
+    "output": "One ordinary quoted Lean string literal whose exported kernel Expr is exactly {lit:{str:input}}",
+    "invalid_input": "Reject every UTF-16 surrogate code point U+D800..U+DFFF with SourceError, including adjacent surrogate pairs; do not replace or normalize text",
+    "rendering": [
+      "Keep U+0020..U+007E except quotation mark and backslash byte-for-byte",
+      "Escape quotation mark as backslash quotation mark and backslash as doubled backslash",
+      "Use backslash n, backslash r, and backslash t for their respective controls",
+      "Use exactly two lowercase hexadecimal digits after backslash x for remaining U+0000..U+001F and U+007F..U+009F",
+      "Use exactly four lowercase hexadecimal digits after backslash u for U+00A0..U+FFFF excluding surrogates",
+      "Emit U+10000..U+10FFFF directly as UTF-8 scalars"
+    ],
+    "unchanged_domains": "No source parser, DSL grammar, scalar String domain, evaluator, native model, theorem imports, axioms, proof strategies, or policy budgets are modified"
+  },
+  "claims": [
+    {"id": "UL18-C1", "statement": "For every expanded positive fixture, both shared Printers and all three lean_string aliases render identical bytes; a fresh Lean definition compiled from those bytes kernel-replays as a safe String definition with value Expr exactly equal to the original string-literal Expr", "verifier": "UL18-V1", "pass": "all fixture rows map uniquely to exported safe definitions with exact type/value and empty axioms; imports and replay succeed; no sorries/warnings/errors", "block": "any mismatch, missing/ambiguous declaration, invalid dependency, compile or replay failure"},
+    {"id": "UL18-C2", "statement": "Empty text, every formerly accepted ASCII character, and their ordered concatenation retain the exact former quoted bytes", "verifier": "UL18-V1", "pass": "every finite legacy row equals quotation mark + original text + quotation mark", "block": "any changed byte"},
+    {"id": "UL18-C3", "statement": "All frozen invalid surrogate inputs are rejected by the helper, its aliases and shared Printers", "verifier": "UL18-V1", "pass": "every invalid fixture raises SourceError before UTF-8 source emission", "block": "any success or other exception"},
+    {"id": "UL18-C4", "statement": "Pinned Lean rejects every frozen malformed-escape declaration and the deliberately unequal literal theorem proved with rfl", "verifier": "UL18-V1", "pass": "each negative compile has nonzero actual compiler return code, at least one error, no timeout, no successful artifact and no sorry", "block": "success, missing diagnostic or timeout"},
+    {"id": "UL18-C5", "statement": "Two isolated fresh build rounds of every frozen positive batch module have identical module-part hashes and replayed declaration inventories, exact correspondence and provenance", "verifier": "UL18-V1", "pass": "both clean build rounds pass every batch, expected artifacts and normalized replay inventories agree, manifest inputs remain unchanged", "block": "input mutation, build failure, mismatch or undeclared nondeterminism"}
+  ],
+  "budget": {"compile_timeout_seconds": 300, "kernel_timeout_seconds": 30, "memory_mb": 8192},
+  "resource_basis": "Use the existing unchanged production/default8192MB cap and existing300s compile/30s replay limits. The earlier2048MB development cap was artificially lower; no production or policy resource limit is edited.",
+  "positive_batch_size": 182,
+  "repair_history": ["development-1 preserved a verifier field-name failure; development-2 and development-3 preserved actual kernel memory-cap failures at an artificially lower2048MB development cap. Development-4 prospectively restores the existing unchanged8192MB production/default cap and the full182-row module; the evidence will determine whether it passes under these existing resources."],
+  "determinism": {"required_clean_builds": 2, "permitted_nondeterministic_fields": ["temporary directory paths", "wall-clock duration", "timestamps", "process argv staging paths"]},
+  "excluded": ["universal Unicode correctness inferred from finite samples", "native tasks/prompts/candidates/proofs/carriers/history/dataset oracle", "full repository activation qualification while other engineers edit", "host evaluation as semantic authority"]
+}

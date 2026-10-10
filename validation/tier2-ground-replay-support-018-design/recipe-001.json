@@ -1,0 +1,18 @@
+{
+  "format": "verislop.ground-replay-normalization-recipe/1",
+  "status": "FROZEN_PROSPECTIVE_UNQUALIFIED",
+  "strategy_id": "S-GR-001",
+  "proof": "by\n  with_unfolding_all\n    simp only [eq_self, true_implies, implies_true, and_true, true_and, not_true_eq_false, not_false_eq_true]\n    all_goals decide +kernel",
+  "options": {"maxRecDepth": 100000, "maxHeartbeats": 2000000, "smartUnfolding": false},
+  "whole_probe_deadline_seconds": 30,
+  "max_polarity_compilations": 2,
+  "polarity_order": [false, true],
+  "simp_only_constants": ["eq_self", "true_implies", "implies_true", "and_true", "true_and", "not_true_eq_false", "not_false_eq_true"],
+  "all_goals_scope": "The fixed single closed theorem goal after logical normalization; if simp-only has closed it, all_goals is a no-op. It introduces no alternative prover or new compiler attempt.",
+  "theorem_type": "Exact original closed E or Not E, never a normalized replacement type.",
+  "observation_oracle": "Only the independently replayed safe theorem and existing exact source/statement/dependency/axiom checks, plus the transitive forbidden-oracle audit. Tactic construction is untrusted.",
+  "axioms": "Record the actual used theorem axiom inventory, classify it under the existing policy and retain the exact dependency/module identities. No claim of an empty axiom set is made before execution.",
+  "proof_dependency_terminal_rule": "Pinned allowed toolchain imports cannot depend forward on newly staged declarations. Audit every reached staged declaration and permit only such bound toolchain leaves. Missing staged exports are blocking.",
+  "baseline_reproducer": "exploration/baseline-003/bounded/assignment-0",
+  "incident_cause_equivalence_claim": false
+}

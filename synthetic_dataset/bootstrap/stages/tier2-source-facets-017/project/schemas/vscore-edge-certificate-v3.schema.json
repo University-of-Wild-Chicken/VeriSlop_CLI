@@ -1,0 +1,411 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:vscore-edge-certificate:0.3",
+  "title": "Registered VSCore checker output for one semantic edge",
+  "$comment": "Produced only by verislop.vscore3-checker after kernel replay of the verifier-owned library, the accepted contract module, the generated goal and the candidate proof module in two isolated builds. Its claims hold only together with the referenced evidence record, which binds the semantic-edge root and the current checker hash. It assigns no lifecycle milestone.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.3"
+    },
+    "format": {
+      "const": "verislop.vscore-edge-certificate/0.3"
+    },
+    "bridge_id": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+    },
+    "edge_id": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+    },
+    "claim_id": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+    },
+    "template": {
+      "const": "vscore.reference_refinement/0.3"
+    },
+    "tier": {
+      "const": 2
+    },
+    "endpoint": {
+      "const": "restricted_source"
+    },
+    "language": {
+      "const": "vscore/0.3"
+    },
+    "semantics": {
+      "const": "vscore-semantics/0.3"
+    },
+    "plan_hash": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "artifacts_hash": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "semantic_edge_root": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "accepted_ir": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "acceptance_certificate": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+            },
+            "sha256": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+            }
+          },
+          "required": [
+            "slot_id",
+            "sha256"
+          ]
+        },
+        "proof_source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+            },
+            "sha256": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+            }
+          },
+          "required": [
+            "slot_id",
+            "sha256"
+          ]
+        },
+        "relation": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+            },
+            "sha256": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+            }
+          },
+          "required": [
+            "slot_id",
+            "sha256"
+          ]
+        },
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+            },
+            "sha256": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+            }
+          },
+          "required": [
+            "slot_id",
+            "sha256"
+          ]
+        },
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slot_id": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+            },
+            "sha256": {
+              "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+            }
+          },
+          "required": [
+            "slot_id",
+            "sha256"
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "proof_source",
+        "relation",
+        "model",
+        "profile"
+      ]
+    },
+    "proposition_hash": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "theorem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "module": {
+          "const": "VeriSlopBridgeProof"
+        },
+        "symbol": {
+          "const": "VeriSlopBridgeProof.edge"
+        },
+        "proposition": {
+          "const": "VeriSlopBridgeGoal.EdgeProp"
+        },
+        "axioms": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "module",
+        "symbol",
+        "proposition",
+        "axioms"
+      ]
+    },
+    "statement_identity": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "symbols": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "entry": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "lean_decl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbol",
+          "entry",
+          "lean_decl"
+        ]
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "accepted_statement_hash": {
+            "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+          },
+          "accepted_theorem": {
+            "type": "string"
+          },
+          "transfer": {
+            "type": "string"
+          },
+          "transfer_theorem": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "accepted_statement_hash",
+          "accepted_theorem",
+          "transfer",
+          "transfer_theorem"
+        ]
+      }
+    },
+    "goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path"
+        },
+        "sha256": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "accepted_modules": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "module": {
+            "type": "string"
+          },
+          "path": {
+            "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path"
+          },
+          "sha256": {
+            "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+          }
+        },
+        "required": [
+          "module",
+          "path",
+          "sha256"
+        ]
+      }
+    },
+    "implementation_ir": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path"
+        },
+        "sha256": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "builds": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path"
+          },
+          "sha256": {
+            "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ]
+      }
+    },
+    "checker": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verifier_id": {
+          "const": "verislop.vscore3-checker"
+        },
+        "verifier_hash": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        }
+      },
+      "required": [
+        "verifier_id",
+        "verifier_hash"
+      ]
+    },
+    "kernel_tool_hash": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "lean_toolchain": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/path"
+        },
+        "sha256": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "semantic_acceptance": {
+      "const": true
+    },
+    "assigns_end_to_end_verified": {
+      "const": false
+    },
+    "readable_support": {
+      "$ref": "urn:verislop:schema:vscore-readable-selection:1#/$defs/support_descriptor"
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "bridge_id",
+    "edge_id",
+    "claim_id",
+    "template",
+    "tier",
+    "endpoint",
+    "language",
+    "semantics",
+    "plan_hash",
+    "artifacts_hash",
+    "semantic_edge_root",
+    "accepted_ir",
+    "acceptance_certificate",
+    "inputs",
+    "proposition_hash",
+    "theorem",
+    "statement_identity",
+    "symbols",
+    "obligations",
+    "goal",
+    "accepted_modules",
+    "implementation_ir",
+    "builds",
+    "checker",
+    "kernel_tool_hash",
+    "lean_toolchain",
+    "evidence",
+    "semantic_acceptance",
+    "assigns_end_to_end_verified"
+  ]
+}

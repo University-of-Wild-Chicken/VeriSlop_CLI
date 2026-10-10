@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "verislop"
+version = "0.1.0"
+description = "VeriSlop CLI — Verify the Slop: contract-first verification of generated software"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+verislop = "verislop.cli:main"
+
+[tool.setuptools]
+packages = ["verislop", "verislop.providers", "verislop.targets", "verislop.bridges", "verislop.backends"]
+
+[tool.setuptools.package-data]
+verislop = ["lean/*.lean", "lean/VSCore/*.lean", "lean/VSCore2/*.lean", "lean/VSCore3/*.lean"]

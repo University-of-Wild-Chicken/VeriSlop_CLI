@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:review-counterexample-receipt:0.2",
+  "title": "Supervisor replay receipt; not proof or milestone evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "format": {
+      "const": "verislop.review-counterexample-receipt/0.2"
+    },
+    "status": {
+      "enum": [
+        "CONFIRMED",
+        "NOT_REPRODUCED",
+        "UNSUPPORTED",
+        "INFRASTRUCTURE_FAILURE"
+      ]
+    },
+    "proposal": {
+      "$ref": "urn:verislop:schema:review-counterexample-proposal:0.2"
+    },
+    "proposal_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "checkpoint": {
+      "enum": [
+        "interpretation",
+        "formal_contract",
+        "implementation",
+        "release"
+      ]
+    },
+    "checker": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "const": "verislop.review-counterexample"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "id",
+        "sha256"
+      ]
+    },
+    "input_bindings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}$"
+      }
+    },
+    "claim": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "expected": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "observed": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "status",
+    "proposal",
+    "proposal_hash",
+    "checkpoint",
+    "checker",
+    "input_bindings",
+    "claim",
+    "expected",
+    "observed",
+    "diagnostics"
+  ]
+}

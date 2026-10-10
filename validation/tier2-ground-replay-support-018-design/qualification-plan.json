@@ -1,0 +1,89 @@
+{
+  "schema_version": "0.1",
+  "format": "verislop.ground-replay-support-qualification-plan/0.1",
+  "design_id": "tier2-ground-replay-support-018-design",
+  "status": "PENDING",
+  "execution_status": "NOT_RUN",
+  "fixture_answers_are_declared_design_expectations": true,
+  "existing_fixture_answers_consulted": false,
+  "task_material_consulted_for_fixtures": false,
+  "selected_strategy": null,
+  "future_preconditions": [
+    "The frozen terminal D21 audit has stopped and the root separately authorizes implementation.",
+    "Construct fixtures only from this generic plan and public VSCore/accepted-carrier specifications; never import task artifacts, historical attempts, reference implementations, fixture answers, benchmark oracles or private cases.",
+    "Create a new isolated candidate; preserve the sealed release and held production root.",
+    "Freeze the chosen unrelated reproducer, all fixture/control bytes, claims, expected dispositions, strategy recipes, limits, TCB inventory, environment, verifier registry and provenance mapping before executing qualification.",
+    "Bind every verifier and relevant input to a canonical sorted manifest and SHA-256 input root; no draft or proposed verifier is registered merely by its name in this plan."
+  ],
+  "minimal_fixtures": [
+    {
+      "id": "F-GR-TRUE",
+      "purpose": "Minimal generic positive observation with a source call and a closed signed carrier.",
+      "accepted_carrier": "Int",
+      "accepted_formula": "forall x : Int, source_call(x) = x",
+      "source_design": "A single pure identity entry on Int; no helpers, aggregates, accepted guarantee proof or refinement proof used as observation evidence.",
+      "assignment": [{"int": "-2"}],
+      "expected_replay_status": "NOT_REPRODUCED",
+      "expected_theorem_polarity": true,
+      "required_observation": "Independently replayed safe theorem of the exact grounded source_call(-2) = -2. The literal expectation is a fixture specification, never an authoritative host evaluation."
+    },
+    {
+      "id": "F-GR-FALSE",
+      "purpose": "Minimal generic negative observation; compilation failure must not supply the negative polarity.",
+      "accepted_carrier": "Int",
+      "accepted_formula": "forall x : Int, source_call(x) = x",
+      "source_design": "A separate single pure entry returning x + 1 on Int. It is deliberately inconsistent with the identity guarantee and must not carry a fabricated refinement proof.",
+      "assignment": [{"int": "-2"}],
+      "expected_replay_status": "CONFIRMED",
+      "expected_theorem_polarity": false,
+      "required_observation": "Independently replayed safe theorem of the negation of the exact grounded identity predicate. Admit ordinary source/goal structure without relying on a universal bridge proof."
+    }
+  ],
+  "unrelated_reproducer_requirement": {
+    "id": "F-GR-REPRODUCER-PENDING",
+    "status": "NOT_YET_IDENTIFIED",
+    "claim": "C-GR-001",
+    "statement": "No particular Lean computational blocker is asserted. Before choosing S-GR-001 or S-GR-002, a new unrelated source/contract pair must produce the baseline's ordinary two-polarity construction failure with captured diagnostic evidence, and one proposed recipe must produce a fully audited exact ground result within the same limits.",
+    "allowed_generic_components": [
+      "A nominal record with an Int field, finite enum field and List(Int) field.",
+      "A helper call with distinct parameter ordering.",
+      "Nested list map/filter/fold over explicitly finite lists.",
+      "A Nat fold returning an Int or record result.",
+      "Signed arithmetic and Int.fdiv through public generic semantics."
+    ],
+    "size_policy": "Freeze a finite candidate set and permitted sizes before exploration. The proposed initial set is at most four independently written small fixtures, at most two finite assignments each, using list lengths 0 or 3 and Nat fold bounds 0 or 3. No unbounded search, repeated task-shaped tuning or extension based on the sealed task is authorized.",
+    "reduction_policy": "If a permitted generic case reproduces the failure, freeze that case before comparison. A later smaller reproducer requires a new frozen fixture root; do not claim minimality without an explicit finite reduction plan.",
+    "if_baseline_succeeds": "Record the successful generic control honestly. It does not reproduce the incident boundary or qualify a new strategy. If the frozen candidate set has no reproducer, C-GR-001 remains unresolved and qualification is BLOCKED.",
+    "prohibited_reproducer": "The incident O6 assignment, its algorithm, task-specific carriers, accepted reference/formula answers or candidate source/proofs must not become a fixture."
+  },
+  "negative_controls": [
+    {"id": "N-GR-WIRE-ARITY", "mutation": "Use an extra assignment value for F-GR-TRUE.", "expected": "UNSUPPORTED with no observed predicate", "claims": ["C-GR-007"]},
+    {"id": "N-GR-WIRE-SORT", "mutation": "Use a tagged String for the accepted Int binder.", "expected": "UNSUPPORTED with no observed predicate", "claims": ["C-GR-007"]},
+    {"id": "N-GR-WIRE-RECORD", "mutation": "For a newly frozen unrelated record fixture, omit a field or add an unaccepted field.", "expected": "UNSUPPORTED with no observed predicate", "claims": ["C-GR-007"]},
+    {"id": "N-GR-OPEN-RESIDUAL", "mutation": "Introduce a residual quantifier over unbounded Int beneath the leading assignment prefix.", "expected": "UNSUPPORTED at the existing residual admission boundary", "claims": ["C-GR-007"]},
+    {"id": "N-GR-SOURCE-STALE", "mutation": "Change delivered source bytes without updating their frozen selected binding.", "expected": "UNSUPPORTED or earlier existing input-integrity rejection; never a definitive ground observation", "claims": ["C-GR-003", "C-GR-007"]},
+    {"id": "N-GR-MODULE-INVENTORY", "mutation": "Remove one required staged module or add an unbound staged module in the isolated qualification harness.", "expected": "UNSUPPORTED from the exact inventory audit, or registered infrastructure failure if the harness cannot execute; never an accepted theorem", "claims": ["C-GR-003", "C-GR-007"]},
+    {"id": "N-GR-FORGED-READABLE", "mutation": "Change one proposed readable source-only body or source_eq correspondence so it differs from the actual checked source.", "expected": "Correspondence admission rejected; no result from that recipe. No extra compilation or weaker theorem allowed.", "claims": ["C-GR-003", "C-GR-004", "C-GR-007"]},
+    {"id": "N-GR-BASE-READABLE", "mutation": "Provide a valid BASE readable selection or an unsupported readable constructor instead of CHECKED source-only correspondence.", "expected": "S-GR-002 is unavailable. Only the frozen pre-compilation selection rule may route to S-GR-001; otherwise UNSUPPORTED.", "claims": ["C-GR-005", "C-GR-007"]},
+    {"id": "N-GR-INADMISSIBLE-AXIOM", "mutation": "A probe theorem proposal uses a fresh axiom declared only in the isolated control module.", "expected": "Existing axiom policy rejects the result; no trust delta admitted", "claims": ["C-GR-004", "C-GR-007"]},
+    {"id": "N-GR-GUARANTEE-ORACLE", "mutation": "A control proof discharges the positive case using an accepted guarantee theorem, including through a one-level wrapper.", "expected": "Result proof dependency audit rejects the observation even if kernel typing succeeds", "claims": ["C-GR-004", "C-GR-007"]},
+    {"id": "N-GR-REFINEMENT-ORACLE", "mutation": "A control proof discharges the positive case using candidate Refines/bridge/transfer theorem evidence, including through a helper proof.", "expected": "Transitive dependency audit rejects the observation; closure presence of existing transfer theorems alone is not a violation", "claims": ["C-GR-004", "C-GR-007"]},
+    {"id": "N-GR-WEAKER-TYPE", "mutation": "Emit a safely kernel-checked theorem of True or another normalized but unlinked predicate as the result.", "expected": "Exact original type/defeq checks reject the result", "claims": ["C-GR-003", "C-GR-007"]},
+    {"id": "N-GR-COMPILE-FAILURE", "mutation": "Use an unrelated admitted formula for which both frozen proof attempts fail ordinary construction.", "expected": "UNSUPPORTED; observed null; retain both bounded diagnostics. No false polarity inferred.", "claims": ["C-GR-006", "C-GR-007"]},
+    {"id": "N-GR-DIAGNOSTIC-TRUNCATION", "mutation": "Exercise the frozen bounded diagnostic encoder with errors exceeding the retained row/byte limit.", "expected": "Record explicit truncation and byte/row counts, preserve attempt identity and original bounded process-output identity where available; no unbounded retention", "claims": ["C-GR-006"]},
+    {"id": "N-GR-BUDGET", "mutation": "An isolated control reaches the current deadline or heartbeat limit during normalization or proof construction.", "expected": "UNSUPPORTED through the existing budget classification; deadline and limits stay unchanged; at most two polarity compilations", "claims": ["C-GR-005", "C-GR-007"]},
+    {"id": "N-GR-REVIEW-INCOMPLETE", "mutation": "A stored generic ballot reports ACCEPT while one required constructed probe is UNSUPPORTED, or required inspection/search remains incomplete despite mechanical PASS.", "expected": "Existing review reconstruction yields ABSTAIN/incomplete, preserving unanimity and required inspection criteria", "claims": ["C-GR-007"]}
+  ],
+  "execution_order_after_separate_authorization": [
+    "Register and hash actual deterministic verifiers; materialize a finite unrelated candidate fixture set.",
+    "Freeze all inputs/claims/controls/recipes/limits/TCB and compute the qualification manifest root.",
+    "Capture baseline outcomes for the frozen unrelated candidates, including both polarity diagnostics where construction is unresolved.",
+    "If no unrelated baseline failure exists, stop with C-GR-001 unresolved; do not select a recipe or infer task-specific support.",
+    "Compare at most the two proposed normalization recipes on the frozen reproducer, within each probe's unchanged limits. These are separately identified qualification executions, never extra strategies inside a single production probe.",
+    "Freeze the proposed selected recipe/eligibility rule in a new candidate if selection changes verification-relevant bytes; rerun affected qualification from that new manifest root.",
+    "Evaluate every required claim and negative control with bound evidence, including exact result and forbidden proof dependency audits.",
+    "Perform two isolated clean builds and compare deterministic proof/module/correspondence/provenance/status inventories; record only predeclared time/path fields as nondeterministic.",
+    "Generate a machine-readable three-state qualification report with every public claim mapped to current verifier/evidence/inputs/trust; stop."
+  ],
+  "no_evidence_claim": "This file is a pending plan. No fixture, baseline failure, normalized theorem, control disposition, verifier registration, clean build or qualification outcome has been executed or established."
+}

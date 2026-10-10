@@ -1,0 +1,62 @@
+{
+  "cases": [
+    {
+      "expected": "ADMIT",
+      "id": "standalone",
+      "text": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    },
+    {
+      "expected": "ADMIT",
+      "id": "registered-prefix-first",
+      "text": "test_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    },
+    {
+      "expected": "ADMIT",
+      "id": "registered-prefix-both",
+      "text": "test_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one\ntest_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    },
+    {
+      "expected": "BLOCK",
+      "id": "arbitrary-prefix",
+      "text": "arbitrary COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    },
+    {
+      "expected": "BLOCK",
+      "id": "wrong-test-prefix",
+      "text": "test_other (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    },
+    {
+      "expected": "BLOCK",
+      "id": "malformed-prefix",
+      "text": "test_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ...COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    },
+    {
+      "expected": "BLOCK",
+      "id": "trailing-data",
+      "text": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one extra\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    },
+    {
+      "expected": "BLOCK",
+      "id": "duplicate",
+      "text": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one\ntest_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    },
+    {
+      "expected": "BLOCK",
+      "id": "missing",
+      "text": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/frozen-attempt-one\n"
+    },
+    {
+      "expected": "BLOCK",
+      "id": "relative-path",
+      "text": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE relative\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    },
+    {
+      "expected": "BLOCK",
+      "id": "dotdot",
+      "text": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /registered/../elsewhere\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /registered/retained-check-one\n"
+    }
+  ],
+  "description": "Prospective synthetic string definitions only. No execution or actual stdout copied.",
+  "execution_status": "NOT_RUN",
+  "format": "verislop.support018-independent-marker-controls/1"
+}

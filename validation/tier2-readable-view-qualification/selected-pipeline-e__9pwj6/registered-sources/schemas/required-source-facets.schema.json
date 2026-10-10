@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:required-source-facets:0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "format", "obligations"],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "format": {"const": "verislop.required-source-facets/0.1"},
+    "obligations": {
+      "type": "object", "minProperties": 1, "maxProperties": 256,
+      "additionalProperties": {
+        "type": "object", "additionalProperties": false,
+        "required": ["file", "entry", "arity", "properties", "value_required"],
+        "properties": {
+          "file": {"const": "program.vscore.json"},
+          "entry": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_.-]{0,127}$"},
+          "arity": {"type": "integer", "minimum": 0},
+          "properties": {"type": "array", "maxItems": 7, "uniqueItems": true,
+            "items": {"enum": ["typed_total", "deterministic", "input_preserved", "no_external_io", "no_floating_point", "pure_data", "restricted_runtime_only"]}},
+          "value_required": {"type": "boolean"}
+        }
+      }
+    }
+  }
+}

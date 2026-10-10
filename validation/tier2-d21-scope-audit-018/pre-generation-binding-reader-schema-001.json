@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "D21 stage018 root-supplied future pre-generation binding arguments",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format", "authorization", "stage", "project", "cohort",
+    "reader_sha256", "reader_schema_sha256", "preregistration_input_root_hash",
+    "expected_source_root", "expected_qualification_input_root",
+    "qualification_report", "qualification_report_schema_sha256",
+    "qualification_verifier", "qualification_specification", "qualification_links",
+    "qualification_input_manifest", "qualification_process_receipts",
+    "engineering_record", "source_freeze", "protocol_sha256",
+    "preregistration_sha256", "project_snapshot_sha256", "native_driver", "controller_inputs"
+  ],
+  "properties": {
+    "format": {"const": "verislop.d21-pre-generation-binding-spec/1"},
+    "authorization": {"const": "root-explicit-new-qualified-paths-before-generation"},
+    "stage": {"const": "tier2-source-facets-018"},
+    "project": {"const": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-018/project"},
+    "cohort": {"const": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-018/run"},
+    "reader_sha256": {"$ref": "#/$defs/hash"},
+    "reader_schema_sha256": {"$ref": "#/$defs/hash"},
+    "preregistration_input_root_hash": {"const": "a8febb88f2615e49738194d1380f7441ab42e5bd808adc40bd20fbb57bbb7366"},
+    "expected_source_root": {"$ref": "#/$defs/canonical_root"},
+    "expected_qualification_input_root": {"$ref": "#/$defs/hash"},
+    "qualification_report": {"$ref": "#/$defs/artifact"},
+    "qualification_report_schema_sha256": {"const": "623e057174a2d3679cd68154391d5caac808ca8bc6786d8ef263e4300c687910"},
+    "qualification_verifier": {"$ref": "#/$defs/artifact"},
+    "qualification_specification": {"$ref": "#/$defs/artifact"},
+    "qualification_links": {
+      "type": "array", "minItems": 2,
+      "description": "Exact hash-valued pointers in the actual final report authenticate the engineering record and source freeze. The registered engineering validator authenticates the native report/package/mechanical-result chain. No redundant direct package/report fields or rewritten roots are introduced.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["artifact", "report_pointer", "expected"],
+        "properties": {
+          "artifact": {"enum": ["engineering_record", "source_freeze"]},
+          "report_pointer": {"$ref": "#/$defs/pointer"},
+          "expected": {"$ref": "#/$defs/hash"}
+        }
+      }
+    },
+    "qualification_input_manifest": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "canonical_pointer"],
+      "properties": {
+        "path": {"$ref": "#/$defs/path"},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "canonical_pointer": {"$ref": "#/$defs/pointer"}
+      },
+      "description": "Actual registered qualification input inventory; the selected value's qualified-project canonical digest must equal the actual report input_root."
+    },
+    "qualification_process_receipts": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["path", "sha256", "returncode_pointer", "report_sha256_pointer"],
+        "properties": {
+          "path": {"$ref": "#/$defs/path"}, "sha256": {"$ref": "#/$defs/hash"},
+          "returncode_pointer": {"$ref": "#/$defs/pointer"},
+          "report_sha256_pointer": {"$ref": "#/$defs/pointer"}
+        }
+      },
+      "description": "Actual completed process receipt files authenticated by the current report; selected returncode must be type int and value 0. Receipt roots retain their actual provenance."
+    },
+    "engineering_record": {"$ref": "#/$defs/artifact"},
+    "source_freeze": {"$ref": "#/$defs/artifact"},
+    "protocol_sha256": {"$ref": "#/$defs/hash"},
+    "preregistration_sha256": {"$ref": "#/$defs/hash"},
+    "project_snapshot_sha256": {"$ref": "#/$defs/hash"},
+    "native_driver": {"$ref": "#/$defs/artifact"},
+    "controller_inputs": {
+      "type": "array", "minItems": 1, "items": {"$ref": "#/$defs/artifact"},
+      "description": "All prospective public controller018 preregistration/configuration inputs. Reader hashes these files and the sole driver; it executes none."
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^(sha256:)?[0-9a-f]{64}$"},
+    "canonical_root": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "path": {"type": "string", "pattern": "^/"},
+    "pointer": {"type": "string", "pattern": "^($|/)"},
+    "artifact": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+      "properties": {"path": {"$ref": "#/$defs/path"}, "sha256": {"$ref": "#/$defs/hash"}}
+    }
+  }
+}

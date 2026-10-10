@@ -1,0 +1,108 @@
+{
+  "controls": [
+    {
+      "expected": "ADMITTED",
+      "id": "M002-STANDALONE",
+      "paths": [
+        "/tmp/unrelated-parser-only/frozen-attempt-new",
+        "/tmp/unrelated-parser-only/retained-check-new"
+      ],
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "ADMITTED",
+      "id": "M002-EXACT-PREFIX",
+      "paths": [
+        "/tmp/unrelated-parser-only/frozen-attempt-new",
+        "/tmp/unrelated-parser-only/retained-check-new"
+      ],
+      "stdout": "test_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\nok\n"
+    },
+    {
+      "expected": "ADMITTED",
+      "id": "M002-BOTH-PREFIXED",
+      "paths": [
+        "/tmp/unrelated-parser-only/frozen-attempt-new",
+        "/tmp/unrelated-parser-only/retained-check-new"
+      ],
+      "stdout": "test_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\ntest_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-ARBITRARY-PREFIX",
+      "stdout": "other COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-NEAR-METHOD",
+      "stdout": "test_actual_frozen_collection_closure_and_retained_release_probex (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-WRONG-CLASS",
+      "stdout": "test_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.OtherTests) ... COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-DUPLICATE",
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\ntest_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ... COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-DUPLICATE-RETAINED",
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-MISSING-FROZEN",
+      "stdout": "COLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-MISSING-RETAINED",
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-EXTRA-TEXT",
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new extra\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-NO-PATH",
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-TAB-SEPARATOR",
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE\t/tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-RELATIVE-PATH",
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE relative/path\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-PARENT-PATH",
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/../unrelated\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-PREFIX-MISSING-SPACE",
+      "stdout": "test_actual_frozen_collection_closure_and_retained_release_probe (tests.test_vscore3_collection_bridge.CollectionRegisteredTier2Tests) ...COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-MARKER-IN-PROSE",
+      "stdout": "warning about COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\n"
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "M002-UNKNOWN-SUFFIX",
+      "stdout": "COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE /tmp/unrelated-parser-only/frozen-attempt-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/unrelated-parser-only/retained-check-new\nCOLLECTION_TIER2_RETAINED_CHECK_CAPTURE /tmp/z other\n"
+    }
+  ],
+  "format": "verislop.support018-marker-controls/1",
+  "status": "DEVELOPMENT_ONLY_NONQUALIFICATION"
+}

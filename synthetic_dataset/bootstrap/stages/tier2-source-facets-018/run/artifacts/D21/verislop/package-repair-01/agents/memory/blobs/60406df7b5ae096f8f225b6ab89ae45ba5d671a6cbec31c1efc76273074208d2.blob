@@ -1,0 +1,606 @@
+FROZEN INTERPRETED OBLIGATIONS (data):
+[
+ {
+  "id": "D1",
+  "kind": "entity",
+  "role": "declaration",
+  "statement": "The delivery is program.vscore.json with one typed entry solve of arity 1. Its input represents {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'} and its result represents an array of {group:string,start:int,count:natural,value:int|null}. Integers are unbounded mathematical integers, and strings consist of Unicode scalar values.",
+  "required": true,
+  "dependencies": [],
+  "acceptance_criteria": [
+   "Input and result types preserve every specified field, array, nullable value and fill alternative under data-pipeline/0.3.",
+   "The declared entry is solve with exactly one argument.",
+   "Integer and string domains have the specified mathematical and Unicode meanings."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "A1",
+  "kind": "precondition",
+  "role": "assumption",
+  "statement": "The caller supplies the specified structured input, with width a positive integer, start<=end, and fill equal to 'none' or 'previous'. No further size, magnitude, ordering, uniqueness or non-nullness precondition applies.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   }
+  ],
+  "acceptance_criteria": [
+   "The input inhabits the specified type, width>0 and start<=end.",
+   "The permitted domain includes empty event arrays, duplicate events, null values, arbitrary integer magnitudes and arbitrary Unicode scalar strings."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O1",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1, the admitted solve entry returns the complete specified grouped bucket aggregation. Let G be the sorted distinct event group names and B=[start+k*width | k is natural and start+k*width<end]. For g in G and b in B, let V(g,b) be the list of non-null event values with group g and b<=time<min(b+width,end), retaining duplicates; c(g,b)=length(V(g,b)) and s(g,b)=sum(V(g,b)). Each output row is {group:g,start:b,count:c(g,b),value:v(g,b)}, where v is s when c>0, null when c=0 and fill='none', and otherwise the sum of the latest earlier bucket of the same group with positive count, or null if none exists. Rows occur in group then bucket order. The implementation is canonical vscore/0.3 under normative Lean vscore-semantics/0.3 and data-pipeline/0.3.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Universal implementation refinement establishes precisely the stated output formula over the entire specified domain, including end=start and empty events.",
+   "For this obligation, program.vscore.json has one admitted typed entry solve of arity 1 and satisfies typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+   "Source identity and all seven source properties require their own discharge; result existence or equality alone does not replace them.",
+   "Arithmetic is exact and unbounded; no extra input bounds or preconditions restrict refinement."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O2",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1, the groups used to construct output are exactly the distinct group names of all events, ordered lexicographically by Unicode scalar codepoints. Events outside [start,end) still contribute their group names. No group is introduced or omitted from this group sequence.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "The group sequence equals sort(distinct(map group events)) using scalar-codepoint lexicographic comparison.",
+   "Groups having no in-range events receive the same prescribed bucket sequence as other groups; with no buckets the result remains empty.",
+   "Universal source implementation refinement establishes the group formula.",
+   "For O2, program.vscore.json contains one admitted typed solve entry of arity 1 satisfying typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O3",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1 and every group, output has exactly one bucket at each start+k*width for natural k with start+k*width<end, in increasing k order. Its interval is [start+k*width,min(start+(k+1)*width,end)). No other bucket exists.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Bucket starts are exactly the stated arithmetic progression strictly below end.",
+   "Every interval is half-open and the final interval is clipped to end.",
+   "When start=end there are no output rows.",
+   "Universal source implementation refinement establishes these formulas without integer overflow.",
+   "For O3, program.vscore.json contains one admitted typed solve entry of arity 1 satisfying typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O4",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1, group g and emitted bucket start b, the count equals the number of event occurrences with group g, non-null value and b<=time<min(b+width,end); the sum equals the exact mathematical sum of their values. Duplicate occurrences each contribute independently. Null values and events outside the interval contribute neither count nor sum.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Count and sum equal the length and integer sum of the filtered event-value list, retaining multiplicity.",
+   "A bucket with events but only null values has count zero.",
+   "Negative and zero values contribute normally; cancellation does not make a positive-count bucket empty.",
+   "Universal source implementation refinement establishes the complete filtering, count and sum formulas.",
+   "For O4, program.vscore.json contains one admitted typed solve entry of arity 1 satisfying typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O5",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1, a bucket with positive count returns its sum regardless of fill and makes that sum the previous value for its group. For a zero-count bucket, fill='none' returns null; fill='previous' returns the sum of the latest earlier positive-count bucket of that group, or null when none exists. Empty buckets preserve previous, pre-start events never initialize it, and a previous sum of zero remains a present value.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Before each group's first bucket, previous is absent.",
+   "Positive count selects the current sum and updates previous, including sum zero.",
+   "Zero count selects exactly the requested fill branch and never updates previous.",
+   "Previous refers only to earlier emitted nonempty buckets of the same group.",
+   "Universal source implementation refinement establishes every branch over the entire domain.",
+   "For O5, program.vscore.json contains one admitted typed solve entry of arity 1 satisfying typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O6",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "For every input satisfying A1, the returned JSON-compatible array contains exactly the rows prescribed by O1, each with group, start, count and value, ordered first by scalar-codepoint lexicographic group order and then increasing bucket start. Typed representation and serialization preserve these fields, nulls, exact integer values and array ordering.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "Output equals the concatenation, in sorted group order, of each group's increasing bucket rows.",
+   "There are no extra, missing or reordered rows.",
+   "data-pipeline/0.3 serialization preserves the specified structure and values.",
+   "Universal source implementation refinement establishes structure and ordering.",
+   "For O6, program.vscore.json contains one admitted typed solve entry of arity 1 satisfying typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "O7",
+  "kind": "postcondition",
+  "role": "guarantee",
+  "statement": "The implementation universally refines the complete functional specification and preserves both public examples exactly: events (a,0,2) and (a,1,-2), start=0,end=5,width=2,fill='previous' yield rows (a,0,2,0),(a,2,0,0),(a,4,0,0); event (z,-1,9), start=0,end=1,width=2,fill='previous' yields (z,0,0,null), with tuple fields group,start,count,value.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "The two concrete inputs produce precisely the supplied output arrays, including row order, counts, zeros and null.",
+   "Examples supplement, and do not replace, universal implementation refinement of the complete O1 aggregation formula.",
+   "For O7, program.vscore.json contains one admitted typed solve entry of arity 1 satisfying typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "I1",
+  "kind": "invariant",
+  "role": "guarantee",
+  "statement": "Throughout each group's bucket traversal, previous is absent exactly when no earlier emitted bucket has positive count; otherwise it is the sum of the latest such bucket. A positive-count bucket replaces it with its sum, including zero; an empty bucket preserves it. Events before start never seed it. The admitted implementation preserves its input and has the required closed source properties.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "The causal previous-value invariant holds initially and after every bucket, with no cross-group carry.",
+   "Duplicate non-null occurrences contribute to count and sum; zero sum remains a real previous value.",
+   "For I1, program.vscore.json contains one admitted typed solve entry of arity 1 satisfying typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+   "I1 is classified source-only by the policy: its required source discharge is not replaced by a value-equality theorem, and its requested causal behavior remains specified."
+  ],
+  "blocked_by": []
+ },
+ {
+  "id": "S1",
+  "kind": "safety_property",
+  "role": "guarantee",
+  "statement": "The delivered program.vscore.json has exactly one admitted typed entry solve of arity 1 executing only canonical vscore/0.3 under normative Lean vscore-semantics/0.3 and data-pipeline/0.3. Execution is total, deterministic and pure over the specified domain, preserves immutable input, performs no external I/O, uses no external-effect constructors or floating point, and uses unbounded mathematical integer arithmetic.",
+  "required": true,
+  "dependencies": [
+   {
+    "id": "D1",
+    "relation": "uses_definition"
+   },
+   {
+    "id": "A1",
+    "relation": "assumes"
+   }
+  ],
+  "acceptance_criteria": [
+   "For S1, the fixed file, entry and arity satisfy typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+   "No execution modifies input or produces external effects.",
+   "All admitted specified inputs terminate with a typed result and repeated execution gives the same result.",
+   "All arithmetic uses exact unbounded integers; no additional domain restrictions apply.",
+   "S1 is source-only, requiring source-property discharge rather than replacement by result existence or value equality."
+  ],
+  "blocked_by": []
+ }
+]
+BINDING MANIFEST (supervisor-owned IDs and role constraints):
+[
+ {
+  "obligation": "D1",
+  "role": "declaration",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "D1",
+   "declarations": [
+    "<qualified Lean declaration>"
+   ]
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "A1",
+  "role": "assumption",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "A1",
+   "predicate": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": []
+ },
+ {
+  "obligation": "O1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O2",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O2",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O3",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O3",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O4",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O4",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O5",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O5",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O6",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O6",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "O7",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "O7",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "I1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "I1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ },
+ {
+  "obligation": "S1",
+  "role": "guarantee",
+  "required": true,
+  "blocked_by": [],
+  "binding": {
+   "obligation": "S1",
+   "theorem": "<qualified Lean declaration>"
+  },
+  "allowed_assumptions": [
+   "A1"
+  ]
+ }
+]
+ASSUMPTION SUPPLIERS:
+[{"discharged_at": "solve invocation by supplying the specified typed input with width>0, start<=end and a permitted fill alternative", "id": "A1", "supplied_by": "caller"}]
+REQUESTED ASSURANCE AND IMPLEMENTATION BOUNDARY (supervisor-selected, not changeable by the proposal):
+{
+ "schema_version": "0.1",
+ "tier": 2,
+ "target": "vscore",
+ "endpoint": "restricted_source",
+ "require_state": "END_TO_END_VERIFIED",
+ "policy": "strict",
+ "backend_version": "0.3"
+}
+REQUIRED SOURCE FACETS (frozen specification constraint; not accepted IR or proof evidence):
+{
+ "format": "verislop.required-source-facets/0.1",
+ "obligations": {
+  "I1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": false
+  },
+  "O1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O2": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O3": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O4": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O5": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O6": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O7": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "S1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": false
+  }
+ },
+ "schema_version": "0.1"
+}
+Retain every policy obligation ID as a required guarantee with its complete requested behavior. Each row fixes the canonical file, entry, arity and closed source properties for that ID. value_required=true requires the complete functional value proposition as well as the source facets; a mathematical existence result, True, reflexive equality or an unrelated entry cannot replace them. Do not convert these requirements into assumptions, declarations, exclusions or optional guarantees. The policy supplies no algorithm, candidate source, expected output, accepted statement or lifecycle state.
+Every policy row is checked against the kernel-elaborated theorem before proof generation, and again after acceptance and in closure. Missing source facets, changed entry/arity or omitted IDs must be repaired under the same specification. Use an actual typed endpoint and the real SourceBoundary Contract conjunction; math-only proxies do not meet the policy. Native Python requirements do not discharge this source policy.
+POLICY AUTHORING WIRE: source_requirements is a map from local definition IDs to {"symbol":"actual_local_function","requirements":[{"tag":"entry","file":"program.vscore.json","entry":"exact_policy_entry","arity":0},{"tag":"typed_total"}]} (use the actual policy arity and every policy property, not the illustrative values). Property constructors are exactly {"tag":TAG}, with TAG one of typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data, restricted_runtime_only. Each obligations[OID] binds its theorem local ID; that theorems row has {"source":["source_definition_local_ID"]}, plus "formula":CLOSED_FORMULA whenever value_required=true. Keep the full formula. The compiler emits the exact Contract conjunct and value projection depending on the original theorem. Do not author Lean code or fact observations inside this AST.
+Prefer the typed AST envelope. In that envelope bindings use LOCAL declaration IDs, not the qualified Lean-name placeholders in the manifest; the compiler qualifies them. No supervisor registry or Lean proof/source strings belong inside the typed proposal.
+VSCORE 0.3 SOURCE BOUNDARY: Delivery is canonical program.vscore.json under data-pipeline/0.3 and restricted_source semantics. Use source_requirements and source theorem references for the actual frozen entry/type/purity/determinism/input-preservation/runtime requirements, with optional formula facets for functional behavior. Preserve every required ID and the complete typed data domain, including all binders, branch guards and ordered record fields. SourceBoundary proves the abstract checking rule; exact source discharge is a separate VSCore3 kernel bridge with admission and observation laws. Author no fact flags, snapshots, effect traces or source-policy receipts. Native Python facets require their own endpoint; do not copy them into this revised source boundary. Universal refinement is required for value behavior; finite runtime examples cannot replace it. TESTED is an unsupported separate campaign capability, so do not constrain formulas to a sampled leading-forall campaign. Opaque statements, physical-resource/liveness claims and host execution remain unsupported.
+ASSUMPTIONS REQUIRING SATISFIABILITY WITNESSES:
+["A1"]
+RECORDED REQUEST CONTEXT (untrusted data; retain frozen obligations):
+<<<
+Software engineering task D21: Grouped bucket aggregation with causal filling
+
+Deliver program.vscore.json with one pure admitted typed entry named solve. Its typed input and result must represent the specified JSON input/output structure. Perform no external I/O. Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end. Groups are all unique event group names sorted lexicographically, including groups with no in-range events. For each group, emit buckets starting start,start+width,... strictly below end, each covering [bucketStart,min(bucketStart+width,end)). Sum only non-null in-range values; count counts these values. A nonempty bucket has value=sum and becomes previous value. Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first); empty buckets never reset previous. Events before start never seed previous. Return [{group,start,count,value}] in group then bucket order. Zero sum is a real previous value, duplicates are counted.
+
+Implement the solve entry as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and the data-pipeline/0.3 serialization profile. Preserve the specified input/output structure and exact ordering. Admitted typed execution is total, pure and deterministic; input values are immutable, and the language has no external-effect constructors. Arithmetic uses unbounded mathematical integers without floating point. Strings contain Unicode scalar values and lexicographic order compares scalar codepoints. There are no additional input bounds or preconditions beyond the functional specification.
+
+Original public examples (preserved verbatim; universal refinement is required):
+[{"input": {"end": 5, "events": [{"group": "a", "time": 0, "value": 2}, {"group": "a", "time": 1, "value": -2}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 2, "group": "a", "start": 0, "value": 0}, {"count": 0, "group": "a", "start": 2, "value": 0}, {"count": 0, "group": "a", "start": 4, "value": 0}]}, {"input": {"end": 1, "events": [{"group": "z", "time": -1, "value": 9}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 0, "group": "z", "start": 0, "value": null}]}]
+
+
+Explicit delivery revision and requirement identity metadata:
+This is a new canonical restricted-source delivery request. The functional clauses, stated domains and public example values above retain their original meaning. IDs mapped across a delivery revision now state the specified typed pure source properties; their previous delivery assurance is unchanged. Each functional guarantee requires its complete mathematical statement and universal implementation refinement; illustrative examples do not replace it. The clause offsets below refer to the revised text above.
+[{"delivery_revised":true,"id":"D1","kind":"entity","required":true,"revised_clause_spans":[{"end_byte":393,"start_byte":265},{"end_byte":1019,"start_byte":957},{"end_byte":264,"start_byte":79},{"end_byte":1687,"start_byte":1080}],"role":"declaration"},{"delivery_revised":false,"id":"I1","kind":"invariant","required":true,"revised_clause_spans":[{"end_byte":759,"start_byte":700},{"end_byte":915,"start_byte":880},{"end_byte":956,"start_byte":916},{"end_byte":1078,"start_byte":1020}],"role":"guarantee"},{"delivery_revised":true,"id":"O1","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":264,"start_byte":79},{"end_byte":1687,"start_byte":1080},{"end_byte":1687,"start_byte":1080}],"role":"guarantee"},{"delivery_revised":false,"id":"O2","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":501,"start_byte":394}],"role":"guarantee"},{"delivery_revised":false,"id":"O3","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":561,"start_byte":502},{"end_byte":637,"start_byte":562}],"role":"guarantee"},{"delivery_revised":false,"id":"O4","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":672,"start_byte":638},{"end_byte":699,"start_byte":673},{"end_byte":1078,"start_byte":1020}],"role":"guarantee"},{"delivery_revised":false,"id":"O5","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":759,"start_byte":700},{"end_byte":879,"start_byte":760}],"role":"guarantee"},{"delivery_revised":true,"id":"O6","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":1019,"start_byte":957},{"end_byte":1687,"start_byte":1080}],"role":"guarantee"},{"delivery_revised":true,"id":"O7","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":2282,"start_byte":1689}],"role":"guarantee"},{"delivery_revised":false,"id":"A1","kind":"precondition","required":true,"revised_clause_spans":[{"end_byte":393,"start_byte":265}],"role":"assumption"},{"delivery_revised":true,"id":"S1","kind":"safety_property","required":true,"revised_clause_spans":[{"end_byte":264,"start_byte":79},{"end_byte":1687,"start_byte":1080}],"role":"guarantee"}]
+
+Mandatory requested source-facet specification:
+Every listed original required guarantee retains the globally requested source delivery: canonical file program.vscore.json, one typed entry solve of arity 1, and all seven closed source properties below. A mathematical result-existence or equality theorem cannot replace entry identity, purity, input preservation, effect restrictions or exact non-floating-point semantics. For every value_required=true row the source must implement the complete functional formula with universal source implementation refinement, including functional safety properties and invariants. Value facets are required by default regardless of category. Only the explicitly classified operational IDs below are source-only, retaining their source requirements rather than being replaced by value equalities. Assumptions, exclusions and separate non-vacuity witnesses are not source-policy rows.
+{"source_only_operational_ids":["I1","S1"],"value_required_default":true}
+{"format":"verislop.required-source-facets/0.1","obligations":{"I1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":false},"O1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O2":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O3":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O4":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O5":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O6":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O7":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"S1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":false}},"schema_version":"0.1"}
+
+>>>
+PREVIOUS CANDIDATE (untrusted source and binding proposal; repair rather than weaken):
+{
+ "lean_source": "-- unparseable formalizer response\n",
+ "formalization": {
+  "error": "unparseable formalizer response: unterminated outer JSON object in the response"
+ },
+ "raw_response": "{\"encoding\":\"verislop.formalizer-ast/0.2\",\"enums\":{\"Fill\":{\"constructors\":[\"none\",\"previous\"]}},\"records\":{\"Event\":{\"fields\":[{\"name\":\"group\",\"sort\":\"String\"},{\"name\":\"time\",\"sort\":\"Int\"},{\"name\":\"value\",\"sort\":{\"option\":\"Int\"}}]},\"Input\":{\"fields\":[{\"name\":\"events\",\"sort\":{\"list\":{\"record\":\"Event\"}}},{\"name\":\"start\",\"sort\":\"Int\"},{\"name\":\"end\",\"sort\":\"Int\"},{\"name\":\"width\",\"sort\":\"Int\"},{\"name\":\"fill\",\"sort\":{\"enum\":\"Fill\"}}]},\"Row\":{\"fields\":[{\"name\":\"group\",\"sort\":\"String\"},{\"name\":\"start\",\"sort\":\"Int\"},{\"name\":\"count\",\"sort\":\"Nat\"},{\"name\":\"value\",\"sort\":{\"option\":\"Int\"}}]},\"State\":{\"fields\":[{\"name\":\"rows\",\"sort\":{\"list\":{\"record\":\"Row\"}}},{\"name\":\"previous\",\"sort\":{\"option\":\"Int\"}}]}},\"symbols\":{\"solve\":{\"args\":[{\"record\":\"Input\"}],\"result\":{\"list\":{\"record\":\"Row\"}},\"body\":{\"tag\":\"list_foldl\",\"value\":{\"tag\":\"list_sort\",\"value\":{\"tag\":\"list_unique\",\"value\":{\"tag\":\"list_map\",\"value\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"events\",\"value\":{\"tag\":\"var\",\"index\":0}},\"function\":{\"sort\":{\"record\":\"Event\"},\"body\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"group\",\"value\":{\"tag\":\"var\",\"index\":0}}}}}},\"initial\":{\"tag\":\"list\",\"element_sort\":{\"record\":\"Row\"},\"items\":[]},\"function\":{\"accumulator_sort\":{\"list\":{\"record\":\"Row\"}},\"element_sort\":\"String\",\"body\":{\"tag\":\"list_append\",\"left\":{\"tag\":\"var\",\"index\":1},\"right\":{\"tag\":\"field\",\"sort\":\"State\",\"field\":\"rows\",\"value\":{\"tag\":\"list_foldl\",\"value\":{\"tag\":\"list_range\",\"stop\":{\"tag\":\"int_to_nat\",\"value\":{\"tag\":\"int_fdiv\",\"left\":{\"tag\":\"int_sub\",\"left\":{\"tag\":\"int_add\",\"left\":{\"tag\":\"int_sub\",\"left\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"end\",\"value\":{\"tag\":\"var\",\"index\":2}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"start\",\"value\":{\"tag\":\"var\",\"index\":2}}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"width\",\"value\":{\"tag\":\"var\",\"index\":2}}},\"right\":{\"tag\":\"int\",\"value\":\"1\"}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"width\",\"value\":{\"tag\":\"var\",\"index\":2}}}}},\"initial\":{\"tag\":\"record\",\"sort\":\"State\",\"fields\":[{\"tag\":\"list\",\"element_sort\":{\"record\":\"Row\"},\"items\":[]},{\"tag\":\"none\",\"element_sort\":\"Int\"}]},\"function\":{\"accumulator_sort\":{\"record\":\"State\"},\"element_sort\":\"Nat\",\"body\":{\"tag\":\"list_foldl\",\"value\":{\"tag\":\"list\",\"element_sort\":\"Int\",\"items\":[{\"tag\":\"int_add\",\"left\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"start\",\"value\":{\"tag\":\"var\",\"index\":4}},\"right\":{\"tag\":\"int_mul\",\"left\":{\"tag\":\"nat_to_int\",\"value\":{\"tag\":\"var\",\"index\":0}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"width\",\"value\":{\"tag\":\"var\",\"index\":4}}}}]},\"initial\":{\"tag\":\"var\",\"index\":1},\"function\":{\"accumulator_sort\":{\"record\":\"State\"},\"element_sort\":\"Int\",\"body\":{\"tag\":\"list_foldl\",\"value\":{\"tag\":\"list\",\"element_sort\":{\"list\":\"Int\"},\"items\":[{\"tag\":\"list_map\",\"value\":{\"tag\":\"list_filter\",\"value\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"events\",\"value\":{\"tag\":\"var\",\"index\":6}},\"function\":{\"sort\":{\"record\":\"Event\"},\"body\":{\"tag\":\"decide\",\"formula\":{\"tag\":\"and\",\"left\":{\"tag\":\"eq\",\"left\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"group\",\"value\":{\"tag\":\"var\",\"index\":0}},\"right\":{\"tag\":\"var\",\"index\":5}},\"right\":{\"tag\":\"and\",\"left\":{\"tag\":\"holds\",\"term\":{\"tag\":\"option_is_some\",\"value\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"value\",\"value\":{\"tag\":\"var\",\"index\":0}}}},\"right\":{\"tag\":\"and\",\"left\":{\"tag\":\"le\",\"left\":{\"tag\":\"var\",\"index\":1},\"right\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"time\",\"value\":{\"tag\":\"var\",\"index\":0}}},\"right\":{\"tag\":\"and\",\"left\":{\"tag\":\"lt\",\"left\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"time\",\"value\":{\"tag\":\"var\",\"index\":0}},\"right\":{\"tag\":\"int_add\",\"left\":{\"tag\":\"var\",\"index\":1},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"width\",\"value\":{\"tag\":\"var\",\"index\":7}}}},\"right\":{\"tag\":\"lt\",\"left\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"time\",\"value\":{\"tag\":\"var\",\"index\":0}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"end\",\"value\":{\"tag\":\"var\",\"index\":7}}}}}}}}},\"function\":{\"sort\":{\"record\":\"Event\"},\"body\":{\"tag\":\"option_get_or\",\"value\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"value\",\"value\":{\"tag\":\"var\",\"index\":0}},\"default\":{\"tag\":\"int\",\"value\":\"0\"}}}}]},\"initial\":{\"tag\":\"var\",\"index\":1},\"function\":{\"accumulator_sort\":{\"record\":\"State\"},\"element_sort\":{\"list\":\"Int\"},\"body\":{\"tag\":\"record\",\"sort\":\"State\",\"fields\":[{\"tag\":\"list_append\",\"left\":{\"tag\":\"field\",\"sort\":\"State\",\"field\":\"rows\",\"value\":{\"tag\":\"var\",\"index\":1}},\"right\":{\"tag\":\"list\",\"element_sort\":{\"record\":\"Row\"},\"items\":[{\"tag\":\"record\",\"sort\":\"Row\",\"fields\":[{\"tag\":\"var\",\"index\":6},{\"tag\":\"var\",\"index\":2},{\"tag\":\"list_length\",\"value\":{\"tag\":\"var\",\"index\":0}},{\"tag\":\"ite\",\"condition\":{\"tag\":\"decide\",\"formula\":{\"tag\":\"lt\",\"left\":{\"tag\":\"nat\",\"value\":\"0\"},\"right\":{\"tag\":\"list_length\",\"value\":{\"tag\":\"var\",\"index\":0}}}},\"then\":{\"tag\":\"some\",\"value\":{\"tag\":\"list_sum\",\"value\":{\"tag\":\"var\",\"index\":0}}},\"else\":{\"tag\":\"ite\",\"condition\":{\"tag\":\"bool_eq\",\"left\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"fill\",\"value\":{\"tag\":\"var\",\"index\":8}},\"right\":{\"tag\":\"enum\",\"sort\":\"Fill\",\"constructor\":\"previous\"}},\"then\":{\"tag\":\"field\",\"sort\":\"State\",\"field\":\"previous\",\"value\":{\"tag\":\"var\",\"index\":1}},\"else\":{\"tag\":\"none\",\"element_sort\":\"Int\"}}}]}]}},{\"tag\":\"ite\",\"condition\":{\"tag\":\"decide\",\"formula\":{\"tag\":\"lt\",\"left\":{\"tag\":\"nat\",\"value\":\"0\"},\"right\":{\"tag\":\"list_length\",\"value\":{\"tag\":\"var\",\"index\":0}}}},\"then\":{\"tag\":\"some\",\"value\":{\"tag\":\"list_sum\",\"value\":{\"tag\":\"var\",\"index\":0}}},\"else\":{\"tag\":\"field\",\"sort\":\"State\",\"field\":\"previous\",\"value\":{\"tag\":\"var\",\"index\":1}}}]}}}}}}}}}}},\"predicates\":{\"valid\":{\"args\":[{\"record\":\"Input\"}],\"formula\":{\"tag\":\"and\",\"left\":{\"tag\":\"lt\",\"left\":{\"tag\":\"int\",\"value\":\"0\"},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"width\",\"value\":{\"tag\":\"var\",\"index\":0}}},\"right\":{\"tag\":\"le\",\"left\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"start\",\"value\":{\"tag\":\"var\",\"index\":0}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"end\",\"value\":{\"tag\":\"var\",\"index\":0}}}}}},\"theorems\":{\"aggregation_contract\":{\"formula\":{\"tag\":\"forall\",\"sort\":{\"record\":\"Input\"},\"body\":{\"tag\":\"implies\",\"left\":{\"tag\":\"predicate\",\"predicate\":\"valid\",\"args\":[{\"tag\":\"var\",\"index\":0}]},\"right\":{\"tag\":\"eq\",\"left\":{\"tag\":\"call\",\"symbol\":\"solve\",\"args\":[{\"tag\":\"var\",\"index\":0}]},\"right\":{\"tag\":\"list_foldl\",\"value\":{\"tag\":\"list_sort\",\"value\":{\"tag\":\"list_unique\",\"value\":{\"tag\":\"list_map\",\"value\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"events\",\"value\":{\"tag\":\"var\",\"index\":0}},\"function\":{\"sort\":{\"record\":\"Event\"},\"body\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"group\",\"value\":{\"tag\":\"var\",\"index\":0}}}}}},\"initial\":{\"tag\":\"list\",\"element_sort\":{\"record\":\"Row\"},\"items\":[]},\"function\":{\"accumulator_sort\":{\"list\":{\"record\":\"Row\"}},\"element_sort\":\"String\",\"body\":{\"tag\":\"list_append\",\"left\":{\"tag\":\"var\",\"index\":1},\"right\":{\"tag\":\"field\",\"sort\":\"State\",\"field\":\"rows\",\"value\":{\"tag\":\"list_foldl\",\"value\":{\"tag\":\"list_range\",\"stop\":{\"tag\":\"int_to_nat\",\"value\":{\"tag\":\"int_fdiv\",\"left\":{\"tag\":\"int_sub\",\"left\":{\"tag\":\"int_add\",\"left\":{\"tag\":\"int_sub\",\"left\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"end\",\"value\":{\"tag\":\"var\",\"index\":2}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"start\",\"value\":{\"tag\":\"var\",\"index\":2}}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"width\",\"value\":{\"tag\":\"var\",\"index\":2}}},\"right\":{\"tag\":\"int\",\"value\":\"1\"}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"width\",\"value\":{\"tag\":\"var\",\"index\":2}}}}},\"initial\":{\"tag\":\"record\",\"sort\":\"State\",\"fields\":[{\"tag\":\"list\",\"element_sort\":{\"record\":\"Row\"},\"items\":[]},{\"tag\":\"none\",\"element_sort\":\"Int\"}]},\"function\":{\"accumulator_sort\":{\"record\":\"State\"},\"element_sort\":\"Nat\",\"body\":{\"tag\":\"list_foldl\",\"value\":{\"tag\":\"list\",\"element_sort\":\"Int\",\"items\":[{\"tag\":\"int_add\",\"left\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"start\",\"value\":{\"tag\":\"var\",\"index\":4}},\"right\":{\"tag\":\"int_mul\",\"left\":{\"tag\":\"nat_to_int\",\"value\":{\"tag\":\"var\",\"index\":0}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"width\",\"value\":{\"tag\":\"var\",\"index\":4}}}}]},\"initial\":{\"tag\":\"var\",\"index\":1},\"function\":{\"accumulator_sort\":{\"record\":\"State\"},\"element_sort\":\"Int\",\"body\":{\"tag\":\"list_foldl\",\"value\":{\"tag\":\"list\",\"element_sort\":{\"list\":\"Int\"},\"items\":[{\"tag\":\"list_map\",\"value\":{\"tag\":\"list_filter\",\"value\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"events\",\"value\":{\"tag\":\"var\",\"index\":6}},\"function\":{\"sort\":{\"record\":\"Event\"},\"body\":{\"tag\":\"decide\",\"formula\":{\"tag\":\"and\",\"left\":{\"tag\":\"eq\",\"left\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"group\",\"value\":{\"tag\":\"var\",\"index\":0}},\"right\":{\"tag\":\"var\",\"index\":5}},\"right\":{\"tag\":\"and\",\"left\":{\"tag\":\"holds\",\"term\":{\"tag\":\"option_is_some\",\"value\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"value\",\"value\":{\"tag\":\"var\",\"index\":0}}}},\"right\":{\"tag\":\"and\",\"left\":{\"tag\":\"le\",\"left\":{\"tag\":\"var\",\"index\":1},\"right\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"time\",\"value\":{\"tag\":\"var\",\"index\":0}}},\"right\":{\"tag\":\"and\",\"left\":{\"tag\":\"lt\",\"left\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"time\",\"value\":{\"tag\":\"var\",\"index\":0}},\"right\":{\"tag\":\"int_add\",\"left\":{\"tag\":\"var\",\"index\":1},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"width\",\"value\":{\"tag\":\"var\",\"index\":7}}}},\"right\":{\"tag\":\"lt\",\"left\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"time\",\"value\":{\"tag\":\"var\",\"index\":0}},\"right\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"end\",\"value\":{\"tag\":\"var\",\"index\":7}}}}}}}}},\"function\":{\"sort\":{\"record\":\"Event\"},\"body\":{\"tag\":\"option_get_or\",\"value\":{\"tag\":\"field\",\"sort\":\"Event\",\"field\":\"value\",\"value\":{\"tag\":\"var\",\"index\":0}},\"default\":{\"tag\":\"int\",\"value\":\"0\"}}}}]},\"initial\":{\"tag\":\"var\",\"index\":1},\"function\":{\"accumulator_sort\":{\"record\":\"State\"},\"element_sort\":{\"list\":\"Int\"},\"body\":{\"tag\":\"record\",\"sort\":\"State\",\"fields\":[{\"tag\":\"list_append\",\"left\":{\"tag\":\"field\",\"sort\":\"State\",\"field\":\"rows\",\"value\":{\"tag\":\"var\",\"index\":1}},\"right\":{\"tag\":\"list\",\"element_sort\":{\"record\":\"Row\"},\"items\":[{\"tag\":\"record\",\"sort\":\"Row\",\"fields\":[{\"tag\":\"var\",\"index\":6},{\"tag\":\"var\",\"index\":2},{\"tag\":\"list_length\",\"value\":{\"tag\":\"var\",\"index\":0}},{\"tag\":\"ite\",\"condition\":{\"tag\":\"decide\",\"formula\":{\"tag\":\"lt\",\"left\":{\"tag\":\"nat\",\"value\":\"0\"},\"right\":{\"tag\":\"list_length\",\"value\":{\"tag\":\"var\",\"index\":0}}}},\"then\":{\"tag\":\"some\",\"value\":{\"tag\":\"list_sum\",\"value\":{\"tag\":\"var\",\"index\":0}}},\"else\":{\"tag\":\"ite\",\"condition\":{\"tag\":\"bool_eq\",\"left\":{\"tag\":\"field\",\"sort\":\"Input\",\"field\":\"fill\",\"value\":{\"tag\":\"var\",\"index\":8}},\"right\":{\"tag\":\"enum\",\"sort\":\"Fill\",\"constructor\":\"previous\"}},\"then\":{\"tag\":\"field\",\"sort\":\"State\",\"field\":\"previous\",\"value\":{\"tag\":\"var\",\"index\":1}},\"else\":{\"tag\":\"none\",\"element_sort\":\"Int\"}}}]}]}},{\"tag\":\"ite\",\"condition\":{\"tag\":\"decide\",\"formula\":{\"tag\":\"lt\",\"left\":{\"tag\":\"nat\",\"value\":\"0\"},\"right\":{\"tag\":\"list_length\",\"value\":{\"tag\":\"var\",\"index\":0}}}},\"then\":{\"tag\":\"some\",\"value\":{\"tag\":\"list_sum\",\"value\":{\"tag\":\"var\",\"index\":0}}},\"else\":{\"tag\":\"field\",\"sort\":\"State\",\"field\":\"previous\",\"value\":{\"tag\":\"var\",\"index\":1}}}]}}}}}}}}}}}},\"source\":[\"delivery\"]},\"source_properties\":{\"source\":[\"delivery\"]},\"nonvacuity\":{\"formula\":{\"tag\":\"exists\",\"sort\":{\"record\":\"Input\"},\"body\":{\"tag\":\"predicate\",\"predicate\":\"valid\",\"args\":[{\"tag\":\"var\",\"index\":0}]}}}},\"obligations\":{\"D1\":{\"declarations\":[{\"kind\":\"enum\",\"name\":\"Fill\"},{\"kind\":\"record\",\"name\":\"Event\"},{\"kind\":\"record\",\"name\":\"Input\"},{\"kind\":\"record\",\"name\":\"Row\"},{\"kind\":\"record\",\"name\":\"State\"},{\"kind\":\"symbol\",\"name\":\"solve\"}]},\"A1\":{\"predicate\":\"valid\"},\"O1\":{\"theorem\":\"aggregation_contract\"},\"O2\":{\"theorem\":\"aggregation_contract\"},\"O3\":{\"theorem\":\"aggregation_contract\"},\"O4\":{\"theorem\":\"aggregation_contract\"},\"O5\":{\"theorem\":\"aggregation_contract\"},\"O6\":{\"theorem\":\"aggregation_contract\"},\"O7\":{\"theorem\":\"aggregation_contract\"},\"I1\":{\"theorem\":\"source_properties\"},\"S1\":{\"theorem\":\"source_properties\"}},\"witness_obligations\":{\"inhabited\":{\"theorem\":\"nonvacuity\",\"witnesses_for\":[\"A1\"],\"description\":\"Empty events, start zero, end zero, width one and fill none satisfy valid.\"}},\"source_requirements\":{\"delivery\":{\"symbol\":\"solve\",\"requirements\":[{\"tag\":\"entry\",\"file\":\"program.vscore.json\",\"entry\":\"solve\",\"arity\":1},{\"tag\":\"typed_total\"},{\"tag\":\"deterministic\"},{\"tag\":\"input_preserved\"},{\"tag\":\"no_external_io\"},{\"tag\":\"no_floating_point\"},{\"tag\":\"pure_data\"},{\"tag\":\"restricted_runtime_only\"}]}}}",
+ "raw_response_snapshot": {
+  "path": "agents/memory/snapshots/00000004-10d1c792da14febe4c5e344dc96caa98e03d5b04682f33c07abfe5a552e763e8.json",
+  "sha256": "sha256:10d1c792da14febe4c5e344dc96caa98e03d5b04682f33c07abfe5a552e763e8",
+  "size": 856
+ }
+}
+EXACT PREVIOUS FORMALIZER RESPONSE (untrusted bytes restored from validated memory):
+{"encoding":"verislop.formalizer-ast/0.2","enums":{"Fill":{"constructors":["none","previous"]}},"records":{"Event":{"fields":[{"name":"group","sort":"String"},{"name":"time","sort":"Int"},{"name":"value","sort":{"option":"Int"}}]},"Input":{"fields":[{"name":"events","sort":{"list":{"record":"Event"}}},{"name":"start","sort":"Int"},{"name":"end","sort":"Int"},{"name":"width","sort":"Int"},{"name":"fill","sort":{"enum":"Fill"}}]},"Row":{"fields":[{"name":"group","sort":"String"},{"name":"start","sort":"Int"},{"name":"count","sort":"Nat"},{"name":"value","sort":{"option":"Int"}}]},"State":{"fields":[{"name":"rows","sort":{"list":{"record":"Row"}}},{"name":"previous","sort":{"option":"Int"}}]}},"symbols":{"solve":{"args":[{"record":"Input"}],"result":{"list":{"record":"Row"}},"body":{"tag":"list_foldl","value":{"tag":"list_sort","value":{"tag":"list_unique","value":{"tag":"list_map","value":{"tag":"field","sort":"Input","field":"events","value":{"tag":"var","index":0}},"function":{"sort":{"record":"Event"},"body":{"tag":"field","sort":"Event","field":"group","value":{"tag":"var","index":0}}}}}},"initial":{"tag":"list","element_sort":{"record":"Row"},"items":[]},"function":{"accumulator_sort":{"list":{"record":"Row"}},"element_sort":"String","body":{"tag":"list_append","left":{"tag":"var","index":1},"right":{"tag":"field","sort":"State","field":"rows","value":{"tag":"list_foldl","value":{"tag":"list_range","stop":{"tag":"int_to_nat","value":{"tag":"int_fdiv","left":{"tag":"int_sub","left":{"tag":"int_add","left":{"tag":"int_sub","left":{"tag":"field","sort":"Input","field":"end","value":{"tag":"var","index":2}},"right":{"tag":"field","sort":"Input","field":"start","value":{"tag":"var","index":2}}},"right":{"tag":"field","sort":"Input","field":"width","value":{"tag":"var","index":2}}},"right":{"tag":"int","value":"1"}},"right":{"tag":"field","sort":"Input","field":"width","value":{"tag":"var","index":2}}}}},"initial":{"tag":"record","sort":"State","fields":[{"tag":"list","element_sort":{"record":"Row"},"items":[]},{"tag":"none","element_sort":"Int"}]},"function":{"accumulator_sort":{"record":"State"},"element_sort":"Nat","body":{"tag":"list_foldl","value":{"tag":"list","element_sort":"Int","items":[{"tag":"int_add","left":{"tag":"field","sort":"Input","field":"start","value":{"tag":"var","index":4}},"right":{"tag":"int_mul","left":{"tag":"nat_to_int","value":{"tag":"var","index":0}},"right":{"tag":"field","sort":"Input","field":"width","value":{"tag":"var","index":4}}}}]},"initial":{"tag":"var","index":1},"function":{"accumulator_sort":{"record":"State"},"element_sort":"Int","body":{"tag":"list_foldl","value":{"tag":"list","element_sort":{"list":"Int"},"items":[{"tag":"list_map","value":{"tag":"list_filter","value":{"tag":"field","sort":"Input","field":"events","value":{"tag":"var","index":6}},"function":{"sort":{"record":"Event"},"body":{"tag":"decide","formula":{"tag":"and","left":{"tag":"eq","left":{"tag":"field","sort":"Event","field":"group","value":{"tag":"var","index":0}},"right":{"tag":"var","index":5}},"right":{"tag":"and","left":{"tag":"holds","term":{"tag":"option_is_some","value":{"tag":"field","sort":"Event","field":"value","value":{"tag":"var","index":0}}}},"right":{"tag":"and","left":{"tag":"le","left":{"tag":"var","index":1},"right":{"tag":"field","sort":"Event","field":"time","value":{"tag":"var","index":0}}},"right":{"tag":"and","left":{"tag":"lt","left":{"tag":"field","sort":"Event","field":"time","value":{"tag":"var","index":0}},"right":{"tag":"int_add","left":{"tag":"var","index":1},"right":{"tag":"field","sort":"Input","field":"width","value":{"tag":"var","index":7}}}},"right":{"tag":"lt","left":{"tag":"field","sort":"Event","field":"time","value":{"tag":"var","index":0}},"right":{"tag":"field","sort":"Input","field":"end","value":{"tag":"var","index":7}}}}}}}}},"function":{"sort":{"record":"Event"},"body":{"tag":"option_get_or","value":{"tag":"field","sort":"Event","field":"value","value":{"tag":"var","index":0}},"default":{"tag":"int","value":"0"}}}}]},"initial":{"tag":"var","index":1},"function":{"accumulator_sort":{"record":"State"},"element_sort":{"list":"Int"},"body":{"tag":"record","sort":"State","fields":[{"tag":"list_append","left":{"tag":"field","sort":"State","field":"rows","value":{"tag":"var","index":1}},"right":{"tag":"list","element_sort":{"record":"Row"},"items":[{"tag":"record","sort":"Row","fields":[{"tag":"var","index":6},{"tag":"var","index":2},{"tag":"list_length","value":{"tag":"var","index":0}},{"tag":"ite","condition":{"tag":"decide","formula":{"tag":"lt","left":{"tag":"nat","value":"0"},"right":{"tag":"list_length","value":{"tag":"var","index":0}}}},"then":{"tag":"some","value":{"tag":"list_sum","value":{"tag":"var","index":0}}},"else":{"tag":"ite","condition":{"tag":"bool_eq","left":{"tag":"field","sort":"Input","field":"fill","value":{"tag":"var","index":8}},"right":{"tag":"enum","sort":"Fill","constructor":"previous"}},"then":{"tag":"field","sort":"State","field":"previous","value":{"tag":"var","index":1}},"else":{"tag":"none","element_sort":"Int"}}}]}]}},{"tag":"ite","condition":{"tag":"decide","formula":{"tag":"lt","left":{"tag":"nat","value":"0"},"right":{"tag":"list_length","value":{"tag":"var","index":0}}}},"then":{"tag":"some","value":{"tag":"list_sum","value":{"tag":"var","index":0}}},"else":{"tag":"field","sort":"State","field":"previous","value":{"tag":"var","index":1}}}]}}}}}}}}}}},"predicates":{"valid":{"args":[{"record":"Input"}],"formula":{"tag":"and","left":{"tag":"lt","left":{"tag":"int","value":"0"},"right":{"tag":"field","sort":"Input","field":"width","value":{"tag":"var","index":0}}},"right":{"tag":"le","left":{"tag":"field","sort":"Input","field":"start","value":{"tag":"var","index":0}},"right":{"tag":"field","sort":"Input","field":"end","value":{"tag":"var","index":0}}}}}},"theorems":{"aggregation_contract":{"formula":{"tag":"forall","sort":{"record":"Input"},"body":{"tag":"implies","left":{"tag":"predicate","predicate":"valid","args":[{"tag":"var","index":0}]},"right":{"tag":"eq","left":{"tag":"call","symbol":"solve","args":[{"tag":"var","index":0}]},"right":{"tag":"list_foldl","value":{"tag":"list_sort","value":{"tag":"list_unique","value":{"tag":"list_map","value":{"tag":"field","sort":"Input","field":"events","value":{"tag":"var","index":0}},"function":{"sort":{"record":"Event"},"body":{"tag":"field","sort":"Event","field":"group","value":{"tag":"var","index":0}}}}}},"initial":{"tag":"list","element_sort":{"record":"Row"},"items":[]},"function":{"accumulator_sort":{"list":{"record":"Row"}},"element_sort":"String","body":{"tag":"list_append","left":{"tag":"var","index":1},"right":{"tag":"field","sort":"State","field":"rows","value":{"tag":"list_foldl","value":{"tag":"list_range","stop":{"tag":"int_to_nat","value":{"tag":"int_fdiv","left":{"tag":"int_sub","left":{"tag":"int_add","left":{"tag":"int_sub","left":{"tag":"field","sort":"Input","field":"end","value":{"tag":"var","index":2}},"right":{"tag":"field","sort":"Input","field":"start","value":{"tag":"var","index":2}}},"right":{"tag":"field","sort":"Input","field":"width","value":{"tag":"var","index":2}}},"right":{"tag":"int","value":"1"}},"right":{"tag":"field","sort":"Input","field":"width","value":{"tag":"var","index":2}}}}},"initial":{"tag":"record","sort":"State","fields":[{"tag":"list","element_sort":{"record":"Row"},"items":[]},{"tag":"none","element_sort":"Int"}]},"function":{"accumulator_sort":{"record":"State"},"element_sort":"Nat","body":{"tag":"list_foldl","value":{"tag":"list","element_sort":"Int","items":[{"tag":"int_add","left":{"tag":"field","sort":"Input","field":"start","value":{"tag":"var","index":4}},"right":{"tag":"int_mul","left":{"tag":"nat_to_int","value":{"tag":"var","index":0}},"right":{"tag":"field","sort":"Input","field":"width","value":{"tag":"var","index":4}}}}]},"initial":{"tag":"var","index":1},"function":{"accumulator_sort":{"record":"State"},"element_sort":"Int","body":{"tag":"list_foldl","value":{"tag":"list","element_sort":{"list":"Int"},"items":[{"tag":"list_map","value":{"tag":"list_filter","value":{"tag":"field","sort":"Input","field":"events","value":{"tag":"var","index":6}},"function":{"sort":{"record":"Event"},"body":{"tag":"decide","formula":{"tag":"and","left":{"tag":"eq","left":{"tag":"field","sort":"Event","field":"group","value":{"tag":"var","index":0}},"right":{"tag":"var","index":5}},"right":{"tag":"and","left":{"tag":"holds","term":{"tag":"option_is_some","value":{"tag":"field","sort":"Event","field":"value","value":{"tag":"var","index":0}}}},"right":{"tag":"and","left":{"tag":"le","left":{"tag":"var","index":1},"right":{"tag":"field","sort":"Event","field":"time","value":{"tag":"var","index":0}}},"right":{"tag":"and","left":{"tag":"lt","left":{"tag":"field","sort":"Event","field":"time","value":{"tag":"var","index":0}},"right":{"tag":"int_add","left":{"tag":"var","index":1},"right":{"tag":"field","sort":"Input","field":"width","value":{"tag":"var","index":7}}}},"right":{"tag":"lt","left":{"tag":"field","sort":"Event","field":"time","value":{"tag":"var","index":0}},"right":{"tag":"field","sort":"Input","field":"end","value":{"tag":"var","index":7}}}}}}}}},"function":{"sort":{"record":"Event"},"body":{"tag":"option_get_or","value":{"tag":"field","sort":"Event","field":"value","value":{"tag":"var","index":0}},"default":{"tag":"int","value":"0"}}}}]},"initial":{"tag":"var","index":1},"function":{"accumulator_sort":{"record":"State"},"element_sort":{"list":"Int"},"body":{"tag":"record","sort":"State","fields":[{"tag":"list_append","left":{"tag":"field","sort":"State","field":"rows","value":{"tag":"var","index":1}},"right":{"tag":"list","element_sort":{"record":"Row"},"items":[{"tag":"record","sort":"Row","fields":[{"tag":"var","index":6},{"tag":"var","index":2},{"tag":"list_length","value":{"tag":"var","index":0}},{"tag":"ite","condition":{"tag":"decide","formula":{"tag":"lt","left":{"tag":"nat","value":"0"},"right":{"tag":"list_length","value":{"tag":"var","index":0}}}},"then":{"tag":"some","value":{"tag":"list_sum","value":{"tag":"var","index":0}}},"else":{"tag":"ite","condition":{"tag":"bool_eq","left":{"tag":"field","sort":"Input","field":"fill","value":{"tag":"var","index":8}},"right":{"tag":"enum","sort":"Fill","constructor":"previous"}},"then":{"tag":"field","sort":"State","field":"previous","value":{"tag":"var","index":1}},"else":{"tag":"none","element_sort":"Int"}}}]}]}},{"tag":"ite","condition":{"tag":"decide","formula":{"tag":"lt","left":{"tag":"nat","value":"0"},"right":{"tag":"list_length","value":{"tag":"var","index":0}}}},"then":{"tag":"some","value":{"tag":"list_sum","value":{"tag":"var","index":0}}},"else":{"tag":"field","sort":"State","field":"previous","value":{"tag":"var","index":1}}}]}}}}}}}}}}}},"source":["delivery"]},"source_properties":{"source":["delivery"]},"nonvacuity":{"formula":{"tag":"exists","sort":{"record":"Input"},"body":{"tag":"predicate","predicate":"valid","args":[{"tag":"var","index":0}]}}}},"obligations":{"D1":{"declarations":[{"kind":"enum","name":"Fill"},{"kind":"record","name":"Event"},{"kind":"record","name":"Input"},{"kind":"record","name":"Row"},{"kind":"record","name":"State"},{"kind":"symbol","name":"solve"}]},"A1":{"predicate":"valid"},"O1":{"theorem":"aggregation_contract"},"O2":{"theorem":"aggregation_contract"},"O3":{"theorem":"aggregation_contract"},"O4":{"theorem":"aggregation_contract"},"O5":{"theorem":"aggregation_contract"},"O6":{"theorem":"aggregation_contract"},"O7":{"theorem":"aggregation_contract"},"I1":{"theorem":"source_properties"},"S1":{"theorem":"source_properties"}},"witness_obligations":{"inhabited":{"theorem":"nonvacuity","witnesses_for":["A1"],"description":"Empty events, start zero, end zero, width one and fill none satisfy valid."}},"source_requirements":{"delivery":{"symbol":"solve","requirements":[{"tag":"entry","file":"program.vscore.json","entry":"solve","arity":1},{"tag":"typed_total"},{"tag":"deterministic"},{"tag":"input_preserved"},{"tag":"no_external_io"},{"tag":"no_floating_point"},{"tag":"pure_data"},{"tag":"restricted_runtime_only"}]}}}
+VERIFIED RESPONSE SNAPSHOT (context provenance only):
+{"path": "agents/memory/snapshots/00000004-10d1c792da14febe4c5e344dc96caa98e03d5b04682f33c07abfe5a552e763e8.json", "sha256": "sha256:10d1c792da14febe4c5e344dc96caa98e03d5b04682f33c07abfe5a552e763e8", "size": 856}
+The previous candidate was rejected by the statement checker:
+- unparseable formalizer response: unterminated outer JSON object in the response
+- CRITIC DIAGNOSTIC REPAIR: INVALID_CANDIDATE identifies an unterminated outer JSON object in raw_formalizer_response. Reconstruct and serialize the complete structured AST envelope, checking balanced object and array delimiters and successful JSON parsing before resubmission. Preserve the typed solve implementation, valid predicate, complete aggregation_contract formula, all obligation bindings, nonvacuity witness, and delivery source requirements; aggregation_contract must retain both its formula and source facet, while source_properties retains its source facet. Do not substitute the rejected lean_source placeholder or weaken any requirement. No admitted probe targets exist, so this is a parsing correction, not a functional counterexample or acceptance claim.
+CORRECTION ATTEMPT 2: inspect each diagnostic and return a changed complete proposal that fixes the rejected syntax or registered-language use while preserving all obligations. Returning the same rejected source and bindings does not repair it.
+AUTONOMOUS CRITIQUE (untrusted proposals; preserve every interpreted obligation):
+{"status": "REPAIR", "feedback": ["CRITIC DIAGNOSTIC REPAIR: INVALID_CANDIDATE identifies an unterminated outer JSON object in raw_formalizer_response. Reconstruct and serialize the complete structured AST envelope, checking balanced object and array delimiters and successful JSON parsing before resubmission. Preserve the typed solve implementation, valid predicate, complete aggregation_contract formula, all obligation bindings, nonvacuity witness, and delivery source requirements; aggregation_contract must retain both its formula and source facet, while source_properties retains its source facet. Do not substitute the rejected lean_source placeholder or weaken any requirement. No admitted probe targets exist, so this is a parsing correction, not a functional counterexample or acceptance claim."]}

@@ -1,0 +1,44 @@
+{
+  "format": "verislop.ground-replay-support-activation/1",
+  "status": "PROSPECTIVE_FROZEN_EXPLORATION",
+  "authorization_receipt": "validation/tier2-support-018-activation/source-hold-release-017.json",
+  "authorization_receipt_sha256": "aa6eee8d1e4eb4625bcc6fc1b9b59f46f17b02336823c5cec452985acbe00626",
+  "production_strategy_selected": null,
+  "candidate_limit": 4,
+  "assignments_per_candidate_limit": 2,
+  "candidate_set": [
+    {"id": "identity", "source": "Int identity entry", "formula": "forall x : Int, source(x) = x", "assignments": [-2, 7]},
+    {"id": "mutant", "source": "Int x+1 entry", "formula": "forall x : Int, source(x) = x", "assignments": [-2, 7]},
+    {"id": "bounded", "source": "Int identity entry", "formula": "forall x : Int, source(x) = x and forall n : Nat, 0 <= n -> n < 3 -> n = n", "assignments": [-2, 7], "range_bound": 3},
+    {"id": "listhelper", "source": "List(Int) maps a helper adding one and folds the resulting list using addition", "formula": "forall xs : List(Int), source(xs) = sum(map((+1), xs))", "assignments": [[], [-4, 2, 9]], "list_lengths": [0, 3]}
+  ],
+  "prospective_recipe_amendment": {
+    "id": "S-GR-001",
+    "status": "PENDING_UNQUALIFIED",
+    "description": "A controlled full-unfolding recipe may first normalize elementary logical identities using a closed simp-only allowlist: eq_self, true_implies, implies_true, and_true, true_and, not_true_eq_false, not_false_eq_true. Then run decide +kernel under locally scoped smartUnfolding false and full transparency. This extends only proof construction for existing admitted formulas; it adds no residual grammar or sampling semantics.",
+    "why_prospective": "The current residual admission includes bounded range propositions, while direct decide synthesis need not construct their instance. Whether this candidate set actually fails and whether the recipe works are both unresolved before execution.",
+    "polarity_compilations_max": 2,
+    "max_rec_depth": 100000,
+    "max_heartbeats_per_polarity": 2000000,
+    "shared_probe_deadline_seconds": 30,
+    "global_simp_or_guarantee_oracle_allowed": false
+  },
+  "diagnostic_bounds_frozen": {
+    "rows_per_polarity": 8,
+    "utf8_payload_bytes_per_row": 512,
+    "total_error_payload_bytes_for_two_polarities": 8192,
+    "whole_attempt_evidence_json_utf8_bytes": 16384,
+    "metadata_reserved_bytes": 8192,
+    "truncation": "Slice UTF-8 bytes to the row payload limit and decode with ignore only for an incomplete final codepoint. Append no ellipsis. Record row and payload truncation flags and original known row/byte counts. Whole wire encoding must remain within its frozen cap; metadata is fixed bounded scalar/hash/count data, with sorry positions limited to eight. If whole wire cannot fit, use a deterministic smaller payload with explicit truncation.",
+    "process_output": "Retain only bounded row text plus existing process returncode and stdout/stderr hashes/counts. Do not embed unbounded process base64 output. Do not call an already truncated output hash complete; underlying process truncation is null unless telemetry explicitly states it.",
+    "receipt_transport": "Successful observed results may include bounded proof_attempts. Unresolved Unsupported strings must include their bounded attempt evidence because the current supervisor receipt stores diagnostics as strings. No receipt schema or consensus change is authorized."
+  },
+  "dependency_audit_prospective": {
+    "export": "Export all independently replayed staged modules using the existing kernel tool export contract and unchanged limits, so wrappers in contract/normative/goal/probe modules can be audited transitively.",
+    "walk": "Walk actual exported theorem value_constants and definition value/type constants from the result theorem. Staged dependencies must have exported rows. Pinned toolchain imports may be terminal trusted leaves because they cannot refer forward to staged candidate declarations. Any missing staged dependency or forbidden reference blocks observation.",
+    "forbidden": "Candidate proof module declarations, generated Refines_/Transfer_/transfer_/edge_of_refines declarations, accepted obligation theorem names, and transitive wrappers. Existing structural transfer audits remain mandatory but are never an observation oracle."
+  },
+  "immutable_prior_runs": true,
+  "no_task_material_or_model_calls": true,
+  "qualification_evidence_generated": false
+}

@@ -1,0 +1,1084 @@
+{
+  "actual_builds_run": 0,
+  "actual_model_calls": 0,
+  "actual_reader_invocations": 0,
+  "actual_tests_run": 0,
+  "audit_id": "support018-independent-audit-001",
+  "claims": [
+    {
+      "audit_groups": [
+        "freeze",
+        "phases"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "INPUT_MUTATION",
+        "UNDECLARED_DEPENDENCY",
+        "STALE_OR_UNBOUND_EVIDENCE",
+        "FORBIDDEN_INPUT",
+        "MISSING_INPUT"
+      ],
+      "class": "dependency",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-01.json",
+      "id": "Q018-01",
+      "novel_evidence_type": "Canonical current source/test/qualification manifests, executable verifier hashes, and admitted-path reconciliation.",
+      "pass_condition": "complete_current_inventory && every_registered_hash_matches && every_dependency_classified && task_inputs == false && model_calls == 0 && prior_pass_inheritance == false",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "current relevant source/spec/schema/build/policy/toolchain files",
+        "complete current tests/**/*.py",
+        "new qualification driver/specification/claims/control/channel/fixture/verifier files"
+      ],
+      "severity": "blocking",
+      "statement": "Every verification-relevant current input and actual verifier is frozen; no prohibited task/oracle/history input supplies fixtures or evidence.",
+      "verifier": "V018-FREEZE"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "VERIFIER_NOT_RUN",
+        "CONTROL_NOT_RUN",
+        "TEST_IDENTITY_MISMATCH",
+        "SKIP",
+        "INPUT_MUTATION"
+      ],
+      "class": "test",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-02.json",
+      "id": "Q018-02",
+      "novel_evidence_type": "Actual per-test start/result inventory, suite exit and before/after complete source/test map.",
+      "pass_condition": "executed_test_ids == registered_test_ids && expected_count == unique_count == tests_run && failures == errors == skips == expected_failures == unexpected_successes == 0 && complete_current_source_and_test_maps_unchanged",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "final ordered test registration",
+        "current tests",
+        "opt-in environment and actual runner"
+      ],
+      "severity": "blocking",
+      "statement": "The exact newly registered suite actually executes every frozen unique ordered test, including the opted-in collection closure and all current carrier/replay additions.",
+      "verifier": "V018-SUITE"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite",
+        "unicode"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "VERIFIER_FAILURE",
+        "KERNEL_REJECTION",
+        "NAME_IDENTITY_MISMATCH",
+        "SCOPE_LEAK",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "test",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-03.json",
+      "id": "Q018-03",
+      "novel_evidence_type": "Actual current kernel exports/signature/dependency checks and native transport regression results; no old-result inheritance.",
+      "pass_condition": "every_final_registered_regression_passes && actual_catalog_and_name_kernel_checks_execute && literal_final_forwarding_checks_execute && no_scope_or_policy_delta",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "registered-test-inventory.json",
+        "current generic catalog/name/readable/workflow/native tests"
+      ],
+      "severity": "blocking",
+      "statement": "The declared current regression inventory retains kernel catalog, exact declaration identities, readable source-only boundaries, native binding and restricted_source dispatch behavior.",
+      "verifier": "V018-REGRESSIONS"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite",
+        "carrier"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "CARRIER_IDENTITY_MISMATCH",
+        "OWN_PATH_VIOLATION",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "test",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-04.json",
+      "id": "Q018-04",
+      "novel_evidence_type": "Instrumented explicit task-data open traces, raw carrier bytes/hash and metadata checks.",
+      "pass_condition": "all_declared_fixtures_bound && explicit_task_data_open_trace == own_path_only && wrong_hash_and_request_and_symlink_and_substitution_controls_rejected && no_write_subprocess_network",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "final inline recipe/message bytes",
+        "synthetic carrier fixtures",
+        "CV N-001 N-002 N-011"
+      ],
+      "severity": "blocking",
+      "statement": "The frozen inline carrier recipe binds its own single exact regular absolute carrier path, raw full SHA256 and native request metadata before emitting content, without substitute task-context access.",
+      "verifier": "V018-CARRIER-IDENTITY"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite",
+        "carrier"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "RECONSTRUCTION_MISMATCH",
+        "OFFSET_UNIT_MISMATCH",
+        "MISSING_TAIL",
+        "UNSUPPORTED_DOMAIN_HIDDEN",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "test",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-05.json",
+      "id": "Q018-05",
+      "novel_evidence_type": "Local generated/retained exact slice, code-point and UTF8 comparisons, interval unions and reconstruction hashes on the declared finite repertoire; explicit unsupported-domain controls. Whole-field actual channel coverage is not asserted by the separate three-case channel check.",
+      "pass_condition": "all_frozen_scalar_fixtures_roundtrip_exactly && field_unions == [0,total_chars] && utf8_prefix_boundaries_match && empty_fields_have_explicit_eof && frozen_surrogate_and_invalid_utf8_controls_explicitly_unsupported && no_native_parser_policy_change",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "CV F-001 through F-006 finalized finite instances",
+        "CV F-004 declared finite Unicode repertoire and N-003 unsupported-domain controls",
+        "CV N-003 through N-008 N-010 N-015"
+      ],
+      "severity": "blocking",
+      "statement": "Retained valid field records reconstruct both exact original declared fixture strings with character/UTF8 boundaries, contiguous coverage, duplicate discipline and final tails; the admitted scalar domain and unsupported Unicode boundaries are stated honestly.",
+      "verifier": "V018-CARRIER-RECONSTRUCTION"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "channel"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "CHANNEL_NOT_TESTED",
+        "OUTPUT_BOUND_EXCEEDED",
+        "TRUNCATED_ADVANCEMENT",
+        "STALE_OR_UNBOUND_EVIDENCE",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "test",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-06.json",
+      "id": "Q018-06",
+      "novel_evidence_type": "Actual tool return output, budget/original-token/truncation identity, model-forward marker, exact received-byte comparisons and retry trace.",
+      "pass_condition": "every_whole_wire_with_newline_bytes <= cap && every_metadata_with_empty_content_wire_bytes <= reserve && every_content_json_token_wire_bytes_including_quotes <= cap-reserve && actual_received_bytes == independently_emitted_expected_bytes && every_low_budget_control_detected && retry_start == truncated_start && channel_records_forwarded_and_retained",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "channel-check-protocol.json",
+        "actual structured exec_command return records",
+        "expected emitted raw bytes and synthetic carriers",
+        "scripts/verify-channel-records.py"
+      ],
+      "severity": "blocking",
+      "statement": "The actual intended exec_command channel delivers the registered three synthetic /user start0 view records intact under frozen caps, or exposes the deliberate truncation without successful cursor advancement and permits same-start bounded retry.",
+      "verifier": "V018-CHANNEL-RECORDS"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite",
+        "carrier"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "NAVIGATION_LOSS",
+        "UNDECLARED_OPTIONAL_SURFACE",
+        "OUTPUT_BOUND_EXCEEDED",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "test",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-07.json",
+      "id": "Q018-07",
+      "novel_evidence_type": "Exact original-coordinate interval maps and linear fallback comparisons; optional unimplemented surface explicitly excluded.",
+      "pass_condition": "both_universal_selectors_supported && opaque_and_unknown_envelopes_linear_roundtrip && optional_navigation_declaration_matches_implementation && every_admitted_optional_interval_exact && inventory_pagination_bounded",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "final optional navigation declaration",
+        "CV F-003 F-005 and N-013"
+      ],
+      "severity": "blocking",
+      "statement": "Universal /system and /user linear views preserve opaque prompts; any declared optional inventory/navigation maps to original user coordinates and does not omit text.",
+      "verifier": "V018-CARRIER-NAVIGATION"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite",
+        "carrier",
+        "ground"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "POLICY_MUTATION",
+        "LIFECYCLE_OVERCLAIM",
+        "TCB_DELTA",
+        "BUDGET_RELAXATION",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "test",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-08.json",
+      "id": "Q018-08",
+      "novel_evidence_type": "Structured baseline/current configuration comparison and exact carrier/reference-field/literal-FINAL regression results.",
+      "pass_condition": "carrier_raw_algorithm_and_reference_fields_unchanged && new_agent_message_hash_bound && literal_final_exact && provider_ballot_repair_probe_budgets_equal_baseline && no_inference_review_retrieval_wall_deadline && acceptance_consensus_coverage_axiom_tcb_unchanged && synthetic_instruction_and_completion_controls_no_new_authority",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "exact current configuration/bindings",
+        "permitted generic prompt change",
+        "CV N-014 N-016",
+        "existing transport/budget/review identities"
+      ],
+      "severity": "blocking",
+      "statement": "Carrier guidance and ground support preserve existing authoritative bytes/bindings, literal FINAL, authorship, policy, finite call budgets and semantic review; view completion adds no acceptance authority.",
+      "verifier": "V018-POLICY"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "ground"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "MISSING_WITNESS",
+        "WITNESS_INVALID",
+        "WRONG_POLARITY",
+        "NO_UNRELATED_REPRODUCER",
+        "POSTHOC_RECIPE_SELECTION",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "witness",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-09.json",
+      "id": "Q018-09",
+      "novel_evidence_type": "Actual original-predicate result theorems, baseline/selected comparison and bounded compiler attempts. A no-reproducer result cannot establish improvement.",
+      "pass_condition": "true_fixture == NOT_REPRODUCED && false_fixture == CONFIRMED && exact_kernel_results && selected_recipe_frozen_before_run && frozen_unrelated_baseline == UNSUPPORTED && selected_recipe_definitive",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "GR F-GR-TRUE F-GR-FALSE",
+        "finite unrelated candidate-set freeze",
+        "selected normalization recipe/rule"
+      ],
+      "severity": "blocking",
+      "statement": "The fixed selected recipe produces independently accepted true and false ground observations on the two minimal unrelated fixtures and demonstrates any advertised normalization improvement on a separately frozen unrelated baseline failure.",
+      "verifier": "V018-GROUND-COMPARISON"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "ground",
+        "unicode"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "STATEMENT_MISMATCH",
+        "SOURCE_AST_MISMATCH",
+        "MODULE_INVENTORY_MISMATCH",
+        "KERNEL_REJECTION",
+        "UNDEFINED_BEHAVIOR_DEPENDENCY",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "implementation_correspondence",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-10.json",
+      "id": "Q018-10",
+      "novel_evidence_type": "Actual module parts/export/replay/defeq/type/AST and source binding records; compiler exit alone never discharges.",
+      "pass_condition": "result_type_exact && original_ground_hash_bound && safe_result && empty_level_params && unresolved_constants == [] && exact_single_ground_defeq && complete_module_replay && staged_inventory_exact && toolchain_closure_bound && reconstructed_source_ast_exact && source_goal_statements_exact && normative_source_unchanged",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "current replay/checker/export/target code",
+        "frozen source/accepted contract/profile/goal modules",
+        "ground observations"
+      ],
+      "severity": "blocking",
+      "statement": "Every definitive ground observation is a safe theorem of the exact original grounded expression E or Not E after complete independent current kernel replay and source/statement/module binding.",
+      "verifier": "V018-GROUND-KERNEL"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "ground"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "OBSERVATION_ORACLE_DEPENDENCY",
+        "UNDECLARED_DEPENDENCY",
+        "INADMISSIBLE_AXIOM",
+        "NON_MECHANICAL_CORRESPONDENCE",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "dependency",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-11.json",
+      "id": "Q018-11",
+      "novel_evidence_type": "Transitive proof dependency and axiom inventory including indirect wrappers; existing transfer closure presence is distinguished from result proof use.",
+      "pass_condition": "every_result_and_normalization_proof_closure_audited && forbidden_dependencies == [] && exact_source_only_correspondences_if_used && axiom_policy_equal_baseline && tcb_delta == []",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "actual exported transitive proof dependencies",
+        "exact checked source-only correspondence inventory",
+        "GR oracle controls"
+      ],
+      "severity": "blocking",
+      "statement": "Result and normalization proof transitive dependency closures exclude accepted guarantee/refinement/bridge/transfer observation oracles, host evaluation authority, new axiom exceptions and new trust.",
+      "verifier": "V018-GROUND-DEPENDENCIES"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "ground",
+        "suite"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "BUDGET_RELAXATION",
+        "EXTRA_COMPILATION",
+        "DEADLINE_RESTART",
+        "FALSE_FROM_FAILURE",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "test",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-12.json",
+      "id": "Q018-12",
+      "novel_evidence_type": "Actual compile count/order and start/end remaining budget plus exhaustion disposition records.",
+      "pass_condition": "probe_compilations <= 2 && attempted_polarities_prefix_of_false_true && no_deadline_restart && all_existing_limits_equal_baseline && normalization_preparation_audits_within_shared_budget && exhausted_or_unavailable_probe_no_observed_value",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "replay policy",
+        "selected recipe source",
+        "attempt traces",
+        "GR budget/optional-boundary controls"
+      ],
+      "severity": "blocking",
+      "statement": "Ground normalization and diagnostics share the unchanged existing deadline/isolation/limits; each probe attempts false then true at most twice and construction failure never determines truth.",
+      "verifier": "V018-GROUND-LIMITS"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "ground"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "MISSING_FAILURE_EVIDENCE",
+        "DIAGNOSTIC_BOUND_EXCEEDED",
+        "TRUNCATION_HIDDEN",
+        "STALE_OR_UNBOUND_EVIDENCE",
+        "FALSE_FROM_FAILURE",
+        "CONTROL_NOT_RUN"
+      ],
+      "class": "provenance",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-13.json",
+      "id": "Q018-13",
+      "novel_evidence_type": "Bounded per-polarity attempt source/hash/exit diagnostics, underlying process truncation and final retained receipt comparison.",
+      "pass_condition": "every_failed_attempt_record_bound && all_frozen_payload_and_wire_bounds_obeyed && strict_unicode_boundaries && available_counts_null_when_unknown && truncation_flags_preserved && complete_hash_never_labels_truncated_output && receipt_contains_bound_diagnostics && status_unaffected",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "final diagnostic encoder and wire bounds",
+        "actual failed compiler results",
+        "review receipt plumbing",
+        "GR diagnostic controls"
+      ],
+      "severity": "blocking",
+      "statement": "Every failed polarity construction retains finite exact-attempt-bound diagnostics with honest byte/row/truncation accounting and no invented cause; receipt plumbing preserves them.",
+      "verifier": "V018-GROUND-DIAGNOSTICS"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "carrier",
+        "ground",
+        "unicode"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "CONTROL_NOT_RUN",
+        "SEMANTIC_NEGATIVE_ACCEPTED",
+        "FORGED_OBSERVATION",
+        "LIFECYCLE_OVERCLAIM"
+      ],
+      "class": "test",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-14.json",
+      "id": "Q018-14",
+      "novel_evidence_type": "Actual affected production path control outcomes, including kernel-accepted oracle and weaker-type controls rejected by observation admission.",
+      "pass_condition": "every_registered_control_executed && actual_disposition == exact_frozen_disposition && no_unsupported_control_observed_boolean && no_view_completion_or_incomplete_search_ACCEPT",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "CV N-001 through N-016 finalized exact instances",
+        "GR controls finalized exact instances",
+        "additional freeze/retention controls"
+      ],
+      "severity": "blocking",
+      "statement": "All frozen carrier and ground negative controls reach their exact declared rejection or unsupported boundary without forged observation, view completion acceptance or weakened search.",
+      "verifier": "V018-NEGATIVE-CONTROLS"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite",
+        "collection"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "CLEAN_BUILD_FAILURE",
+        "MISSING_WITNESS",
+        "VERIFIER_NOT_RUN",
+        "STALE_OR_UNBOUND_EVIDENCE"
+      ],
+      "class": "build",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-15.json",
+      "id": "Q018-15",
+      "novel_evidence_type": "Fresh current native package and actual two-build process/artifact/replay records; no old fixture or result reuse.",
+      "pass_condition": "fixture_created_after_current_source_freeze && no_live_model_transcripts && registered_bridge_acceptance && actual_registered_closure_report_terminal_and_mechanical_VERIFIED && build_names == [A,B] && fresh_isolated_builds == 2 && both_ok && no_unregistered_cache_reuse",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "actual opted-in current collection native fixture",
+        "current source freeze",
+        "registered bridge/restricted_source closure validators"
+      ],
+      "severity": "blocking",
+      "statement": "A newly created unrelated complete native restricted_source fixture reaches registered bridge acceptance and closure with actual independent clean builds A and B from the frozen current source.",
+      "verifier": "V018-CLEAN-BRIDGES"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite",
+        "collection"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "TEMPORARY_ROOT_NOT_REMOVED",
+        "RETAINED_VALIDATION_FAILURE",
+        "RELEASE_PROBE_UNRESOLVED",
+        "STALE_OR_UNBOUND_EVIDENCE"
+      ],
+      "class": "build",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-16.json",
+      "id": "Q018-16",
+      "novel_evidence_type": "Actual original-root removal, independent retained validation and second concrete probe; booleans copied from build records are insufficient.",
+      "pass_condition": "initial_concrete_release_probe_PASS && original_temporary_root_removed && retained_validation_current_PASS && retained_concrete_release_probe_PASS && retained_source_root_and_inputs_match",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "retained fresh fixture package",
+        "actual deletion/absence receipt",
+        "release probe outputs"
+      ],
+      "severity": "blocking",
+      "statement": "The actual retained qualification package validates and executes its concrete release probe after the original temporary build/fixture root is removed.",
+      "verifier": "V018-RETAINED-PACKAGE"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite",
+        "collection"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "STALE_OR_UNBOUND_EVIDENCE",
+        "ORPHAN_CLAIM",
+        "INVENTED_BUILD_RECORD",
+        "RETAINED_VALIDATION_FAILURE"
+      ],
+      "class": "provenance",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-17.json",
+      "id": "Q018-17",
+      "novel_evidence_type": "Actual reconstructed and validated engineering record including retained package members, report and closure/build identities.",
+      "pass_condition": "engineering_record_actual_equals_registered_validation && record_source_root == current_source_root && record_package_files_root_matches && report_and_mechanical_result_hashes_match && builds_and_determinism_equal_actual_current_replay",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "synthetic_dataset.tools.bootstrap_tier2.engineering_record",
+        "verify_engineering_record",
+        "current retained fixture/source freeze"
+      ],
+      "severity": "blocking",
+      "statement": "The current engineering record reconstructs from the fresh complete native fixture, current source freeze and current registered retained validators, with exact package/report/closure/build bindings.",
+      "verifier": "V018-ENGINEERING-RECORD"
+    },
+    {
+      "audit_groups": [
+        "freeze",
+        "phases",
+        "suite",
+        "carrier",
+        "channel",
+        "unicode",
+        "ground",
+        "collection",
+        "provenance"
+      ],
+      "audit_novel_evidence_type": "Independent actual-process/log/raw-artifact hash admission and original predicate projection reconciliation",
+      "block_conditions": [
+        "NONDETERMINISM",
+        "ORPHAN_CLAIM",
+        "SCOPE_LEAK",
+        "CLAIM_MUTATION",
+        "STALE_OR_UNBOUND_EVIDENCE"
+      ],
+      "class": "determinism",
+      "dependencies_trusted": [
+        "TCB-LEAN",
+        "TCB-ORCHESTRATION",
+        "TCB-CPYTHON",
+        "TCB-HASH",
+        "TCB-OS-ISOLATION",
+        "TCB-HARDWARE",
+        "TCB-ACCEPTED-INTERPRETATION"
+      ],
+      "evidence_path": "evidence/Q018-18.json",
+      "id": "Q018-18",
+      "novel_evidence_type": "Machine-readable complete evidence/hash/provenance/determinism reconciliation and three-state decision.",
+      "pass_condition": "proof_correspondence_provenance_claim_status_and_reproducible_hashes_equal && only_predeclared_volatile_fields_excluded && all_public_claims_bound && no_unused_required_evidence && all_required_claims_PASS && boundaries_explicit",
+      "possible_state_transition": {
+        "from": "PASS",
+        "to": "BLOCK"
+      },
+      "scope_inputs": [
+        "all new evidence",
+        "determinism comparison rule",
+        "provenance and report schemas"
+      ],
+      "severity": "blocking",
+      "statement": "The two fresh executions agree on the declared deterministic inventories/artifacts and all public claims have current claim/evidence/verifier/input/trust provenance; the final decision uses only frozen obligations.",
+      "verifier": "V018-FINAL-RECONCILIATION"
+    }
+  ],
+  "decision": {
+    "exit_codes": {
+      "0": "VERIFIED",
+      "1": "BLOCKED",
+      "2": "INFRASTRUCTURE_FAILURE"
+    },
+    "infrastructure_only": "Unexpected non-claim filesystem/runtime inability; missing malformed stale unbound contradictory evidence is BLOCKED",
+    "manual_override_allowed": false,
+    "unresolved_is_blocking": true,
+    "valid_states": [
+      "VERIFIED",
+      "BLOCKED",
+      "INFRASTRUCTURE_FAILURE"
+    ]
+  },
+  "evidence_admission": {
+    "closure_root_and_verifier_binding_required": true,
+    "evidence_rehashed_on_exit": true,
+    "hash_and_size_all_finalizer_evidence": true,
+    "no_old_PASS_transfer": true,
+    "no_symlink_components": true,
+    "process_returncode_exact_integer_not_bool": true,
+    "raw_stdout_stderr_rehashed": true,
+    "registered_argv_and_serial_timestamps_required": true,
+    "regular_paths": true,
+    "strict_utf8_json_unique_keys": true,
+    "whole_current_manifest_rehashed_entry_exit": true
+  },
+  "exclusions": [
+    "old-stage rescoring or repair",
+    "task semantic correctness or incident cause",
+    "LLM delivery consumption understanding or full semantic review",
+    "view completion -> ACCEPT/release/lifecycle",
+    "natural-language correspondence proof",
+    "universal refinement except separately existing actually kernel-accepted frozen fixture obligations",
+    "universal ground decidability or replay completeness",
+    "TESTED/END_TO_END_VERIFIED repository promotion",
+    "Tier3/Tier4",
+    "Python equivalence, extraction/compiler-chain or machine-code correctness",
+    "unlisted claims, future revisions or undeclared execution environments"
+  ],
+  "execution_status": "NOT_RUN",
+  "expected_counts": {
+    "claims": 18,
+    "inputs": 455,
+    "registered_ordered_tests": 180,
+    "source_files": 245,
+    "test_files": 130,
+    "test_modules": 15
+  },
+  "finite_scope": {
+    "carrier_families": [
+      "F-001",
+      "F-002",
+      "F-003",
+      "F-004",
+      "F-005",
+      "F-006"
+    ],
+    "carrier_negatives": [
+      "N-001",
+      "N-002",
+      "N-003",
+      "N-004",
+      "N-005",
+      "N-006",
+      "N-007",
+      "N-008",
+      "N-009",
+      "N-010",
+      "N-011",
+      "N-012",
+      "N-013",
+      "N-014",
+      "N-015",
+      "N-016"
+    ],
+    "channel": "Exactly intact/truncated/retry /user start0 slices at frozen 8192/2048/16384,8192/2048/100,4096/2048/16384 caps; no whole-field channel or consumption claim",
+    "ground_cases": "Exact frozen eight fixture/assignment pairs in current finalizer specification",
+    "ground_negatives": [
+      "N-GR-WIRE-ARITY",
+      "N-GR-WIRE-SORT",
+      "N-GR-WIRE-RECORD",
+      "N-GR-OPEN-RESIDUAL",
+      "N-GR-SOURCE-STALE",
+      "N-GR-MODULE-INVENTORY",
+      "N-GR-FORGED-READABLE",
+      "N-GR-BASE-READABLE",
+      "N-GR-INADMISSIBLE-AXIOM",
+      "N-GR-GUARANTEE-ORACLE",
+      "N-GR-REFINEMENT-ORACLE",
+      "N-GR-WEAKER-TYPE",
+      "N-GR-COMPILE-FAILURE",
+      "N-GR-DIAGNOSTIC-TRUNCATION",
+      "N-GR-BUDGET",
+      "N-GR-REVIEW-INCOMPLETE"
+    ],
+    "unicode": {
+      "exact_literal_Expr": 182,
+      "independent_rounds": [
+        "A",
+        "B"
+      ],
+      "lean_negatives": 5,
+      "legacy": 95,
+      "surrogate_paths": 5,
+      "surrogates": 6
+    }
+  },
+  "format": "verislop.support018-independent-audit-specification/1",
+  "frozen_authorities": {
+    "validation/tier2-support-018-qualification-plan/final-readiness-amendment-001/amendment.json": "sha256:c8efc757836f6ce9ef4ea86cd525639e6eda21e3471b7898ee4dde0624210d68",
+    "validation/tier2-support-018-qualification-plan/final-reconciliation-001/finalizer-registration.json": "sha256:2e27da7fb7d8826c11ec9c1ef02fb9e666048e0155097b12571e32b05c9eb6bb",
+    "validation/tier2-support-018-qualification-plan/final-reconciliation-001/reconcile.py": "sha256:dd04ec9ad77c4ea5c9d39f39f2c002edd8fa2364cd3d0ee514e065b1b083560f",
+    "validation/tier2-support-018-qualification-plan/final-reconciliation-001/report-schema.json": "sha256:623e057174a2d3679cd68154391d5caac808ca8bc6786d8ef263e4300c687910",
+    "validation/tier2-support-018-qualification-plan/final-reconciliation-001/specification.json": "sha256:01ed8995de69ed0f2f34a6be954e53f0c647e784563abd05c47290c7e67c9cac",
+    "validation/tier2-support-018-qualification-plan/qualification-plan.json": "sha256:dc2e31e939daaec8dfc7265c05eb0d854b13e17d7650f1eae41540d0f7b15a01",
+    "validation/tier2-support-018-qualification/execute-phases.py": "sha256:d71f57ac944c7944680a83cb1226e54929f39353b4ae10cef2d0bac68eefbe1e",
+    "validation/tier2-support-018-qualification/gate.py": "sha256:5f50427233cc10bd402c613489599bc0ef858b1ac4a6e03dd206d449e31c8a59",
+    "validation/tier2-support-018-qualification/prepare-inputs.py": "sha256:4ea374f4a2a7a7122726c6613c228c5559a786e4dde345585092a0564e097788",
+    "validation/tier2-support-018-qualification/preregistration.json": "sha256:c71599dd568059cfdea83f62984a838f52958482bb33d2e580efa885242703ae",
+    "validation/tier2-support-018-qualification/qualification-inputs.json": "sha256:a67e0cb003b6ba0073579e08e271f08a2a69f99b918b6297d36200398a262bd8",
+    "validation/tier2-support-018-qualification/qualification-specification.json": "sha256:efc7ec5a40dc449319b365f3132567596eb038eb9517e439f32674d1ae51e663",
+    "validation/tier2-support-018-qualification/source-freeze.json": "sha256:5d1b510f96f288c05b1741c0617dc0226ea4efcbf1630d214a0d686f7e5d80c0"
+  },
+  "frozen_phase_commands": [
+    {
+      "accepted_exit_code": 0,
+      "argv": [
+        "/home/augustus/anaconda3/bin/python",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-support-018-qualification/gate.py",
+        "run"
+      ],
+      "environment": {
+        "PYTHONPATH": "/home/augustus/VeriSlop_CLI"
+      },
+      "id": "registered-suite",
+      "required_report": "validation/tier2-support-018-qualification/run-result.json"
+    },
+    {
+      "accepted_exit_code": 0,
+      "argv": [
+        "/home/augustus/anaconda3/bin/python",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-carrier-view-support-018-implementation/verify_carrier_views.py",
+        "--manifest",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-support-018-qualification/verification-source-manifest.json",
+        "--output",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-support-018-qualification/carrier-fixtures"
+      ],
+      "environment": {
+        "PYTHONPATH": "/home/augustus/VeriSlop_CLI"
+      },
+      "id": "carrier-fixtures"
+    },
+    {
+      "accepted_exit_code": 0,
+      "argv": [
+        "/home/augustus/anaconda3/bin/python",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-unicode-literal-support-018/verify.py",
+        "--run-id",
+        "qualification-018"
+      ],
+      "environment": {
+        "PYTHONPATH": "/home/augustus/VeriSlop_CLI"
+      },
+      "id": "unicode-kernel"
+    },
+    {
+      "accepted_exit_code": 0,
+      "argv": [
+        "/home/augustus/anaconda3/bin/python",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-ground-replay-support-018-design/qualification.py",
+        "--output",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-support-018-qualification/ground-kernel",
+        "--source-freeze",
+        "sha256:d8a0820c0194b7ed864a7377218012aa4c9489e007a18d221ec80ec0696289a8",
+        "--source-manifest",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-support-018-qualification/verification-source-manifest.json"
+      ],
+      "environment": {
+        "PYTHONPATH": "/home/augustus/VeriSlop_CLI"
+      },
+      "id": "ground-kernel"
+    }
+  ],
+  "input_root": "sha256:a36acd8fa59e47f9285e69fd693c4cf1c03fe68d66d0062d57ab54ac0f6ba5f1",
+  "kernel_tool_hash": "sha256:d55d01a37b8442488b093a14a2f1497bdcc1fc879443b8a9e673fe998a57bcc6",
+  "mode": "PROSPECTIVE_REGISTERED_NOT_RUN",
+  "policy_hash": "sha256:8319119acc0c3df741f36474159a3a35ef574ada68ba671e203c6a501054503b",
+  "public_claims": [
+    {
+      "claims": [
+        "Q018-04",
+        "Q018-05",
+        "Q018-06",
+        "Q018-07"
+      ],
+      "id": "P018-ACCESS",
+      "text": "Frozen unrelated scalar-string fixtures have exact bounded own-carrier views and reconstruction under the declared tested channel surface."
+    },
+    {
+      "claims": [
+        "Q018-03",
+        "Q018-08",
+        "Q018-12",
+        "Q018-14"
+      ],
+      "id": "P018-POLICY",
+      "text": "The frozen support change preserves declared native transport, review, source authority and existing budgets."
+    },
+    {
+      "claims": [
+        "Q018-09",
+        "Q018-10",
+        "Q018-11"
+      ],
+      "id": "P018-GROUND",
+      "text": "Declared unrelated ground fixtures yield exact safe original-predicate observations after independent kernel replay under unchanged trust."
+    },
+    {
+      "claims": [
+        "Q018-12",
+        "Q018-13",
+        "Q018-14"
+      ],
+      "id": "P018-DIAGNOSTICS",
+      "text": "Unresolved construction retains bounded exact-attempt diagnostics and remains unsupported through the current receipt path."
+    },
+    {
+      "claims": [
+        "Q018-15",
+        "Q018-16",
+        "Q018-17",
+        "Q018-18"
+      ],
+      "id": "P018-CLOSURE",
+      "text": "The frozen unrelated complete native fixture reaches current registered restricted_source closure through fresh deterministic builds and retained validation."
+    },
+    {
+      "claims": [
+        "Q018-01",
+        "Q018-02",
+        "Q018-18"
+      ],
+      "id": "P018-BOUNDARY",
+      "text": "Only the frozen finite qualification obligations passed under the declared TCB; evidence belongs to the new current root."
+    }
+  ],
+  "qualification_closure_id": "support018-final-current-root-001",
+  "reader_contract": {
+    "capture_discovery": "Exactly one COLLECTION_TIER2_FROZEN_ATTEMPT_CAPTURE and RETAINED_CHECK_CAPTURE marker in current registered-suite.stdout.log, authenticated by current numeric suite receipt; no glob discovery of other captures",
+    "collection_chain": "Authenticated engineering-record -> referenced current native report -> report.files manifest -> declared package members -> mechanical_result/report.builds A/B process/artifact chain. Direct local-current-bridge/*.json guessing is prohibited. Representation absent or ambiguous is BLOCKED.",
+    "exact_arguments": "--final-report and --finalizer-receipt supplied by root only after final qualification completion; --output names a new write-once child directory",
+    "label_or_returncode_alone_sufficient": false,
+    "missing_or_ambiguous_evidence": "BLOCKED",
+    "models_builds_tests_comparators_processes": false,
+    "pure_artifact_reader": true,
+    "registered_verifier_imports": false,
+    "writes": "New independent audit output only; every evidence/source/package read-only"
+  },
+  "report_categories": [
+    "PROVED kernel theorem",
+    "CHECKED structural/view/support results",
+    "TESTED only explicitly executed finite checks, no repository TESTED promotion",
+    "ASSUMED accepted interpretation",
+    "TRUSTED TCB",
+    "OUT_OF_SCOPE exclusions"
+  ],
+  "source_root": "sha256:d8a0820c0194b7ed864a7377218012aa4c9489e007a18d221ec80ec0696289a8",
+  "specification_first": true,
+  "stop_rule": "Register specification and reader hashes without invocation. STOP until root supplies final completion paths. Then evaluate exactly the frozen finite surface once, preserve all failure evidence, emit three-state report, STOP.",
+  "tcb": {
+    "forbidden_new_authorities": [
+      "host evaluator or native_decide",
+      "reference/benchmark/task oracle",
+      "new axiom-policy exception",
+      "candidate/accepted guarantee theorem used to decide observation"
+    ],
+    "required_delta": [],
+    "trusted": [
+      {
+        "id": "TCB-LEAN",
+        "surface": "pinned Lean kernel/toolchain and unchanged permitted logical axioms; exact bytes/version/olean closure registered"
+      },
+      {
+        "id": "TCB-ORCHESTRATION",
+        "surface": "current controller/reifier/export/audit/launcher code as existing explicit orchestration trust, not host truth oracle"
+      },
+      {
+        "id": "TCB-CPYTHON",
+        "surface": "declared runtime/standard library strict JSON and Unicode/filesystem semantics"
+      },
+      {
+        "id": "TCB-HASH",
+        "surface": "declared SHA256 implementation and collision resistance"
+      },
+      {
+        "id": "TCB-OS-ISOLATION",
+        "surface": "OS/filesystem/network/memory process isolation semantics"
+      },
+      {
+        "id": "TCB-HARDWARE",
+        "surface": "execution hardware"
+      },
+      {
+        "id": "TCB-ACCEPTED-INTERPRETATION",
+        "surface": "existing accepted natural-language interpretation boundary; not proved equivalent here"
+      }
+    ],
+    "untrusted": [
+      "LLM or human fixture/proof proposals",
+      "normalization and readable generators",
+      "candidate supplied results or receipts"
+    ]
+  },
+  "toolchain": {
+    "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+    "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "pin": "leanprover/lean4:v4.34.1",
+    "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+  }
+}
