@@ -1,0 +1,99 @@
+90:11: unsolved goals
+case pos
+x : Input
+g : String
+k : Nat
+a : Stats
+e : Event
+v : Int
+hv : e.value = some v
+hg : e.group = g
+hl : x.start + Int.ofNat k * x.width ≤ e.time
+hu : e.time < x.start + Int.ofNat k * x.width + x.width
+he : e.time < x.end
+⊢ ((if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).count,
+      (if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).sum,
+      ()) =
+    if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then (a.count + 1, a.sum + v, ())
+    else (a.count, a.sum, ())
+
+case pos
+x : Input
+g : String
+k : Nat
+a : Stats
+e : Event
+v : Int
+hv : e.value = some v
+hg : e.group = g
+hl : x.start + Int.ofNat k * x.width ≤ e.time
+hu : ¬e.time < x.start + Int.ofNat k * x.width + x.width
+he : e.time < x.end
+⊢ ((if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).count,
+      (if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).sum,
+      ()) =
+    if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then (a.count + 1, a.sum + v, ())
+    else (a.count, a.sum, ())
+
+case pos
+x : Input
+g : String
+k : Nat
+a : Stats
+e : Event
+v : Int
+hv : e.value = some v
+hg : e.group = g
+hl : ¬x.start + Int.ofNat k * x.width ≤ e.time
+hu : e.time < x.start + Int.ofNat k * x.width + x.width
+he : e.time < x.end
+⊢ ((if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).count,
+      (if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).sum,
+      ()) =
+    if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then (a.count + 1, a.sum + v, ())
+    else (a.count, a.sum, ())
+
+case pos
+x : Input
+g : String
+k : Nat
+a : Stats
+e : Event
+v : Int
+hv : e.value = some v
+hg : e.group = g
+hl : ¬x.start + Int.ofNat k * x.width ≤ e.time
+hu : ¬e.time < x.start + Int.ofNat k * x.width + x.width
+he : e.time < x.end
+⊢ ((if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).count,
+      (if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).sum,
+      ()) =
+    if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then (a.count + 1, a.sum + v, ())
+    else (a.count, a.sum, ())
+
+113:2: `simp` made no progress
+
+128:2: Type mismatch: After simplification, term
+  h
+ has type
+  List.map packOutput (List.foldl (fun a g => a ++ group_rows x g) [] (groups x)) =
+    List.foldl (fun a g => a ++ rawGroup x g) [] (List.map (fun g => g) (groups x))
+but is expected to have type
+  List.map packOutput (List.foldl (fun _v1 _v2 => _v1.append (group_rows x _v2)) [] (groups x)) =
+    List.foldl (fun a g => a ++ rawGroup x g) [] (groups x)

@@ -1,0 +1,64 @@
+```lean
+import VeriSlopBridgeGoal
+
+set_option maxRecDepth 100000
+set_option maxHeartbeats 20000000
+
+namespace VeriSlopBridgeProof
+
+private theorem foldl_transport {α β γ δ : Type}
+    (f : α → β) (g : γ → δ)
+    (step : α → γ → α) (step' : β → δ → β)
+    (h : ∀ a x, f (step a x) = step' (f a) (g x))
+    (xs : List γ) (a : α) :
+    f (xs.foldl step a) = (xs.map g).foldl step' (f a) := by
+  induction xs generalizing a with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [List.foldl_cons, List.map_cons, ih, h]
+
+private theorem foldl_map_input {α β γ : Type}
+    (f : α → β) (step : γ → β → γ) (xs : List α) (a : γ) :
+    (xs.map f).foldl step a =
+      xs.foldl (fun acc x => step acc (f x)) a := by
+  induction xs generalizing a with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [List.map_cons, List.foldl_cons, ih]
+
+theorem edge : VeriSlopBridgeGoal.EdgeProp := by
+  apply VeriSlopBridgeGoal.edge_of_refines
+  intro x
+  with_unfolding_all
+    simp [VeriSlopBridgeGoal.source_fn_solve,
+      VeriSlopBridgeGoal.entry_solve,
+      VeriSlopBridgeGoal.checkedProgram,
+      VeriSlopBridgeGoal.rawProgram,
+      VeriSlopBridgeGoal.profile,
+      VeriSlopBridgeGoal.adapter_0,
+      VeriSlopBridgeGoal.adapter_1,
+      VeriSlopBridgeGoal.adapter_2,
+      VeriSlopBridgeGoal.adapter_3,
+      VeriSlopBridgeGoal.adapter_4,
+      VeriSlopBridgeGoal.adapter_5,
+      VeriSlopBridgeGoal.adapter_6,
+      VeriSlopBridgeGoal.adapter_7,
+      VeriSlopBridgeGoal.adapter_8,
+      VSCore3.stringAdapter, VSCore3.intAdapter,
+      VSCore3.natAdapter, VSCore3.optionAdapter,
+      VSCore3.listAdapter,
+      VeriSlopAST.solve, VeriSlopAST.groups,
+      VeriSlopAST.group_rows, VeriSlopAST.step,
+      VeriSlopAST.stats, VeriSlopAST.bucket_count,
+      foldl_map_input, List.map_map, List.map_append,
+      List.foldl_cons, List.foldl_nil,
+      Bool.and_eq_true, decide_eq_true_eq]
+    <;> first
+      | rfl
+      | (congr 1 <;> funext <;>
+          first
+            | rfl
+            | (split <;> simp_all))
+
+end VeriSlopBridgeProof
+```

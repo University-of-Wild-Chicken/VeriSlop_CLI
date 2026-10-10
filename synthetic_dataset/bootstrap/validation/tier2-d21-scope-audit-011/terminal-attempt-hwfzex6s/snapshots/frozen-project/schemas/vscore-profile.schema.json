@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:vscore-profile:0.1",
+  "title": "VSCore representation profile derived from an accepted contract registry",
+  "$comment": "A candidate supplies a copy as its node profile; the registered checker requires byte equality with the derivation from the accepted profile registry.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "format": {
+      "const": "verislop.vscore-profile/0.1"
+    },
+    "language": {
+      "const": "vscore/0.1"
+    },
+    "accepted_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "accepted_profile_hash": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "enums": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "constructors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          "lean_decl": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lean_constructors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "id",
+          "constructors",
+          "lean_decl",
+          "lean_constructors"
+        ]
+      }
+    },
+    "representation": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "adapters": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "language",
+    "accepted_profile",
+    "accepted_profile_hash",
+    "enums",
+    "representation",
+    "adapters"
+  ]
+}

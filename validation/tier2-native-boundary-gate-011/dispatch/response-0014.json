@@ -1,0 +1,20 @@
+{
+  "task": "D21",
+  "arm": "verislop",
+  "supplemental_protocol_root": "sha256:2d7070989ccba4a98a20d5e864a4ac218f1df901659b5c701aec22d9be214928",
+  "source_root": "sha256:b9d1ba95eae0bf4e1eb824b5d729ad26b33bf2d5bcc857899825eb446babac5a",
+  "request_set_root": "sha256:846461144ed0dcaec457d5a20f414910ab82a3409562919b612261adc8ac910c",
+  "spawn_message_sha256": "sha256:495d35a733e6a0d771e6a19998123bcf336b577effe96bae7d1e907ded6fd0e3",
+  "carrier_path": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-011/run/artifacts/D21/verislop/mailbox/carrier-0014.json",
+  "carrier_sha256": "sha256:f93cdb36b5680a94ca3751ce391f96fdc5ba556d369efc12b52904576c191790",
+  "model_override": "gpt-6.1-sol",
+  "fork_turns": "none",
+  "transport": "collaboration",
+  "requested_model": "gpt-6.1-sol",
+  "relay_mode": "file",
+  "request_id": "0014",
+  "request_sha256": "sha256:28a5c63e7079e1181970495f5d6311995d8159c32cb730f363dc5848fde00c33",
+  "agent_task_id": "/root/native_dispatch_011/native_tier2_d21_0014",
+  "text": "```lean\nimport VeriSlopBridgeGoal\n\nset_option maxRecDepth 100000\nset_option maxHeartbeats 20000000\n\nnamespace VeriSlopBridgeProof\n\nprivate theorem foldl_transport {α β γ δ : Type}\n    (f : α → β) (g : γ → δ)\n    (step : α → γ → α) (step' : β → δ → β)\n    (h : ∀ a x, f (step a x) = step' (f a) (g x))\n    (xs : List γ) (a : α) :\n    f (xs.foldl step a) = (xs.map g).foldl step' (f a) := by\n  induction xs generalizing a with\n  | nil => rfl\n  | cons x xs ih =>\n    simp only [List.foldl_cons, List.map_cons, ih, h]\n\nprivate theorem foldl_map_input {α β γ : Type}\n    (f : α → β) (step : γ → β → γ) (xs : List α) (a : γ) :\n    (xs.map f).foldl step a =\n      xs.foldl (fun acc x => step acc (f x)) a := by\n  induction xs generalizing a with\n  | nil => rfl\n  | cons x xs ih =>\n    simp only [List.map_cons, List.foldl_cons, ih]\n\ntheorem edge : VeriSlopBridgeGoal.EdgeProp := by\n  apply VeriSlopBridgeGoal.edge_of_refines\n  intro x\n  with_unfolding_all\n    simp [VeriSlopBridgeGoal.source_fn_solve,\n      VeriSlopBridgeGoal.entry_solve,\n      VeriSlopBridgeGoal.checkedProgram,\n      VeriSlopBridgeGoal.rawProgram,\n      VeriSlopBridgeGoal.profile,\n      VeriSlopBridgeGoal.adapter_0,\n      VeriSlopBridgeGoal.adapter_1,\n      VeriSlopBridgeGoal.adapter_2,\n      VeriSlopBridgeGoal.adapter_3,\n      VeriSlopBridgeGoal.adapter_4,\n      VeriSlopBridgeGoal.adapter_5,\n      VeriSlopBridgeGoal.adapter_6,\n      VeriSlopBridgeGoal.adapter_7,\n      VeriSlopBridgeGoal.adapter_8,\n      VSCore3.stringAdapter, VSCore3.intAdapter,\n      VSCore3.natAdapter, VSCore3.optionAdapter,\n      VSCore3.listAdapter,\n      VeriSlopAST.solve, VeriSlopAST.groups,\n      VeriSlopAST.group_rows, VeriSlopAST.step,\n      VeriSlopAST.stats, VeriSlopAST.bucket_count,\n      foldl_map_input, List.map_map, List.map_append,\n      List.foldl_cons, List.foldl_nil,\n      Bool.and_eq_true, decide_eq_true_eq]\n    <;> first\n      | rfl\n      | (congr 1 <;> funext <;>\n          first\n            | rfl\n            | (split <;> simp_all))\n\nend VeriSlopBridgeProof\n```",
+  "model_identity_attested": false
+}

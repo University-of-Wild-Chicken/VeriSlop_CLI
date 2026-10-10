@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:acceptance-certificate:0.1",
+  "title": "Immutable Lean acceptance certificate binding claims, proof inventory, environment, checkers and policy",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "artifact_kind": {
+      "const": "acceptance_certificate"
+    },
+    "contract_input_root": {
+      "$ref": "#/$defs/hash"
+    },
+    "gate": {
+      "enum": [
+        "accepted_and_proved",
+        "typechecked_exploratory",
+        "blocked"
+      ]
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "allowed_axioms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "hash",
+        "allowed_axioms"
+      ]
+    },
+    "toolchain": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      },
+      "required": [
+        "pin",
+        "version",
+        "githash",
+        "lean_binary_sha256"
+      ]
+    },
+    "olean_closure": {
+      "$ref": "#/$defs/hash"
+    },
+    "checkers": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/hash"
+      }
+    },
+    "sandbox": {
+      "type": "object"
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/artifact"
+        },
+        "olean": {
+          "$ref": "#/$defs/artifact"
+        },
+        "environment_export": {
+          "$ref": "#/$defs/artifact"
+        },
+        "profile": {
+          "$ref": "#/$defs/artifact"
+        },
+        "statements": {
+          "$ref": "#/$defs/artifact"
+        }
+      },
+      "required": [
+        "source",
+        "olean",
+        "environment_export",
+        "profile",
+        "statements"
+      ]
+    },
+    "obligations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "kind": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "representation": {
+            "enum": [
+              "contract_dsl",
+              "contract_facets",
+              "source_facets",
+              "lean_expr",
+              "typed_metadata",
+              "none"
+            ]
+          },
+          "lean_symbol": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "statement_hash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "typechecked": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "NOT_APPLICABLE",
+              "PENDING"
+            ]
+          },
+          "proved": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "NOT_APPLICABLE",
+              "PENDING"
+            ]
+          },
+          "axioms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "uses_proof": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "witnesses": {}
+        },
+        "required": [
+          "revision",
+          "kind",
+          "role",
+          "representation",
+          "lean_symbol",
+          "statement_hash",
+          "typechecked",
+          "proved",
+          "axioms",
+          "codes",
+          "uses_proof",
+          "witnesses"
+        ]
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/diagnostic"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "contract_input_root",
+    "gate",
+    "policy",
+    "toolchain",
+    "olean_closure",
+    "checkers",
+    "sandbox",
+    "artifacts",
+    "obligations",
+    "diagnostics"
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "blocking",
+            "infrastructure",
+            "warning",
+            "info"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "details": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "message",
+        "obligations",
+        "claims"
+      ]
+    }
+  }
+}

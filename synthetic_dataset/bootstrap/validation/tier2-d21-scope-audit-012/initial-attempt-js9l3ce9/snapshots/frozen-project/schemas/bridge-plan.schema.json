@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:bridge-plan:0.1",
+  "title": "Frozen bridge claim graph and artifact slots; not verification evidence",
+  "$comment": "Structure only. The registered validator must check unique IDs, exact accepted obligation coverage, all references, role/model bindings, an acyclic premise graph, registered verifier assignments, and endpoint coverage. Submitted fields never assign lifecycle outcomes.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "format": { "const": "verislop.bridge-plan/0.1" },
+    "bridge_id": { "$ref": "#/$defs/id" },
+    "tier": { "enum": [2, 3, 4] },
+    "endpoint": { "enum": ["restricted_source", "proof_bearing_source", "extracted_language", "machine_code_region", "native_binary"] },
+    "accepted_ir": { "$ref": "#/$defs/hash" },
+    "acceptance_certificate": { "$ref": "#/$defs/hash" },
+    "nodes": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/node" } },
+    "artifact_slots": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/slot" } },
+    "claims": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/claim" } },
+    "obligations": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/obligation" } },
+    "edges": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/edge" } },
+    "reproducible_slots": { "$ref": "#/$defs/nonempty_ids" },
+    "declared_trust": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/trust" } }
+  },
+  "required": ["schema_version", "format", "bridge_id", "tier", "endpoint", "accepted_ir", "acceptance_certificate", "nodes", "artifact_slots", "claims", "obligations", "edges", "reproducible_slots", "declared_trust"],
+  "allOf": [
+    { "if": { "properties": { "tier": { "const": 2 } } }, "then": { "properties": { "endpoint": { "const": "restricted_source" } } } },
+    { "if": { "properties": { "tier": { "const": 3 } } }, "then": { "properties": { "endpoint": { "enum": ["proof_bearing_source", "extracted_language"] } } } },
+    { "if": { "properties": { "tier": { "const": 4 } } }, "then": { "properties": { "endpoint": { "enum": ["machine_code_region", "native_binary"] } } } }
+  ],
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$", "minLength": 71, "maxLength": 71 },
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:/@+-]*(?![\\s\\S])", "maxLength": 256 },
+    "ids": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "nonempty_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "path": { "type": "string", "maxLength": 4096, "pattern": "^(?!/)(?!.*(?:^|/)\\.{1,2}(?:/|$))[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*(?![\\s\\S])" },
+    "hashed_ref": {
+      "type": "object", "additionalProperties": false,
+      "properties": { "id": { "$ref": "#/$defs/id" }, "sha256": { "$ref": "#/$defs/hash" } },
+      "required": ["id", "sha256"]
+    },
+    "hashed_refs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/hashed_ref" } },
+    "node": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "node_id": { "$ref": "#/$defs/id" },
+        "kind": { "$ref": "#/$defs/id" },
+        "artifact_slots": { "$ref": "#/$defs/nonempty_ids" },
+        "model_ref": { "$ref": "#/$defs/hashed_ref" },
+        "profile_ref": { "$ref": "#/$defs/hashed_ref" }
+      },
+      "required": ["node_id", "kind", "artifact_slots", "model_ref", "profile_ref"]
+    },
+    "slot": {
+      "type": "object", "additionalProperties": false,
+      "properties": { "slot_id": { "$ref": "#/$defs/id" }, "role": { "$ref": "#/$defs/id" }, "node_id": { "$ref": "#/$defs/id" } },
+      "required": ["slot_id", "role", "node_id"]
+    },
+    "claim": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "claim_id": { "$ref": "#/$defs/id" },
+        "verifier_id": { "$ref": "#/$defs/id" },
+        "root_kind": { "enum": ["bridge_plan", "bridge_artifacts", "semantic_edge"] },
+        "result_predicate": { "enum": ["bridge-semantic-edge/0.1", "bridge-structural/0.1"] },
+        "premises": { "$ref": "#/$defs/ids" }
+      },
+      "required": ["claim_id", "verifier_id", "root_kind", "result_predicate", "premises"],
+      "allOf": [
+        { "if": { "properties": { "result_predicate": { "const": "bridge-semantic-edge/0.1" } } },
+          "then": { "properties": { "root_kind": { "const": "semantic_edge" } } },
+          "else": { "properties": { "root_kind": { "enum": ["bridge_plan", "bridge_artifacts"] } } } }
+      ]
+    },
+    "obligation": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "accepted_statement_hash": { "$ref": "#/$defs/hash" },
+        "required_claims": { "$ref": "#/$defs/nonempty_ids" }
+      },
+      "required": ["id", "revision", "accepted_statement_hash", "required_claims"]
+    },
+    "edge": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "edge_id": { "$ref": "#/$defs/id" },
+        "claim_id": { "$ref": "#/$defs/id" },
+        "source_node": { "$ref": "#/$defs/id" },
+        "target_node": { "$ref": "#/$defs/id" },
+        "model_refs": { "$ref": "#/$defs/hashed_refs" },
+        "profile_refs": { "$ref": "#/$defs/hashed_refs" },
+        "relation": { "$ref": "#/$defs/hashed_ref" },
+        "expected_proposition_hash": { "$ref": "#/$defs/hash" }
+      },
+      "required": ["edge_id", "claim_id", "source_node", "target_node", "model_refs", "profile_refs", "relation", "expected_proposition_hash"]
+    },
+    "trust": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["logic", "checker", "semantics", "artifact_io", "environment", "hardware", "external_assumption"] },
+        "description": { "type": "string", "minLength": 1 }
+      },
+      "required": ["id", "kind", "description"]
+    }
+  }
+}

@@ -1,0 +1,464 @@
+{
+  "checks": "if C then match v with none=>a|some u=>b else a; match v with none=>a|some u=>if C then b else a; C and b unchanged under exact named binders",
+  "entry_declarations_other_helpers": "identical",
+  "method": "pure tree substitution only; no execution/refinement proof",
+  "stats2": {
+    "initial": {
+      "fields": [
+        {
+          "id": "count",
+          "value": {
+            "tag": "nat",
+            "value": "0"
+          }
+        },
+        {
+          "id": "sum",
+          "value": {
+            "tag": "int",
+            "value": "0"
+          }
+        }
+      ],
+      "record": "Stats",
+      "tag": "record"
+    },
+    "source": {
+      "field": "events",
+      "tag": "project",
+      "value": {
+        "name": "input",
+        "tag": "named_var"
+      }
+    },
+    "step": {
+      "cond": {
+        "left": {
+          "left": {
+            "field": "group",
+            "tag": "project",
+            "value": {
+              "name": "item0",
+              "tag": "named_var"
+            }
+          },
+          "right": {
+            "name": "group",
+            "tag": "named_var"
+          },
+          "tag": "eq"
+        },
+        "right": {
+          "left": {
+            "left": {
+              "left": {
+                "field": "start",
+                "tag": "project",
+                "value": {
+                  "name": "input",
+                  "tag": "named_var"
+                }
+              },
+              "right": {
+                "left": {
+                  "tag": "nat_to_int",
+                  "value": {
+                    "name": "index",
+                    "tag": "named_var"
+                  }
+                },
+                "right": {
+                  "field": "width",
+                  "tag": "project",
+                  "value": {
+                    "name": "input",
+                    "tag": "named_var"
+                  }
+                },
+                "tag": "mul"
+              },
+              "tag": "add"
+            },
+            "right": {
+              "field": "time",
+              "tag": "project",
+              "value": {
+                "name": "item0",
+                "tag": "named_var"
+              }
+            },
+            "tag": "le"
+          },
+          "right": {
+            "left": {
+              "left": {
+                "field": "time",
+                "tag": "project",
+                "value": {
+                  "name": "item0",
+                  "tag": "named_var"
+                }
+              },
+              "right": {
+                "left": {
+                  "left": {
+                    "field": "start",
+                    "tag": "project",
+                    "value": {
+                      "name": "input",
+                      "tag": "named_var"
+                    }
+                  },
+                  "right": {
+                    "left": {
+                      "tag": "nat_to_int",
+                      "value": {
+                        "name": "index",
+                        "tag": "named_var"
+                      }
+                    },
+                    "right": {
+                      "field": "width",
+                      "tag": "project",
+                      "value": {
+                        "name": "input",
+                        "tag": "named_var"
+                      }
+                    },
+                    "tag": "mul"
+                  },
+                  "tag": "add"
+                },
+                "right": {
+                  "field": "width",
+                  "tag": "project",
+                  "value": {
+                    "name": "input",
+                    "tag": "named_var"
+                  }
+                },
+                "tag": "add"
+              },
+              "tag": "lt"
+            },
+            "right": {
+              "left": {
+                "field": "time",
+                "tag": "project",
+                "value": {
+                  "name": "item0",
+                  "tag": "named_var"
+                }
+              },
+              "right": {
+                "field": "end",
+                "tag": "project",
+                "value": {
+                  "name": "input",
+                  "tag": "named_var"
+                }
+              },
+              "tag": "lt"
+            },
+            "tag": "and"
+          },
+          "tag": "and"
+        },
+        "tag": "and"
+      },
+      "else": {
+        "name": "acc0",
+        "tag": "named_var"
+      },
+      "tag": "if",
+      "then": {
+        "none": {
+          "name": "acc0",
+          "tag": "named_var"
+        },
+        "scrutinee": {
+          "field": "value",
+          "tag": "project",
+          "value": {
+            "name": "item0",
+            "tag": "named_var"
+          }
+        },
+        "some": {
+          "fields": [
+            {
+              "id": "count",
+              "value": {
+                "left": {
+                  "field": "count",
+                  "tag": "project",
+                  "value": {
+                    "name": "acc0",
+                    "tag": "named_var"
+                  }
+                },
+                "right": {
+                  "tag": "nat",
+                  "value": "1"
+                },
+                "tag": "add"
+              }
+            },
+            {
+              "id": "sum",
+              "value": {
+                "left": {
+                  "field": "sum",
+                  "tag": "project",
+                  "value": {
+                    "name": "acc0",
+                    "tag": "named_var"
+                  }
+                },
+                "right": {
+                  "name": "some1",
+                  "tag": "named_var"
+                },
+                "tag": "add"
+              }
+            }
+          ],
+          "record": "Stats",
+          "tag": "record"
+        },
+        "tag": "match_option"
+      }
+    },
+    "tag": "list_fold"
+  },
+  "stats3": {
+    "initial": {
+      "fields": [
+        {
+          "id": "count",
+          "value": {
+            "tag": "nat",
+            "value": "0"
+          }
+        },
+        {
+          "id": "sum",
+          "value": {
+            "tag": "int",
+            "value": "0"
+          }
+        }
+      ],
+      "record": "Stats",
+      "tag": "record"
+    },
+    "source": {
+      "field": "events",
+      "tag": "project",
+      "value": {
+        "name": "input",
+        "tag": "named_var"
+      }
+    },
+    "step": {
+      "none": {
+        "name": "acc0",
+        "tag": "named_var"
+      },
+      "scrutinee": {
+        "field": "value",
+        "tag": "project",
+        "value": {
+          "name": "item0",
+          "tag": "named_var"
+        }
+      },
+      "some": {
+        "cond": {
+          "left": {
+            "left": {
+              "field": "group",
+              "tag": "project",
+              "value": {
+                "name": "item0",
+                "tag": "named_var"
+              }
+            },
+            "right": {
+              "name": "group",
+              "tag": "named_var"
+            },
+            "tag": "eq"
+          },
+          "right": {
+            "left": {
+              "left": {
+                "left": {
+                  "field": "start",
+                  "tag": "project",
+                  "value": {
+                    "name": "input",
+                    "tag": "named_var"
+                  }
+                },
+                "right": {
+                  "left": {
+                    "tag": "nat_to_int",
+                    "value": {
+                      "name": "index",
+                      "tag": "named_var"
+                    }
+                  },
+                  "right": {
+                    "field": "width",
+                    "tag": "project",
+                    "value": {
+                      "name": "input",
+                      "tag": "named_var"
+                    }
+                  },
+                  "tag": "mul"
+                },
+                "tag": "add"
+              },
+              "right": {
+                "field": "time",
+                "tag": "project",
+                "value": {
+                  "name": "item0",
+                  "tag": "named_var"
+                }
+              },
+              "tag": "le"
+            },
+            "right": {
+              "left": {
+                "left": {
+                  "field": "time",
+                  "tag": "project",
+                  "value": {
+                    "name": "item0",
+                    "tag": "named_var"
+                  }
+                },
+                "right": {
+                  "left": {
+                    "left": {
+                      "field": "start",
+                      "tag": "project",
+                      "value": {
+                        "name": "input",
+                        "tag": "named_var"
+                      }
+                    },
+                    "right": {
+                      "left": {
+                        "tag": "nat_to_int",
+                        "value": {
+                          "name": "index",
+                          "tag": "named_var"
+                        }
+                      },
+                      "right": {
+                        "field": "width",
+                        "tag": "project",
+                        "value": {
+                          "name": "input",
+                          "tag": "named_var"
+                        }
+                      },
+                      "tag": "mul"
+                    },
+                    "tag": "add"
+                  },
+                  "right": {
+                    "field": "width",
+                    "tag": "project",
+                    "value": {
+                      "name": "input",
+                      "tag": "named_var"
+                    }
+                  },
+                  "tag": "add"
+                },
+                "tag": "lt"
+              },
+              "right": {
+                "left": {
+                  "field": "time",
+                  "tag": "project",
+                  "value": {
+                    "name": "item0",
+                    "tag": "named_var"
+                  }
+                },
+                "right": {
+                  "field": "end",
+                  "tag": "project",
+                  "value": {
+                    "name": "input",
+                    "tag": "named_var"
+                  }
+                },
+                "tag": "lt"
+              },
+              "tag": "and"
+            },
+            "tag": "and"
+          },
+          "tag": "and"
+        },
+        "else": {
+          "name": "acc0",
+          "tag": "named_var"
+        },
+        "tag": "if",
+        "then": {
+          "fields": [
+            {
+              "id": "count",
+              "value": {
+                "left": {
+                  "field": "count",
+                  "tag": "project",
+                  "value": {
+                    "name": "acc0",
+                    "tag": "named_var"
+                  }
+                },
+                "right": {
+                  "tag": "nat",
+                  "value": "1"
+                },
+                "tag": "add"
+              }
+            },
+            {
+              "id": "sum",
+              "value": {
+                "left": {
+                  "field": "sum",
+                  "tag": "project",
+                  "value": {
+                    "name": "acc0",
+                    "tag": "named_var"
+                  }
+                },
+                "right": {
+                  "name": "some1",
+                  "tag": "named_var"
+                },
+                "tag": "add"
+              }
+            }
+          ],
+          "record": "Stats",
+          "tag": "record"
+        }
+      },
+      "tag": "match_option"
+    },
+    "tag": "list_fold"
+  },
+  "step": "identical after exact bucket_start syntactic substitution"
+}

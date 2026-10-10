@@ -1,0 +1,323 @@
+{
+  "obligations": [
+    {
+      "id": "D1",
+      "revision": 1,
+      "kind": "entity",
+      "role": "declaration",
+      "statement": "The input is a record containing events, start, end, width and fill. Each event contains a Unicode-scalar string group, mathematical integer time and nullable mathematical integer value. The result is a list of records containing group, start, count and nullable integer value. Define G as the scalar-codepoint lexicographically sorted distinct group names occurring anywhere in events. Define B as the increasing sequence start+k*width for natural k with start+k*width<end. For g in G and b in B, define M(g,b) as the multiset of event occurrences with group=g, non-null value and b<=time<min(b+width,end), n(g,b) as its cardinality, and s(g,b) as the sum of its values.",
+      "required": true,
+      "scope": ["typed input, result and mathematical aggregation definitions"],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Input and output types represent the specified JSON structures under data-pipeline/0.3.",
+        "Event occurrences retain multiplicity in M.",
+        "Integer domains are unbounded and strings consist of Unicode scalar values."
+      ],
+      "sources": [
+        {"clause_id": "C3", "origin": "explicit", "interpretation": "Typed JSON representation."},
+        {"clause_id": "C5", "origin": "explicit", "interpretation": "Input fields and domains."},
+        {"clause_id": "C6", "origin": "explicit", "interpretation": "Group domain."},
+        {"clause_id": "C7", "origin": "explicit", "interpretation": "Bucket starts."},
+        {"clause_id": "C8", "origin": "explicit", "interpretation": "Bucket intervals."},
+        {"clause_id": "C9", "origin": "explicit", "interpretation": "Contributing occurrences."},
+        {"clause_id": "C10", "origin": "explicit", "interpretation": "Cardinality."},
+        {"clause_id": "C15", "origin": "explicit", "interpretation": "Result fields."},
+        {"clause_id": "C21", "origin": "explicit", "interpretation": "Integer semantics."},
+        {"clause_id": "C22", "origin": "explicit", "interpretation": "String semantics."}
+      ]
+    },
+    {
+      "id": "A1",
+      "revision": 1,
+      "kind": "precondition",
+      "role": "assumption",
+      "statement": "The caller supplies the specified typed input with width a positive integer, start<=end and fill equal to none or previous. No further input bounds or preconditions apply.",
+      "required": true,
+      "scope": ["solve invocation"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}],
+      "acceptance_criteria": ["width>0 and start<=end; all fields have the stated domains; no additional restrictions."],
+      "sources": [
+        {"clause_id": "C5", "origin": "explicit", "interpretation": "Stated input domain."},
+        {"clause_id": "C23", "origin": "explicit", "interpretation": "No additional assumptions."}
+      ]
+    },
+    {
+      "id": "O1",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "Deliver canonical program.vscore.json containing exactly one admitted typed entry solve of arity 1, using vscore/0.3 under normative Lean vscore-semantics/0.3 and data-pipeline/0.3. For every input satisfying A1 its typed execution returns the specified JSON result structure. This actual entry must universally refine the complete aggregation specification, be typed total, deterministic, input preserving, free of external I/O and floating point, pure data and restricted-runtime-only.",
+      "required": true,
+      "scope": ["delivered source and all specified inputs"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}, {"id": "A1", "relation": "assumes"}],
+      "acceptance_criteria": [
+        "Canonical file, entry name, arity, language semantics and serialization profile match the request.",
+        "The admitted entry represents the specified input and output structures and works over the entire stated domain.",
+        "All seven closed source properties hold for solve; result existence or an unrelated entry cannot substitute for implementation refinement."
+      ],
+      "sources": [
+        {"clause_id": "C2", "origin": "explicit", "interpretation": "Delivery identity."},
+        {"clause_id": "C3", "origin": "explicit", "interpretation": "Typed representation."},
+        {"clause_id": "C17", "origin": "explicit", "interpretation": "Normative source and serialization."},
+        {"clause_id": "C19", "origin": "explicit", "interpretation": "Total pure deterministic execution."},
+        {"clause_id": "C20", "origin": "explicit", "interpretation": "Input preservation and effects."},
+        {"clause_id": "C21", "origin": "explicit", "interpretation": "Exact integer arithmetic."},
+        {"clause_id": "C23", "origin": "explicit", "interpretation": "Complete domain."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Source delivery for every guarantee."},
+        {"clause_id": "C35", "origin": "explicit", "interpretation": "No substitution by mathematical existence."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Universal source refinement."},
+        {"clause_id": "C40", "origin": "explicit", "interpretation": "O1 source and value facets."}
+      ]
+    },
+    {
+      "id": "O2",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "For every input satisfying A1, solve uses exactly G: every distinct event group appears once in the group enumeration in Unicode scalar-codepoint lexicographic order, including groups whose events are all outside the requested interval or have null values. This behavior must be universally implemented by program.vscore.json's solve of arity 1 with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+      "required": true,
+      "scope": ["all specified inputs and delivered solve source"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}, {"id": "A1", "relation": "assumes"}],
+      "acceptance_criteria": [
+        "Group enumeration equals G without omissions or repetitions.",
+        "Empty events yields an empty group enumeration.",
+        "The actual canonical solve source universally refines this proposition and satisfies all seven source properties."
+      ],
+      "sources": [
+        {"clause_id": "C6", "origin": "explicit", "interpretation": "Complete sorted distinct group enumeration."},
+        {"clause_id": "C22", "origin": "explicit", "interpretation": "Scalar-codepoint ordering."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Required canonical source."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Universal implementation refinement."},
+        {"clause_id": "C40", "origin": "explicit", "interpretation": "O2 source and value facets."}
+      ]
+    },
+    {
+      "id": "O3",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "For every input satisfying A1 and every g in G, solve emits exactly one bucket for each b in B, covering [b,min(b+width,end)). There are no other buckets; when start=end there are none. This behavior must be universally implemented by program.vscore.json's solve of arity 1 with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+      "required": true,
+      "scope": ["all groups, all specified intervals and delivered source"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}, {"id": "A1", "relation": "assumes"}],
+      "acceptance_criteria": [
+        "Bucket starts are exactly start+k*width<end for natural k.",
+        "Intervals include their lower endpoint and exclude their upper endpoint, truncating the last interval at end.",
+        "The actual canonical solve source universally refines this proposition and satisfies all seven source properties."
+      ],
+      "sources": [
+        {"clause_id": "C7", "origin": "explicit", "interpretation": "Bucket progression."},
+        {"clause_id": "C8", "origin": "explicit", "interpretation": "Strict stopping condition and half-open coverage."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Required canonical source."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Universal implementation refinement."},
+        {"clause_id": "C40", "origin": "explicit", "interpretation": "O3 source and value facets."}
+      ]
+    },
+    {
+      "id": "O4",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "For every input satisfying A1 and each emitted pair (g,b), count=n(g,b) and the bucket sum=s(g,b), computed using exact unbounded mathematical integers. Only non-null values of occurrences in that group's half-open bucket interval contribute; every duplicate occurrence contributes separately. This behavior must be universally implemented by program.vscore.json's solve of arity 1 with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+      "required": true,
+      "scope": ["every emitted bucket and delivered source"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}, {"id": "A1", "relation": "assumes"}],
+      "acceptance_criteria": [
+        "Count equals the cardinality of M(g,b), including duplicate occurrences.",
+        "Sum equals the mathematical sum over M(g,b); null and out-of-range values contribute neither count nor sum.",
+        "The actual canonical solve source universally refines this proposition and satisfies all seven source properties."
+      ],
+      "sources": [
+        {"clause_id": "C9", "origin": "explicit", "interpretation": "Non-null in-range aggregation."},
+        {"clause_id": "C10", "origin": "explicit", "interpretation": "Count of contributing occurrences."},
+        {"clause_id": "C16", "origin": "explicit", "interpretation": "Duplicate multiplicity."},
+        {"clause_id": "C21", "origin": "explicit", "interpretation": "Exact unbounded integer sums."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Required canonical source."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Universal implementation refinement."},
+        {"clause_id": "C40", "origin": "explicit", "interpretation": "O4 source and value facets."}
+      ]
+    },
+    {
+      "id": "O5",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "For every specified input and pair (g,b), if n(g,b)>0 the returned value is s(g,b). If n(g,b)=0 and fill=none the value is null. If n(g,b)=0 and fill=previous the value is s(g,b') for the greatest earlier b' in B with n(g,b')>0, or null if no such b' exists. Previous state is independent per group, starts absent, is updated only by nonempty buckets, is never reset by empty buckets, treats zero sums as present values, and never receives values from events before start. This complete causal formula must be universally implemented by program.vscore.json's solve of arity 1 with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+      "required": true,
+      "scope": ["all groups, both fill modes, all buckets and delivered source"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}, {"id": "A1", "relation": "assumes"}],
+      "acceptance_criteria": [
+        "Nonempty means positive count of non-null contributing occurrences, including buckets whose sum is zero.",
+        "Every returned value follows the stated three branches.",
+        "Prior state is the latest strictly earlier nonempty bucket sum in the same group, with no pre-start seed or empty-bucket reset.",
+        "The actual canonical solve source universally refines this proposition and satisfies all seven source properties."
+      ],
+      "sources": [
+        {"clause_id": "C11", "origin": "explicit", "interpretation": "Nonempty value and update."},
+        {"clause_id": "C12", "origin": "explicit", "interpretation": "Both empty-bucket fill branches and initial null."},
+        {"clause_id": "C13", "origin": "explicit", "interpretation": "Empty buckets preserve previous state."},
+        {"clause_id": "C14", "origin": "explicit", "interpretation": "No pre-start seeding."},
+        {"clause_id": "C16", "origin": "explicit", "interpretation": "Zero is a present previous value."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Required canonical source."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Universal implementation refinement."},
+        {"clause_id": "C40", "origin": "explicit", "interpretation": "O5 source and value facets."}
+      ]
+    },
+    {
+      "id": "O6",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "For every input satisfying A1, solve returns exactly the list of records {group:g,start:b,count:n(g,b),value:v(g,b)}, where v follows O5, enumerating g through G and b through B in that order. Preserve the exact specified JSON field structure and list ordering under data-pipeline/0.3. This behavior must be universally implemented by program.vscore.json's solve of arity 1 with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+      "required": true,
+      "scope": ["complete returned list and delivered source"],
+      "dependencies": [{"id": "D1", "relation": "uses_definition"}, {"id": "A1", "relation": "assumes"}, {"id": "O5", "relation": "uses_proof"}],
+      "acceptance_criteria": [
+        "List equality holds with the group-major, increasing-bucket enumeration and all required fields.",
+        "There are no omitted or extra output rows; no events or start=end yields an empty result.",
+        "The actual canonical solve source universally refines this proposition and satisfies all seven source properties."
+      ],
+      "sources": [
+        {"clause_id": "C15", "origin": "explicit", "interpretation": "Result structure and order."},
+        {"clause_id": "C17", "origin": "explicit", "interpretation": "Serialization profile."},
+        {"clause_id": "C18", "origin": "explicit", "interpretation": "Exact structure and ordering preservation."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Required canonical source."},
+        {"clause_id": "C36", "origin": "explicit", "interpretation": "Universal implementation refinement."},
+        {"clause_id": "C40", "origin": "explicit", "interpretation": "O6 source and value facets."}
+      ]
+    },
+    {
+      "id": "O7",
+      "revision": 1,
+      "kind": "postcondition",
+      "role": "guarantee",
+      "statement": "The actual solve entry must satisfy the complete universal aggregation formula for every specified input and reproduce both public examples exactly: the a events (0,2) and (1,-2) with start=0,end=5,width=2,fill=previous return rows (a,0,2,0),(a,2,0,0),(a,4,0,0); the z event (-1,9) with start=0,end=1,width=2,fill=previous returns (z,0,0,null). Examples do not replace universal refinement. The source is program.vscore.json's solve of arity 1 with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+      "required": true,
+      "scope": ["public examples, all specified inputs and delivered source"],
+      "dependencies": [{"id": "A1", "relation": "assumes"}, {"id": "O6", "relation": "uses_proof"}],
+      "acceptance_criteria": [
+        "Both example output lists equal the supplied outputs exactly.",
+        "Universal implementation refinement of the complete formula holds beyond the examples.",
+        "All seven source properties hold for the actual canonical entry."
+      ],
+      "sources": [
+        {"clause_id": "C24", "origin": "explicit", "interpretation": "Preserved public examples."},
+        {"clause_id": "C25", "origin": "explicit", "interpretation": "Exact example values and universal refinement."},
+        {"clause_id": "C30", "origin": "explicit", "interpretation": "Complete universal functional statements."},
+        {"clause_id": "C31", "origin": "explicit", "interpretation": "Examples are insufficient alone."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Required canonical source."},
+        {"clause_id": "C40", "origin": "explicit", "interpretation": "O7 source and value facets."}
+      ]
+    },
+    {
+      "id": "I1",
+      "revision": 1,
+      "kind": "invariant",
+      "role": "guarantee",
+      "statement": "Throughout admitted execution of the canonical program.vscore.json solve entry of arity 1, the seven required source properties hold: typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only under normative Lean vscore-semantics/0.3. I1 is explicitly source-only; its causal aggregation behavior remains fully specified as required functional guarantees O4 and O5.",
+      "required": true,
+      "scope": ["all admitted execution of delivered solve"],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "The actual canonical entry satisfies all seven source properties throughout execution.",
+        "Input values remain immutable and execution stays within the restricted pure runtime.",
+        "Source-only classification does not remove O4 or O5's universal causal and multiplicity formulas."
+      ],
+      "sources": [
+        {"clause_id": "C19", "origin": "explicit", "interpretation": "Operational execution properties."},
+        {"clause_id": "C20", "origin": "explicit", "interpretation": "Input immutability and effect restriction."},
+        {"clause_id": "C21", "origin": "explicit", "interpretation": "No floating point."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Canonical entry and seven properties."},
+        {"clause_id": "C38", "origin": "explicit", "interpretation": "Explicit source-only operational classification."},
+        {"clause_id": "C40", "origin": "explicit", "interpretation": "I1 source-only row."}
+      ]
+    },
+    {
+      "id": "S1",
+      "revision": 1,
+      "kind": "safety_property",
+      "role": "guarantee",
+      "statement": "The delivered program.vscore.json has the required canonical solve entry of arity 1 and admits only typed total deterministic pure-data execution within the restricted vscore/0.3 runtime, preserving input values, performing no external I/O and using no floating point. Arithmetic has unbounded mathematical integer semantics and the source has no external-effect constructors. S1 is explicitly source-only.",
+      "required": true,
+      "scope": ["canonical source and every admitted execution"],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "All seven closed source properties hold for the actual named entry.",
+        "No external I/O, mutation of input or floating-point arithmetic occurs.",
+        "Normative source admission and exact integer semantics are requirements, not facts asserted as already established."
+      ],
+      "sources": [
+        {"clause_id": "C2", "origin": "explicit", "interpretation": "Pure admitted typed entry."},
+        {"clause_id": "C4", "origin": "explicit", "interpretation": "No external I/O."},
+        {"clause_id": "C17", "origin": "explicit", "interpretation": "Restricted canonical semantics."},
+        {"clause_id": "C19", "origin": "explicit", "interpretation": "Total pure deterministic execution."},
+        {"clause_id": "C20", "origin": "explicit", "interpretation": "Immutable input and no effects."},
+        {"clause_id": "C21", "origin": "explicit", "interpretation": "Unbounded integers without floating point."},
+        {"clause_id": "C34", "origin": "explicit", "interpretation": "Required source facets."},
+        {"clause_id": "C35", "origin": "explicit", "interpretation": "Source safety cannot be replaced by value equality."},
+        {"clause_id": "C38", "origin": "explicit", "interpretation": "Source-only operational classification."},
+        {"clause_id": "C40", "origin": "explicit", "interpretation": "S1 source-only row."}
+      ]
+    }
+  ],
+  "category_review": {
+    "entities": "Typed event input, ordered bucket result, Unicode group strings and mathematical aggregation definitions.",
+    "preconditions": "Only the stated typed input domain, positive width and start<=end.",
+    "postconditions": "Canonical source delivery, exact groups, buckets, aggregation, causal filling, ordered output and examples with universal implementation refinement.",
+    "invariants": "I1 preserves required operational source facets; causal state formulas are retained in O5.",
+    "safety_properties": "S1 requires pure restricted execution, immutable inputs, no external I/O and no floating point.",
+    "liveness_properties": "Total admitted execution is required through source facets; no additional liveness requirement.",
+    "resource_constraints": "No resource bounds stated; integer and input domains must not be artificially bounded.",
+    "error_semantics": "No behavior outside the specified typed domain is requested.",
+    "explicit_non_goals": "None stated.",
+    "ambiguities": "None; all branches, ordering and domains are specified."
+  },
+  "clauses": [
+    {"clause_id": "C1", "disposition": "context", "refs": [], "note": "Task title."},
+    {"clause_id": "C2", "disposition": "obligations", "refs": ["O1", "S1"], "note": ""},
+    {"clause_id": "C3", "disposition": "obligations", "refs": ["D1", "O1"], "note": ""},
+    {"clause_id": "C4", "disposition": "obligations", "refs": ["S1"], "note": ""},
+    {"clause_id": "C5", "disposition": "obligations", "refs": ["D1", "A1"], "note": ""},
+    {"clause_id": "C6", "disposition": "obligations", "refs": ["D1", "O2"], "note": ""},
+    {"clause_id": "C7", "disposition": "obligations", "refs": ["D1", "O3"], "note": ""},
+    {"clause_id": "C8", "disposition": "obligations", "refs": ["D1", "O3"], "note": ""},
+    {"clause_id": "C9", "disposition": "obligations", "refs": ["D1", "O4"], "note": ""},
+    {"clause_id": "C10", "disposition": "obligations", "refs": ["D1", "O4"], "note": ""},
+    {"clause_id": "C11", "disposition": "obligations", "refs": ["O5"], "note": ""},
+    {"clause_id": "C12", "disposition": "obligations", "refs": ["O5"], "note": ""},
+    {"clause_id": "C13", "disposition": "obligations", "refs": ["O5"], "note": ""},
+    {"clause_id": "C14", "disposition": "obligations", "refs": ["O5"], "note": ""},
+    {"clause_id": "C15", "disposition": "obligations", "refs": ["D1", "O6"], "note": ""},
+    {"clause_id": "C16", "disposition": "obligations", "refs": ["O4", "O5"], "note": ""},
+    {"clause_id": "C17", "disposition": "obligations", "refs": ["O1", "O6", "S1"], "note": ""},
+    {"clause_id": "C18", "disposition": "obligations", "refs": ["O6"], "note": ""},
+    {"clause_id": "C19", "disposition": "obligations", "refs": ["O1", "I1", "S1"], "note": ""},
+    {"clause_id": "C20", "disposition": "obligations", "refs": ["O1", "I1", "S1"], "note": ""},
+    {"clause_id": "C21", "disposition": "obligations", "refs": ["D1", "O1", "O4", "I1", "S1"], "note": ""},
+    {"clause_id": "C22", "disposition": "obligations", "refs": ["D1", "O2"], "note": ""},
+    {"clause_id": "C23", "disposition": "obligations", "refs": ["A1", "O1"], "note": ""},
+    {"clause_id": "C24", "disposition": "obligations", "refs": ["O7"], "note": ""},
+    {"clause_id": "C25", "disposition": "obligations", "refs": ["O7"], "note": ""},
+    {"clause_id": "C26", "disposition": "context", "refs": [], "note": "Delivery revision provenance; canonical delivery behavior is specified in O1."},
+    {"clause_id": "C27", "disposition": "context", "refs": [], "note": "Revision preserves original meaning; all functional clauses and examples remain required."},
+    {"clause_id": "C28", "disposition": "context", "refs": [], "note": "Requirement identity mapping; required source facets are retained under their actual IDs."},
+    {"clause_id": "C29", "disposition": "context", "refs": [], "note": "Historical assurance metadata does not establish current satisfaction."},
+    {"clause_id": "C30", "disposition": "obligations", "refs": ["O1", "O2", "O3", "O4", "O5", "O6", "O7"], "note": "Complete formulas and universal source refinement are required."},
+    {"clause_id": "C31", "disposition": "obligations", "refs": ["O7"], "note": "Examples do not substitute for universal behavior."},
+    {"clause_id": "C32", "disposition": "context", "refs": [], "note": "Citation-offset metadata."},
+    {"clause_id": "C33", "disposition": "context", "refs": [], "note": "Revision identity and span mapping; IDs and original behaviors are retained without asserting assurance."},
+    {"clause_id": "C34", "disposition": "obligations", "refs": ["I1", "O1", "O2", "O3", "O4", "O5", "O6", "O7", "S1"], "note": ""},
+    {"clause_id": "C35", "disposition": "obligations", "refs": ["O1", "S1"], "note": ""},
+    {"clause_id": "C36", "disposition": "obligations", "refs": ["O1", "O2", "O3", "O4", "O5", "O6", "O7"], "note": ""},
+    {"clause_id": "C37", "disposition": "obligations", "refs": ["O1", "O2", "O3", "O4", "O5", "O6", "O7"], "note": "Every value-required row retains its complete functional proposition."},
+    {"clause_id": "C38", "disposition": "obligations", "refs": ["I1", "S1"], "note": ""},
+    {"clause_id": "C39", "disposition": "context", "refs": [], "note": "Policy-row classification; A1 remains a separate caller assumption."},
+    {"clause_id": "C40", "disposition": "obligations", "refs": ["I1", "O1", "O2", "O3", "O4", "O5", "O6", "O7", "S1"], "note": "All actual policy IDs retain canonical identity and all seven source facets; O1-O7 additionally require universal value refinement."}
+  ],
+  "assumptions": [
+    {"id": "A1", "supplied_by": "caller", "discharged_at": "solve invocation, by supplying the stated typed input with positive width and start<=end"}
+  ],
+  "ambiguities": [],
+  "selected_defaults": []
+}

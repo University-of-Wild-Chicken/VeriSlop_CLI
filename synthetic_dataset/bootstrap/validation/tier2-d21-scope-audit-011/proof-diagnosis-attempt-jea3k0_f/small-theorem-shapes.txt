@@ -1,0 +1,44 @@
+Bounded proof-search diagnosis; theorem shapes only, no new task proof.
+
+Retained conditional residual, abstracted from proof2 and proof3:
+  ((if P then t else a).count, (if P then t else a).sum, ()) =
+  if P then (t.count, t.sum, ()) else (a.count, a.sum, ())
+This is function application through ite, for arbitrary P, a, and t.
+
+Pinned Init.ByCases.apply_ite:
+  (f : α → β) (P : Prop) [Decidable P] (x y : α) :
+  f (ite P x y) = ite P (f x) (f y)
+
+Pinned Int.ofNat_eq_natCast, annotated [simp], existing proof rfl:
+  (n : Nat) : Int.ofNat n = (n : Int)
+Pinned NatCast Int definition: natCast n := Int.ofNat n.
+Thus the Int.ofNat k versus ↑k printouts are not different integer semantics.
+A hypothesis being used before its cast spelling is normalized can survive a
+single simp pass even when the target has the same mathematical guard.
+No tactic replay was run by this auditor, so the causal account is limited to
+exact retained residuals and pinned source definitions.
+
+Pinned List.foldl_map:
+  {f : β₁ → β₂} {g : α → β₂ → α} {l : List β₁} {init : α} :
+  (l.map f).foldl g init = l.foldl (fun x y => g x (f y)) init
+Pinned List.foldl_hom:
+  (f : α₁ → α₂) {g₁ : α₁ → β → α₁} {g₂ : α₂ → β → α₂}
+  {l : List β} {init : α₁}
+  (H : ∀ x y, g₂ (f x) y = f (g₁ x y)) :
+  l.foldl g₂ (f init) = f (l.foldl g₁ init)
+Pinned List.map_id uses map id; List.map_id' and List.map_id_fun'
+explicitly use map (fun a => a). The failed attempt restricts simplification
+to List.map_id and retains exactly that lambda spelling in its goal.
+
+Pinned decide_eq_true_eq [Decidable p] : (decide p = true) = p
+Pinned decide_eq_false_iff_not [Decidable p] : (decide p = false) ↔ ¬p
+The proof2 count branches retain a Bool equation rather than the corresponding
+Nat comparison; its displayed implications are vacuous under that comparison.
+
+Generic representation-library ergonomic shape (not a new theorem or proof):
+  for f : α → β, f (if P then a else b) = if P then f a else f b.
+This is already apply_ite. A VSCore3 adapter alias could expose the same shape
+for a.to / a.inv, but mathematical foundations are not missing.
+Generic combined fold representation shape is already present as candidate
+private foldl_transport and follows the pinned foldl_map / foldl_hom interfaces.
+No D21-specific statement, tactic patch, or replacement proof is supplied.

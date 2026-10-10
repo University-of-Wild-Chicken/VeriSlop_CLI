@@ -1,0 +1,65 @@
+96:4: unsolved goals
+case pos
+x : Input
+g : String
+k : Nat
+a : Stats
+e : Event
+v : Int
+hv : e.value = some v
+h :
+  e.group = g ∧
+    x.start + Int.ofNat k * x.width ≤ e.time ∧ e.time < x.start + Int.ofNat k * x.width + x.width ∧ e.time < x.end
+⊢ ((if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).count,
+      (if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).sum,
+      ()) =
+    if x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width then (a.count + 1, a.sum + v, ())
+    else (a.count, a.sum, ())
+
+98:4: unsolved goals
+case neg
+x : Input
+g : String
+k : Nat
+a : Stats
+e : Event
+v : Int
+hv : e.value = some v
+h :
+  ¬(e.group = g ∧
+      x.start + Int.ofNat k * x.width ≤ e.time ∧ e.time < x.start + Int.ofNat k * x.width + x.width ∧ e.time < x.end)
+⊢ ((if e.group = g ∧ x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width ∧ e.time < x.end then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).count,
+      (if
+            e.group = g ∧
+              x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width ∧ e.time < x.end then
+          { count := a.count + 1, sum := a.sum + v }
+        else a).sum,
+      ()) =
+    if e.group = g ∧ x.start + ↑k * x.width ≤ e.time ∧ e.time < x.start + ↑k * x.width + x.width ∧ e.time < x.end then
+      (a.count + 1, a.sum + v, ())
+    else (a.count, a.sum, ())
+
+102:62: unsolved goals
+case isTrue
+x : Input
+g : String
+k : Nat
+a : State
+h✝ : decide (0 < (stats x g k).count) = true
+⊢ ((stats x g k).count = 0 → some (stats x g k).sum = a.previous) ∧
+    ((stats x g k).count = 0 → x.fill = "previous" ∧ some (stats x g k).sum = a.previous)
+
+case isFalse
+x : Input
+g : String
+k : Nat
+a : State
+h✝ : decide (0 < (stats x g k).count) = false
+⊢ (0 < (stats x g k).count → a.previous = some (stats x g k).sum) ∧
+    (0 < (stats x g k).count → x.fill = "previous" ∧ a.previous = some (stats x g k).sum)

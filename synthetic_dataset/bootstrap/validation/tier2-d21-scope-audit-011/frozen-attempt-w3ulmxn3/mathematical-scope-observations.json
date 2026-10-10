@@ -1,0 +1,42 @@
+[
+  {
+    "clause": "Full domain",
+    "observation": "Input events/list/Int/String/Option shapes have no size or magnitude bounds. The sole guard is width>0, start<=end, and the two specified fill alternatives."
+  },
+  {
+    "clause": "Bucket count, signed endpoints and empty interval",
+    "observation": "For d=end-start>=0 and w=width>0, N=floor((d+w-1)/w)=ceil(d/w). Numerator is nonnegative; toNat changes nothing. When d=0, N=0. For k<N, start+k*w<end, and conversely. This reasoning depends only on d,w, not the signs or magnitudes of start,end."
+  },
+  {
+    "clause": "Groups and Unicode order",
+    "observation": "Map group over every input event, erase duplicates only in that name list, then mergeSort using decidable String<=. Pinned Lean String order is lexicographic List Char order and Char order compares scalar values. Out-of-range events still contribute group names."
+  },
+  {
+    "clause": "Half-open end clipping",
+    "observation": "Event guard contains group equality, bucketStart<=time, time<bucketStart+width, time<end, and isSome value. The two strict upper guards are equivalent to time<min(bucketStart+width,end)."
+  },
+  {
+    "clause": "Counts, sums, duplicates and null",
+    "observation": "Each occurrence in the original input events list is folded separately. Only eligible Some values increment count and contribute Int sum; event list is never deduplicated. Stats starts count0/sum0."
+  },
+  {
+    "clause": "Causal previous and zero",
+    "observation": "Each group starts State(previous=None,rows=[]), then increasing bucket indices. count>0 updates previous to Some sum, including zero. Empty bucket retains previous. fill previous uses retained state; fill none emits None. Before-start events fail all emitted buckets' lower guard, so cannot seed."
+  },
+  {
+    "clause": "Exact group-then-bucket output",
+    "observation": "A singleton output record is appended at every bucket step, bucket state rows are projected after the fold, and each group rows list is appended to outer output. No prepend/reverse/alternate order/extra output branch occurs."
+  },
+  {
+    "clause": "Required identities and facets",
+    "observation": "All11 original IDs retained required and active. O1-O7 bind the identical full universal functional formula conjoined with exact solve/file/arity+7 source properties. Only explicitly approved I1/S1 are source-only. Derived required A1_satisfiable quantifies the same valid domain."
+  },
+  {
+    "clause": "Lean body versus reconstructed statement",
+    "observation": "The named Lean helper definitions bucket_count/stats/step/group_rows/groups/solve were manually read and match the inlined primitive RHS, including all binders. Their exact hashes and record/projection dependency hashes are present in O1 semantic_closure. No author JSON was used as statement authority."
+  },
+  {
+    "clause": "Proof and implementation status",
+    "observation": "Frozen challenge contains three expected by-sorry placeholders. This is a scope audit of the frozen Lean/reconstructed representation, not proof acceptance, actual source refinement, raw adapter adequacy, or mechanical closure. Those remain later native workflow obligations."
+  }
+]

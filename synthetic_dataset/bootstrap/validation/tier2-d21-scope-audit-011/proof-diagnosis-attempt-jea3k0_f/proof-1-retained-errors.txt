@@ -1,0 +1,264 @@
+60:25: simp_all made no progress
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ((List.map (fun x => (x.group, x.time, x.value, ())) x.events, x.start, x.end, x.width, x.fill, ()), ())
+  has type
+    VSCore3.Denote
+        (VSCore3.Shape.record "Input" ["events", "start", "end", "width", "fill"]
+          ((VSCore3.Shape.record "Event" ["group", "time", "value"]
+                  (VSCore3.Shape.string.product
+                    (VSCore3.Shape.int.product (VSCore3.Shape.int.option.product VSCore3.Shape.unit)))).list.product
+            (VSCore3.Shape.int.product
+              (VSCore3.Shape.int.product
+                (VSCore3.Shape.int.product (VSCore3.Shape.string.product VSCore3.Shape.unit)))))) ×
+      VSCore3.Env []
+  but is expected to have type
+    VSCore3.Env
+      ((VSCore3.findEntry
+              ((VSCore3.compileProgram { enums := [] }
+                      { language := "vscore/0.3", profile := "data-pipeline/0.3",
+                        declarations :=
+                          [VSCore3.DataDecl.record "Event"
+                              [("group", VSCore3.Ty.string), ("time", VSCore3.Ty.int),
+                                ("value", VSCore3.Ty.int.option)],
+                            VSCore3.DataDecl.record "Input"
+                              [("events", (VSCore3.Ty.record "Event").list), ("start", VSCore3.Ty.int),
+                                ("end", VSCore3.Ty.int), ("width", VSCore3.Ty.int), ("fill", VSCore3.Ty.string)],
+                            VSCore3.DataDecl.record "Output"
+                              [("group", VSCore3.Ty.string), ("start", VSCore3.Ty.int), ("count", VSCore3.Ty.nat),
+                                ("value", VSCore3.Ty.int.option)],
+                            VSCore3.DataDecl.record "State"
+                              [("previous", VSCore3.Ty.int.option), ("rows", (VSCore3.Ty.record "Output").list)],
+                            VSCore3.DataDecl.record "Stats" [("count", VSCore3.Ty.nat), ("sum", VSCore3.Ty.int)]],
+                        helpers :=
+                          [{ id := "bucket_count", params := [VSCore3.Ty.record "Input"], result := VSCore3.Ty.nat,
+                              body :=
+                                ((VSCore3.Expr.bin VSCore.BinOp.sub
+                                        (VSCore3.Expr.bin VSCore.BinOp.add
+                                          (VSCore3.Expr.bin VSCore.BinOp.sub ((VSCore3.Expr.var 0).project "end")
+                                            ((VSCore3.Expr.var 0).project "start"))
+                                          ((VSCore3.Expr.var 0).project "width"))
+                                        (VSCore3.Expr.int 1)).intFdiv
+                                    ((VSCore3.Expr.var 0).project "width")).intToNat },
+                            { id := "bucket_start", params := [VSCore3.Ty.record "Input", VSCore3.Ty.nat],
+                              result := VSCore3.Ty.int,
+                              body :=
+                                VSCore3.Expr.bin VSCore.BinOp.add ((VSCore3.Expr.var 1).project "start")
+                                  (VSCore3.Expr.bin VSCore.BinOp.mul (VSCore3.Expr.var 0).natToInt
+                                    ((VSCore3.Expr.var 1).project "width")) },
+                            { id := "stats", params := [VSCore3.Ty.record "Input", VSCore3.Ty.string, VSCore3.Ty.nat],
+                              result := VSCore3.Ty.record "Stats",
+                              body :=
+                                ((VSCore3.Expr.var 2).project "events").listFold
+                                  (VSCore3.Expr.record "Stats"
+                                    [("count", VSCore3.Expr.nat 0), ("sum", VSCore3.Expr.int 0)])
+                                  ((VSCore3.Expr.bin VSCore.BinOp.and
+                                        (VSCore3.Expr.bin VSCore.BinOp.eq ((VSCore3.Expr.var 0).project "group")
+                                          (VSCore3.Expr.var 3))
+                                        (VSCore3.Expr.bin VSCore.BinOp.and
+                                          (VSCore3.Expr.bin VSCore.BinOp.le
+                                            (VSCore3.Expr.call "bucket_start" [VSCore3.Expr.var 4, VSCore3.Expr.var 2])
+                                            ((VSCore3.Expr.var 0).project "time"))
+                                          (VSCore3.Expr.bin VSCore.BinOp.and
+                                            (VSCore3.Expr.bin VSCore.BinOp.lt ((VSCore3.Expr.var 0).project "time")
+                                              (VSCore3.Expr.bin VSCore.BinOp.add
+                                                (VSCore3.Expr.call "bucket_start"
+                                                  [VSCore3.Expr.var 4, VSCore3.Expr.var 2])
+                                                ((VSCore3.Expr.var 4).project "width")))
+                                            (VSCore3.Expr.bin VSCore.BinOp.lt ((VSCore3.Expr.var 0).project "time")
+                                              ((VSCore3.Expr.var 4).project "end"))))).ite
+                                    (((VSCore3.Expr.var 0).project "value").matchOption (VSCore3.Expr.var 1)
+                                      (VSCore3.Expr.record "Stats"
+                                        [("count",
+                                            VSCore3.Expr.bin VSCore.BinOp.add ((VSCore3.Expr.var 2).project "count")
+                                              (VSCore3.Expr.nat 1)),
+                                          ("sum",
+                                            VSCore3.Expr.bin VSCore.BinOp.add ((VSCore3.Expr.var 2).project "sum")
+                                              (VSCore3.Expr.var 0))]))
+                                    (VSCore3.Expr.var 1)) },
+                            { id := "step",
+                              params :=
+                                [VSCore3.Ty.record "Input", VSCore3.Ty.string, VSCore3.Ty.nat,
+                                  VSCore3.Ty.record "State"],
+                              result := VSCore3.Ty.record "State",
+                              body :=
+                                (VSCore3.Expr.call "stats"
+                                      [VSCore3.Expr.var 3, VSCore3.Expr.var 2, VSCore3.Expr.var 1]).letE
+                                  (VSCore3.Expr.record "State"
+                                    [("previous",
+                                        (VSCore3.Expr.bin VSCore.BinOp.lt (VSCore3.Expr.nat 0)
+                                              ((VSCore3.Expr.var 0).project "count")).ite
+                                          ((VSCore3.Expr.var 0).project "sum").some
+                                          ((VSCore3.Expr.var 1).project "previous")),
+                                      ("rows",
+                                        ((VSCore3.Expr.var 1).project "rows").listAppend
+                                          ((VSCore3.Expr.record "Output"
+                                                [("group", VSCore3.Expr.var 3),
+                                                  ("start",
+                                                    VSCore3.Expr.call "bucket_start"
+                                                      [VSCore3.Expr.var 4, VSCore3.Expr.var 2]),
+                                                  ("count", (VSCore3.Expr.var 0).project "count"),
+                                                  ("value",
+                                                    (VSCore3.Expr.bin VSCore.BinOp.lt (VSCore3.Expr.nat 0)
+                                                          ((VSCore3.Expr.var 0).project "count")).ite
+                                                      ((VSCore3.Expr.var 0).project "sum").some
+                                                      ((VSCore3.Expr.bin VSCore.BinOp.eq
+                                                            ((VSCore3.Expr.var 4).project "fill")
+                                                            (VSCore3.Expr.string
+                                                              [112, 114, 101, 118, 105, 111, 117, 115])).ite
+                                                        ((VSCore3.Expr.var 1).project "previous")
+                                                        (VSCore3.Expr.none VSCore3.Ty.int)))]).cons
+                                            (VSCore3.Expr.nil (VSCore3.Ty.record "Output"))))]) },
+                            { id := "group_rows", params := [VSCore3.Ty.record "Input", VSCore3.Ty.string],
+                              result := (VSCore3.Ty.record "Output").list,
+                              body :=
+                                ((VSCore3.Expr.call "bucket_count" [VSCore3.Expr.var 1]).listRange.listFold
+                                      (VSCore3.Expr.record "State"
+                                        [("previous", VSCore3.Expr.none VSCore3.Ty.int),
+                                          ("rows", VSCore3.Expr.nil (VSCore3.Ty.record "Output"))])
+                                      (VSCore3.Expr.call "step"
+                                        [VSCore3.Expr.var 3, VSCore3.Expr.var 2, VSCore3.Expr.var 0,
+                                          VSCore3.Expr.var 1])).project
+                                  "rows" },
+                            { id := "groups", params := [VSCore3.Ty.record "Input"], result := VSCore3.Ty.string.list,
+                              body :=
+                                (((VSCore3.Expr.var 0).project "events").listMap
+                                      ((VSCore3.Expr.var 0).project "group")).listUnique.listSort }],
+                        entries :=
+                          [{ id := "solve", params := [VSCore3.Ty.record "Input"],
+                              result := (VSCore3.Ty.record "Output").list,
+                              body :=
+                                (VSCore3.Expr.call "groups" [VSCore3.Expr.var 0]).listFold
+                                  (VSCore3.Expr.nil (VSCore3.Ty.record "Output"))
+                                  ((VSCore3.Expr.var 1).listAppend
+                                    (VSCore3.Expr.call "group_rows"
+                                      [VSCore3.Expr.var 2, VSCore3.Expr.var 0])) }] }).toOption.getD
+                { declarations := [], helpers := [], entries := [], signatures := [] })
+              "solve").getD
+          { id := "_missing", params := [], result := VSCore3.Shape.unit, run := fun x => () }).params
+  in the application
+    ((VSCore3.findEntry
+              ((VSCore3.compileProgram { enums := [] }
+                      { language := "vscore/0.3", profile := "data-pipeline/0.3",
+                        declarations :=
+                          [VSCore3.DataDecl.record "Event"
+                              [("group", VSCore3.Ty.string), ("time", VSCore3.Ty.int),
+                                ("value", VSCore3.Ty.int.option)],
+                            VSCore3.DataDecl.record "Input"
+                              [("events", (VSCore3.Ty.record "Event").list), ("start", VSCore3.Ty.int),
+                                ("end", VSCore3.Ty.int), ("width", VSCore3.Ty.int), ("fill", VSCore3.Ty.string)],
+                            VSCore3.DataDecl.record "Output"
+                              [("group", VSCore3.Ty.string), ("start", VSCore3.Ty.int), ("count", VSCore3.Ty.nat),
+                                ("value", VSCore3.Ty.int.option)],
+                            VSCore3.DataDecl.record "State"
+                              [("previous", VSCore3.Ty.int.option), ("rows", (VSCore3.Ty.record "Output").list)],
+                            VSCore3.DataDecl.record "Stats" [("count", VSCore3.Ty.nat), ("sum", VSCore3.Ty.int)]],
+                        helpers :=
+                          [{ id := "bucket_count", params := [VSCore3.Ty.record "Input"], result := VSCore3.Ty.nat,
+                              body :=
+                                ((VSCore3.Expr.bin VSCore.BinOp.sub
+                                        (VSCore3.Expr.bin VSCore.BinOp.add
+                                          (VSCore3.Expr.bin VSCore.BinOp.sub ((VSCore3.Expr.var 0).project "end")
+                                            ((VSCore3.Expr.var 0).project "start"))
+                                          ((VSCore3.Expr.var 0).project "width"))
+                                        (VSCore3.Expr.int 1)).intFdiv
+                                    ((VSCore3.Expr.var 0).project "width")).intToNat },
+                            { id := "bucket_start", params := [VSCore3.Ty.record "Input", VSCore3.Ty.nat],
+                              result := VSCore3.Ty.int,
+                              body :=
+                                VSCore3.Expr.bin VSCore.BinOp.add ((VSCore3.Expr.var 1).project "start")
+                                  (VSCore3.Expr.bin VSCore.BinOp.mul (VSCore3.Expr.var 0).natToInt
+                                    ((VSCore3.Expr.var 1).project "width")) },
+                            { id := "stats", params := [VSCore3.Ty.record "Input", VSCore3.Ty.string, VSCore3.Ty.nat],
+                              result := VSCore3.Ty.record "Stats",
+                              body :=
+                                ((VSCore3.Expr.var 2).project "events").listFold
+                                  (VSCore3.Expr.record "Stats"
+                                    [("count", VSCore3.Expr.nat 0), ("sum", VSCore3.Expr.int 0)])
+                                  ((VSCore3.Expr.bin VSCore.BinOp.and
+                                        (VSCore3.Expr.bin VSCore.BinOp.eq ((VSCore3.Expr.var 0).project "group")
+                                          (VSCore3.Expr.var 3))
+                                        (VSCore3.Expr.bin VSCore.BinOp.and
+                                          (VSCore3.Expr.bin VSCore.BinOp.le
+                                            (VSCore3.Expr.call "bucket_start" [VSCore3.Expr.var 4, VSCore3.Expr.var 2])
+                                            ((VSCore3.Expr.var 0).project "time"))
+                                          (VSCore3.Expr.bin VSCore.BinOp.and
+                                            (VSCore3.Expr.bin VSCore.BinOp.lt ((VSCore3.Expr.var 0).project "time")
+                                              (VSCore3.Expr.bin VSCore.BinOp.add
+                                                (VSCore3.Expr.call "bucket_start"
+                                                  [VSCore3.Expr.var 4, VSCore3.Expr.var 2])
+                                                ((VSCore3.Expr.var 4).project "width")))
+                                            (VSCore3.Expr.bin VSCore.BinOp.lt ((VSCore3.Expr.var 0).project "time")
+                                              ((VSCore3.Expr.var 4).project "end"))))).ite
+                                    (((VSCore3.Expr.var 0).project "value").matchOption (VSCore3.Expr.var 1)
+                                      (VSCore3.Expr.record "Stats"
+                                        [("count",
+                                            VSCore3.Expr.bin VSCore.BinOp.add ((VSCore3.Expr.var 2).project "count")
+                                              (VSCore3.Expr.nat 1)),
+                                          ("sum",
+                                            VSCore3.Expr.bin VSCore.BinOp.add ((VSCore3.Expr.var 2).project "sum")
+                                              (VSCore3.Expr.var 0))]))
+                                    (VSCore3.Expr.var 1)) },
+                            { id := "step",
+                              params :=
+                                [VSCore3.Ty.record "Input", VSCore3.Ty.string, VSCore3.Ty.nat,
+                                  VSCore3.Ty.record "State"],
+                              result := VSCore3.Ty.record "State",
+                              body :=
+                                (VSCore3.Expr.call "stats"
+                                      [VSCore3.Expr.var 3, VSCore3.Expr.var 2, VSCore3.Expr.var 1]).letE
+                                  (VSCore3.Expr.record "State"
+                                    [("previous",
+                                        (VSCore3.Expr.bin VSCore.BinOp.lt (VSCore3.Expr.nat 0)
+                                              ((VSCore3.Expr.var 0).project "count")).ite
+                                          ((VSCore3.Expr.var 0).project "sum").some
+                                          ((VSCore3.Expr.var 1).project "previous")),
+                                      ("rows",
+                                        ((VSCore3.Expr.var 1).project "rows").listAppend
+                                          ((VSCore3.Expr.record "Output"
+                                                [("group", VSCore3.Expr.var 3),
+                                                  ("start",
+                                                    VSCore3.Expr.call "bucket_start"
+                                                      [VSCore3.Expr.var 4, VSCore3.Expr.var 2]),
+                                                  ("count", (VSCore3.Expr.var 0).project "count"),
+                                                  ("value",
+                                                    (VSCore3.Expr.bin VSCore.BinOp.lt (VSCore3.Expr.nat 0)
+                                                          ((VSCore3.Expr.var 0).project "count")).ite
+                                                      ((VSCore3.Expr.var 0).project "sum").some
+                                                      ((VSCore3.Expr.bin VSCore.BinOp.eq
+                                                            ((VSCore3.Expr.var 4).project "fill")
+                                                            (VSCore3.Expr.string
+                                                              [112, 114, 101, 118, 105, 111, 117, 115])).ite
+                                                        ((VSCore3.Expr.var 1).project "previous")
+                                                        (VSCore3.Expr.none VSCore3.Ty.int)))]).cons
+                                            (VSCore3.Expr.nil (VSCore3.Ty.record "Output"))))]) },
+                            { id := "group_rows", params := [VSCore3.Ty.record "Input", VSCore3.Ty.string],
+                              result := (VSCore3.Ty.record "Output").list,
+                              body :=
+                                ((VSCore3.Expr.call "bucket_count" [VSCore3.Expr.var 1]).listRange.listFold
+                                      (VSCore3.Expr.record "State"
+                                        [("previous", VSCore3.Expr.none VSCore3.Ty.int),
+                                          ("rows", VSCore3.Expr.nil (VSCore3.Ty.record "Output"))])
+                                      (VSCore3.Expr.call "step"
+                                        [VSCore3.Expr.var 3, VSCore3.Expr.var 2, VSCore3.Expr.var 0,
+                                          VSCore3.Expr.var 1])).project
+                                  "rows" },
+                            { id := "groups", params := [VSCore3.Ty.record "Input"], result := VSCore3.Ty.string.list,
+                              body :=
+                                (((VSCore3.Expr.var 0).project "events").listMap
+                                      ((VSCore3.Expr.var 0).project "group")).listUnique.listSort }],
+                        entries :=
+                          [{ id := "solve", params := [VSCore3.Ty.record "Input"],
+                              result := (VSCore3.Ty.record "Output").list,
+                              body :=
+                                (VSCore3.Expr.call "groups" [VSCore3.Expr.var 0]).listFold
+                                  (VSCore3.Expr.nil (VSCore3.Ty.record "Output"))
+                                  ((VSCore3.Expr.var 1).listAppend
+                                    (VSCore3.Expr.call "group_rows"
+                                      [VSCore3.Expr.var 2, VSCore3.Expr.var 0])) }] }).toOption.getD
+                { declarations := [], helpers := [], entries := [], signatures := [] })
+              "solve").getD
+          { id := "_missing", params := [], result := VSCore3.Shape.unit, run := fun x => () }).run
+      ((List.map (fun x => (x.group, x.time, x.value, ())) x.events, x.start, x.end, x.width, x.fill, ()), ())

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:claims:0.1",
+  "title": "Frozen finite claim inventory (contract phase or implementation phase)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "artifact_kind": { "enum": ["contract_claims", "implementation_claims"] },
+    "bound_to": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+    },
+    "parameters": { "type": "object" },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$" },
+          "revision": { "type": "integer", "minimum": 1 },
+          "kind": { "type": "string", "minLength": 1 },
+          "role": { "enum": ["guarantee", "assumption", "declaration", "exclusion", "open_question"] },
+          "statement": { "type": "string", "minLength": 1 },
+          "required": { "type": "boolean" },
+          "source_refs": { "type": "array", "items": { "$ref": "urn:verislop:schema:obligation:0.1#/$defs/source" }, "minItems": 1 },
+          "scope": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+          "dependencies": { "type": "array", "items": { "$ref": "urn:verislop:schema:obligation:0.1#/$defs/dependency" } },
+          "acceptance_criteria": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+          "origin": { "enum": ["interpreted", "derived"] },
+          "record_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "blocked_by": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        },
+        "required": [
+          "id", "revision", "kind", "role", "statement", "required", "source_refs", "scope",
+          "dependencies", "acceptance_criteria", "origin", "record_digest", "blocked_by"
+        ]
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": { "type": "string", "minLength": 1 },
+          "obligation": { "type": ["string", "null"] },
+          "milestone": { "type": ["string", "null"] },
+          "required": { "type": "boolean" },
+          "applicable": { "type": "boolean" },
+          "verifier": { "type": "string", "minLength": 1 },
+          "pass_predicate": { "type": "string", "minLength": 1 },
+          "severity": { "enum": ["blocking", "advisory"] },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "required": ["claim_id", "obligation", "milestone", "required", "applicable", "verifier", "pass_predicate", "severity", "reason"]
+      }
+    }
+  },
+  "required": ["schema_version", "artifact_kind", "bound_to", "parameters", "obligations", "claims"]
+}

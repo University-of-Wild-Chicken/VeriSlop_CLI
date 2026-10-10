@@ -1,0 +1,434 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:obligation:0.1",
+  "title": "VeriSlop tracked obligation; evidence validity requires semantic validation",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "kind": {
+      "enum": [
+        "entity",
+        "precondition",
+        "postcondition",
+        "invariant",
+        "safety_property",
+        "liveness_property",
+        "resource_constraint",
+        "error_semantics",
+        "explicit_non_goal",
+        "ambiguity",
+        "non_vacuity"
+      ]
+    },
+    "role": {
+      "enum": [
+        "guarantee",
+        "assumption",
+        "declaration",
+        "exclusion",
+        "open_question"
+      ]
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required": {
+      "type": "boolean"
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:verislop:schema:obligation:0.1#/$defs/source"
+      },
+      "minItems": 1
+    },
+    "scope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:verislop:schema:obligation:0.1#/$defs/dependency"
+      }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "state": {
+      "enum": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED",
+        "PROVED",
+        "IMPLEMENTED",
+        "LINKED",
+        "TESTED",
+        "END_TO_END_VERIFIED"
+      ]
+    },
+    "lifecycle": {
+      "$ref": "urn:verislop:schema:obligation:0.1#/$defs/lifecycle"
+    },
+    "formal": {
+      "$ref": "urn:verislop:schema:obligation:0.1#/$defs/formal"
+    },
+    "implementation_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "id",
+    "revision",
+    "kind",
+    "role",
+    "statement",
+    "required",
+    "source_refs",
+    "scope",
+    "dependencies",
+    "acceptance_criteria",
+    "state",
+    "lifecycle"
+  ],
+  "$defs": {
+    "milestone": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "outcome": {
+          "enum": [
+            "PENDING",
+            "PASS",
+            "FAIL",
+            "STALE",
+            "UNSUPPORTED",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "outcome",
+        "evidence_refs",
+        "reason",
+        "scope"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "outcome": {
+                "const": "PASS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence_refs": {
+                "minItems": 1
+              },
+              "scope": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "INTERPRETED": {
+          "$ref": "urn:verislop:schema:obligation:0.1#/$defs/milestone"
+        },
+        "FORMALIZED": {
+          "$ref": "urn:verislop:schema:obligation:0.1#/$defs/milestone"
+        },
+        "TYPECHECKED": {
+          "$ref": "urn:verislop:schema:obligation:0.1#/$defs/milestone"
+        },
+        "PROVED": {
+          "$ref": "urn:verislop:schema:obligation:0.1#/$defs/milestone"
+        },
+        "IMPLEMENTED": {
+          "$ref": "urn:verislop:schema:obligation:0.1#/$defs/milestone"
+        },
+        "LINKED": {
+          "$ref": "urn:verislop:schema:obligation:0.1#/$defs/milestone"
+        },
+        "TESTED": {
+          "$ref": "urn:verislop:schema:obligation:0.1#/$defs/milestone"
+        },
+        "END_TO_END_VERIFIED": {
+          "$ref": "urn:verislop:schema:obligation:0.1#/$defs/milestone"
+        }
+      },
+      "required": [
+        "INTERPRETED",
+        "FORMALIZED",
+        "TYPECHECKED",
+        "PROVED",
+        "IMPLEMENTED",
+        "LINKED",
+        "TESTED",
+        "END_TO_END_VERIFIED"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "document_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "document_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "start_byte": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_byte": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "origin": {
+          "enum": [
+            "explicit",
+            "inferred"
+          ]
+        },
+        "interpretation": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "document_ref",
+        "document_hash",
+        "start_byte",
+        "end_byte",
+        "origin",
+        "interpretation"
+      ]
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relation": {
+          "enum": [
+            "assumes",
+            "uses_definition",
+            "uses_proof",
+            "requires_witness",
+            "refines",
+            "requires_bridge",
+            "blocked_by"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "relation"
+      ]
+    },
+    "formal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lean_symbol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "representation": {
+          "enum": [
+            "contract_dsl",
+            "contract_facets",
+            "source_facets",
+            "lean_expr",
+            "typed_metadata"
+          ]
+        },
+        "formula_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "semantic_closure_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "hypotheses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "axioms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "reification_evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "lean_symbol",
+        "representation",
+        "formula_ref",
+        "statement_hash",
+        "semantic_closure_hash",
+        "hypotheses",
+        "axioms",
+        "reification_evidence_ref"
+      ]
+    },
+    "semantic_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "kind": {
+          "enum": [
+            "entity",
+            "precondition",
+            "postcondition",
+            "invariant",
+            "safety_property",
+            "liveness_property",
+            "resource_constraint",
+            "error_semantics",
+            "explicit_non_goal",
+            "ambiguity",
+            "non_vacuity"
+          ]
+        },
+        "role": {
+          "enum": [
+            "guarantee",
+            "assumption",
+            "declaration",
+            "exclusion",
+            "open_question"
+          ]
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:verislop:schema:obligation:0.1#/$defs/source"
+          },
+          "minItems": 1
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:verislop:schema:obligation:0.1#/$defs/dependency"
+          }
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "formal": {
+          "$ref": "urn:verislop:schema:obligation:0.1#/$defs/formal"
+        }
+      },
+      "required": [
+        "id",
+        "revision",
+        "kind",
+        "role",
+        "statement",
+        "required",
+        "source_refs",
+        "scope",
+        "dependencies",
+        "acceptance_criteria",
+        "formal"
+      ]
+    }
+  }
+}

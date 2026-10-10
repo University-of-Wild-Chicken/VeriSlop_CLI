@@ -1,0 +1,351 @@
+{
+  "profile": {
+    "profile_id": "generated.v0_2",
+    "dsl": "verislop.contract-dsl/0.2",
+    "numeric_semantics": "Nat denotes Lean's arbitrary-precision natural numbers; sub is truncated subtraction; no machine width; Int denotes arbitrary-precision signed integers with exact add/sub/mul/neg",
+    "result_semantics": "Result(E, A) denotes Except E A; the error sort is the first parameter",
+    "evaluation_semantics": "pure total functions; no I/O, mutation, concurrency or nondeterminism",
+    "enums": {},
+    "symbols": {
+      "bucket_count": {
+        "lean_decl": "VeriSlopAST.bucket_count",
+        "args": [
+          {
+            "record": "Input"
+          }
+        ],
+        "result": "Nat",
+        "level_params": [],
+        "decl_hash": "sha256:b19a37ba59438b36e8200e9bb63e8dee28311f4b252b392c178642ed9aa85d52"
+      },
+      "group_rows": {
+        "lean_decl": "VeriSlopAST.group_rows",
+        "args": [
+          {
+            "record": "Input"
+          },
+          "String"
+        ],
+        "result": {
+          "list": {
+            "record": "Output"
+          }
+        },
+        "level_params": [],
+        "decl_hash": "sha256:640902fba442df07e8ffa8eea0b4834164630a909b93aa1300a6bea28152b83d"
+      },
+      "groups": {
+        "lean_decl": "VeriSlopAST.groups",
+        "args": [
+          {
+            "record": "Input"
+          }
+        ],
+        "result": {
+          "list": "String"
+        },
+        "level_params": [],
+        "decl_hash": "sha256:d6967b2557a1af8758135edf7c0328824c21dd575266cc033ee0534fcd706ec6"
+      },
+      "solve": {
+        "lean_decl": "VeriSlopAST.solve",
+        "args": [
+          {
+            "record": "Input"
+          }
+        ],
+        "result": {
+          "list": {
+            "record": "Output"
+          }
+        },
+        "level_params": [],
+        "decl_hash": "sha256:947fd48b4311193ac90f1065de7c0192965123d489e6e72060991a693e154991"
+      },
+      "stats": {
+        "lean_decl": "VeriSlopAST.stats",
+        "args": [
+          {
+            "record": "Input"
+          },
+          "String",
+          "Nat"
+        ],
+        "result": {
+          "record": "Stats"
+        },
+        "level_params": [],
+        "decl_hash": "sha256:c3990d16d8872dd66b5f4a279a0496e29ea246a4ad3de8ffae7e011864e46457"
+      },
+      "step": {
+        "lean_decl": "VeriSlopAST.step",
+        "args": [
+          {
+            "record": "Input"
+          },
+          "String",
+          "Nat",
+          {
+            "record": "State"
+          }
+        ],
+        "result": {
+          "record": "State"
+        },
+        "level_params": [],
+        "decl_hash": "sha256:14d8227b2bb8cab408ac596f5d054f6f8536536d89af1af4e8a27a5e0c08a671"
+      }
+    },
+    "predicates": {
+      "valid_input": {
+        "lean_decl": "VeriSlopAST.valid_input",
+        "args": [
+          {
+            "record": "Input"
+          }
+        ],
+        "decl_hash": "sha256:66e4a2a412bf4f10a5e5c9fb889b2678398eac18909ad3bd4e018d5af34a7076"
+      }
+    },
+    "records": {
+      "Event": {
+        "lean_decl": "VeriSlopAST.Event",
+        "lean_constructor": "VeriSlopAST.Event.mk",
+        "decl_hash": "sha256:40cfc90e19e1cff7dcea4fb5c63d0bb8266d22b6d077268ede90032d78d43a8c",
+        "constructor_hash": "sha256:7a18dc98236c38f9c3cb50d3c0cd6e35cd5f1bc2ed46cb6247b9e6fe359aad0e",
+        "fields": [
+          {
+            "name": "group",
+            "sort": "String",
+            "lean_projection": "VeriSlopAST.Event.group",
+            "projection_hash": "sha256:c37753c480182fc96f469a36bf5cecc3fbc70fd4e0b9171926478920c7575a02"
+          },
+          {
+            "name": "time",
+            "sort": "Int",
+            "lean_projection": "VeriSlopAST.Event.time",
+            "projection_hash": "sha256:5b21185f0bff5aaf88b8dc7f541419b1ca2785f45bc4e523d1b1c6a5a958acb7"
+          },
+          {
+            "name": "value",
+            "sort": {
+              "option": "Int"
+            },
+            "lean_projection": "VeriSlopAST.Event.value",
+            "projection_hash": "sha256:58ac93f80b07b8cce4bd0727d77d06182002ee15cd66c55960920faf6b02cdab"
+          }
+        ]
+      },
+      "Input": {
+        "lean_decl": "VeriSlopAST.Input",
+        "lean_constructor": "VeriSlopAST.Input.mk",
+        "decl_hash": "sha256:e9228750bc6bfcf83169429bb80c0cb46600c2bdd0a8701d9df12af2528a014b",
+        "constructor_hash": "sha256:97995f6673ab575d95c8647236a82e3725cb5b5852755f487c4556a0244e41e6",
+        "fields": [
+          {
+            "name": "events",
+            "sort": {
+              "list": {
+                "record": "Event"
+              }
+            },
+            "lean_projection": "VeriSlopAST.Input.events",
+            "projection_hash": "sha256:ba8e4a943b1849814c2119b5dd79e1dfec49438987f68dae57e2a3cf43b29e8c"
+          },
+          {
+            "name": "start",
+            "sort": "Int",
+            "lean_projection": "VeriSlopAST.Input.start",
+            "projection_hash": "sha256:2e8a7012474510a4b1491d36ad0567d41b58ecd498efea58bbc45fc146f37062"
+          },
+          {
+            "name": "end",
+            "sort": "Int",
+            "lean_projection": "VeriSlopAST.Input.end",
+            "projection_hash": "sha256:350c4e1359105240ff7c9b3069ed277ea46de10772fc4f5cdd42511596ab89aa"
+          },
+          {
+            "name": "width",
+            "sort": "Int",
+            "lean_projection": "VeriSlopAST.Input.width",
+            "projection_hash": "sha256:52741922bd21de65a36cb9e71ab9ae83054f633748902507175e9c9271221df4"
+          },
+          {
+            "name": "fill",
+            "sort": "String",
+            "lean_projection": "VeriSlopAST.Input.fill",
+            "projection_hash": "sha256:63695efe6e0222dce7e3a1a5d60ed256cb96684410fb01b6f210c3483fd00ebf"
+          }
+        ]
+      },
+      "Output": {
+        "lean_decl": "VeriSlopAST.Output",
+        "lean_constructor": "VeriSlopAST.Output.mk",
+        "decl_hash": "sha256:aa5233995bb6c071193a2731c15afd77ef3f68c383dbbdcab5cff347587bd97b",
+        "constructor_hash": "sha256:4f67064f8312cbdaf0682febba4c9ada5c99bd5324d68a2dd553354840feead7",
+        "fields": [
+          {
+            "name": "group",
+            "sort": "String",
+            "lean_projection": "VeriSlopAST.Output.group",
+            "projection_hash": "sha256:340a3e29b2eade3f062c95e9c6710a25d12a38ce91ba6de6ee218d6f6c9b2ae4"
+          },
+          {
+            "name": "start",
+            "sort": "Int",
+            "lean_projection": "VeriSlopAST.Output.start",
+            "projection_hash": "sha256:58c14aaa9eb89f55892b861e71239c271647470c4dfb0d0d1837b70586d1d36d"
+          },
+          {
+            "name": "count",
+            "sort": "Nat",
+            "lean_projection": "VeriSlopAST.Output.count",
+            "projection_hash": "sha256:9d4ffc19dbc2c77b9c724bab8dceda55eb38d70dd91ff8178ec064268a93cff9"
+          },
+          {
+            "name": "value",
+            "sort": {
+              "option": "Int"
+            },
+            "lean_projection": "VeriSlopAST.Output.value",
+            "projection_hash": "sha256:7679497b35c34d22467fbc62fce817cb096d4c6519de220136d08f72db34edd9"
+          }
+        ]
+      },
+      "State": {
+        "lean_decl": "VeriSlopAST.State",
+        "lean_constructor": "VeriSlopAST.State.mk",
+        "decl_hash": "sha256:2476ad04b45a6cc0f3c2c35ea08bc154d5a0d022cd7906ee0717cb2b357fe366",
+        "constructor_hash": "sha256:bd65245e92c252cb742bb0d9f302e81f7dbdd2941dd51f7649f38cc84b26e96a",
+        "fields": [
+          {
+            "name": "previous",
+            "sort": {
+              "option": "Int"
+            },
+            "lean_projection": "VeriSlopAST.State.previous",
+            "projection_hash": "sha256:9184f6199158a50a93a63db887d7ad779d3ceef26c77766663ad1c196fa2a321"
+          },
+          {
+            "name": "rows",
+            "sort": {
+              "list": {
+                "record": "Output"
+              }
+            },
+            "lean_projection": "VeriSlopAST.State.rows",
+            "projection_hash": "sha256:47bf9200af9eb39b045bd36083f5d05ced0c476db5aff303ace3db05b2330907"
+          }
+        ]
+      },
+      "Stats": {
+        "lean_decl": "VeriSlopAST.Stats",
+        "lean_constructor": "VeriSlopAST.Stats.mk",
+        "decl_hash": "sha256:cc0271f604db9c0769d2c7de84439224eef96f8cc99116f211148a12f9c9ac0d",
+        "constructor_hash": "sha256:7996daf00f360456aaaf20dd89dca694ee03bad636ac9f7cafb33eb0ec2c5ed2",
+        "fields": [
+          {
+            "name": "count",
+            "sort": "Nat",
+            "lean_projection": "VeriSlopAST.Stats.count",
+            "projection_hash": "sha256:64e60d993d4061de457047e19eaad7114199be0a690493abc360d59ff47964dc"
+          },
+          {
+            "name": "sum",
+            "sort": "Int",
+            "lean_projection": "VeriSlopAST.Stats.sum",
+            "projection_hash": "sha256:e7db174b4f00fd848a847e6cae118666f3d0067367c5e477f1bb0475277ed305"
+          }
+        ]
+      }
+    },
+    "data_semantics": "String is a sequence of Unicode scalar values; lists preserve order and duplicates; records have fixed ordered fields"
+  },
+  "notes": [],
+  "roots": [
+    "And",
+    "Bool",
+    "Bool.true",
+    "Decidable.decide",
+    "Eq",
+    "Exists",
+    "Int",
+    "Int.add",
+    "Int.decLe",
+    "Int.decLt",
+    "Int.fdiv",
+    "Int.instLEInt",
+    "Int.instLTInt",
+    "Int.mul",
+    "Int.ofNat",
+    "Int.sub",
+    "Int.toNat",
+    "LE.le",
+    "LT.lt",
+    "List",
+    "List.append",
+    "List.cons",
+    "List.eraseDups",
+    "List.foldl",
+    "List.map",
+    "List.mergeSort",
+    "List.nil",
+    "List.range",
+    "Nat",
+    "Nat.add",
+    "Nat.decLt",
+    "OfNat.ofNat",
+    "Option",
+    "Option.getD",
+    "Option.isSome",
+    "Option.none",
+    "Option.some",
+    "String",
+    "String.decLE",
+    "String.instLE",
+    "VeriSlop.Source.Contract",
+    "VeriSlopAST.Event",
+    "VeriSlopAST.Event.group",
+    "VeriSlopAST.Event.time",
+    "VeriSlopAST.Event.value",
+    "VeriSlopAST.Input",
+    "VeriSlopAST.Input.end",
+    "VeriSlopAST.Input.events",
+    "VeriSlopAST.Input.fill",
+    "VeriSlopAST.Input.start",
+    "VeriSlopAST.Input.width",
+    "VeriSlopAST.Output",
+    "VeriSlopAST.Output.mk",
+    "VeriSlopAST.SolveSource",
+    "VeriSlopAST.State",
+    "VeriSlopAST.State.mk",
+    "VeriSlopAST.State.previous",
+    "VeriSlopAST.State.rows",
+    "VeriSlopAST.Stats",
+    "VeriSlopAST.Stats.count",
+    "VeriSlopAST.Stats.mk",
+    "VeriSlopAST.Stats.sum",
+    "VeriSlopAST.complete_aggregation",
+    "VeriSlopAST.input_inhabited",
+    "VeriSlopAST.solve",
+    "VeriSlopAST.source_properties",
+    "VeriSlopAST.valid_input",
+    "cond",
+    "instBEqOfDecidableEq",
+    "instDecidableAnd",
+    "instDecidableEqBool",
+    "instDecidableEqString",
+    "instLTNat",
+    "instOfNatNat"
+  ],
+  "explicit_registry_declarations": [
+    "VeriSlopAST.Event",
+    "VeriSlopAST.Input",
+    "VeriSlopAST.Output",
+    "VeriSlopAST.complete_aggregation",
+    "VeriSlopAST.input_inhabited",
+    "VeriSlopAST.solve",
+    "VeriSlopAST.source_properties",
+    "VeriSlopAST.valid_input"
+  ]
+}
