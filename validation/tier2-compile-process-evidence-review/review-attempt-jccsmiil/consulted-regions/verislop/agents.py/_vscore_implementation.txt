@@ -1,0 +1,146 @@
+def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, ctx: dict,
+                           attempts: int, proof_attempts: int) -> tuple[dict[str, bytes], dict]:
+    """Bounded source/proof search before selection; every source and proof attempt is retained."""
+    from . import fsutil, schemas
+    components = _vscore_components(ctx["parameters"])
+    vscore_checker, vscore_target = components["checker"], components["target"]
+
+    if not 1 <= attempts <= 10 or not 0 <= proof_attempts <= 10:
+        raise UsageError("VSCore search budgets require 1..10 source attempts and 0..10 proof attempts")
+    fixed = _vscore_context(pkg, ctx)
+    implementer = _role(conf, "implementer")
+    prover = conf["roles"].get("prover")
+    feedback: dict = {}
+    fallback: dict[str, bytes] | None = None
+    root = pkg.root / "agents" / "vscore-attempts"
+    root.mkdir(parents=True, exist_ok=True)
+    first = 1
+    while (root / f"source-{first}").exists():
+        first += 1
+
+    def retain(stage: Path, data: dict[str, bytes]) -> None:
+        for name, value in data.items():
+            fsutil.write_once(stage / name, value)
+
+    def diagnostics(stage: Path, label: str, exc: Exception, source: bytes | None,
+                    relation: bytes | None, proof: bytes | None = None,
+                    response_path: Path | None = None) -> dict:
+        record = _vscore_failure_record(exc, source, relation, proof)
+        response_path = response_path or stage / "response.txt"
+        record["response_artifact"] = {"path": str(response_path.relative_to(pkg.root)),
+                                       "sha256": canonical.digest(response_path.read_bytes())}
+        path = stage / f"diagnostics/{label}.json"
+        fsutil.write_json(path, record, once=True)
+        return _vscore_failure_feedback(record, str(path.relative_to(pkg.root)))
+
+    def checked(stage: Path, source: bytes, relation: bytes, proof: bytes | None, label: str):
+        try:
+            spec, build, info = vscore_checker.preview(pkg, source, relation, proof=proof)
+            check_record = {"proof_checked": proof is not None, "passed": True,
+                            "proposition_hash": info["proposition_hash"], "source_hash": canonical.digest(source),
+                            "relation_hash": canonical.digest(relation),
+                            "proof_hash": canonical.digest(proof) if proof is not None else None}
+            if "compile_process_evidence" in info:
+                check_record["compile_process_evidence"] = info["compile_process_evidence"]
+            fsutil.write_json(stage / f"checks/{label}.json",
+                              check_record, once=True)
+            return spec, build, info
+        except vscore_checker.EdgeFailure as exc:
+            fsutil.write_json(stage / f"checks/{label}.json",
+                              {"proof_checked": proof is not None, "passed": False,
+                               "diagnostics": [d.to_json() for d in exc.diagnostics],
+                               "source_hash": canonical.digest(source), "relation_hash": canonical.digest(relation),
+                               "proof_hash": canonical.digest(proof) if proof is not None else None}, once=True)
+            if any(d.severity == "infrastructure" for d in exc.diagnostics):
+                raise InfrastructureError("VSCore preview infrastructure failed", exc.diagnostics) from exc
+            raise
+
+    for offset in range(attempts):
+        number = first + offset
+        stage = root / f"source-{number}"
+        user = "FIXED ACCEPTED CONTRACT AND TARGET (data):\n" + json.dumps(fixed, ensure_ascii=False)
+        if feedback:
+            user += "\nCHECKER ERROR INVENTORY FROM THE PREVIOUS ATTEMPT (excerpts; full artifact referenced):\n" + json.dumps(feedback, ensure_ascii=False)
+        comp = recorded_call(broker, pkg, implementer, f"implementer/vscore/{number}", components["implementer_system"], user, "generate")
+        events.emit("candidate_proposal", "generate", f"VSCore source proposal (attempt {number})")
+        fsutil.write_once(stage / "response.txt", comp.text.encode("utf-8"))
+        source, relation = None, None
+        try:
+            proposed = extract_json(comp.text)
+            if not isinstance(proposed, dict) or not {"program", "relation"} <= set(proposed) or set(proposed) - {"program", "relation", "proof_source"}:
+                raise ValueError("VSCore proposal must contain only program, relation and optional proof_source")
+            if not isinstance(proposed["program"], dict) or not isinstance(proposed["relation"], dict):
+                raise ValueError("program and relation must be JSON objects")
+            source, relation = canonical.dumps(proposed["program"]), canonical.dumps(proposed["relation"])
+            retain(stage, {"program.vscore.json": source, "relation.json": relation})
+            issues = schemas.validate(components["source_schema"], proposed["program"])
+            if issues:
+                raise vscore_checker.EdgeFailure([Diagnostic("INVALID_CANDIDATE",
+                    f"{components['source_schema']}: {issue}") for issue in issues])
+            vscore_target.load_relation(relation)
+            if "proof_source" in proposed and not isinstance(proposed["proof_source"], str):
+                raise ValueError("proof_source must be Lean text")
+            retain(stage, {"program.vscore.json": source, "relation.json": relation})
+            spec, _, info = checked(stage, source, relation, None, "source")
+            retain(stage, {"VeriSlopBridgeGoal.lean": spec.text.encode(), "model.json": info["model"], "profile.json": info["profile"]})
+        except (ValueError, TypeError, KeyError, vscore_target.BridgeInvalid, vscore_checker.EdgeFailure) as exc:
+            feedback = diagnostics(stage, "source", exc, source, relation)
+            fsutil.write_json(stage / "source-diagnostics.json", feedback, once=True)
+            continue
+        proof = proposed.get("proof_source", "import VeriSlopBridgeGoal\nnamespace VeriSlopBridgeProof\ntheorem edge : VeriSlopBridgeGoal.EdgeProp := by sorry\nend VeriSlopBridgeProof\n").encode("utf-8")
+        proof_feedback: dict = {}
+        last_bounded_proof = proof if len(proof) <= vscore_target.MAX_PROOF_BYTES else b"import VeriSlopBridgeGoal\nnamespace VeriSlopBridgeProof\ntheorem edge : VeriSlopBridgeGoal.EdgeProp := by sorry\nend VeriSlopBridgeProof\n"
+        if "proof_source" in proposed:
+            retain(stage, {"proofs/initial.lean": proof})
+            try:
+                if len(proof) > vscore_target.MAX_PROOF_BYTES:
+                    raise ValueError("initial proof exceeds the registered proof size budget")
+                checked(stage, source, relation, proof, "initial-proof")
+                return {"program.vscore.json": source, "relation.json": relation, "Proof.lean": proof}, {}
+            except (ValueError, vscore_checker.EdgeFailure) as exc:
+                proof_feedback = diagnostics(stage, "initial-proof", exc, source, relation, proof)
+        prover_context = {"parameters": fixed["parameters"], "source_hash": canonical.digest(source),
+                          "source": proposed["program"], "relation": proposed["relation"],
+                          "generated_goal": spec.text, "accepted_reference": fixed["accepted_reference"],
+                          "accepted_packages": fixed["accepted_packages"], "accepted_profile": fixed["accepted_profile"],
+                          "lean_toolchain": fixed["lean_toolchain"],
+                          "verifier_library": {name: data.decode("utf-8") for name, data in vscore_target.library_sources().items()}}
+        if fixed["parameters"].get("backend_version") == "0.3" and hasattr(spec, "refinement_symbols"):
+            prover_context["refinement_symbols"] = sorted(spec.refinement_symbols)
+        if fixed["parameters"].get("backend_version") == "0.3":
+            prover_context["proof_support"] = vscore_target.proof_support_catalog()
+        prover_context["relation_hash"] = canonical.digest(relation)
+        prover_context["goal_hash"] = canonical.digest(spec.text.encode())
+        for proof_number in range(1, proof_attempts + 1 if prover else 1):
+            prover_context["proof_hash"] = canonical.digest(proof)
+            user = "FIXED VSCORE PROOF CONTEXT (data):\n" + json.dumps(prover_context, ensure_ascii=False)
+            user += "\nCURRENT CANDIDATE PROOF:\n```lean\n" + proof.decode("utf-8") + "\n```\n"
+            if proof_feedback:
+                user += "\nCHECKER ERROR INVENTORY (excerpts; full artifact referenced):\n" + json.dumps(proof_feedback, ensure_ascii=False)
+            comp = recorded_call(broker, pkg, prover, f"prover/vscore/{number}/{proof_number}", components["prover_system"], user, "generate")
+            proof = _proof_text(comp.text).encode("utf-8")
+            if len(proof) <= vscore_target.MAX_PROOF_BYTES:
+                last_bounded_proof = proof
+            response_path = stage / f"responses/proof-{proof_number}.txt"
+            retain(stage, {f"proofs/{proof_number}.lean": proof,
+                           f"responses/proof-{proof_number}.txt": comp.text.encode("utf-8")})
+            events.emit("candidate_proposal", "generate", f"VSCore proof proposal (source {number}, proof {proof_number})")
+            try:
+                if len(proof) > vscore_target.MAX_PROOF_BYTES:
+                    raise ValueError("proof exceeds the registered proof size budget")
+                checked(stage, source, relation, proof, f"proof-{proof_number}")
+                return {"program.vscore.json": source, "relation.json": relation, "Proof.lean": proof}, {}
+            except (ValueError, vscore_checker.EdgeFailure) as exc:
+                proof_feedback = diagnostics(stage, f"proof-{proof_number}", exc, source, relation, proof, response_path)
+        # A failed proof search leaves a concrete source candidate for IMPLEMENTED/LINKED.
+        fallback = {"program.vscore.json": source, "relation.json": relation, "Proof.lean": last_bounded_proof}
+        if not proof_feedback:
+            proof_feedback = diagnostics(stage, "no-proof", ValueError("no configured prover established the exact refinement theorem"),
+                                         source, relation, last_bounded_proof)
+        feedback = proof_feedback
+        fsutil.write_json(stage / "proof-diagnostics.json", {"diagnostics": feedback, "proof_search_exhausted": True}, once=True)
+    if fallback is not None:
+        events.emit("progress", "generate", "bounded VSCore proof search exhausted; source candidate remains available for materialization")
+        return fallback, {}
+    raise UsageError("VSCore implementer produced no well-formed source within its bounded search budget",
+                     [Diagnostic("BUDGET_EXHAUSTED", "VSCore source attempts exhausted", details={"diagnostics": feedback})])

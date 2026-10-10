@@ -1,0 +1,943 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "format": {
+      "const": "verislop.vscore-readable-view/1"
+    },
+    "selected_mode": {
+      "enum": [
+        "BASE",
+        "CHECKED"
+      ]
+    },
+    "status": {
+      "enum": [
+        "CHECKED",
+        "UNSUPPORTED",
+        "REJECTED",
+        "INFRASTRUCTURE_FAILURE"
+      ]
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "slot_id": {
+          "const": "vscore-readable-selection"
+        },
+        "role": {
+          "const": "readable_selection"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "slot_id",
+        "role",
+        "sha256"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "source_registry": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "profile": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "accepted_profile": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "accepted_ir": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "acceptance_certificate": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "relation": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "adapters": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "toolchain_closure": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "policy": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "source",
+        "source_registry",
+        "profile",
+        "accepted_profile",
+        "accepted_ir",
+        "acceptance_certificate",
+        "relation",
+        "adapters",
+        "toolchain_closure",
+        "policy"
+      ]
+    },
+    "renderer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "const": "vscore-readable/1"
+        },
+        "implementation_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "coverage_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "recipe_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "kernel_tool_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "proof_identity_mode": {
+          "const": "MODULE_BOUND_PROOF"
+        }
+      },
+      "required": [
+        "version",
+        "implementation_hash",
+        "coverage_hash",
+        "recipe_hash",
+        "kernel_tool_hash",
+        "proof_identity_mode"
+      ]
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_ast_nodes": {
+          "const": 4096
+        },
+        "source_ast_depth": {
+          "const": 128
+        },
+        "helpers": {
+          "const": 128
+        },
+        "entries": {
+          "const": 64
+        },
+        "type_depth": {
+          "const": 64
+        },
+        "total_record_fields": {
+          "const": 4096
+        },
+        "max_call_arity": {
+          "const": 64
+        },
+        "generation_steps": {
+          "const": 2000000
+        },
+        "source_block_bytes": {
+          "const": 2097152
+        },
+        "correspondence_bytes": {
+          "const": 8388608
+        },
+        "typed_ir_bytes": {
+          "const": 16777216
+        },
+        "support_declarations": {
+          "const": 65536
+        },
+        "support_export_bytes": {
+          "const": 67108864
+        },
+        "manifest_bytes": {
+          "const": 4194304
+        },
+        "optional_stdout_bytes": {
+          "const": 16777216
+        },
+        "optional_stderr_bytes": {
+          "const": 16777216
+        },
+        "optional_kernel_response_bytes": {
+          "const": 67108864
+        },
+        "diagnostic_display_chars_per_row": {
+          "const": 240
+        }
+      },
+      "required": [
+        "source_ast_nodes",
+        "source_ast_depth",
+        "helpers",
+        "entries",
+        "type_depth",
+        "total_record_fields",
+        "max_call_arity",
+        "generation_steps",
+        "source_block_bytes",
+        "correspondence_bytes",
+        "typed_ir_bytes",
+        "support_declarations",
+        "support_export_bytes",
+        "manifest_bytes",
+        "optional_stdout_bytes",
+        "optional_stderr_bytes",
+        "optional_kernel_response_bytes",
+        "diagnostic_display_chars_per_row"
+      ]
+    },
+    "base_goal_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "selected_goal_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "base_proposition_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "replayed_proposition_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "support_inventory_hash": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/hash"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "compiled_inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "enum": [
+              "entry",
+              "helper"
+            ]
+          },
+          "source_id": {
+            "type": "string"
+          },
+          "source_index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "compiled_index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "source_declaration_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "compilation_context_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "params_shape_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "result_shape_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "lookup_theorem": {
+            "type": "string"
+          },
+          "signature_theorem": {
+            "type": "string"
+          },
+          "compiled_decl": {
+            "type": "string"
+          },
+          "readable_run_decl": {
+            "type": "string"
+          },
+          "readable_named_decl": {
+            "type": "string"
+          },
+          "run_equals_theorem": {
+            "type": "string"
+          },
+          "run_equals_type_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "role",
+          "source_id",
+          "source_index",
+          "compiled_index",
+          "source_declaration_hash",
+          "compilation_context_hash",
+          "params_shape_hash",
+          "result_shape_hash",
+          "lookup_theorem",
+          "signature_theorem",
+          "compiled_decl",
+          "readable_run_decl",
+          "readable_named_decl",
+          "run_equals_theorem",
+          "run_equals_type_hash"
+        ]
+      }
+    },
+    "support_declarations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string"
+          },
+          "origin": {
+            "enum": [
+              "source_block",
+              "correspondence",
+              "generated_auxiliary",
+              "generic_support"
+            ]
+          },
+          "kind": {
+            "enum": [
+              "definition",
+              "theorem"
+            ]
+          },
+          "safety": {
+            "const": "safe"
+          },
+          "level_params": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "type_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "body_hash": {
+            "oneOf": [
+              {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "type_constants": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "body_constants": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "transitive_dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "axioms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unresolved_constants": {
+            "type": "array",
+            "maxItems": 0
+          },
+          "kernel_record": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "path",
+              "sha256",
+              "size"
+            ]
+          },
+          "identity_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "proof_identity": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "const": "MODULE_BOUND_PROOF"
+                  },
+                  "proof_body_ast": {
+                    "const": "UNAVAILABLE"
+                  },
+                  "individual_proof_body_digest": {
+                    "const": "UNAVAILABLE"
+                  },
+                  "regenerated_source_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "module_parts_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "direct_value_constants_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "type_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "axiom_inventory_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "proof_body_ast",
+                  "individual_proof_body_digest",
+                  "regenerated_source_hash",
+                  "module_parts_hash",
+                  "direct_value_constants_hash",
+                  "type_hash",
+                  "axiom_inventory_hash"
+                ]
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "const": "EXPORTED_DEFINITION_BODY"
+                  },
+                  "regenerated_source_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "module_parts_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "exported_body_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "type_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "regenerated_source_hash",
+                  "module_parts_hash",
+                  "exported_body_hash",
+                  "type_hash"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "module",
+          "origin",
+          "kind",
+          "safety",
+          "level_params",
+          "type_hash",
+          "body_hash",
+          "identity_hash",
+          "type_constants",
+          "body_constants",
+          "transitive_dependencies",
+          "axioms",
+          "unresolved_constants",
+          "kernel_record",
+          "proof_identity"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "theorem"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "body_hash": {
+                  "type": "null"
+                },
+                "proof_identity": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "kind": {
+                      "const": "MODULE_BOUND_PROOF"
+                    },
+                    "proof_body_ast": {
+                      "const": "UNAVAILABLE"
+                    },
+                    "individual_proof_body_digest": {
+                      "const": "UNAVAILABLE"
+                    },
+                    "regenerated_source_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    "module_parts_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    "direct_value_constants_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    "type_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    "axiom_inventory_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "proof_body_ast",
+                    "individual_proof_body_digest",
+                    "regenerated_source_hash",
+                    "module_parts_hash",
+                    "direct_value_constants_hash",
+                    "type_hash",
+                    "axiom_inventory_hash"
+                  ]
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "body_hash": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                },
+                "proof_identity": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "kind": {
+                      "const": "EXPORTED_DEFINITION_BODY"
+                    },
+                    "regenerated_source_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    "module_parts_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    "exported_body_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    "type_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "regenerated_source_hash",
+                    "module_parts_hash",
+                    "exported_body_hash",
+                    "type_hash"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "base_declaration_identity_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "support_axiom_baseline_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "actual_support_axioms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "toolchain": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pin": {
+          "type": "string"
+        },
+        "kernel_tool_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "import_closure_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "pin",
+        "kernel_tool_hash",
+        "import_closure_hash"
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "enum": [
+              "source_block",
+              "standalone_source",
+              "typed_ir",
+              "correspondence_source",
+              "base_goal",
+              "selected_goal",
+              "declarations",
+              "compiled_inventory",
+              "equalities",
+              "dependencies",
+              "axioms",
+              "kernel_export",
+              "kernel_receipt",
+              "diagnostics",
+              "proof_identity"
+            ]
+          },
+          "artifact": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "path",
+              "sha256",
+              "size"
+            ]
+          }
+        },
+        "required": [
+          "role",
+          "artifact"
+        ]
+      }
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "enum": [
+              "NOT_REQUESTED",
+              "UNSUPPORTED_CONSTRUCTOR",
+              "UNSUPPORTED_TYPE",
+              "UNSUPPORTED_PRIMITIVE",
+              "NODE_BUDGET",
+              "DEPTH_BUDGET",
+              "HELPER_BUDGET",
+              "ENTRY_BUDGET",
+              "TYPE_DEPTH_BUDGET",
+              "FIELD_BUDGET",
+              "ARITY_BUDGET",
+              "GENERATION_STEP_BUDGET",
+              "OUTPUT_BUDGET",
+              "COMPILE_FAILURE",
+              "CORRESPONDENCE_REJECTION",
+              "INVENTORY_REJECTION",
+              "AXIOM_REJECTION",
+              "IMPORT_REJECTION",
+              "TIMEOUT",
+              "OOM",
+              "TOOL_FAILURE",
+              "TOOL_UNAVAILABLE",
+              "DIAGNOSTIC_OUTPUT_BUDGET"
+            ]
+          },
+          "stage": {
+            "enum": [
+              "selection",
+              "coverage",
+              "lowering",
+              "rendering",
+              "compile",
+              "kernel",
+              "audit"
+            ]
+          },
+          "source_path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "reported_error_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "diagnostic_artifact": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "size": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256",
+                  "size"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "diagnostic_complete": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "stage",
+          "source_path",
+          "message",
+          "reported_error_count",
+          "diagnostic_artifact",
+          "diagnostic_complete"
+        ]
+      }
+    },
+    "checked_proof_support_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "support_module_parts_hash": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "selected_mode",
+    "status",
+    "selection",
+    "inputs",
+    "renderer",
+    "budgets",
+    "base_goal_hash",
+    "selected_goal_hash",
+    "base_proposition_hash",
+    "replayed_proposition_hash",
+    "support_inventory_hash",
+    "compiled_inventory",
+    "support_declarations",
+    "base_declaration_identity_hash",
+    "support_axiom_baseline_hash",
+    "actual_support_axioms",
+    "toolchain",
+    "artifacts",
+    "reasons",
+    "checked_proof_support_dependencies",
+    "support_module_parts_hash"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:vscore-readable-view:1",
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "$comment": "Authoritative output only after current kernel replay and exhaustive audit; published through semantic certificate and evidence. Schema alone is not evidence.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "selected_mode": {
+            "const": "CHECKED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": "CHECKED"
+          },
+          "support_inventory_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "reasons": {
+            "maxItems": 0
+          },
+          "compiled_inventory": {
+            "minItems": 1
+          },
+          "support_declarations": {
+            "minItems": 1
+          },
+          "support_module_parts_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "status": {
+            "enum": [
+              "UNSUPPORTED",
+              "REJECTED",
+              "INFRASTRUCTURE_FAILURE"
+            ]
+          },
+          "support_inventory_hash": {
+            "type": "null"
+          },
+          "compiled_inventory": {
+            "maxItems": 0
+          },
+          "support_declarations": {
+            "maxItems": 0
+          },
+          "actual_support_axioms": {
+            "maxItems": 0
+          },
+          "checked_proof_support_dependencies": {
+            "maxItems": 0
+          },
+          "support_module_parts_hash": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

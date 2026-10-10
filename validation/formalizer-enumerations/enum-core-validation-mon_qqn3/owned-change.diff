@@ -1,0 +1,303 @@
+--- initial/verislop/dsl.py
++++ final/verislop/dsl.py
+@@ -128,25 +128,37 @@
+     predicates: dict[str, dict[str, Any]]
+     raw: dict[str, Any]
+     records: dict[str, dict[str, Any]] = field(default_factory=dict)
++    # Only the untrusted frontend's mandatory kernel audit may use a candidate
++    # name. Accepted profiles always use an AST-derived, hashed binding.
++    allow_candidate_enum_equality: bool = False
+ 
+     @property
+     def encoding(self) -> str:
+         return self.raw.get("dsl", ENCODING)
+ 
+     @classmethod
+-    def from_json(cls, data: dict[str, Any]) -> "Profile":
++    def from_json(cls, data: dict[str, Any], *, allow_candidate_enum_equality: bool = False) -> "Profile":
+         p = cls(data["profile_id"], data.get("enums", {}), data.get("symbols", {}), data.get("predicates", {}), data,
+-                data.get("records", {}))
++                data.get("records", {}), allow_candidate_enum_equality)
+         if p.encoding not in (ENCODING, ENCODING_V2):
+             raise DSLError(f"unsupported profile encoding {p.encoding!r}")
+         if p.records and p.encoding != ENCODING_V2:
+             raise DSLError("records require contract DSL 0.2")
+         for eid, e in p.enums.items():
+-            if not ID_RE.match(eid):
++            if not isinstance(eid, str) or not ID_RE.fullmatch(eid):
+                 raise DSLError(f"invalid enumeration ID {eid!r}")
++            fields = {"constructors", "lean_decl", "lean_constructors", "decl_hash", "decidable_eq"}
++            if allow_candidate_enum_equality:
++                fields.add("candidate_decidable_eq")
++            if not isinstance(e, dict) or "constructors" not in e or set(e) - fields:
++                raise DSLError(f"enumeration {eid} has unknown or candidate-only metadata")
+             ctors = e["constructors"]
+-            if not ctors or len(set(ctors)) != len(ctors) or not all(ID_RE.match(c) for c in ctors):
++            if (not isinstance(ctors, list) or not ctors
++                    or not all(isinstance(c, str) and ID_RE.fullmatch(c) for c in ctors)
++                    or len(set(ctors)) != len(ctors)):
+                 raise DSLError(f"enumeration {eid} needs a nonempty list of unique constructor IDs")
++            if "decidable_eq" in e or "candidate_decidable_eq" in e:
++                p.enum_equality_binding(eid)
+         for rid, r in p.records.items():
+             if not ID_RE.fullmatch(rid):
+                 raise DSLError(f"invalid record ID {rid!r}")
+@@ -196,6 +208,32 @@
+ 
+     def hash(self) -> str:
+         return canonical.digest_json(self.raw)
++
++    def enum_equality_binding(self, eid: str) -> dict[str, str]:
++        """Resolve metadata only; accepted AST validation lives in the reifier.
++
++        A well-shaped profile is not an acceptance certificate. Production
++        consumers still bind it to the independently derived accepted profile.
++        """
++        row = self.enums.get(eid)
++        if not isinstance(row, dict):
++            raise DSLError(f"unknown enumeration {eid!r}")
++        candidate = "candidate_decidable_eq" in row
++        accepted = "decidable_eq" in row
++        if candidate and (accepted or not self.allow_candidate_enum_equality):
++            raise DSLError(f"enumeration {eid} has forbidden candidate equality metadata")
++        if not accepted and not candidate:
++            raise DSLError(f"enumeration {eid} has no bound computable DecidableEq instance")
++        binding = row["candidate_decidable_eq" if candidate else "decidable_eq"]
++        wanted = {"lean_decl"} if candidate else {"lean_decl", "decl_hash"}
++        if (not isinstance(binding, dict) or set(binding) != wanted
++                or not isinstance(binding.get("lean_decl"), str)
++                or not ID_RE.fullmatch(binding["lean_decl"])):
++            raise DSLError(f"enumeration {eid} has malformed equality metadata")
++        if accepted and (not isinstance(binding["decl_hash"], str)
++                         or not re.fullmatch(r"sha256:[0-9a-f]{64}", binding["decl_hash"])):
++            raise DSLError(f"enumeration {eid} has malformed equality hash")
++        return binding
+ 
+ 
+ # ------------------------------------------------------------------------------------------
+@@ -314,8 +352,12 @@
+         b = type_term(t["right"], ctx, profile, budget, depth + 1)
+         wanted = "Int" if tag in INT_OPS else "String" if tag == "string_append" else "Bool"
+         if tag == "bool_eq":
+-            if not sort_eq(a, b) or a not in ("Nat", "Int", "String", "Bool", "Unit"):
+-                raise DSLError("bool_eq requires equal primitive scalar sorts")
++            if not sort_eq(a, b):
++                raise DSLError("bool_eq requires equal operand sorts")
++            if isinstance(a, dict) and set(a) == {"enum"}:
++                profile.enum_equality_binding(a["enum"])
++            elif a not in ("Nat", "Int", "String", "Bool", "Unit"):
++                raise DSLError("bool_eq requires equal primitive scalar or bound enumeration sorts")
+             return "Bool"
+         if a != wanted or b != wanted:
+             raise DSLError(f"{tag} operands must be {wanted}")
+@@ -515,7 +557,11 @@
+     if tag in ("true", "false", "holds"):
+         return True
+     if tag in RELATIONS:
+-        return type_term(p["left"], ctx, profile, budget, depth + 1) in ("Nat", "Int", "Bool", "String", "Unit")
++        sort = type_term(p["left"], ctx, profile, budget, depth + 1)
++        if tag == "eq" and isinstance(sort, dict) and set(sort) == {"enum"}:
++            profile.enum_equality_binding(sort["enum"])
++            return True
++        return sort in ("Nat", "Int", "Bool", "String", "Unit")
+     if tag == "not":
+         return decidable_shape(p["body"], ctx, profile, budget, depth + 1)
+     if tag in CONNECTIVES:
+--- initial/verislop/reify.py
++++ final/verislop/reify.py
+@@ -18,7 +18,7 @@
+ from typing import Any
+ 
+ from . import canonical
+-from .dsl import ID_RE, Profile, DSLError, ENCODING, ENCODING_V2, type_formula
++from .dsl import ID_RE, Profile, DSLError, ENCODING, ENCODING_V2, type_formula, type_term
+ from .exprjson import (
+     Expr, app, beta, bvar, const, has_loose_bvar, head, head_const, lam, name_str, pi, parse_name, instantiate1,
+ )
+@@ -118,6 +118,55 @@
+     if t != const(n) or len(fields) != meta["num_fields"] or not 1 <= len(fields) <= 64:
+         raise Unsupported("record constructor field inventory mismatch")
+     return ctor, fields
++
++
++def _enum_equality_declaration(name: str, enum_decl: str, decls: dict[str, dict[str, Any]],
++                               decl_hashes: dict[str, str] | None = None) -> str:
++    """Check the actual pinned export, not a guessed deriving-instance name.
++
++    The fixed frontend emits exactly `DecidableEq.{1} E`. Other aliases and
++    arbitrary BEq functions are outside this increment. The full local semantic
++    closure is checked here; production acceptance separately freezes its hashes
++    in the environment and obligation semantic closure.
++    """
++    from .exprjson import closure, constants, decl_hash
++    from .policy import NATIVE_AXIOM_MARKERS
++
++    row = decls.get(name)
++    if not isinstance(row, dict) or row.get("type") != app(const("DecidableEq", [1]), const(enum_decl)):
++        raise Unsupported(f"enumeration equality instance {name} has no exact nominal DecidableEq type")
++    if row.get("kind") != "definition" or row.get("level_params") or "value" not in row:
++        raise Unsupported(f"enumeration equality instance {name} is not a monomorphic computable definition")
++    for dependency in sorted(closure({name}, decls)):
++        c = decls[dependency]
++        if (c.get("safety") != "safe" or c.get("kind") not in
++                {"definition", "theorem", "inductive", "constructor", "recursor"}
++                or c.get("unresolved_constants")):
++            raise Unsupported(f"enumeration equality depends on unavailable or noncomputable declaration {dependency}")
++        axioms = {name_str(a) for a in c.get("axioms", [])}
++        # Choice can inhabit a Decidable type without executable decision
++        # machinery. This restriction does not change the global proof policy.
++        if axioms - {"propext", "Quot.sound"}:
++            raise Unsupported(f"enumeration equality depends on noncomputable or forbidden axioms in {dependency}")
++        refs = constants(c.get("value", {})) | constants(c["type"])
++        if any(n.startswith("Classical.") or n == "sorryAx" or
++               any(marker in n for marker in NATIVE_AXIOM_MARKERS) for n in refs):
++            raise Unsupported(f"enumeration equality depends on noncomputable or forbidden machinery in {dependency}")
++        actual_hash = decl_hash(c)
++        if decl_hashes is not None and decl_hashes.get(dependency) != actual_hash:
++            raise Unsupported(f"enumeration equality has stale semantic identity for {dependency}")
++    return decl_hash(row)
++
++
++def validate_enum_equality_binding(profile: Profile, eid: str, decls: dict[str, dict[str, Any]]) -> str:
++    """Resolve one accepted binding against actual declarations, failing closed."""
++    binding = profile.enum_equality_binding(eid)
++    if "candidate_decidable_eq" in profile.enums[eid]:
++        raise Unsupported("candidate equality metadata cannot reconstruct an accepted expression")
++    actual = _enum_equality_declaration(binding["lean_decl"], profile.enums[eid].get("lean_decl", ""), decls)
++    if actual != binding["decl_hash"]:
++        raise Unsupported(f"enumeration {eid} equality binding has a stale declaration hash")
++    return binding["lean_decl"]
+ 
+ 
+ def _short(name: str) -> str:
+@@ -205,6 +254,17 @@
+             continue
+         enums[eid] = {"lean_decl": n, "constructors": cids, "lean_constructors": ctors, "decl_hash": decl_hashes[n]}
+         enum_decl[n] = eid
++        equality_names = sorted(k for k in reach if all_decls[k].get("type") ==
++                                app(const("DecidableEq", [1]), const(n)))
++        if len(equality_names) > 1:
++            notes.append(f"enumeration {n} has ambiguous reachable DecidableEq declarations; enum decisions unavailable")
++        elif equality_names:
++            equality_name = equality_names[0]
++            try:
++                equality_hash = _enum_equality_declaration(equality_name, n, all_decls, decl_hashes)
++                enums[eid]["decidable_eq"] = {"lean_decl": equality_name, "decl_hash": equality_hash}
++            except Unsupported as exc:
++                notes.append(str(exc) + "; enum decisions unavailable")
+     records = {}
+     record_decl = {}
+     pending = dict(candidates_record)
+@@ -307,6 +367,20 @@
+             return self.sort(t)
+         except Unsupported:
+             return None
++
++    def enum_decision_bindings(self, formula: dict, ctx: list[tuple]) -> set[str]:
++        """Find enum equality leaves in the quantifier-free decision grammar."""
++        tag = formula["tag"]
++        if tag == "eq":
++            sort = type_term(formula["left"], [entry[1] for entry in ctx if entry[0] == "var"], self.p)
++            if isinstance(sort, dict) and set(sort) == {"enum"}:
++                return {validate_enum_equality_binding(self.p, sort["enum"], self.decls)}
++        elif tag == "not":
++            return self.enum_decision_bindings(formula["body"], ctx)
++        elif tag in ("and", "or", "implies", "iff"):
++            return (self.enum_decision_bindings(formula["left"], ctx)
++                    | self.enum_decision_bindings(formula["right"], ctx))
++        return set()
+ 
+     @staticmethod
+     def var(i: int, ctx: list[tuple]) -> dict[str, Any]:
+@@ -406,7 +480,15 @@
+             eq = {"tag": "bool_eq", "left": self.term(args[2], ctx), "right": self.term(args[3], ctx)}
+             return eq if n == "BEq.beq" else {"tag": "bool_not", "value": eq}
+         if n == "Decidable.decide" and len(args) == 2:
+-            return {"tag": "decide", "formula": self.formula(args[0], ctx)}
++            formula = self.formula(args[0], ctx)
++            bindings = self.enum_decision_bindings(formula, ctx)
++            if bindings:
++                from .exprjson import canon
++
++                expected = _Denoter(self.p).decision(formula, ctx)
++                if canon(args[1], []) != canon(expected, []):
++                    raise Unsupported("enum decision does not use the exact bound equality instance and fixed combinators")
++            return {"tag": "decide", "formula": formula}
+         if n == "HAppend.hAppend" and len(args) == 6:
+             s = self.sort(args[0])
+             if not all(self.sort(a) == s for a in args[:3]) or not (s == "String" or isinstance(s, dict) and "list" in s):
+@@ -622,12 +704,13 @@
+         return app(const("OfNat.ofNat", [LEVEL_ZERO]), const("Nat"), {"lit": {"nat": n}},
+                    app(const("instOfNatNat"), {"lit": {"nat": n}}))
+ 
+-    @staticmethod
+-    def equality_instance(s: Any) -> Expr:
++    def equality_instance(self, s: Any) -> Expr:
+         names = {"Nat": "instDecidableEqNat", "Int": "Int.instDecidableEq", "Bool": "instDecidableEqBool",
+                  "String": "instDecidableEqString", "Unit": "instDecidableEqPUnit"}
++        if isinstance(s, dict) and set(s) == {"enum"}:
++            return const(self.p.enum_equality_binding(s["enum"])["lean_decl"])
+         if not isinstance(s, str) or s not in names:
+-            raise DSLError("decidable equality outside primitive scalar sorts")
++            raise DSLError("decidable equality outside primitive scalar or bound enumeration sorts")
+         return const(names[s], [1] if s == "Unit" else [])
+ 
+     def decision(self, p: dict[str, Any], ctx: list[tuple]) -> Expr:
+@@ -733,6 +816,9 @@
+             if tag in ("bool_and", "bool_or"):
+                 return app(const("Bool.and" if tag == "bool_and" else "Bool.or"), a, b), "Bool"
+             if tag == "bool_eq":
++                if isinstance(s, dict) and set(s) == {"enum"}:
++                    proposition = app(const("Eq", [1]), self.sort(s), a, b)
++                    return app(const("Decidable.decide"), proposition, app(self.equality_instance(s), a, b)), "Bool"
+                 inst = app(const("instBEqOfDecidableEq", [0]), self.sort(s), self.equality_instance(s))
+                 return app(const("BEq.beq", [0]), self.sort(s), inst, a, b), "Bool"
+             if tag == "string_append":
+--- initial/schemas/vscore-profile-v3.schema.json
++++ final/schemas/vscore-profile-v3.schema.json
+@@ -21,7 +21,36 @@
+       "pattern": "^sha256:[0-9a-f]{64}$"
+     },
+     "enums": {
+-      "type": "object"
++      "type": "object",
++      "additionalProperties": {
++        "type": "object",
++        "additionalProperties": false,
++        "properties": {
++          "constructors": {
++            "type": "array",
++            "minItems": 1,
++            "uniqueItems": true,
++            "items": {"type": "string", "minLength": 1}
++          },
++          "lean_decl": {"type": "string", "minLength": 1},
++          "lean_constructors": {
++            "type": "array",
++            "minItems": 1,
++            "items": {"type": "string", "minLength": 1}
++          },
++          "decl_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
++          "decidable_eq": {
++            "type": "object",
++            "additionalProperties": false,
++            "properties": {
++              "lean_decl": {"type": "string", "minLength": 1},
++              "decl_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
++            },
++            "required": ["lean_decl", "decl_hash"]
++          }
++        },
++        "required": ["constructors"]
++      }
+     },
+     "records": {
+       "type": "object"
+@@ -43,5 +72,6 @@
+     "records",
+     "symbols",
+     "representation"
+-  ]
++  ],
++  "$comment": "Enum equality metadata is optional for legacy carrier/formula profiles. Accepted bindings contain only the exact AST-derived declaration name and semantic declaration hash; candidate_decidable_eq is forbidden. Kernel replay, safe computable closure, exact nominal instance type and accepted-profile byte/hash correspondence remain mandatory semantic checks."
+ }

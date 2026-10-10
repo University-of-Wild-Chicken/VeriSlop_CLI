@@ -1,0 +1,40 @@
+def outputs(ctx: EdgeContext, spec: T.GoalSpec, a: Build, b: Build, run_id: str, stage: Path) -> dict[str, bytes]:
+    """Certificate, IR, all accepted module parts, build records and bound evidence."""
+    files: dict[str, bytes] = {"goal/VeriSlopBridgeGoal.lean": spec.text.encode()}
+    accepted = []
+    for m in (T.GOAL_MODULE, T.PROOF_MODULE):
+        for suffix, data in sorted(a.modules[m].items()):
+            path = f"accepted/{m}{suffix}"
+            files[path] = data
+            accepted.append({"module": m, "path": path, "sha256": canonical.digest(data)})
+    ir = {"schema_version": "0.3", "format": T.IR_FORMAT, "language": T.LANGUAGE, "semantics": T.SEMANTICS,
+          "bridge_id": ctx.bridge_id, "edge_id": ctx.edge["edge_id"], "claim_id": ctx.claim["claim_id"],
+          "source": {"slot_id": ctx.inputs["source"][0], "size": len(spec.source_bytes),
+                     "sha256": canonical.digest(spec.source_bytes)},
+          "accepted_ir": ctx.plan["accepted_ir"], "acceptance_certificate": ctx.plan["acceptance_certificate"],
+          "proposition_hash": a.proposition_hash,
+          "accepted_modules": [{"module": x["module"], "sha256": x["sha256"]}
+                               for x in accepted if x["path"].endswith(".olean")],
+          **a.ir, "exporter": {"verifier_id": VERIFIER, "verifier_hash": verifier_hash(VERIFIER)}}
+    _schema("vscore-implementation-ir-v3", ir)
+    files[IR_FILE] = canonical.dumps(ir)
+    for label, build in (("A", a), ("B", b)):
+        files[f"builds/{label}.json"] = canonical.dumps(build.observation)
+    cert = {**_semantic_descriptor(ctx, spec, a.axioms),
+            "accepted_modules": accepted,
+            "implementation_ir": {"path": IR_FILE, "sha256": canonical.digest(files[IR_FILE])},
+            "builds": [{"path": f"builds/{x}.json", "sha256": canonical.digest(files[f"builds/{x}.json"])} for x in "AB"]}
+    evidence = EvidenceStore(stage, run_id).record(
+        claim_id=ctx.claim["claim_id"], verifier_id=VERIFIER, status="PASS", scope=SCOPE,
+        input_root=cert["semantic_edge_root"],
+        result={**_evidence_result(cert), "compile_process_evidence": {
+            "format": "verislop.vscore-compile-process-inventory/1",
+            "builds": {"A": a.process_evidence, "B": b.process_evidence}}},
+        invocation=["verislop", "bridge", "accept", "--bridge-id", ctx.bridge_id])
+    ev_path = f"evidence/{evidence.id}.json"
+    files[ev_path] = (stage / ev_path).read_bytes()
+    files[evidence.record["raw_result_ref"]] = (stage / evidence.record["raw_result_ref"]).read_bytes()
+    cert["evidence"] = {"path": ev_path, "sha256": canonical.digest(files[ev_path])}
+    _schema("vscore-edge-certificate-v3", cert)
+    files[CERTIFICATE] = canonical.dumps(cert)
+    return files

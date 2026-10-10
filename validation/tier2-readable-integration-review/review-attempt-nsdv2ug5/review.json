@@ -1,0 +1,47 @@
+{
+  "format": "verislop.independent-readable-integration-review/1",
+  "utc": "2026-10-10T04:12:47.584850+00:00",
+  "decision": "REVISION_REQUIRED",
+  "audited_sources": {
+    "docs/bootstrap-tier2-readable-denotation.md": "2cf3c011af814083eabc910efd3231ab8943c300100f4c4b0a2c3e56af322abf",
+    "tests/test_vscore3_readable_cli.py": "3b681f64c4723a35c2d5d3ec3eb01cc92e8e938b99dfd248c4dc61d50ed0b2ef",
+    "tests/test_vscore3_readable_integration.py": "6e5156c7e17ba283bb09e88fbd45f9f39eea22f6fd77359268c1f2c2b92c0189",
+    "verislop/backends/vscore3.py": "4ed125ed30fe4501aa542eb270dff9bf21c6ba1c5a03ab9351236bf3b74dfa67",
+    "verislop/backends/vscore3_closure.py": "d13da6bd02e1a6acda8d52da334c555c4a9603c673a2d84ff42a14ba7edc55be",
+    "verislop/cli.py": "97046a2194b4c71551f8e07eba223becf19b84eae6ebc16e635a213140b91d09"
+  },
+  "snapshot_stable": true,
+  "checks": {
+    "captured_focused_tests": 31,
+    "test_exit_code": 0,
+    "concrete_witness_exit_code": 0
+  },
+  "finding": {
+    "id": "READABLE_CLI_STALE_OUTPUT_SELECTION",
+    "file": "verislop/cli.py",
+    "lines": "562-575",
+    "concrete_trigger": "First successful readable-view output, then successful no-readable-flags --bridge-id candidate into same --out directory.",
+    "observed": "Second preview is legacy BASE and second summary has no selection; former exact valid selection+diagnostic files survive. The real backend metadata loader classifies the second directory as selected readable support.",
+    "witness": "out-reuse-witness.json",
+    "required_correction": "Fail closed before writes if pre-existing reserved readable trees contain paths outside the new complete artifact inventory; reject symlink/nonregular entries. Do not delete prior files."
+  },
+  "other_audited_seams": [
+    "candidate and agent exact selection/diagnostic propagation without reselection",
+    "frozen rerun metadata equality",
+    "post-preparation context equality",
+    "proof-free materialization/link selected-mode and goal-hash check",
+    "closed complete support manifest projection",
+    "closure certificate/readable descriptor and frozen byte equality",
+    "retained execution support membership/hash checks",
+    "telemetry absent from deterministic support projection",
+    "registered review normalizer preservation",
+    "regular-file reader rechecks and symlink selection rejection"
+  ],
+  "limits": [
+    "Compile/preview/acceptance services mocked in consumer tests; five real closed metadata/manifest helper tests exercise schema/hash behavior without Lean.",
+    "Renderer/checker still in implementation at capture; no claim of universal kernel inventory qualification.",
+    "No Lean/native/model/task/corpus/historical task artifacts accessed.",
+    "No additional reproducible defect found within the listed consumer seams; not a blanket correctness guarantee."
+  ],
+  "writes": "Only this new validation attempt; production, cohort and package unchanged."
+}

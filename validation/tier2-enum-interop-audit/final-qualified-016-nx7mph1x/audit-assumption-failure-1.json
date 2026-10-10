@@ -1,0 +1,55 @@
+{
+  "format": "verislop.enum-final-independent-audit-checks/0.1",
+  "utc": "2026-10-10T07:08:35.999093+00:00",
+  "status": "AUDIT_CHECK_FAILURE",
+  "checks": [
+    {
+      "id": "gate-all131-success",
+      "ok": true
+    },
+    {
+      "id": "gate-honest-zero-models",
+      "ok": true
+    },
+    {
+      "id": "gate-current-source-stable",
+      "ok": true
+    },
+    {
+      "id": "production-root-recomputed",
+      "ok": true,
+      "actual_hash": "sha256:65e1833cf9a83b13982adf1aedaeb8d680ba4088d7a4365e4d3353b018fbf1b6",
+      "expected_hash": "sha256:65e1833cf9a83b13982adf1aedaeb8d680ba4088d7a4365e4d3353b018fbf1b6"
+    },
+    {
+      "id": "test-root-recomputed",
+      "ok": true,
+      "actual_hash": "sha256:4b26b905f09ea50988a2dda8aa444e6d02b5d3fd6060ece775dd2157e17f9229",
+      "expected_hash": "sha256:4b26b905f09ea50988a2dda8aa444e6d02b5d3fd6060ece775dd2157e17f9229"
+    },
+    {
+      "id": "qualification-production-root",
+      "ok": true,
+      "actual_hash": "sha256:65e1833cf9a83b13982adf1aedaeb8d680ba4088d7a4365e4d3353b018fbf1b6",
+      "expected_hash": "sha256:65e1833cf9a83b13982adf1aedaeb8d680ba4088d7a4365e4d3353b018fbf1b6"
+    },
+    {
+      "id": "qualification-frozen-inputs-complete",
+      "ok": false,
+      "actual_hash": "sha256:fd717c32b113972b13a845a33161ec43975e3ab91f648bacdcd43fb4dcb9c433",
+      "expected_hash": "sha256:3ec9cace877477f96850e681b5c8f88507b579f39ec53cfa98a4dc0e5dedc332"
+    }
+  ],
+  "checks_run": 7,
+  "failures": 1,
+  "inventories": {},
+  "observations": {
+    "audit_error": {
+      "type": "AssertionError",
+      "message": "{'id': 'qualification-frozen-inputs-complete', 'ok': False, 'actual_hash': 'sha256:fd717c32b113972b13a845a33161ec43975e3ab91f648bacdcd43fb4dcb9c433', 'expected_hash': 'sha256:3ec9cace877477f96850e681b5c8f88507b579f39ec53cfa98a4dc0e5dedc332'}",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/augustus/VeriSlop_CLI/validation/tier2-enum-interop-audit/final-qualified-016-nx7mph1x/audit.py\", line 35, in <module>\n    equal('qualification-frozen-inputs-complete',qual['source_hashes'],{**freeze['source_files'],**tests,'validation/tier2-native-boundary-gate-016/driver.py':canonical.digest_file(G/'driver.py')})\n  File \"/home/augustus/VeriSlop_CLI/validation/tier2-enum-interop-audit/final-qualified-016-nx7mph1x/audit.py\", line 23, in equal\n    def equal(name,a,b):check(name,a==b,actual_hash=identity(a),expected_hash=identity(b))\n  File \"/home/augustus/VeriSlop_CLI/validation/tier2-enum-interop-audit/final-qualified-016-nx7mph1x/audit.py\", line 18, in check\n    if not q['ok']:raise AssertionError(q)\nAssertionError: {'id': 'qualification-frozen-inputs-complete', 'ok': False, 'actual_hash': 'sha256:fd717c32b113972b13a845a33161ec43975e3ab91f648bacdcd43fb4dcb9c433', 'expected_hash': 'sha256:3ec9cace877477f96850e681b5c8f88507b579f39ec53cfa98a4dc0e5dedc332'}\n"
+    }
+  },
+  "no_native_kernel_model_calls": true,
+  "kernel_evidence_scope": "Stored actual generic pinned builds/replays authenticated; no fresh kernel replay by this auditor."
+}

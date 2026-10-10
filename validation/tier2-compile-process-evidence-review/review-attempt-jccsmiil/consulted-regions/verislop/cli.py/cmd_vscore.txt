@@ -1,0 +1,164 @@
+def cmd_vscore(args: argparse.Namespace) -> StageResult:
+    """Authoring helpers and standalone kernel admission; bridge milestones stay separate."""
+    from . import canonical
+    from .targets import vscore_source as src
+    from .targets import vscore2_source as src2, vscore2_check, vscore3_source as src3, vscore3_check
+
+    try:
+        with Path(args.source).open("rb") as handle:
+            source = handle.read(src.MAX_SOURCE_BYTES + 1)
+        if len(source) > src.MAX_SOURCE_BYTES:
+            raise src.SourceError("source exceeds the supported byte budget")
+    except (OSError, src.SourceError) as exc:
+        return StageResult("vscore " + args.vscore_action, "BLOCKED", "source input admission",
+                           [Diagnostic("INVALID_CANDIDATE", f"cannot read VSCore source: {exc}")])
+    if args.vscore_action in ("parse", "compile", "check"):
+        enums: dict[str, list[str]] = {}
+        profile_path = Path(args.profile) if args.profile else None
+        try:
+            if profile_path is None:
+                # Default: the accepted registry of --package, when it is an accepted run.
+                pkg = Package(Path(args.package))
+                acceptance = pkg.path("accepted") / "acceptance.json"
+                if pkg.exists() and acceptance.is_file():
+                    accepted = canonical.load_file(acceptance)
+                    artifacts = accepted.get("artifacts") if isinstance(accepted, dict) else None
+                    artifact = artifacts.get("profile") if isinstance(artifacts, dict) else None
+                    rel = artifact.get("path") if isinstance(artifact, dict) else None
+                    if not isinstance(rel, str) or not rel or Path(rel).is_absolute() or ".." in Path(rel).parts:
+                        raise src.SourceError("accepted run needs a relative profile artifact path")
+                    profile_path = pkg.root / rel
+            if profile_path is not None:
+                prof = canonical.load_file(profile_path)
+                if not isinstance(prof, dict) or not isinstance(prof.get("enums", {}), dict):
+                    raise src.SourceError("profile must contain an enumeration registry object")
+                for k, v in prof.get("enums", {}).items():
+                    if not isinstance(v, dict) or not isinstance(v.get("constructors"), list):
+                        raise src.SourceError("each enumeration needs a constructors array")
+                    if not all(isinstance(c, str) for c in v["constructors"]):
+                        raise src.SourceError("enumeration constructor IDs must be strings")
+                    enums[k] = v["constructors"]
+            if args.vscore_action == "compile":
+                text = source.decode("ascii")
+                src = _vscore_surface_module(text)
+                prog = src.parse_surface(text, enums)
+                encoded = src.source_bytes(prog)
+                try:
+                    fsutil.atomic_write(Path(args.out), encoded)
+                except OSError as exc:
+                    return StageResult("vscore compile", "INFRASTRUCTURE_FAILURE", "write canonical source",
+                        [Diagnostic("VERIFIER_FAILURE", str(exc), severity="infrastructure")])
+                return StageResult("vscore compile", "PASS", src.LANGUAGE + " surface authoring into canonical delivered JSON (advisory)",
+                    summary={"out": args.out, "language": src.LANGUAGE,
+                             "source_hash": canonical.digest(encoded), "required_features": src.required_features(prog),
+                             "authoritative": False},
+                    lines=["Canonical JSON written; use `vscore check` for kernel-checked source admission."])
+            src = _vscore_source_module(source)
+            if args.vscore_action == "check":
+                checker = {src2: vscore2_check, src3: vscore3_check}.get(src)
+                if checker is None:
+                    return StageResult("vscore check", "BLOCKED", "VSCore source admission",
+                        [Diagnostic("UNSUPPORTED_CAPABILITY", "this source-check command requires vscore/0.2 or vscore/0.3; use the registered bridge workflow for 0.1")])
+                return checker.check(source, enums, Path(args.out) if args.out else None)
+            prog = src.parse_source(source)
+            sigs = src.check_program(enums, prog)
+        except (src.SourceError, UnicodeError, canonical.CanonicalJSONError, OSError) as exc:
+            return StageResult("vscore " + args.vscore_action, "BLOCKED", "source/profile admission",
+                               [Diagnostic(getattr(exc, "code", "INVALID_CANDIDATE"), f"VSCore source rejected: {exc}")])
+        return StageResult("vscore parse", "PASS", "host proposal parse and type check (advisory)",
+                           summary={"program": src.program_json(prog),
+                                    "signatures": [{"id": x["id"], "params": [src.ty_json(t) for t in x["params"]],
+                                                    "result": src.ty_json(x["result"])} for x in sigs],
+                                    "authoritative": False},
+                           lines=["Advisory host parse only; acceptance needs the kernel-checked parse equation."])
+    try:
+        src = _vscore_source_module(source)
+        if src is src2:
+            return StageResult("vscore goal", "BLOCKED", "registered accepted-contract bridge capability",
+                [Diagnostic("UNSUPPORTED_CAPABILITY", "vscore/0.2 source admission uses `vscore check`; accepted-contract refinement/transport is not registered for 0.2")])
+    except src.SourceError as exc:
+        return StageResult("vscore goal", "BLOCKED", "registered accepted-contract bridge capability",
+                           [Diagnostic(getattr(exc, "code", "INVALID_CANDIDATE"), str(exc))])
+    if src is src3:
+        from .bridges import vscore3_checker as vc
+    else:
+        from .bridges import vscore_checker as vc
+
+    select_readable = getattr(args, "readable_view", False)
+    selection_path = getattr(args, "readable_selection", None)
+    if (select_readable or selection_path) and src is not src3:
+        return StageResult("vscore goal", "BLOCKED", "registered readable source support",
+                           [Diagnostic("UNSUPPORTED_CAPABILITY", "readable source support requires vscore/0.3")])
+    if select_readable and (selection_path or args.proof):
+        raise UsageError("--readable-view is an initial source-only selection; use --readable-selection to check a proof")
+
+    pkg = _package(args, create=False)
+    relation = Path(args.relation).read_bytes()
+    proof = Path(args.proof).read_bytes() if args.proof else None
+    if args.bridge_id and proof is None:
+        raise UsageError("--bridge-id writes a complete candidate directory and therefore needs --proof")
+    gate = "derive the VSCore bridge goal and its proposition hash (advisory; publishes nothing)"
+    from .bridges.manifest import InvalidPackage, PackageReader
+    reader = None
+    try:
+        preview_options = {}
+        metadata = None
+        if select_readable:
+            preview_options["select_readable"] = True
+        elif selection_path:
+            path = Path(selection_path).absolute()
+            if path.parts[-3:] != ("support", "readable", "selection.json"):
+                raise UsageError("--readable-selection must point to support/readable/selection.json in its artifact directory")
+            reader = PackageReader(path.parents[2])
+            selection = reader.read(vc.READABLE_SELECTION_PATH, keep=True).data
+            metadata = vc.readable_candidate_metadata(selection, lambda name: reader.read(name, keep=True).data)
+            preview_options = {"readable_selection": selection,
+                               "readable_diagnostics": {k: v for k, v in metadata.items()
+                                                        if k != vc.READABLE_SELECTION_PATH}}
+        spec, _build, info = vc.preview(pkg, source, relation, proof, args.obligation or None, **preview_options)
+        if metadata is not None and info.get("readable_candidate_artifacts") != metadata:
+            raise vc.EdgeFailure([Diagnostic("INPUT_MUTATION", "replayed readable metadata differs from the frozen selection")])
+        if reader is not None:
+            reader.recheck()
+    except (vc.EdgeFailure, InvalidPackage) as exc:
+        diagnostics = exc.diagnostics if isinstance(exc, vc.EdgeFailure) else [Diagnostic(exc.code, str(exc))]
+        return StageResult("vscore goal", "BLOCKED" if not any(d.severity == "infrastructure" for d in diagnostics)
+                           else "INFRASTRUCTURE_FAILURE", gate, diagnostics)
+    finally:
+        if reader is not None:
+            reader.close()
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    files = {"VeriSlopBridgeGoal.lean": spec.text.encode(), vc.FILES["model"]: info["model"],
+             vc.FILES["profile"]: info["profile"]}
+    if "compile_process_evidence" in info:
+        files["compile-process-evidence.json"] = canonical.dumps(info["compile_process_evidence"])
+    for artifact_map in ("readable_artifacts", "readable_candidate_artifacts"):
+        for name, data in info.get(artifact_map, {}).items():
+            if name in files and files[name] != data:
+                raise UsageError(f"conflicting readable output artifact: {name}")
+            files[name] = data
+    if args.bridge_id:
+        files.update(vc.candidate_files(args.bridge_id, info, source, relation, proof))
+    for name, data in files.items():
+        fsutil.atomic_write(out / name, data)
+    summary = {k: v for k, v in info.items() if k not in (
+        "model", "profile", "compile_process_evidence", "readable_selection", "readable_artifacts", "readable_candidate_artifacts")}
+    if info.get("readable_selection") is not None:
+        summary["readable_selection"] = {
+            "path": str(out / vc.READABLE_SELECTION_PATH),
+            "sha256": canonical.digest(info["readable_selection"]), "authoritative": False,
+        }
+    if "compile-process-evidence.json" in files:
+        summary["compile_process_evidence"] = {
+            "path": str(out / "compile-process-evidence.json"),
+            "sha256": canonical.digest(files["compile-process-evidence.json"]),
+            "authoritative": False,
+        }
+    summary.update({"out": str(out), "written": sorted(files), "authoritative": False})
+    lines = [f"proposition hash: {info['proposition_hash']}", f"goal: {out / 'VeriSlopBridgeGoal.lean'}"]
+    if proof is not None:
+        lines.append("candidate proof checked in one isolated build (axioms: " + ", ".join(info["edge_axioms"]) + ")")
+    if args.bridge_id:
+        lines.append(f"candidate directory ready: verislop bridge prepare --proposal {out / 'proposal.json'} --candidate-dir {out}")
+    return StageResult("vscore goal", "PASS", gate, summary=summary, lines=lines)

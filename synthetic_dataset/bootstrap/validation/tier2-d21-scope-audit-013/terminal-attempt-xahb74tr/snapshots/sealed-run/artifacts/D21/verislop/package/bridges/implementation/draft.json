@@ -1,0 +1,1511 @@
+{
+  "ambiguities": [],
+  "artifact_kind": "draft",
+  "category_review": {
+    "ambiguities": "None.",
+    "entities": "Typed event input and bucket-record output; Unicode scalar strings and unbounded integers.",
+    "error_semantics": "Behavior outside the specified input domain is not stated.",
+    "explicit_non_goals": "None stated.",
+    "invariants": "I1 retains source-only immutable execution properties; functional previous-value invariants remain in O5.",
+    "liveness_properties": "Total admitted execution is required; no separate progress condition is stated.",
+    "postconditions": "Canonical unary source delivery; exact groups, buckets, aggregation, causal filling, output ordering and examples with universal refinement.",
+    "preconditions": "Only the specified input domain, width>0 and start<=end.",
+    "resource_constraints": "No additional bounds are permitted; no complexity bound is stated.",
+    "safety_properties": "S1 retains all restricted source safety properties."
+  },
+  "entities": [
+    {
+      "acceptance_criteria": [
+        "Types represent the exact requested JSON structures under data-pipeline/0.3.",
+        "Unicode strings and integer values have the stated domains."
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations carry no end-to-end correctness claim",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "a declaration carries no proposition to prove",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "declarations have no proposition to test; their adapters are exercised by guarantee campaigns",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "typed input and output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 239,
+          "interpretation": "typed JSON representation",
+          "origin": "explicit",
+          "start_byte": 155
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 393,
+          "interpretation": "input fields and domains",
+          "origin": "explicit",
+          "start_byte": 265
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1019,
+          "interpretation": "output record fields",
+          "origin": "explicit",
+          "start_byte": 957
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1506,
+          "interpretation": "integer domain",
+          "origin": "explicit",
+          "start_byte": 1435
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1596,
+          "interpretation": "string domain",
+          "origin": "explicit",
+          "start_byte": 1507
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The unary solve entry accepts {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'} and returns a list of {group:string,start:int,count:nonnegative int,value:int|null}. Integers are unbounded mathematical integers; strings are sequences of Unicode scalar values."
+    }
+  ],
+  "error_semantics": [],
+  "explicit_non_goals": [],
+  "invariants": [
+    {
+      "acceptance_criteria": [
+        "The actual unary solve source satisfies every listed closed source property.",
+        "Input values remain unchanged throughout execution.",
+        "The source-only classification does not remove causal filling, zero-sum or empty-bucket requirements from O5."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "I1",
+      "kind": "invariant",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all admitted typed executions",
+        "source-only operational invariant"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1352,
+          "interpretation": "total deterministic pure execution",
+          "origin": "explicit",
+          "start_byte": 1294
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1434,
+          "interpretation": "input immutability",
+          "origin": "explicit",
+          "start_byte": 1353
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1506,
+          "interpretation": "no floating point",
+          "origin": "explicit",
+          "start_byte": 1435
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5288,
+          "interpretation": "mandatory canonical source",
+          "origin": "explicit",
+          "start_byte": 5036
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5869,
+          "interpretation": "operational source-only classification",
+          "origin": "explicit",
+          "start_byte": 5716
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 8118,
+          "interpretation": "I1 source policy",
+          "origin": "explicit",
+          "start_byte": 5957
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The canonical program.vscore.json entry solve of arity 1 maintains immutable input values throughout admitted typed execution and satisfies typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only under canonical vscore/0.3, normative Lean vscore-semantics/0.3 and data-pipeline/0.3. I1 is explicitly source-only; the functional previous-value invariants are retained as universally implemented requirements in O5."
+    }
+  ],
+  "liveness_properties": [],
+  "postconditions": [
+    {
+      "acceptance_criteria": [
+        "The actual canonical unary solve source implements the requested behavior for all valid inputs.",
+        "The entry satisfies typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only.",
+        "An existence theorem or unrelated entry does not substitute for source implementation refinement."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O1",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "delivered source",
+        "every specified input"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 154,
+          "interpretation": "canonical file and entry",
+          "origin": "explicit",
+          "start_byte": 79
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 239,
+          "interpretation": "typed representation",
+          "origin": "explicit",
+          "start_byte": 155
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 264,
+          "interpretation": "no external I/O",
+          "origin": "explicit",
+          "start_byte": 240
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1227,
+          "interpretation": "normative source and serialization",
+          "origin": "explicit",
+          "start_byte": 1080
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1352,
+          "interpretation": "execution properties",
+          "origin": "explicit",
+          "start_byte": 1294
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1434,
+          "interpretation": "immutability and effect restriction",
+          "origin": "explicit",
+          "start_byte": 1353
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1506,
+          "interpretation": "exact arithmetic",
+          "origin": "explicit",
+          "start_byte": 1435
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1687,
+          "interpretation": "complete valid-input domain",
+          "origin": "explicit",
+          "start_byte": 1597
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5288,
+          "interpretation": "mandatory source facets",
+          "origin": "explicit",
+          "start_byte": 5036
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5458,
+          "interpretation": "source identity cannot be replaced",
+          "origin": "explicit",
+          "start_byte": 5289
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 8118,
+          "interpretation": "O1 source and value policy",
+          "origin": "explicit",
+          "start_byte": 5957
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Deliver canonical program.vscore.json containing exactly one admitted typed entry solve of arity 1, implementing the specified typed input/result representation under canonical vscore/0.3, normative Lean vscore-semantics/0.3 and data-pipeline/0.3. For every A1 input its admitted execution returns the specified result, is total and deterministic, preserves input values, performs no external I/O, uses exact unbounded integer arithmetic without floating point, operates on pure data and uses only the restricted runtime with no external-effect constructors."
+    },
+    {
+      "acceptance_criteria": [
+        "Group sequence = scalar-codepoint lexicographic sort of the set of all event group names.",
+        "No name is omitted because it has no in-range event; no extra group is introduced.",
+        "All seven required source properties hold for the actual unary solve entry."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O2",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all specified inputs",
+        "group selection and ordering"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 501,
+          "interpretation": "complete distinct group set",
+          "origin": "explicit",
+          "start_byte": 394
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1596,
+          "interpretation": "codepoint ordering",
+          "origin": "explicit",
+          "start_byte": 1507
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5288,
+          "interpretation": "canonical source facets",
+          "origin": "explicit",
+          "start_byte": 5036
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5654,
+          "interpretation": "universal implementation refinement",
+          "origin": "explicit",
+          "start_byte": 5459
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 8118,
+          "interpretation": "O2 policy row",
+          "origin": "explicit",
+          "start_byte": 5957
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For every A1 input, the groups used for output are exactly the distinct group names appearing anywhere in events, sorted lexicographically by Unicode scalar codepoints, including names whose events all lie outside [start,end). This behavior is universally implemented by canonical program.vscore.json's unary solve under the normative source and serialization semantics; that entry is typed-total, deterministic, input-preserving, free of external I/O and floating point, pure-data and restricted-runtime-only."
+    },
+    {
+      "acceptance_criteria": [
+        "Bucket starts are exactly start+k*width for natural k satisfying start+k*width<end.",
+        "Intervals are left-inclusive, right-exclusive and clipped at end.",
+        "Universal source refinement and all seven source properties hold for the actual unary solve."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        },
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "O3",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all specified inputs",
+        "bucket construction"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 561,
+          "interpretation": "bucket progression",
+          "origin": "explicit",
+          "start_byte": 502
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 637,
+          "interpretation": "strict terminal guard and clipped intervals",
+          "origin": "explicit",
+          "start_byte": 562
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5288,
+          "interpretation": "source delivery properties",
+          "origin": "explicit",
+          "start_byte": 5036
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5654,
+          "interpretation": "universal formula refinement",
+          "origin": "explicit",
+          "start_byte": 5459
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 8118,
+          "interpretation": "O3 policy row",
+          "origin": "explicit",
+          "start_byte": 5957
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For every selected group and each natural k with b_k = start + k*width < end, emit exactly one bucket covering [b_k,min(b_k+width,end)). Emit no other buckets. When start=end there are no buckets. This formula is universally implemented by canonical program.vscore.json's unary solve under vscore/0.3, Lean vscore-semantics/0.3 and data-pipeline/0.3, with typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+    },
+    {
+      "acceptance_criteria": [
+        "count equals the number of matching non-null event occurrences.",
+        "sum equals their exact unbounded integer sum, including negative values and cancellation.",
+        "Duplicates are counted with multiplicity.",
+        "The actual canonical unary solve refines this formula universally and satisfies every required source property."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O4",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all specified inputs",
+        "bucket aggregation"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 672,
+          "interpretation": "non-null in-range sum",
+          "origin": "explicit",
+          "start_byte": 638
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 699,
+          "interpretation": "count domain",
+          "origin": "explicit",
+          "start_byte": 673
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1078,
+          "interpretation": "duplicate multiplicity",
+          "origin": "explicit",
+          "start_byte": 1020
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1506,
+          "interpretation": "exact mathematical arithmetic",
+          "origin": "explicit",
+          "start_byte": 1435
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5288,
+          "interpretation": "source properties",
+          "origin": "explicit",
+          "start_byte": 5036
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5654,
+          "interpretation": "universal source refinement",
+          "origin": "explicit",
+          "start_byte": 5459
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 8118,
+          "interpretation": "O4 policy row",
+          "origin": "explicit",
+          "start_byte": 5957
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For each emitted group g and bucket start b, let M be the multiset of event occurrences with group=g, b<=time<min(b+width,end), and value not null. The bucket count is |M| and its sum is the exact mathematical sum of their values. Null values and out-of-range events contribute neither count nor sum; duplicate occurrences each contribute separately. Canonical program.vscore.json's unary solve universally implements this formula under the specified normative semantics with all seven required source properties: typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+    },
+    {
+      "acceptance_criteria": [
+        "Nonempty means count>0, regardless of whether sum is zero.",
+        "Empty fill-none buckets return null.",
+        "Empty fill-previous buckets use only the latest earlier nonempty bucket in the same group.",
+        "Before the first nonempty bucket value is null; empty buckets never reset previous and pre-start events never seed it.",
+        "The actual source universally refines every branch and satisfies all seven source properties."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        }
+      ],
+      "id": "O5",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all specified inputs",
+        "causal filling"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 759,
+          "interpretation": "nonempty update",
+          "origin": "explicit",
+          "start_byte": 700
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 879,
+          "interpretation": "empty fill branches",
+          "origin": "explicit",
+          "start_byte": 760
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 915,
+          "interpretation": "empty retention",
+          "origin": "explicit",
+          "start_byte": 880
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 956,
+          "interpretation": "causal initialization",
+          "origin": "explicit",
+          "start_byte": 916
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1078,
+          "interpretation": "zero is a real previous sum",
+          "origin": "explicit",
+          "start_byte": 1020
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5288,
+          "interpretation": "source facets",
+          "origin": "explicit",
+          "start_byte": 5036
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5654,
+          "interpretation": "universal branch refinement",
+          "origin": "explicit",
+          "start_byte": 5459
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 8118,
+          "interpretation": "O5 policy row",
+          "origin": "explicit",
+          "start_byte": 5957
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For every group, scan its emitted buckets in increasing start order with previous initially null. If count>0, value equals that bucket's sum and previous becomes that sum, including zero. If count=0, value is null when fill='none'; when fill='previous', value is the sum of the latest earlier bucket of the same group with count>0, or null if none exists. Empty buckets leave previous unchanged. Events before start never initialize previous. Canonical program.vscore.json's unary solve universally implements these branches under the specified normative semantics and has typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+    },
+    {
+      "acceptance_criteria": [
+        "Output is exactly the group-major, bucket-minor concatenation of the specified records.",
+        "No extra or missing records or altered fields occur.",
+        "Empty group or bucket domains yield [].",
+        "The actual unary source and serialization universally implement this result with all seven source properties."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        },
+        {
+          "id": "A1",
+          "relation": "assumes"
+        },
+        {
+          "id": "O2",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O3",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O4",
+          "relation": "uses_proof"
+        },
+        {
+          "id": "O5",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O6",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all specified inputs",
+        "serialized output"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1019,
+          "interpretation": "result structure and ordering",
+          "origin": "explicit",
+          "start_byte": 957
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1293,
+          "interpretation": "exact structure preservation",
+          "origin": "explicit",
+          "start_byte": 1228
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1227,
+          "interpretation": "serialization semantics",
+          "origin": "explicit",
+          "start_byte": 1080
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5288,
+          "interpretation": "source facets",
+          "origin": "explicit",
+          "start_byte": 5036
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5654,
+          "interpretation": "universal result refinement",
+          "origin": "explicit",
+          "start_byte": 5459
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 8118,
+          "interpretation": "O6 policy row",
+          "origin": "explicit",
+          "start_byte": 5957
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "For every valid input, return exactly the list of {group,start,count,value} records prescribed by O2-O5, ordered first by scalar-codepoint lexicographic group order and then by increasing bucket start, with the exact requested JSON structure. Empty events or start=end yield an empty list. This result is universally implemented by canonical program.vscore.json's unary solve under vscore/0.3, Lean vscore-semantics/0.3 and data-pipeline/0.3, satisfying typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only."
+    },
+    {
+      "acceptance_criteria": [
+        "Both example JSON outputs match exactly.",
+        "Universal functional refinement remains required beyond the examples.",
+        "Canonical unary solve satisfies all seven source properties."
+      ],
+      "dependencies": [
+        {
+          "id": "A1",
+          "relation": "assumes"
+        },
+        {
+          "id": "O6",
+          "relation": "uses_proof"
+        }
+      ],
+      "id": "O7",
+      "kind": "postcondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "public examples",
+        "all specified inputs"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1734,
+          "interpretation": "preserved public examples",
+          "origin": "explicit",
+          "start_byte": 1689
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 2282,
+          "interpretation": "exact example results and universal refinement",
+          "origin": "explicit",
+          "start_byte": 1735
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5288,
+          "interpretation": "source facets",
+          "origin": "explicit",
+          "start_byte": 5036
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5654,
+          "interpretation": "complete universal value formulas",
+          "origin": "explicit",
+          "start_byte": 5459
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 8118,
+          "interpretation": "O7 policy row",
+          "origin": "explicit",
+          "start_byte": 5957
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The actual canonical program.vscore.json unary solve preserves both public examples exactly: for group a with values 2 at time 0 and -2 at time 1, start=0,end=5,width=2,fill='previous', return records (a,0,2,0),(a,2,0,0),(a,4,0,0); for group z with value 9 at time -1, start=0,end=1,width=2,fill='previous', return (z,0,0,null). These examples accompany universal implementation refinement of the complete O2-O6 formulas for every valid input, rather than replacing it. The entry satisfies typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only under the specified normative source and serialization semantics."
+    }
+  ],
+  "preconditions": [
+    {
+      "acceptance_criteria": [
+        "width is a positive integer and start <= end.",
+        "No restrictions are imposed on event ordering, duplicates, group names, event times, integer magnitudes or nullable values beyond the specified types."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "A1",
+      "kind": "precondition",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at solve invocation, by supplying the specified typed input with width>0 and start<=end",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at solve invocation, by supplying the specified typed input with width>0 and start<=end",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at solve invocation, by supplying the specified typed input with width>0 and start<=end",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "an assumption is a hypothesis; it is not proved by the theorems that use it",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "NOT_APPLICABLE",
+          "reason": "assumption is supplied by caller and discharged at solve invocation, by supplying the specified typed input with width>0 and start<=end",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "assumption",
+      "scope": [
+        "caller input"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 393,
+          "interpretation": "stated valid-input constraints",
+          "origin": "explicit",
+          "start_byte": 265
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1687,
+          "interpretation": "no additional preconditions",
+          "origin": "explicit",
+          "start_byte": 1597
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "The caller supplies an input in D1's specified domain with width > 0 and start <= end. No additional input bounds or preconditions are assumed."
+    }
+  ],
+  "request_ref": "tier2:tier2-source-facets-013:D21",
+  "resource_constraints": [],
+  "safety_properties": [
+    {
+      "acceptance_criteria": [
+        "No external effects, input mutation or floating-point operations occur.",
+        "The actual canonical unary solve source satisfies every required source property.",
+        "Source requirements are not replaced by a mathematical equality or existence statement."
+      ],
+      "dependencies": [
+        {
+          "id": "D1",
+          "relation": "uses_definition"
+        }
+      ],
+      "id": "S1",
+      "kind": "safety_property",
+      "lifecycle": {
+        "END_TO_END_VERIFIED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "FORMALIZED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "IMPLEMENTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "INTERPRETED": {
+          "evidence_refs": [
+            "provenance:tier2:tier2-source-facets-013:D21"
+          ],
+          "outcome": "PASS",
+          "reason": "Recorded interpretation proposal; not mathematical proof.",
+          "scope": [
+            "recorded interpretation of the request"
+          ]
+        },
+        "LINKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "PROVED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TESTED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        },
+        "TYPECHECKED": {
+          "evidence_refs": [],
+          "outcome": "PENDING",
+          "reason": "No VeriSlop verifier has evaluated this milestone.",
+          "scope": []
+        }
+      },
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "all admitted typed executions",
+        "source-only operational safety"
+      ],
+      "source_refs": [
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 154,
+          "interpretation": "typed pure entry",
+          "origin": "explicit",
+          "start_byte": 79
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 264,
+          "interpretation": "I/O prohibition",
+          "origin": "explicit",
+          "start_byte": 240
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1227,
+          "interpretation": "restricted normative runtime",
+          "origin": "explicit",
+          "start_byte": 1080
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1352,
+          "interpretation": "total pure deterministic execution",
+          "origin": "explicit",
+          "start_byte": 1294
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1434,
+          "interpretation": "effect and mutation restriction",
+          "origin": "explicit",
+          "start_byte": 1353
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 1506,
+          "interpretation": "exact integer semantics",
+          "origin": "explicit",
+          "start_byte": 1435
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5288,
+          "interpretation": "closed source properties",
+          "origin": "explicit",
+          "start_byte": 5036
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5458,
+          "interpretation": "source identity remains necessary",
+          "origin": "explicit",
+          "start_byte": 5289
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 5869,
+          "interpretation": "source-only operational classification",
+          "origin": "explicit",
+          "start_byte": 5716
+        },
+        {
+          "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2",
+          "document_ref": "tier2:tier2-source-facets-013:D21",
+          "end_byte": 8118,
+          "interpretation": "S1 policy row",
+          "origin": "explicit",
+          "start_byte": 5957
+        }
+      ],
+      "state": "INTERPRETED",
+      "statement": "Canonical program.vscore.json's sole typed entry solve of arity 1 executes exclusively within the admitted restricted vscore/0.3 runtime under Lean vscore-semantics/0.3 and data-pipeline/0.3, with no external I/O or external-effect constructors, immutable input, pure data and exact unbounded integer arithmetic without floating point. It satisfies all seven closed properties typed_total, deterministic, input_preserved, no_external_io, no_floating_point, pure_data and restricted_runtime_only. S1 is source-only."
+    }
+  ],
+  "schema_version": "0.1"
+}

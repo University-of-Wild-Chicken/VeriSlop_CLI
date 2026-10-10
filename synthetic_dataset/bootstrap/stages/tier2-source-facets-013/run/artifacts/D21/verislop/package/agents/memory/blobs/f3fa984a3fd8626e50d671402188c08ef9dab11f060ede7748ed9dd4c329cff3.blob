@@ -1,0 +1,176 @@
+```lean
+import VeriSlopBridgeGoal
+
+set_option maxRecDepth 100000
+set_option maxHeartbeats 20000000
+
+namespace VeriSlopBridgeProof
+
+open VeriSlopBridgeGoal
+
+private abbrev B := String × (Int × (Nat × (Option Int × Unit)))
+private abbrev E := String × (Int × (Option Int × Unit))
+private abbrev I := List E × (Int × (Int × (Int × (String × Unit))))
+private abbrev S := Option Int × (List B × Unit)
+
+private def eb (b : VeriSlopAST.Bucket) : B :=
+  (b.group, b.start, b.count, b.value, ())
+
+private def ee (e : VeriSlopAST.Event) : E :=
+  (e.group, e.time, e.value, ())
+
+private def ei (i : VeriSlopAST.Input) : I :=
+  (i.events.map ee, i.start, i.end, i.width, i.fill, ())
+
+private def es (s : VeriSlopAST.Scan) : S :=
+  (s.previous, s.rows.map eb, ())
+
+private def aggregateStep (i : I) (g : String) (a : B) (e : E) : B :=
+  if decide (e.1 = g) &&
+      ((match e.2.2.1 with | none => false | some _ => true) &&
+      (decide (a.2.1 ≤ e.2.1) &&
+      (decide (e.2.1 < a.2.1 + i.2.2.2.1) &&
+       decide (e.2.1 < i.2.2.1)))) then
+    (a.1, a.2.1, a.2.2.1 + 1,
+      some ((match a.2.2.2.1 with | none => 0 | some v => v) +
+            (match e.2.2.1 with | none => 0 | some v => v)), ())
+  else a
+
+private def aggregate (i : I) (g : String) (k : Nat) : B :=
+  i.1.foldl (aggregateStep i g)
+    (g, i.2.1 + Int.ofNat k * i.2.2.2.1, 0, some 0, ())
+
+private def scanStep (i : I) (a : S) (b : B) : S :=
+  (if decide (0 < b.2.2.1) then b.2.2.2.1 else a.1,
+   a.2.1 ++
+     [(b.1, b.2.1, b.2.2.1,
+       if decide (0 < b.2.2.1) then b.2.2.2.1
+       else if decide (i.2.2.2.2.1 = "previous") then a.1 else none, ())],
+   ())
+
+private def groupRows (i : I) (g : String) : List B :=
+  ((List.range
+      (Int.toNat
+        (Int.fdiv ((i.2.2.1 - i.2.1 + i.2.2.2.1) - 1)
+          i.2.2.2.1))).foldl
+    (fun a k => scanStep i a (aggregate i g k))
+    (none, [], ())).2.1
+
+private def solve (i : I) : List B :=
+  ((i.1.map (fun e => e.1)).eraseDups.mergeSort
+    (fun a b => decide (a ≤ b))).foldl
+    (fun a g => a ++ groupRows i g) []
+
+private theorem foldBridge
+    {A X R Y : Type}
+    (enc : A → R) (input : X → Y)
+    (f : R → Y → R) (g : A → X → A)
+    (h : ∀ a x, f (enc a) (input x) = enc (g a x))
+    (xs : List X) (a : A) :
+    (xs.map input).foldl f (enc a) = enc (xs.foldl g a) := by
+  induction xs generalizing a with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [List.map_cons, List.foldl_cons, h]
+    exact ih (g a x)
+
+private theorem aggregate_correct (i : VeriSlopAST.Input) (g : String) (k : Nat) :
+    aggregate (ei i) g k = eb (VeriSlopAST.aggregate i g k) := by
+  unfold aggregate VeriSlopAST.aggregate
+  change (i.events.map ee).foldl (aggregateStep (ei i) g)
+      (eb ⟨g, i.start + Int.ofNat k * i.width, 0, some 0⟩) = _
+  apply foldBridge
+  intro a e
+  cases ha : a.value <;> cases he : e.value <;>
+    simp [aggregateStep, ei, eb, ee, ha, he, cond,
+      VSCore3.ProofSupport.ite_decide,
+      VSCore3.ProofSupport.apply_bool_ite,
+      VSCore3.ProofSupport.apply_ite,
+      VSCore3.ProofSupport.int_ofNat_eq_cast]
+
+private theorem groupRows_correct (i : VeriSlopAST.Input) (g : String) :
+    groupRows (ei i) g = (VeriSlopAST.group_rows i g).map eb := by
+  unfold groupRows VeriSlopAST.group_rows
+  simp only [List.foldl_cons, List.foldl_nil]
+  have h :
+      (List.range
+        (Int.toNat
+          (Int.fdiv ((i.end - i.start + i.width) - 1) i.width))).foldl
+        (fun a k => scanStep (ei i) a (aggregate (ei i) g k))
+        (es ⟨none, []⟩) =
+      es
+        ((List.range
+          (Int.toNat
+            (Int.fdiv ((i.end - i.start + i.width) - 1) i.width))).foldl
+          (fun a k =>
+            let b := VeriSlopAST.aggregate i g k
+            VeriSlopAST.Scan.mk
+              (cond (decide (0 < b.count)) b.value a.previous)
+              (a.rows ++
+                [VeriSlopAST.Bucket.mk b.group b.start b.count
+                  (cond (decide (0 < b.count)) b.value
+                    (cond (decide (i.fill = "previous")) a.previous none))]))
+          ⟨none, []⟩) := by
+    simpa only [VSCore3.ProofSupport.map_identity] using
+      (foldBridge es (fun k : Nat => k)
+        (fun a k => scanStep (ei i) a (aggregate (ei i) g k))
+        (fun a k =>
+          let b := VeriSlopAST.aggregate i g k
+          VeriSlopAST.Scan.mk
+            (cond (decide (0 < b.count)) b.value a.previous)
+            (a.rows ++
+              [VeriSlopAST.Bucket.mk b.group b.start b.count
+                (cond (decide (0 < b.count)) b.value
+                  (cond (decide (i.fill = "previous")) a.previous none))]))
+        (by
+          intro a k
+          rw [aggregate_correct]
+          simp [scanStep, ei, es, eb, cond,
+            VSCore3.ProofSupport.ite_decide,
+            VSCore3.ProofSupport.apply_bool_ite,
+            VSCore3.ProofSupport.apply_ite])
+        (List.range
+          (Int.toNat
+            (Int.fdiv ((i.end - i.start + i.width) - 1) i.width)))
+        ⟨none, []⟩)
+  have hp := congrArg (fun s : S => s.2.1) h
+  simpa [ei, es] using hp
+
+private theorem solve_correct (i : VeriSlopAST.Input) :
+    solve (ei i) = (VeriSlopAST.solve i).map eb := by
+  unfold solve VeriSlopAST.solve
+  simp only [ei, List.map_map]
+  simpa only [VSCore3.ProofSupport.map_identity] using
+    (foldBridge (fun xs : List VeriSlopAST.Bucket => xs.map eb)
+      (fun g : String => g)
+      (fun a g => a ++ groupRows (ei i) g)
+      (fun a g => a ++ VeriSlopAST.group_rows i g)
+      (by
+        intro a g
+        rw [groupRows_correct]
+        simp only [List.map_append])
+      ((i.events.map (fun e => e.group)).eraseDups.mergeSort
+        (fun a b => decide (a ≤ b)))
+      [])
+
+private theorem refines : Refines_solve := by
+  intro i
+  unfold source_fn_solve
+  with_unfolding_all
+    change adapter_8.inv (solve (adapter_5.to i)) = VeriSlopAST.solve i
+  have hi : adapter_5.to i = ei i := by
+    simp [adapter_5, adapter_4, adapter_3, adapter_2, adapter_1, adapter_0,
+      VSCore3.listAdapter, VSCore3.optionAdapter,
+      VSCore3.intAdapter, VSCore3.stringAdapter, ei, ee,
+      VSCore3.ProofSupport.map_identity]
+  rw [hi, solve_correct]
+  simp [adapter_8, adapter_7, adapter_6, adapter_2, adapter_1, adapter_0,
+    VSCore3.listAdapter, VSCore3.optionAdapter,
+    VSCore3.natAdapter, VSCore3.intAdapter, VSCore3.stringAdapter,
+    eb, List.map_map, VSCore3.ProofSupport.map_identity]
+
+theorem edge : VeriSlopBridgeGoal.EdgeProp :=
+  VeriSlopBridgeGoal.edge_of_refines refines
+
+end VeriSlopBridgeProof
+```

@@ -1,0 +1,75 @@
+Readable VSCore denotation design v2.1: module-bound proof identity
+
+This immutable design-only revision supersedes the first v2 directory without
+changing it. It freezes the minimal honest MODULE_BOUND_PROOF choice requested
+after terminal audit013. Source/docs/tests and historic runs are untouched; no
+engineering validation, Lean/build/model/task run was performed.
+
+The first implementation remains deterministic typed source rendering, supporting
+39 of 41 current Expr constructors (variant/matchVariant excluded). Every source
+entry/helper, including unused helpers, must be covered together. The complete
+constructor matrix, declared-order Env/named signatures, reversed source stacks,
+actual compiled helper lookup/scheduling/signature/RunEquals laws and finite
+structural proof-generation recipe are fixed in specification.json. Feasibility
+through dependent compiler transports remains unestablished.
+
+Two-phase admission is mandatory: unchanged base goal admission first, isolated
+append-only enriched proposal second, then CHECKED promotion or byte-identical
+base fallback before authoring. Frozen CHECKED selection may never downgrade in
+acceptance, published verification, materialization, link or closure, even when
+the proof does not use support. Base/input mutation/shared infrastructure failures
+remain hard. Optional-only timeout/OOM/output/generation failures retain explicit
+reasons and bounded full diagnostics or honest incomplete/overflow records.
+
+The proof identity choice uses existing kernel APIs. The current exporter omits
+individual theorem proof ASTs; decl_hash covers theorem type only. Those limits
+are explicit. Every theorem instead has MODULE_BOUND_PROOF identity: exact
+independent universal type, kind/safety/levels, actual value_constants, staged
+dependency inventory/toolchain anchors and complete transitive axiom/unknown walk,
+plus exact deterministic regenerated Lean source and full compiled module parts.
+Kernel replay rechecks the actual body in that bound module. No individual proof
+AST/digest is available or claimed; body_hash is null. Definitions retain required
+exact exported type/body hashes. No kernel-exporter expansion is required.
+
+This is defensible because source and full module bytes, regenerated and replayed
+under pinned imports, bind an actual theorem body even when the exporter does not
+expose its expression. A different same-type proof cannot pass by retaining only
+decl_hash: source/module/inventory identities are frozen. Every support theorem,
+unused included, receives its actual ref/axiom/safety/level audit. Missing value
+refs/module identity/skipped support or incomplete staged safety inspection makes
+CHECKED unavailable/rejected. Nonstaged dependency terms remain anchored in the
+complete pinned toolchain import closure and per-root axiom walk, preserving
+existing trust; this is not a claim of a complete nonstaged proof DAG. Any future
+need for independent proof-body inspection is a separately specified exporter
+milestone, not an unannounced requirement here.
+
+The frozen candidate selection metadata uses closed readable-selection/1 schema
+and fixed vscore-readable-selection slot before bridge roots form. Authoritative
+acceptance sidecar readable/manifest.json uses closed readable-view/1 schema and
+is certificate/evidence bound. Existing certificate, implementation-IR, build and
+closure schemas receive explicit readable_support extensions. Original source/
+proof slots and strict relation remain unchanged. Accepted verification maps to
+current verify_published; there is no current verify_accepted Python function.
+All selected replay call sites and closure artifacts/comparison slots are listed.
+
+Compiler-process telemetry is a separately owned increment. Readable-view work
+consumes actual argv/returncode/timeout/resource/output-digest observations only
+after qualification and labels absent measurements unavailable; it does not edit
+leanbridge or the existing diagnostic helper. Full optional stream retention and
+overflow behavior must meet this design without false completeness assertions.
+No model inference timeout, runtime source bound or resource-policy relaxation
+is introduced. Numeric optional node/byte/step/depth/arity budgets are frozen.
+
+The 19 fresh unrelated validation case families include unchanged source-view
+bytes when accepted reference/guarantee bodies vary; typable same-sort parameter,
+helper argument, list-fold item/acc and Nat-fold index/acc swaps; exact actual
+helper scheduler provenance; optional fallback versus frozen no-downgrade; malicious
+unused support; closed metadata/certificate/evidence/closure mutation; and explicit
+module-bound proof substitution/rejection. Two clean from-source executions must
+compare every new artifact and preserve original Refines/transfers/raw coverage/
+source-only requiredness/trust. These tests are described, not executed here.
+
+The implementation slice includes renderer/target/checker/packet, schemas and
+verifier registration, needed generic Lean transport lemmas, and backend/closure
+selected replay integration. Controlled compiler normalization remains a separate
+deferred prototype. Review this complete specification before any implementation.

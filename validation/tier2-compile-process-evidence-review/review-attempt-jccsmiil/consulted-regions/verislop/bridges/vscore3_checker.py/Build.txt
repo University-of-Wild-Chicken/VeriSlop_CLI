@@ -1,0 +1,10 @@
+class Build:
+    observation: dict
+    decls: dict[str, dict]
+    modules: dict[str, dict[str, bytes]]
+    proposition_hash: str
+    ir: dict
+    axioms: list[str]
+    # Actual process observations are hash-bound in raw evidence, not compared
+    # across clean builds or included in the semantic certificate descriptor.
+    process_evidence: dict[str, dict] = field(default_factory=dict)

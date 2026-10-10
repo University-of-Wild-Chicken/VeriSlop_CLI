@@ -1,0 +1,58 @@
+{
+  "status": "DESIGN_ONLY_NOT_AN_ADMITTED_CATALOG",
+  "catalog_after_release": {
+    "global_simp_rules": false,
+    "lemmas": [
+      {
+        "name": "VSCore3.ProofSupport.apply_ite",
+        "signature": "∀ {α : Sort u} {β : Sort v} (f : α → β) (p : Prop) [Decidable p] (x y : α), f (if p then x else y) = if p then f x else f y"
+      },
+      {
+        "name": "VSCore3.ProofSupport.apply_bool_ite",
+        "signature": "∀ {α : Sort u} {β : Sort v} (f : α → β) (b : Bool) (x y : α), f (if b then x else y) = if b then f x else f y"
+      },
+      {
+        "name": "VSCore3.ProofSupport.ite_decide",
+        "signature": "∀ {α : Sort u} (p : Prop) [Decidable p] (x y : α), (if decide p then x else y) = if p then x else y"
+      },
+      {
+        "name": "VSCore3.ProofSupport.map_identity",
+        "signature": "∀ {α : Type u} (xs : List α), xs.map (fun x => x) = xs"
+      },
+      {
+        "name": "VSCore3.ProofSupport.int_ofNat_eq_cast",
+        "signature": "∀ (n : Nat), Int.ofNat n = (n : Int)"
+      },
+      {
+        "name": "VSCore3.ProofSupport.int_ofNat_add",
+        "signature": "∀ (m n : Nat), Int.ofNat (m + n) = Int.ofNat m + Int.ofNat n"
+      },
+      {
+        "name": "VSCore3.ProofSupport.to_eq_iff",
+        "signature": "∀ {t : VSCore3.Shape} {α : Type} (a : VSCore3.Adapter t α) (x y : α), a.to x = a.to y ↔ x = y"
+      },
+      {
+        "name": "VSCore3.ProofSupport.decide_to_eq",
+        "signature": "∀ {t : VSCore3.Shape} {α : Type} (a : VSCore3.Adapter t α) [DecidableEq α] [DecidableEq (VSCore3.Denote t)] (x y : α), decide (a.to x = a.to y) = decide (x = y)"
+      },
+      {
+        "name": "VSCore3.ProofSupport.map_transport",
+        "signature": "∀ {t u : VSCore3.Shape} {α β : Type} (a : VSCore3.Adapter t α) (b : VSCore3.Adapter u β) (f : α → β) (g : VSCore3.Denote t → VSCore3.Denote u) (h : ∀ x, g (a.to x) = b.to (f x)) (xs : List α), (VSCore3.listAdapter b).inv (List.map g ((VSCore3.listAdapter a).to xs)) = List.map f xs"
+      },
+      {
+        "name": "VSCore3.ProofSupport.filter_transport",
+        "signature": "∀ {t : VSCore3.Shape} {α : Type} (a : VSCore3.Adapter t α) (p : α → Bool) (q : VSCore3.Denote t → Bool) (h : ∀ x, q (a.to x) = p x) (xs : List α), (VSCore3.listAdapter a).inv (List.filter q ((VSCore3.listAdapter a).to xs)) = List.filter p xs"
+      },
+      {
+        "name": "VSCore3.ProofSupport.foldl_transport",
+        "signature": "∀ {t u : VSCore3.Shape} {α β : Type} (a : VSCore3.Adapter t α) (b : VSCore3.Adapter u β) (f : β → α → β) (g : VSCore3.Denote u → VSCore3.Denote t → VSCore3.Denote u) (h : ∀ z x, g (b.to z) (a.to x) = b.to (f z x)) (z : β) (xs : List α), b.inv (List.foldl g (b.to z) ((VSCore3.listAdapter a).to xs)) = List.foldl f z xs"
+      }
+    ],
+    "module": "VSCore3.Transport",
+    "source_hash": "RECOMPUTE_FROM_CHANGED_VSCore3.Transport_BYTES",
+    "universes": [
+      "u",
+      "v"
+    ]
+  }
+}

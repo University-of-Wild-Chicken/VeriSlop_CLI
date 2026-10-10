@@ -1,0 +1,4 @@
+def _attach_build_process_evidence(exc: EdgeFailure | VeriSlopError, inventory: dict):
+    for diagnostic in exc.diagnostics:
+        diagnostic.details = {**diagnostic.details, "build_process_evidence": copy.deepcopy(inventory)}
+    return exc

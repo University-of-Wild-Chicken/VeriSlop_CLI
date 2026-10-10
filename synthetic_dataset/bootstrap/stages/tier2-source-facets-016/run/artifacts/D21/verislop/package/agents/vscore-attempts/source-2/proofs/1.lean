@@ -1,0 +1,180 @@
+import VeriSlopBridgeGoal
+
+set_option maxRecDepth 100000
+set_option maxHeartbeats 20000000
+
+namespace VeriSlopBridgeProof
+
+open VeriSlopBridgeGoal VeriSlopAST
+open VeriSlopReadableSource
+
+private theorem map_filter_transport {α β : Type}
+    (f : α → β) (p : α → Bool) (q : β → Bool)
+    (h : ∀ x, q (f x) = p x) (xs : List α) :
+    (xs.map f).filter q = (xs.filter p).map f := by
+  induction xs with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [List.map_cons, List.filter_cons, h x]
+    cases p x <;> simp_all
+
+private theorem fold_transport {α β γ : Type}
+    (f : α → β) (s : α → γ → α) (t : β → γ → β)
+    (h : ∀ a x, t (f a) x = f (s a x))
+    (xs : List γ) (a : α) :
+    xs.foldl t (f a) = f (xs.foldl s a) := by
+  induction xs generalizing a with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [List.foldl_cons, h, ih]
+
+private theorem bool_ite_cond {α : Type} (b : Bool) (x y : α) :
+    (if b then x else y) = cond b x y := by
+  cases b <;> rfl
+
+private def selected (i : Input) (g : String) (t : Int) (e : Event) : Bool :=
+  decide (e.group = g) &&
+    (e.value.isSome &&
+      decide (t ≤ e.time ∧ e.time < t + i.width ∧ e.time < i.end))
+
+private def stats (i : Input) (g : String) (t : Int) : Stats :=
+  let es := i.events.filter (selected i g t)
+  ⟨es.length, (es.map (fun e => e.value.getD 0)).sum⟩
+
+private def step (i : Input) (g : String) (s : State) (n : Nat) : State :=
+  let t := i.start + Int.ofNat n * i.width
+  let b := stats i g t
+  ⟨s.rows ++ [⟨g, t, b.count,
+      cond (decide (0 < b.count)) (some b.sum)
+        (cond (decide (i.fill = Fill.previous)) s.previous none)⟩],
+    cond (decide (0 < b.count)) (some b.sum) s.previous⟩
+
+private def indices (i : Input) : List Nat :=
+  List.range ((i.end - i.start + i.width - 1).fdiv i.width).toNat
+
+private def rows (i : Input) (g : String) : List Row :=
+  ((indices i).foldl (step i g) ⟨[], none⟩).rows
+
+private def stateTo (s : State) :
+    VSCore3.Denote
+      (.record "State" ["rows", "previous"]
+        (.product helper_1_result (.product (.option .int) .unit))) :=
+  (adapter_9.to s.rows, (s.previous, ()))
+
+private theorem helper_stats (i : Input) (g : String) (t : Int) :
+    helper_0_named (adapter_6.to i) g t =
+      ((stats i g t).count, ((stats i g t).sum, ())) := by
+  let q := fun (e : VSCore3.Denote
+      (.record "Event" ["group", "time", "value"]
+        (.product .string (.product .int (.product (.option .int) .unit))))) =>
+    decide (e.1 = g) &&
+      ((Option.casesOn e.2.2.1 false (fun _ => true)) &&
+        (decide (t ≤ e.2.1) &&
+          (decide (e.2.1 < t + i.width) && decide (e.2.1 < i.end))))
+  have hp : ∀ e : Event, q (adapter_3.to e) = selected i g t e := by
+    intro e
+    cases hv : e.value <;>
+      simp [q, selected, adapter_3, adapter_0, adapter_1, adapter_2,
+        VSCore3.stringAdapter, VSCore3.intAdapter, VSCore3.optionAdapter,
+        hv, decide_and]
+  have hf := map_filter_transport adapter_3.to (selected i g t) q hp i.events
+  with_unfolding_all
+    simp only [helper_0_named, helper_0_run, helper_0_body,
+      helper_0_params, VSCore3.envReverse, VSCore3.envReverseAux,
+      adapter_6, adapter_4, VSCore3.listAdapter,
+      adapter_1, VSCore3.intAdapter]
+    change
+      (((i.events.map adapter_3.to).filter q).length,
+        (((((i.events.map adapter_3.to).filter q).map
+          (fun e => Option.casesOn e.2.2.1 0 (fun v => v))).sum), ())) = _
+    rw [hf]
+    simp only [List.length_map, List.map_map]
+    have hm : (fun e : Event =>
+        Option.casesOn (adapter_3.to e).2.2.1 0 (fun v => v)) =
+        (fun e : Event => e.value.getD 0) := by
+      funext e
+      cases hv : e.value <;>
+        simp [adapter_3, adapter_2, adapter_1,
+          VSCore3.optionAdapter, VSCore3.intAdapter, hv]
+    rw [hm]
+    rfl
+
+private def rawStep (i : Input) (g : String)
+    (s : VSCore3.Denote
+      (.record "State" ["rows", "previous"]
+        (.product helper_1_result (.product (.option .int) .unit))))
+    (n : Nat) :=
+  let t := i.start + Int.ofNat n * i.width
+  let b := helper_0_named (adapter_6.to i) g t
+  (s.1 ++ [(g, (t, (b.1,
+    (cond (decide (0 < b.1)) (some b.2.1)
+      (cond (decide (adapter_5.to i.fill =
+        (⟨"previous", by decide +kernel⟩ :
+          VSCore3.Denote (.enum "Fill" ["none", "previous"]))))
+        s.2.1 none), ()))))],
+    (cond (decide (0 < b.1)) (some b.2.1) s.2.1, ()))
+
+private theorem raw_step (i : Input) (g : String) (s : State) (n : Nat) :
+    rawStep i g (stateTo s) n = stateTo (step i g s n) := by
+  unfold rawStep
+  rw [helper_stats]
+  cases hf : i.fill <;>
+    simp [stateTo, step, adapter_9, adapter_8, adapter_7,
+      adapter_2, adapter_1, adapter_0, adapter_5,
+      VSCore3.listAdapter, VSCore3.natAdapter, VSCore3.optionAdapter,
+      VSCore3.intAdapter, VSCore3.stringAdapter, hf,
+      VSCore3.ProofSupport.map_identity,
+      VSCore3.ProofSupport.apply_bool_ite,
+      VSCore3.ProofSupport.apply_ite]
+
+private theorem helper_rows (i : Input) (g : String) :
+    helper_1_named (adapter_6.to i) g = adapter_9.to (rows i g) := by
+  have h := fold_transport stateTo (step i g) (rawStep i g)
+    (raw_step i g) (indices i) (⟨[], none⟩ : State)
+  have hp := congrArg (fun s => s.1) h
+  with_unfolding_all
+    simpa [helper_1_named, helper_1_run, helper_1_body,
+      helper_1_params, VSCore3.envReverse, VSCore3.envReverseAux,
+      adapter_6, adapter_4, adapter_1, VSCore3.listAdapter,
+      VSCore3.intAdapter, rawStep, stateTo, rows, indices,
+      List.foldl_cons, List.foldl_nil, bool_ite_cond] using hp
+
+private theorem group_names (i : Input) :
+    (adapter_6.to i).1.map (fun e => e.1) =
+      i.events.map Event.group := by
+  simp [adapter_6, adapter_4, adapter_3, adapter_0,
+    VSCore3.listAdapter, VSCore3.stringAdapter, List.map_map]
+
+private theorem readable_refines (i : Input) :
+    VeriSlopBridgeGoal.Readable.readable_fn_solve i = solve i := by
+  let gs := (i.events.map Event.group).eraseDups.mergeSort
+    (fun a b => decide (a ≤ b))
+  have hfold :
+      gs.foldl
+        (fun acc g => acc ++ helper_1_named (adapter_6.to i) g)
+        (adapter_9.to []) =
+      adapter_9.to (gs.foldl (fun acc g => acc ++ rows i g) []) := by
+    apply fold_transport
+    intro acc g
+    rw [helper_rows]
+    simp [adapter_9, VSCore3.listAdapter, List.map_append]
+  have hsolve :
+      gs.foldl (fun acc g => acc ++ rows i g) [] = solve i := by
+    rfl
+  have hr :
+      entry_0_run (adapter_6.to i, ()) = adapter_9.to (solve i) := by
+    with_unfolding_all
+      simpa [entry_0_run, entry_0_body, entry_0_params,
+        VSCore3.envReverse, VSCore3.envReverseAux, group_names,
+        gs, hsolve, adapter_9, VSCore3.listAdapter] using hfold
+  unfold VeriSlopBridgeGoal.Readable.readable_fn_solve
+  rw [hr]
+  exact adapter_9.from_to i.solve
+
+theorem edge : VeriSlopBridgeGoal.EdgeProp := by
+  apply VeriSlopBridgeGoal.edge_of_refines
+  intro i
+  rw [VeriSlopBridgeGoal.Readable.source_eq_solve]
+  exact readable_refines i
+
+end VeriSlopBridgeProof

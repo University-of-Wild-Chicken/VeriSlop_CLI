@@ -1,0 +1,37 @@
+ERROR
+test_bad_enumeration_shapes_names_and_generated_collisions (test_formal_frontend_enums.EnumFrontendValidationTests) ... ok
+test_both_schema_hashes_registered_and_schema_is_only_structural (test_formal_frontend_enums.EnumFrontendValidationTests) ... ok
+test_constructor_type_unknown_sort_and_term_shape_fail_closed (test_formal_frontend_enums.EnumFrontendValidationTests) ... ok
+test_exact_version_dispatch_and_legacy_byte_stability (test_formal_frontend_enums.EnumFrontendValidationTests) ... ok
+test_global_declaration_and_constructor_budgets (test_formal_frontend_enums.EnumFrontendValidationTests) ... ok
+test_nominal_carriers_quoted_source_and_precedence (test_formal_frontend_enums.EnumFrontendValidationTests) ... ok
+test_origin_replay_rejects_changed_constructor_nominality_order_and_receipts (test_formal_frontend_enums.EnumFrontendValidationTests) ... ok
+
+======================================================================
+ERROR: setUpClass (test_formal_frontend_enums.EnumFrontendKernelTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/augustus/VeriSlop_CLI/tests/test_formal_frontend_enums.py", line 226, in setUpClass
+    cls.audit = leanbridge.run_kernel_tool(cls.tc, cls.compiled.olean, {"defeq": ff.kernel_audit_requests(cls.generated)})
+  File "/home/augustus/VeriSlop_CLI/verislop/formal_frontend.py", line 745, in kernel_audit_requests
+    requests = [{"id": "body:" + name, "theorem": parse_name(_lean_name(name)),
+  File "/home/augustus/VeriSlop_CLI/verislop/formal_frontend.py", line 746, in <listcomp>
+    "expr": reify.denote_formula(formula, compiled.profile)} for name, formula in sorted(compiled.audit_formulas.items())]
+  File "/home/augustus/VeriSlop_CLI/verislop/reify.py", line 874, in denote_formula
+    return _Denoter(profile).formula(formula, [])
+  File "/home/augustus/VeriSlop_CLI/verislop/reify.py", line 851, in formula
+    return pi("x", self.sort(p["sort"]), self.formula(p["body"], [("var", p["sort"])] + ctx))
+  File "/home/augustus/VeriSlop_CLI/verislop/reify.py", line 851, in formula
+    return pi("x", self.sort(p["sort"]), self.formula(p["body"], [("var", p["sort"])] + ctx))
+  File "/home/augustus/VeriSlop_CLI/verislop/reify.py", line 830, in formula
+    b, _ = self.term(p["right"], ctx)
+  File "/home/augustus/VeriSlop_CLI/verislop/reify.py", line 736, in term
+    inst = app(const("instBEqOfDecidableEq", [0]), self.sort(s), self.equality_instance(s))
+  File "/home/augustus/VeriSlop_CLI/verislop/reify.py", line 630, in equality_instance
+    raise DSLError("decidable equality outside primitive scalar sorts")
+verislop.dsl.DSLError: decidable equality outside primitive scalar sorts
+
+----------------------------------------------------------------------
+Ran 7 tests in 1.798s
+
+FAILED (errors=1)

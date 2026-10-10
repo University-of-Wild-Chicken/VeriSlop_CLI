@@ -1,0 +1,55 @@
+def preview(pkg: Package, source: bytes, relation_bytes: bytes, proof: bytes | None = None,
+            obligations: list[str] | None = None) -> tuple[T.GoalSpec, Build, dict]:
+    """Derive the goal for an accepted run and build it once (with the proof when given).
+
+    This is a convenience for candidate authors; it publishes nothing and is never evidence.
+    The registered checker repeats every step from the frozen bundle during `bridge accept`.
+    """
+    from ..export import verified_ir
+    from ..lifecycle import applicability
+
+    ir, ir_hash, cert, diags = verified_ir(pkg)
+    if diags or ir is None or cert is None:
+        raise EdgeFailure(diags or [Diagnostic("VERIFIER_NOT_RUN", "no accepted IR")])
+    matches = [p for p in policymod.POLICIES.values()
+               if p["id"] == cert["policy"]["id"] and policymod.policy_hash(p) == cert["policy"]["hash"]]
+    if len(matches) != 1:
+        raise _fail("STATEMENT_MISMATCH", "accepted contract does not use one exact registered policy")
+    try:
+        relation = T.load_relation(relation_bytes)
+    except T.BridgeInvalid as exc:
+        raise _fail(exc.code, str(exc)) from None
+    if (relation["source_slot"], relation["proof_slot"]) != (SLOTS["source"], SLOTS["proof"]):
+        raise _fail("INVALID_CANDIDATE", f"relation slots must be {SLOTS['source']} and {SLOTS['proof']} for this helper")
+    required = sorted(oid for oid, r in ir["obligations"].items()
+                      if r["required"] and r["role"] == "guarantee" and applicability(r)["END_TO_END_VERIFIED"][0])
+    chosen = sorted(obligations) if obligations else required
+    profile_ref = cert["artifacts"]["profile"]
+    accepted_profile = canonical.load_file(pkg.root / profile_ref["path"])
+    obls = {}
+    for oid in chosen:
+        rec = ir["obligations"].get(oid)
+        if rec is None:
+            raise _fail("ORPHAN_CLAIM", f"unknown accepted obligation {oid}")
+        if rec["formal"]["representation"] not in {"contract_dsl", "source_facets"}:
+            raise _fail("UNSUPPORTED_CAPABILITY", f"{oid} has no registered value/source transfer")
+        digest = rec["formal"]["formula_ref"].rsplit("@", 1)[-1]
+        package = canonical.load_file(pkg.path("accepted") / "expressions" / (digest[7:] + ".json"))
+        obls[oid] = _obligation_from_package(oid, rec, package, accepted_profile)
+    ctx = EdgeContext("preview", {}, "", "", {"edge_id": "preview", "expected_proposition_hash": None},
+                      {"claim_id": "PREVIEW"}, {}, relation,
+                      {"source": (SLOTS["source"], source), "relation": (SLOTS["relation"], relation_bytes),
+                       "proof_source": (SLOTS["proof"], proof or b""),
+                       "model": (SLOTS["model"], canonical.dumps(T.model_descriptor(cert["toolchain"]["pin"]))),
+                       "profile": (SLOTS["profile"], canonical.dumps(T.profile_descriptor(accepted_profile, profile_ref["sha256"])))},
+                      ir, cert, accepted_profile, profile_ref["sha256"],
+                      (pkg.root / cert["artifacts"]["olean"]["path"]).read_bytes(), dict(matches[0]), obls)
+    spec = derive_goal(ctx)
+    tc = leanbridge.resolve_toolchain(cert["toolchain"]["pin"])
+    build = run_build(tc, ctx, spec, with_proof=proof is not None)
+    info = {"proposition_hash": build.proposition_hash, "obligations": sorted(obls), "required_obligations": required,
+            "symbols": [{"symbol": s.symbol, "entry": s.entry, "lean_decl": s.lean_decl} for s in spec.symbols],
+            "proof_checked": proof is not None, "edge_axioms": build.axioms,
+            "model": ctx.inputs["model"][1], "profile": ctx.inputs["profile"][1],
+            "compile_process_evidence": copy.deepcopy(build.process_evidence)}
+    return spec, build, info

@@ -1,0 +1,13 @@
+class CompileResult:
+    ok: bool
+    olean: Path | None
+    messages: list[dict[str, Any]]
+    errors: list[str]
+    sorry_positions: list[dict[str, int]]
+    timed_out: bool
+    wall_seconds: float
+    isolation: dict[str, Any] = field(default_factory=dict)
+    raw_stderr: str = ""
+    # Optional for compatibility with existing positional and synthetic results. This is
+    # attempt-local telemetry, never a deterministic build observation or acceptance rule.
+    process_evidence: dict[str, Any] | None = None

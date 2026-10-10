@@ -1,0 +1,412 @@
+REQUEST (untrusted data; byte length 8119):
+<<<
+Software engineering task D21: Grouped bucket aggregation with causal filling
+
+Deliver program.vscore.json with one pure admitted typed entry named solve. Its typed input and result must represent the specified JSON input/output structure. Perform no external I/O. Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end. Groups are all unique event group names sorted lexicographically, including groups with no in-range events. For each group, emit buckets starting start,start+width,... strictly below end, each covering [bucketStart,min(bucketStart+width,end)). Sum only non-null in-range values; count counts these values. A nonempty bucket has value=sum and becomes previous value. Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first); empty buckets never reset previous. Events before start never seed previous. Return [{group,start,count,value}] in group then bucket order. Zero sum is a real previous value, duplicates are counted.
+
+Implement the solve entry as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and the data-pipeline/0.3 serialization profile. Preserve the specified input/output structure and exact ordering. Admitted typed execution is total, pure and deterministic; input values are immutable, and the language has no external-effect constructors. Arithmetic uses unbounded mathematical integers without floating point. Strings contain Unicode scalar values and lexicographic order compares scalar codepoints. There are no additional input bounds or preconditions beyond the functional specification.
+
+Original public examples (preserved verbatim; universal refinement is required):
+[{"input": {"end": 5, "events": [{"group": "a", "time": 0, "value": 2}, {"group": "a", "time": 1, "value": -2}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 2, "group": "a", "start": 0, "value": 0}, {"count": 0, "group": "a", "start": 2, "value": 0}, {"count": 0, "group": "a", "start": 4, "value": 0}]}, {"input": {"end": 1, "events": [{"group": "z", "time": -1, "value": 9}], "fill": "previous", "start": 0, "width": 2}, "output": [{"count": 0, "group": "z", "start": 0, "value": null}]}]
+
+
+Explicit delivery revision and requirement identity metadata:
+This is a new canonical restricted-source delivery request. The functional clauses, stated domains and public example values above retain their original meaning. IDs mapped across a delivery revision now state the specified typed pure source properties; their previous delivery assurance is unchanged. Each functional guarantee requires its complete mathematical statement and universal implementation refinement; illustrative examples do not replace it. The clause offsets below refer to the revised text above.
+[{"delivery_revised":true,"id":"D1","kind":"entity","required":true,"revised_clause_spans":[{"end_byte":393,"start_byte":265},{"end_byte":1019,"start_byte":957},{"end_byte":264,"start_byte":79},{"end_byte":1687,"start_byte":1080}],"role":"declaration"},{"delivery_revised":false,"id":"I1","kind":"invariant","required":true,"revised_clause_spans":[{"end_byte":759,"start_byte":700},{"end_byte":915,"start_byte":880},{"end_byte":956,"start_byte":916},{"end_byte":1078,"start_byte":1020}],"role":"guarantee"},{"delivery_revised":true,"id":"O1","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":264,"start_byte":79},{"end_byte":1687,"start_byte":1080},{"end_byte":1687,"start_byte":1080}],"role":"guarantee"},{"delivery_revised":false,"id":"O2","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":501,"start_byte":394}],"role":"guarantee"},{"delivery_revised":false,"id":"O3","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":561,"start_byte":502},{"end_byte":637,"start_byte":562}],"role":"guarantee"},{"delivery_revised":false,"id":"O4","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":672,"start_byte":638},{"end_byte":699,"start_byte":673},{"end_byte":1078,"start_byte":1020}],"role":"guarantee"},{"delivery_revised":false,"id":"O5","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":759,"start_byte":700},{"end_byte":879,"start_byte":760}],"role":"guarantee"},{"delivery_revised":true,"id":"O6","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":1019,"start_byte":957},{"end_byte":1687,"start_byte":1080}],"role":"guarantee"},{"delivery_revised":true,"id":"O7","kind":"postcondition","required":true,"revised_clause_spans":[{"end_byte":2282,"start_byte":1689}],"role":"guarantee"},{"delivery_revised":false,"id":"A1","kind":"precondition","required":true,"revised_clause_spans":[{"end_byte":393,"start_byte":265}],"role":"assumption"},{"delivery_revised":true,"id":"S1","kind":"safety_property","required":true,"revised_clause_spans":[{"end_byte":264,"start_byte":79},{"end_byte":1687,"start_byte":1080}],"role":"guarantee"}]
+
+Mandatory requested source-facet specification:
+Every listed original required guarantee retains the globally requested source delivery: canonical file program.vscore.json, one typed entry solve of arity 1, and all seven closed source properties below. A mathematical result-existence or equality theorem cannot replace entry identity, purity, input preservation, effect restrictions or exact non-floating-point semantics. For every value_required=true row the source must implement the complete functional formula with universal source implementation refinement, including functional safety properties and invariants. Value facets are required by default regardless of category. Only the explicitly classified operational IDs below are source-only, retaining their source requirements rather than being replaced by value equalities. Assumptions, exclusions and separate non-vacuity witnesses are not source-policy rows.
+{"source_only_operational_ids":["I1","S1"],"value_required_default":true}
+{"format":"verislop.required-source-facets/0.1","obligations":{"I1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":false},"O1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O2":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O3":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O4":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O5":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O6":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"O7":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":true},"S1":{"arity":1,"entry":"solve","file":"program.vscore.json","properties":["typed_total","deterministic","input_preserved","no_external_io","no_floating_point","pure_data","restricted_runtime_only"],"value_required":false}},"schema_version":"0.1"}
+
+>>>
+
+REQUEST CLAUSE MANIFEST (supervisor-owned exact quotes and UTF-8 byte spans):
+[
+ {
+  "clause_id": "C1",
+  "quote": "Software engineering task D21: Grouped bucket aggregation with causal filling",
+  "start_byte": 0,
+  "end_byte": 77
+ },
+ {
+  "clause_id": "C2",
+  "quote": "Deliver program.vscore.json with one pure admitted typed entry named solve.",
+  "start_byte": 79,
+  "end_byte": 154
+ },
+ {
+  "clause_id": "C3",
+  "quote": "Its typed input and result must represent the specified JSON input/output structure.",
+  "start_byte": 155,
+  "end_byte": 239
+ },
+ {
+  "clause_id": "C4",
+  "quote": "Perform no external I/O.",
+  "start_byte": 240,
+  "end_byte": 264
+ },
+ {
+  "clause_id": "C5",
+  "quote": "Input {events:[{group:string,time:int,value:int|null}],start:int,end:int,width:positive int,fill:'none'|'previous'}, start<=end.",
+  "start_byte": 265,
+  "end_byte": 393
+ },
+ {
+  "clause_id": "C6",
+  "quote": "Groups are all unique event group names sorted lexicographically, including groups with no in-range events.",
+  "start_byte": 394,
+  "end_byte": 501
+ },
+ {
+  "clause_id": "C7",
+  "quote": "For each group, emit buckets starting start,start+width,...",
+  "start_byte": 502,
+  "end_byte": 561
+ },
+ {
+  "clause_id": "C8",
+  "quote": "strictly below end, each covering [bucketStart,min(bucketStart+width,end)).",
+  "start_byte": 562,
+  "end_byte": 637
+ },
+ {
+  "clause_id": "C9",
+  "quote": "Sum only non-null in-range values;",
+  "start_byte": 638,
+  "end_byte": 672
+ },
+ {
+  "clause_id": "C10",
+  "quote": "count counts these values.",
+  "start_byte": 673,
+  "end_byte": 699
+ },
+ {
+  "clause_id": "C11",
+  "quote": "A nonempty bucket has value=sum and becomes previous value.",
+  "start_byte": 700,
+  "end_byte": 759
+ },
+ {
+  "clause_id": "C12",
+  "quote": "Empty bucket value is null for fill none, or latest previous nonempty bucket sum for fill previous (null before first);",
+  "start_byte": 760,
+  "end_byte": 879
+ },
+ {
+  "clause_id": "C13",
+  "quote": "empty buckets never reset previous.",
+  "start_byte": 880,
+  "end_byte": 915
+ },
+ {
+  "clause_id": "C14",
+  "quote": "Events before start never seed previous.",
+  "start_byte": 916,
+  "end_byte": 956
+ },
+ {
+  "clause_id": "C15",
+  "quote": "Return [{group,start,count,value}] in group then bucket order.",
+  "start_byte": 957,
+  "end_byte": 1019
+ },
+ {
+  "clause_id": "C16",
+  "quote": "Zero sum is a real previous value, duplicates are counted.",
+  "start_byte": 1020,
+  "end_byte": 1078
+ },
+ {
+  "clause_id": "C17",
+  "quote": "Implement the solve entry as canonical vscore/0.3 source under normative Lean vscore-semantics/0.3 and the data-pipeline/0.3 serialization profile.",
+  "start_byte": 1080,
+  "end_byte": 1227
+ },
+ {
+  "clause_id": "C18",
+  "quote": "Preserve the specified input/output structure and exact ordering.",
+  "start_byte": 1228,
+  "end_byte": 1293
+ },
+ {
+  "clause_id": "C19",
+  "quote": "Admitted typed execution is total, pure and deterministic;",
+  "start_byte": 1294,
+  "end_byte": 1352
+ },
+ {
+  "clause_id": "C20",
+  "quote": "input values are immutable, and the language has no external-effect constructors.",
+  "start_byte": 1353,
+  "end_byte": 1434
+ },
+ {
+  "clause_id": "C21",
+  "quote": "Arithmetic uses unbounded mathematical integers without floating point.",
+  "start_byte": 1435,
+  "end_byte": 1506
+ },
+ {
+  "clause_id": "C22",
+  "quote": "Strings contain Unicode scalar values and lexicographic order compares scalar codepoints.",
+  "start_byte": 1507,
+  "end_byte": 1596
+ },
+ {
+  "clause_id": "C23",
+  "quote": "There are no additional input bounds or preconditions beyond the functional specification.",
+  "start_byte": 1597,
+  "end_byte": 1687
+ },
+ {
+  "clause_id": "C24",
+  "quote": "Original public examples (preserved verbatim;",
+  "start_byte": 1689,
+  "end_byte": 1734
+ },
+ {
+  "clause_id": "C25",
+  "quote": "universal refinement is required):\n[{\"input\": {\"end\": 5, \"events\": [{\"group\": \"a\", \"time\": 0, \"value\": 2}, {\"group\": \"a\", \"time\": 1, \"value\": -2}], \"fill\": \"previous\", \"start\": 0, \"width\": 2}, \"output\": [{\"count\": 2, \"group\": \"a\", \"start\": 0, \"value\": 0}, {\"count\": 0, \"group\": \"a\", \"start\": 2, \"value\": 0}, {\"count\": 0, \"group\": \"a\", \"start\": 4, \"value\": 0}]}, {\"input\": {\"end\": 1, \"events\": [{\"group\": \"z\", \"time\": -1, \"value\": 9}], \"fill\": \"previous\", \"start\": 0, \"width\": 2}, \"output\": [{\"count\": 0, \"group\": \"z\", \"start\": 0, \"value\": null}]}]",
+  "start_byte": 1735,
+  "end_byte": 2282
+ },
+ {
+  "clause_id": "C26",
+  "quote": "Explicit delivery revision and requirement identity metadata:\nThis is a new canonical restricted-source delivery request.",
+  "start_byte": 2285,
+  "end_byte": 2406
+ },
+ {
+  "clause_id": "C27",
+  "quote": "The functional clauses, stated domains and public example values above retain their original meaning.",
+  "start_byte": 2407,
+  "end_byte": 2508
+ },
+ {
+  "clause_id": "C28",
+  "quote": "IDs mapped across a delivery revision now state the specified typed pure source properties;",
+  "start_byte": 2509,
+  "end_byte": 2600
+ },
+ {
+  "clause_id": "C29",
+  "quote": "their previous delivery assurance is unchanged.",
+  "start_byte": 2601,
+  "end_byte": 2648
+ },
+ {
+  "clause_id": "C30",
+  "quote": "Each functional guarantee requires its complete mathematical statement and universal implementation refinement;",
+  "start_byte": 2649,
+  "end_byte": 2760
+ },
+ {
+  "clause_id": "C31",
+  "quote": "illustrative examples do not replace it.",
+  "start_byte": 2761,
+  "end_byte": 2801
+ },
+ {
+  "clause_id": "C32",
+  "quote": "The clause offsets below refer to the revised text above.",
+  "start_byte": 2802,
+  "end_byte": 2859
+ },
+ {
+  "clause_id": "C33",
+  "quote": "[{\"delivery_revised\":true,\"id\":\"D1\",\"kind\":\"entity\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":393,\"start_byte\":265},{\"end_byte\":1019,\"start_byte\":957},{\"end_byte\":264,\"start_byte\":79},{\"end_byte\":1687,\"start_byte\":1080}],\"role\":\"declaration\"},{\"delivery_revised\":false,\"id\":\"I1\",\"kind\":\"invariant\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":759,\"start_byte\":700},{\"end_byte\":915,\"start_byte\":880},{\"end_byte\":956,\"start_byte\":916},{\"end_byte\":1078,\"start_byte\":1020}],\"role\":\"guarantee\"},{\"delivery_revised\":true,\"id\":\"O1\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":264,\"start_byte\":79},{\"end_byte\":1687,\"start_byte\":1080},{\"end_byte\":1687,\"start_byte\":1080}],\"role\":\"guarantee\"},{\"delivery_revised\":false,\"id\":\"O2\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":501,\"start_byte\":394}],\"role\":\"guarantee\"},{\"delivery_revised\":false,\"id\":\"O3\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":561,\"start_byte\":502},{\"end_byte\":637,\"start_byte\":562}],\"role\":\"guarantee\"},{\"delivery_revised\":false,\"id\":\"O4\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":672,\"start_byte\":638},{\"end_byte\":699,\"start_byte\":673},{\"end_byte\":1078,\"start_byte\":1020}],\"role\":\"guarantee\"},{\"delivery_revised\":false,\"id\":\"O5\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":759,\"start_byte\":700},{\"end_byte\":879,\"start_byte\":760}],\"role\":\"guarantee\"},{\"delivery_revised\":true,\"id\":\"O6\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":1019,\"start_byte\":957},{\"end_byte\":1687,\"start_byte\":1080}],\"role\":\"guarantee\"},{\"delivery_revised\":true,\"id\":\"O7\",\"kind\":\"postcondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":2282,\"start_byte\":1689}],\"role\":\"guarantee\"},{\"delivery_revised\":false,\"id\":\"A1\",\"kind\":\"precondition\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":393,\"start_byte\":265}],\"role\":\"assumption\"},{\"delivery_revised\":true,\"id\":\"S1\",\"kind\":\"safety_property\",\"required\":true,\"revised_clause_spans\":[{\"end_byte\":264,\"start_byte\":79},{\"end_byte\":1687,\"start_byte\":1080}],\"role\":\"guarantee\"}]",
+  "start_byte": 2860,
+  "end_byte": 5034
+ },
+ {
+  "clause_id": "C34",
+  "quote": "Mandatory requested source-facet specification:\nEvery listed original required guarantee retains the globally requested source delivery: canonical file program.vscore.json, one typed entry solve of arity 1, and all seven closed source properties below.",
+  "start_byte": 5036,
+  "end_byte": 5288
+ },
+ {
+  "clause_id": "C35",
+  "quote": "A mathematical result-existence or equality theorem cannot replace entry identity, purity, input preservation, effect restrictions or exact non-floating-point semantics.",
+  "start_byte": 5289,
+  "end_byte": 5458
+ },
+ {
+  "clause_id": "C36",
+  "quote": "For every value_required=true row the source must implement the complete functional formula with universal source implementation refinement, including functional safety properties and invariants.",
+  "start_byte": 5459,
+  "end_byte": 5654
+ },
+ {
+  "clause_id": "C37",
+  "quote": "Value facets are required by default regardless of category.",
+  "start_byte": 5655,
+  "end_byte": 5715
+ },
+ {
+  "clause_id": "C38",
+  "quote": "Only the explicitly classified operational IDs below are source-only, retaining their source requirements rather than being replaced by value equalities.",
+  "start_byte": 5716,
+  "end_byte": 5869
+ },
+ {
+  "clause_id": "C39",
+  "quote": "Assumptions, exclusions and separate non-vacuity witnesses are not source-policy rows.",
+  "start_byte": 5870,
+  "end_byte": 5956
+ },
+ {
+  "clause_id": "C40",
+  "quote": "{\"source_only_operational_ids\":[\"I1\",\"S1\"],\"value_required_default\":true}\n{\"format\":\"verislop.required-source-facets/0.1\",\"obligations\":{\"I1\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":false},\"O1\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":true},\"O2\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":true},\"O3\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":true},\"O4\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":true},\"O5\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":true},\"O6\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":true},\"O7\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":true},\"S1\":{\"arity\":1,\"entry\":\"solve\",\"file\":\"program.vscore.json\",\"properties\":[\"typed_total\",\"deterministic\",\"input_preserved\",\"no_external_io\",\"no_floating_point\",\"pure_data\",\"restricted_runtime_only\"],\"value_required\":false}},\"schema_version\":\"0.1\"}",
+  "start_byte": 5957,
+  "end_byte": 8118
+ }
+]
+REQUEST CITATION SCOPE (clause IDs belong only to this exact request):
+{"document": "tier2:tier2-source-facets-015:D21", "document_hash": "sha256:789cb596e5b534eacc67b4942a06050b87af78619d904ab1a54e340d977799f2"}
+REQUIRED SOURCE FACETS (frozen specification constraint; not accepted IR or proof evidence):
+{
+ "format": "verislop.required-source-facets/0.1",
+ "obligations": {
+  "I1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": false
+  },
+  "O1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O2": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O3": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O4": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O5": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O6": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "O7": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": true
+  },
+  "S1": {
+   "arity": 1,
+   "entry": "solve",
+   "file": "program.vscore.json",
+   "properties": [
+    "typed_total",
+    "deterministic",
+    "input_preserved",
+    "no_external_io",
+    "no_floating_point",
+    "pure_data",
+    "restricted_runtime_only"
+   ],
+   "value_required": false
+  }
+ },
+ "schema_version": "0.1"
+}
+Retain every policy obligation ID as a required guarantee with its complete requested behavior. Each row fixes the canonical file, entry, arity and closed source properties for that ID. value_required=true requires the complete functional value proposition as well as the source facets; a mathematical existence result, True, reflexive equality or an unrelated entry cannot replace them. Do not convert these requirements into assumptions, declarations, exclusions or optional guarantees. The policy supplies no algorithm, candidate source, expected output, accepted statement or lifecycle state.
+Use the policy's actual obligation IDs rather than renaming them or merging away required IDs. Interpret their source properties faithfully under the same guarantees and preserve all public request clauses, examples, branch guards and typed input/output requirements. SourceBoundary and exact source discharge are formalization/bridge steps, not facts the interpreter may assert as already established.

@@ -1,0 +1,276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:vscore-materialization:0.3",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.3"
+    },
+    "format": {
+      "const": "verislop.vscore-materialization/0.3"
+    },
+    "backend": {
+      "const": "verislop.backend.vscore/0.3"
+    },
+    "bridge_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "source_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "decoded_program_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "program": {
+      "$ref": "urn:verislop:schema:vscore-source:0.3"
+    },
+    "signatures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "params": {
+            "type": "array",
+            "items": {
+              "$ref": "urn:verislop:schema:vscore-source:0.3#/$defs/type"
+            }
+          },
+          "result": {
+            "$ref": "urn:verislop:schema:vscore-source:0.3#/$defs/type"
+          }
+        },
+        "required": [
+          "id",
+          "params",
+          "result"
+        ]
+      }
+    },
+    "enums": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "constructors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          }
+        },
+        "required": [
+          "id",
+          "constructors"
+        ]
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "entry": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "lean_decl": {
+            "type": "string",
+            "minLength": 1
+          },
+          "args": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/sort"
+            }
+          },
+          "result": {
+            "$ref": "#/$defs/sort"
+          }
+        },
+        "required": [
+          "symbol",
+          "entry",
+          "lean_decl",
+          "args",
+          "result"
+        ]
+      }
+    },
+    "adapters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sort": {
+            "$ref": "#/$defs/sort"
+          },
+          "decl_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "name",
+          "sort",
+          "decl_hash"
+        ]
+      },
+      "minItems": 0
+    },
+    "profile_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "proposition_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "proof_checked": {
+      "const": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "backend",
+    "bridge_id",
+    "source_hash",
+    "decoded_program_hash",
+    "program",
+    "signatures",
+    "enums",
+    "bindings",
+    "adapters",
+    "profile_hash",
+    "proposition_hash",
+    "proof_checked"
+  ],
+  "$defs": {
+    "sort": {
+      "oneOf": [
+        {
+          "enum": [
+            "Nat",
+            "Int",
+            "Bool",
+            "String",
+            "Unit"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enum": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "enum"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "result": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "error": {
+                  "$ref": "#/$defs/sort"
+                },
+                "ok": {
+                  "$ref": "#/$defs/sort"
+                }
+              },
+              "required": [
+                "error",
+                "ok"
+              ]
+            }
+          },
+          "required": [
+            "result"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "record": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "record"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "list": {
+              "$ref": "#/$defs/sort"
+            }
+          },
+          "required": [
+            "list"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "option": {
+              "$ref": "#/$defs/sort"
+            }
+          },
+          "required": [
+            "option"
+          ]
+        }
+      ]
+    }
+  }
+}

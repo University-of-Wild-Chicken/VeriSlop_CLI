@@ -1,0 +1,147 @@
+{
+  "format": "verislop.readable-denotation-milestone-design/1",
+  "design_id": "readable-view-design-013-20261010T030558Z-b1ff56cd",
+  "state": "DESIGN_ONLY_UNIMPLEMENTED",
+  "objective": "Expose a deterministic readable Lean denotation of admitted finalized VSCore 0.3 source, with kernel-checked universal equality to its unchanged exact compiled entries, as optional authoring support.",
+  "execution_boundary": {
+    "allowed_now": ["Read current generic APIs", "Write this unique validation design directory"],
+    "forbidden_now": ["Edit source, docs, or tests", "Build or invoke Lean", "Invoke models or task tools", "Read retained task, corpus, or stage artifacts", "Supply guidance or artifacts to the live author/controller"],
+    "live_run_effect": "None. This design is not implemented, qualified, or supplied to the frozen live run.",
+    "provenance": "Generic current APIs and read-only API review. No retained task source, proof, case, carrier, expected output, or result is an input. Observed generic normalization difficulties motivate readability; no task candidate is produced."
+  },
+  "existing_machinery": [
+    {"api": "VSCore3.CompiledFunction.run", "fact": "The intrinsic compiler already returns total Lean functions over Env and Denote. This is the normative meaning, not a separately checked readable view."},
+    {"api": "VSCore3.castCompiled / envReverse / compileExpr", "fact": "Successful compilation retains exact dependent casts, binder/environment ordering and scalar/list/nominal semantics."},
+    {"api": "VSCore3.Adapter and RawLaws", "fact": "Exact accepted carrier adapters and canonical raw representation laws already exist; no arbitrary shape round-trip laws may be assumed."},
+    {"api": "VSCore3.evalEntry_encoded and generated raw_eval_*", "fact": "Already universally connect encoded arguments, exact compiled entry runs and raw evaluation."},
+    {"api": "generated source_fn_* / Refines_* / InputsCover_* / Transfer_*", "fact": "Already fix the implementation side, universal accepted-reference equality, raw coverage and obligation-ID-specific transfer."},
+    {"api": "vscore3_source.lean_expr / lean_program", "fact": "Render VSCore source constructor literals, not readable executable mathematical Lean functions."},
+    {"api": "vscore_target.Printer", "fact": "Explicit goal-expression printer supports a restricted node set; it is not a general readable printer for compiled lets, projections, matches, implicit binders and arbitrary sorts."},
+    {"api": "vscore3_checker.preview / run_build / _audit", "fact": "Can compile and replay exact generated source-derived definitions and bind their declaration inventory; presently exposes no independently checked readable-function interface."}
+  ],
+  "invariants": [
+    {"id": "RV-I01", "requirement": "Preserve canonical source bytes, profile, language, semantics, accepted nominal identities and adapter identity. The readable view is not a new delivered endpoint or runtime."},
+    {"id": "RV-I02", "requirement": "Keep existing source_fn definitions, universal Refines inventory, EdgeProp meaning, per-ID transfer statements and admitted raw coverage. Preserve source-only facet treatment and refinement of required extras."},
+    {"id": "RV-I03", "requirement": "Generate readable bodies only from source, signatures, exact nominal/enumeration registries and renderer identity. Do not inspect accepted function bodies, accepted guarantee formulas, task examples, expected outputs, previous proofs, or model suggestions."},
+    {"id": "RV-I04", "requirement": "Every exposed equality quantifies over all intrinsic environments or all accepted argument values; finite execution examples cannot establish correspondence."},
+    {"id": "RV-I05", "requirement": "Kernel replay must check the exact correspondence theorem type, definitions, dependency identity and transitive axioms. No new axiom allowance, sorry, native_decide, extern, implemented_by, unsafe or partial code."},
+    {"id": "RV-I06", "requirement": "Keep the compiler side intact. Cast erasure, similar types, pretty output, renderer determinism or source admission alone cannot establish readable equality."},
+    {"id": "RV-I07", "requirement": "Readable support failure is not a failure of the existing source language capability. Its absence must leave the unchanged standard authoring path and all proof obligations available."},
+    {"id": "RV-I08", "requirement": "Bind optional support explicitly. Helpers outside EdgeProp's dependency closure are not automatically covered by the current proposition hash."}
+  ],
+  "closed_coverage": {
+    "types": ["Nat", "Int", "Bool", "String", "Unit", "accepted finite Enum", "Result(error,ok)", "Option(T)", "List(T)", "acyclic nominal Record with exact ordered fields; arbitrary finite nesting of supported types"],
+    "source_expr_constructors": ["var", "nat", "int", "string", "bool", "unit", "enum", "bin", "not", "ite", "letE", "ok", "error", "matchResult", "record", "project", "none", "some", "matchOption", "nil", "cons", "matchList", "call", "listFold", "natFold", "intNeg", "intFdiv", "natToInt", "intToNat", "listLength", "listRange", "listGet", "listAppend", "listReverse", "listSort", "listUnique", "listMap", "listFilter", "listSum"],
+    "bin_ops": {
+      "eq": "Exact typed structural equality via the same denoteDecidableEq carrier; Bool result.",
+      "add_sub_mul": "Nat and Int only; Nat subtraction is saturating, Int subtraction is signed.",
+      "lt_le": "Nat, Int and String only; emit Bool-valued decide of the same pinned Lean comparison.",
+      "and_or": "Bool only; preserve compiler Bool operations without interpreting them as propositions."
+    },
+    "primitive_semantics": {
+      "intFdiv": "The exact pinned Lean Int.fdiv operation, including zero and negative divisors.",
+      "natToInt_intToNat": "Int.ofNat and Int.toNat exactly; no bounded machine arithmetic.",
+      "string": "String.ofList of admitted Unicode scalar codepoints via Char.ofNat; no ASCII, byte, UTF-16 or locale reinterpretation.",
+      "listGet": "The same total Option-producing List.get?Internal call used by the compiler.",
+      "listSort": "The compiler's mergeSort and ascending decide(a <= b) comparator for admitted Nat, Int or String elements.",
+      "listUnique": "The same first-occurrence eraseDups behavior and admitted primitive carriers.",
+      "listFold": "List.foldl with the exact accumulator/item positions and surrounding immutable captures.",
+      "natFold": "Nat.rec with the compiler's exact initial state, index and accumulator positions; no execution fuel.",
+      "remaining_list_ops": "Pinned Lean List.range, length, append, reverse, map, filter and sum, exactly as selected by compileExpr."
+    },
+    "helper_coverage": "Acyclic source helpers over supported types and constructors, including helpers called inside list/natural folds and map/filter bodies. Named definitions in stable dependency order preserve sharing; calls use declaration-order arguments.",
+    "excluded_first_milestone": ["variant / matchVariant and types depending on them", "any future or unrecognized source constructor", "any carrier the existing bridge cannot map through exact adapters", "recursive/cyclic nominal declarations or helpers, which existing admission already rejects"],
+    "unsupported_rule": "Determine support recursively before rendering. Any unsupported constructor, type or required helper makes that entry's view UNSUPPORTED with all missing reasons. Never emit a partial view or replace a missing operation with a constant/default. This does not change the base backend's existing admission."
+  },
+  "rendering_contract": {
+    "preferred_route": "Deterministic structural AST-to-Lean renderer with a small typed rendering IR. The IR and Python inference remain proposals; they acquire no semantic authority without kernel correspondence.",
+    "input": ["exact canonical finalized source bytes and source hash", "same exact Profile/enumeration registry used by admission", "resolved source record declarations and signatures", "closed renderer version, implementation hash and coverage registry"],
+    "standalone_output": "A source-only ReadableSource.lean artifact importing the existing pinned VSCore3 library. It contains canonical shape aliases, named record packing/projection helpers, source helper denotations and entry readable_run definitions. It contains no accepted reference function calls, accepted guarantees or task proofs.",
+    "representation": "Use the existing intrinsic Denote carriers: records are their exact nominal Shape.record and right-associated ordered product payload ending Unit; Result uses the same intrinsic Sum, and Option/List use the same recursive carriers. Emit named packing/projection helpers and source field labels for readability. Do not invent a new accepted record identity or silently infer its layout.",
+    "accepted_wrapper": "Within the existing generated goal, derive readable_fn_* using the already checked argument adapters and result adapter.inv around readable_run. The wrapper is a typed authoring interface to the same accepted carrier, not an alternative adapter.",
+    "module_integration_minimum": "Render source-only definitions as one canonical block that can compile standalone and can also be embedded byte-for-byte in the existing goal namespace. Place accepted wrappers and correspondence theorems in the goal. This avoids adding a new required imported module in the initial milestone; audit block hash and declaration identity explicitly.",
+    "binder_rules": [
+      "Emit entry/helper parameters in declared order. The source body variable environment is reversed parameter order, matching compileFunction and envReverse.",
+      "letE body environment is [bound value] followed by the surrounding environment.",
+      "map/filter body environment is [item] followed by the surrounding environment.",
+      "listFold step environment is [item, accumulator] followed by the surrounding environment, while the emitted foldl lambda parameters are accumulator then item.",
+      "natFold step environment is [accumulator, index] followed by the surrounding environment, while the emitted Nat.rec step parameters are index then accumulator.",
+      "matchList cons environment is [tail, head] followed by the surrounding environment.",
+      "Option and Result branch environments extend the surrounding environment by their payload in exactly the compiler branch order."
+    ],
+    "determinism": ["Stable source-index-based generated names and canonical escaping", "Stable topological helper/declaration order with source-order tie breaking", "Canonical fully typed literals and primitive applications", "Preserve lexical lets and shared named helper calls", "No global simplification, accepted-body inlining, algebraic optimization, helper graph expansion or runtime input evaluation"],
+    "cost_bound": "Freeze maximum rendered nodes/bytes and proof-generation steps before qualification. Each source/helper node has bounded emission; shared helper calls remain references, preventing exponential call-graph expansion. Exceeding a view-only budget returns explicit unavailable status rather than changing source/runtime semantics. No inference timeouts are introduced."
+  },
+  "correspondence_gate": {
+    "required_universal_shapes": [
+      "RunEquals(entry) := forall env : Env exactEntry.params, exactEntry.run env = readable_run_entry env",
+      "ReadableEquals(symbol) := forall accepted arguments in their exact declared carriers, source_fn_symbol arguments = readable_fn_symbol arguments",
+      "ReadableRawEval(symbol) := forall accepted arguments, evalEntry exactProfile exactProgram exactEntryId encodedArguments = Except.ok (exactResultAdapter.encode (readable_fn_symbol arguments))"
+    ],
+    "derivation": "Generate fixed structural correspondence terms/steps from the closed constructor registry. Universal compiler-run equality is checked first; adapter wrappers supply ReadableEquals; existing raw_eval_* or evalEntry_encoded supplies ReadableRawEval. Never prove Refines to an accepted function or any accepted guarantee automatically.",
+    "exact_checks": ["Existing exact parse, admission, compilation and entry lookup gates succeed", "Readable definitions have the exact derived types and source-only bodies", "The correspondence theorem has the exact universally quantified expected equality; a theorem of True, equality to itself, narrowed domain or omitted binder is rejected", "Full staged-module kernel replay succeeds", "Transitive correspondence axioms/dependencies obey the unchanged pinned policy, even if an equality helper is not used by the candidate edge proof", "No unreadable/missing dependency, unsafe declaration or declaration substitution", "All source/profile/adapter/renderer/goal/declaration identities match the same current inputs"],
+    "proof_mechanism": "A finite reviewed per-constructor correspondence generator and reusable representation/congruence lemmas; limited definitional conversion for closed compiler administration is allowed only inside that checked generator. Broad compiler unfolding, model-authored correspondence, arbitrary tactic search and native evaluation are not qualification evidence.",
+    "axiom_rule": "Declare the baseline foundational/dependency axiom set before qualification and require every support theorem's transitive set to remain within that same already-declared set. No new axiom declaration, newly admitted axiom, policy extension or undeclared trusted dependency is permitted. Prefer pointwise universal equality rather than adding function-extensionality assumptions.",
+    "independence": "These theorems establish readable source equivalence only. They leave universal Refines and every required accepted transfer proof to the unchanged bridge proof boundary."
+  },
+  "identity_binding": {
+    "required_manifest_fields": ["format/version", "canonical source hash", "exact source-profile hash", "accepted profile and nominal registry hash", "binding relation hash", "exact existing adapter declaration hashes", "renderer version and implementation/source-inventory hash", "coverage registry hash", "typed view IR hash", "source-only Lean artifact/block hash", "goal module and generated goal text hash", "readable definition names/type/body hashes", "each exact universal correspondence theorem name/type/value hash", "correspondence dependency/axiom inventory", "pinned Lean toolchain and imported module closure identity", "complete preview execution record refs"],
+    "rule": "Names or proposition_hash alone are insufficient. Verify manifest field set, regenerate from current inputs, compare exact declaration identities, then kernel-check/replay. A view outside EdgeProp's closure needs explicit binding even if the base edge proposition hash remains unchanged.",
+    "acceptance": "If readable support is referenced in an edge proof, independently regenerate and replay it under the frozen acceptance inputs and registered renderer. Never reuse an advisory preview result as acceptance evidence. Preserve existing two isolated build, axiom, semantic IR reexport, provenance and final closure checks."
+  },
+  "optional_packet_interface": {
+    "packet_key": "readable_source_view",
+    "authoring_statuses": ["CHECKED", "UNSUPPORTED", "REJECTED", "INFRASTRUCTURE_FAILURE"],
+    "not_lifecycle_states": "These describe optional authoring support only and discharge no obligation or milestone.",
+    "checked": "Expose source-only readable definitions, accepted wrappers, exact theorem signatures and names, explicit binding manifest and complete artifact refs only after the universal kernel correspondence gate succeeds.",
+    "other_statuses": "Expose reasons and durable diagnostic refs; do not expose a purported equivalence theorem or mark an unchecked definition usable. Retain the original source/goal/library/context, universal Refines inventory and every accepted obligation.",
+    "fallback": "View-only failure may return the standard packet with view unavailable. It cannot repair/change source, relation, adapters or accepted contract, hide any required failure, assert proof success or remove proof obligations. Existing failures of the base admission/checker retain their existing classification and stopping behavior.",
+    "partial_support": "Entry-wise status is permitted only with an explicit inventory for every bound entry. CHECKED applies solely to individually fully checked entries; unsupported dependency makes all dependent views unavailable. No claim of complete-program readable coverage unless all entries are checked."
+  },
+  "durable_artifacts": [
+    {"name": "readable-source.lean", "content": "Exact standalone source-only definition block; explicit advisory status."},
+    {"name": "readable-view-ir.json", "content": "Deterministic typed proposal IR, binder environments, nominal layouts and support inventory."},
+    {"name": "readable-view-manifest.json", "content": "All exact source/profile/adapter/renderer/code/declaration/toolchain bindings."},
+    {"name": "readable-correspondence.json", "content": "Exact expected and replayed theorem types, definitions, dependency/axiom inventories, kernel result and module identities."},
+    {"name": "readable-diagnostics.json", "content": "Complete error inventory and available compiler/kernel outputs; explicit output-retention limitations, compact row for every error, full artifact path/hash, current input binding."},
+    {"name": "readable-build-A.json / readable-build-B.json", "content": "Isolated clean qualification records with generated code, declarations, checked theorem inventory and artifact digests; compare all declared deterministic fields."}
+  ],
+  "fresh_generic_validation_cases": [
+    {"id": "RV-T01", "schema": "scalar-only, three distinct parameters over Nat/Int/Bool", "exercise": "Declaration-order parameters, reversed source environment, nested lets, both conditional branches and noncommutative arithmetic.", "pass": "Universal exact compiled-run and wrapper equalities replay; comparisons remain Bool and Nat/Int operations preserve their own semantics."},
+    {"id": "RV-T02", "schema": "record PulseMark { label:String, enabled:Bool, delta:Int }; record WrapMark { marker:Option(PulseMark), history:List(Option(PulseMark)) }", "exercise": "Nested ordered nominal records, Option payload matches, construction/projection, map/filter with outer scalar/string/record captures and let-bound repeated uses.", "pass": "Universal correspondence under exact layouts/adapters; no independent accepted record identity or hidden casts assumed."},
+    {"id": "RV-T03", "schema": "record FoldMemo { state:Int, seen:Nat, chosen:Option(String) }; source parameters include List(Option(PulseMark))", "exercise": "Left fold with record accumulator, branch payloads, helper calls and surrounding immutable captures.", "pass": "Universal correspondence retains item/accumulator positions and every outer binder; no finite-list bound added."},
+    {"id": "RV-T04", "schema": "Nat bound, scalar state and captured Option/List/record values", "exercise": "Natural fold with index and accumulator referenced distinctly, nested let, map or helper use in a step.", "pass": "Universal equality for every natural bound with exact Nat.rec order and no runtime fuel."},
+    {"id": "RV-T05", "schema": "List(Result(Option(PulseMark),WrapMark)) and accepted finite Enum ToggleMark", "exercise": "Nested Result/Option/List branches and enum constructors, typed equality and shape-correct payload handling.", "pass": "All branch types and case order correspond universally; nominal identity and exact enum registry retained."},
+    {"id": "RV-T06", "schema": "Acyclic diamond helper dependency graph over supported scalar/list/record signatures", "exercise": "Repeated named helper use, out-of-dependency-order source declarations, fold/map calls and captures passed as actual helper arguments.", "pass": "Stable dependency rendering, correct argument order, sharing without exponential inlining, universal helper and entry correspondence."},
+    {"id": "RV-T07", "schema": "Int/Nat/String/Bool lists and scalar parameters", "exercise": "Exact fdiv, conversions, Bool-valued comparison, Unicode scalar construction, Option indexing and fixed sort/unique/list primitives.", "pass": "Universal equality uses the same pinned primitive constants; independent closed sanity examples may supplement but cannot replace it."},
+    {"id": "RV-T08", "schema": "The previous fresh schemas only", "exercise": "Mutate renderer output: noncommutative argument swap, changed scalar operator, changed comparison boundary, swapped Option/Result branch, item/accumulator swap, natural index/accumulator swap, altered record field order or nominal ID, missing captured variable.", "pass": "Exact typing/layout or universal kernel correspondence rejects each semantically distinguishable mutation; no CHECKED packet is emitted."},
+    {"id": "RV-T09", "schema": "Two independent fresh admitted sources/profiles with different nominal registries", "exercise": "Replay a view/theorem/manifest under altered source, profile, relation, adapter, renderer, theorem type or artifact bytes; attempt narrowed equality or theorem of True.", "pass": "Identity/theorem checks reject stale, substituted or weakened correspondence even if a pretty name or base proposition hash matches."},
+    {"id": "RV-T10", "schema": "Fresh supported program and an unrelated internal variant-dependent program", "exercise": "Unsupported constructor/type, renderer-only byte/node budget, failed correspondence, missing tooling and injected sorry/axiom/unsafe/import violation.", "pass": "Complete unavailable reasons/artifacts, correct optional status and unchanged standard packet; base required failures remain failures; no forbidden equality is exposed."},
+    {"id": "RV-T11", "schema": "All positive fresh schemas, multiple bound entries and mixed source/value obligation fixtures", "exercise": "Two isolated clean generations/builds/replays and downstream exact-edge replay using the checked equality helper.", "pass": "Deterministic artifacts/declarations/theorem inventories; original Refines inventory, per-ID accepted theorem references, raw coverage, source facets and trust boundaries unchanged."}
+  ],
+  "normalization_prettyprint_alternative": {
+    "state": "FEASIBLE_IN_PRINCIPLE_NOT_ESTABLISHED",
+    "input": "Exact declaration expressions obtained from the current replayed compiler-generated goal/module, under the same source/profile/toolchain bindings. Stored source_fn expressions are not assumed to already be normal or readable merely because elaboration used with_unfolding_all.",
+    "needed_phase": "A pinned Lean-side controlled reduction/quotation phase specializing only compileProgram/findEntry/closed shape checks/casts/environment plumbing with symbolic runtime arguments. Preserve List.map/foldl/Nat.rec and scalar operations as named functions; preserve helper and let sharing.",
+    "additional_gates": ["Hash and register the normalizer and reduction whitelist", "Retain exact original and transformed Lean expressions with expected types", "Kernel-check universal equality to the unchanged source_fn/entry.run, not just untrusted normalizer isDefEq output", "Round-trip pretty output through Lean elaboration and compare the expected expression/type, then replay", "Bind all transformation and prettyprinting artifacts independently from the base proposition hash"],
+    "risks": ["Broad reduction exposes recursor/equality/typeclass internals and is unreadable", "Compiled helper closure expansion can become exponential", "Capture substitution duplicates expressions or loses useful let sharing", "Symbolic List/Option/record adapter inverses may need proved simplification rather than computation", "Implicit arguments, universes, coercions, projections and name hygiene can change prettyprinted elaboration", "Runtime primitives must not be evaluated or algebraically optimized while claiming a source-only structural view"],
+    "recommendation": "Use a bounded typed AST renderer as the initial engineering route. Consider controlled expression-body normalization as a separately specified diagnostic/reference prototype after a generic correspondence gate exists. Do not combine both approaches into the first milestone or treat feasibility as a completed result."
+  },
+  "minimum_future_implementation": [
+    {"file": "docs/bootstrap-tier2-readable-denotation.md", "purpose": "Freeze this engineering contract, constructor and primitive registry, identity fields, optional statuses and validation predicates before implementation."},
+    {"file": "verislop/targets/vscore3_readable.py (new)", "functions": ["supported_view_inventory", "lower_typed_view", "render_readable_source", "readable_view_descriptor"], "purpose": "Source-only deterministic proposal lowering/rendering with explicit binder stacks, canonical nominal layouts, named helper sharing and finite output bounds."},
+    {"file": "verislop/targets/vscore3_target.py", "functions": ["derive_readable_view", "render_readable_wrappers", "expected_readable_equalities", "render_readable_correspondence"], "purpose": "Embed the exact block and adapter wrappers in the generated goal without replacing source_fn or changing Refines/EdgeProp/transfer semantics."},
+    {"file": "verislop/lean/VSCore3/ReadableSupport.lean (new only if needed)", "functions": ["Reviewed universal cast/environment/constructor congruence and representation transport lemmas"], "purpose": "Supply only generic kernel-proved correspondence building blocks missing from existing library support; no accepted task proof or new axioms."},
+    {"file": "verislop/bridges/vscore3_checker.py", "functions": ["check_readable_correspondence", "audit_readable_manifest", "preview_readable_packet"], "purpose": "Validate exact theorem signatures, bodies, dependencies/axioms and explicit identity manifest; retain complete errors; regenerate during acceptance when support is used; preserve existing strict gates."},
+    {"file": "verislop/agents.py", "functions": ["Attach checked-or-unavailable readable_source_view to proof context"], "purpose": "Expose optional support and artifact refs with exact current binding; retain original packet and required obligations on unavailable support."},
+    {"file": "tests/test_vscore3_readable_denotation.py (new)", "functions": ["Closed coverage and binder/layout tests", "Universal kernel correspondence and mutation tests", "Exact packet binding/fallback tests", "Two clean generation/build/replay comparison"], "purpose": "Implement RV-T01 through RV-T11 using newly created unrelated fixtures; no retained corpus/task replay qualifies the generic milestone."},
+    {"file": "verislop/verifiers.py and module inventory integration, only if required by chosen support layout", "purpose": "Include renderer, coverage registry and any support library in registered implementation identities; bind dynamic support artifacts explicitly. Do not rely on an unchanged base proposition closure."}
+  ],
+  "engineering_release_conditions": [
+    "Approve a finite coverage/proof-generation design and inspect the actual existing APIs before assigning implementation scope.",
+    "Demonstrate future deterministic output and universal correspondence for every positive generic case, with all mutation/fallback cases producing the specified failure behavior.",
+    "Confirm support is source-only, preserves original functional/source requirements and trust, and leaves every accepted refinement/transfer obligation required exactly as before.",
+    "Complete two isolated clean builds/replays, required deterministic comparisons and artifact/declaration/hash bindings on the frozen generic qualification inputs.",
+    "Report implementation and qualification results separately from any future task result. This design alone establishes none of them."
+  ]
+}

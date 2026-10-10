@@ -1,0 +1,259 @@
+VSCore 0.3 exact Lean name identity: findings and minimum change design
+
+Status and scope
+
+This is a read-only design. No production, schema/specification, or test files
+were edited. No task implementation or task proof was examined or constructed.
+The analysis used current verislop production modules, current generic schemas,
+and generic tests. An initial broad rg --files discovery returned path names from
+other repository trees; no contents from those paths were read. Every subsequent
+read was scoped to explicit current source/schema/test paths. No collaboration
+inventory, bootstrap stage, old experiment, or task artifact content was read.
+
+The only executed probe was a short Python expression over current exprjson and
+target helpers, with PYTHONDONTWRITEBYTECODE=1. It did not compile a Lean module or
+write a test. The test cases below are proposed work for after the source hold.
+
+Current source hashes (SHA-256, without the sha256: prefix)
+
+verislop/bridges/vscore3_checker.py
+  a3a456dce81acf998af640cb79e3681e033fadffb9f9d17e275a54eb2f4ba8e5
+verislop/targets/vscore3_target.py
+  7d30b5e1cadf87711d51d4c0294f797467efc08ab9235d551f2bc5ddfff0bc96
+verislop/targets/vscore3_replay.py
+  cbc7ccd1845b0735ef1db335c22ae1541ab59d9f30b63165ec86841f911877a0
+verislop/targets/vscore_target.py
+  5900590a4af5fcce818f9ecf7372a9b4a95f67c00072d9e472f2b2c28e0c8f41
+verislop/exprjson.py
+  32cc06b49c5637206ab885b9aa2cf3c19f275cbf6b99946612a04f3b6f10d329
+
+1. Name identity and the supported obligation identifier domain
+
+schemas/obligation.schema.json:8-10 and :347-349 allow the pattern
+  ^[A-Za-z][A-Za-z0-9_.:-]*$
+Thus hyphens, literal dots, and colons are allowed in obligation IDs. The generic
+bridge-plan ID grammar at schemas/bridge-plan.schema.json:32 is broader, but the
+covered record is also bound to accepted obligation input by load_context.
+
+vscore3_target aliases gname/gconst/lean_component from vscore_target. The shared
+gname at vscore_target.py:154-159 returns [GOAL_MODULE, component], treating the
+entire generated suffix as one string component. It never parses the suffix as a
+namespace path. This is correct for an ID containing a dot.
+
+vscore3_target.py:548-552 and :596 render the entire Transfer_<id> or
+transfer_<id> component through lean_component. For a hyphen, dot, or colon this
+produces one quoted Lean identifier, e.g. theorem «transfer_Generic-1».
+
+exprjson.py:20-29 name_str serializes the same component list as
+  VeriSlopBridgeGoal.«transfer_Generic-1»
+The replay declaration indexes at checker.py:466-473 and replay.py:191-195 are
+keyed by name_str(exported_name_components). Any lookup that starts with an
+unquoted raw full-name string has to use the same component construction first.
+
+Read-only probe results:
+
+ID Generic_1:
+  components ["VeriSlopBridgeGoal", "transfer_Generic_1"]
+  export key VeriSlopBridgeGoal.transfer_Generic_1
+  current raw transfer lookup matches: true
+ID Generic-1:
+  components ["VeriSlopBridgeGoal", "transfer_Generic-1"]
+  export key VeriSlopBridgeGoal.«transfer_Generic-1»
+  current raw transfer lookup matches: false
+ID Generic.1:
+  components ["VeriSlopBridgeGoal", "transfer_Generic.1"]
+  export key VeriSlopBridgeGoal.«transfer_Generic.1»
+  current raw transfer lookup matches: false
+  parse_name(raw full-name concatenation) also changes the components: true
+ID Generic:1:
+  components ["VeriSlopBridgeGoal", "transfer_Generic:1"]
+  export key VeriSlopBridgeGoal.«transfer_Generic:1»
+  current raw transfer lookup matches: false
+
+In particular, parse_name(GOAL_MODULE + ".transfer_" + oid) is not a valid fix:
+for Generic.1 it creates [GOAL_MODULE, "transfer_Generic", 1]. The correct name
+has only [GOAL_MODULE, "transfer_Generic.1"]. A single quote pair around the
+whole fully-qualified name would also produce the wrong structure.
+
+2. Exact lookup and statement/re-export inventory
+
+Defects in the current VSCore 0.3 paths:
+
+- verislop/bridges/vscore3_checker.py:506 obtains a transfer theorem using
+  f"{GOAL_MODULE}.transfer_{ob.oid}". It misses valid quoted generated leaves.
+- verislop/targets/vscore3_replay.py:200 repeats the same raw concatenation in
+  the concrete review replay audit. Fixing only checker.py leaves this path
+  unable to resolve the same valid transfer declarations.
+- checker.py:507 and replay.py:202 compare ob.lean_symbol directly with the
+  name_str spelling of each exported value_constants entry. This is a string
+  spelling comparison, not a Lean Name comparison. For example the schema-
+  allowed spelling Fixture.«contract» parses to ["Fixture", "contract"], but
+  its replay spelling is Fixture.contract. The current comparison rejects it.
+  Whether upstream accepted inputs currently canonicalize all such spellings
+  is outside this design; these two comparisons should still express exact
+  component equality. Parsed names with different namespace structure must
+  remain different, even if their printed leaf text looks related.
+- checker.py:648 serializes obligation transfer and transfer_theorem metadata
+  through raw concatenation. For dotted IDs these strings describe a different
+  component structure if parsed as Lean names. Hyphen/colon output also differs
+  from the replay index's canonical rendering.
+- checker.py:657 serializes statement_identity the same way. It consequently
+  disagrees with statement_mismatches' actual declaration keys for quoted leaves.
+  The current descriptor comparison binds its own deterministic output, so this
+  is an identity spelling defect rather than a separately observed lookup in
+  those certificate fields.
+
+Existing exact paths to preserve:
+
+- vscore3_target.py:405 stores a literal component key Transfer_<oid> in
+  spec.expected. :321 constructs EdgeProp references with gconst("Transfer_" +
+  oid), preserving literal punctuation as one component.
+- vscore3_target.py:412-421 statement_mismatches uses name_str(gname(component))
+  for ordinary expected declarations. It already finds a quoted Transfer_<oid>
+  definition correctly. It also compares exact expression types/values and kind
+  and rejects unexpected universes; this check should not be relaxed.
+- That function deliberately treats the reserved Readable. prefix as an actual
+  nested namespace. Its current branch builds GOAL_MODULE + "." + component.
+  The readable generated leaves are helper_<index>/entry_<index> names
+  (vscore3_readable.py:107-108), and the reserved expected names are created at
+  vscore3_target.py:654-657. They are not arbitrary obligation ID components.
+  A shared expected-name helper must preserve this distinction.
+- vscore3_target.py:433-447 reexport obtains sourceBytes, rawProgram, signatures,
+  and profile through old._value. vscore_target.py:978-982 _value uses
+  name_str(gname(comp)) already. These fixed one-component names are exact and
+  contain no obligation ID. The re-exported program and source-byte comparisons
+  therefore need no punctuation-specific lookup rewrite.
+- The constructor reifier used there inherits _Reify.head at
+  vscore_target.py:846-851. It compares name_str(fn["const"]) with fixed normative
+  constructor names. These names are fixed and independent of obligation IDs.
+- exprjson.constants, semantic_refs, closure, canon, and decl_hash all obtain
+  declaration/reference keys through name_str; closure and proposition_hash use
+  the same keys as the replay index. They already retain literal dotted leaves.
+  No Expr JSON hashing or global serializer change is required for this bug.
+- EDGE_PROP, EDGE_THEOREM, source-check theorem names, module names, and the
+  verifier namespace prefixes are fixed identifiers. Their raw strings do not
+  contain obligation IDs, so the present failure does not require their rewrite.
+
+The analogous older VSCore checker also has raw transfer lookups/metadata, but
+changing the older protocol is outside this VSCore 0.3 design.
+
+3. Minimum exact implementation design
+
+Retain current JSON component arrays and current string-indexed declaration maps.
+Derive map keys from the structured components, not by cleaning ID text. Do not
+strip punctuation, replace '-' with '_', compare suffixes, or fall back to a
+second raw spelling. Distinct allowed IDs must remain distinct declarations.
+
+A. In checker.py and replay.py, construct the transfer lookup as:
+     name_str(target.gname("transfer_" + obligation.oid))
+   (T in checker.py, target in replay.py). This uses the same two components as
+   rendering, expected expressions, and kernel export.
+
+B. Parse an accepted theorem's input spelling once and compare its components
+   directly with each exported value_constants entry:
+     accepted_name = parse_name(obligation.lean_symbol)
+     any(exported_name == accepted_name
+         for exported_name in transfer.get("value_constants", []))
+   Keep the theorem kind requirement. Any malformed parsed name should fail
+   closed through the existing statement/unsupported diagnostic boundary, rather
+   than escape as an unclassified exception. Optionally share this tiny predicate
+   between the two paths, but do not broaden dependency membership to partial names.
+
+C. Add a small shared helper in vscore3_target for the name of a spec.expected
+   entry, retaining the existing representation:
+     ordinary component -> gname(component)
+     reserved "Readable." + leaf -> [GOAL_MODULE, "Readable", leaf]
+   Use name_str(that result) in both statement_mismatches and the descriptor's
+   statement_identity. If using parse_name for the reserved branch, apply it
+   only to that verifier-owned hierarchical key; never to an ordinary component.
+
+D. Serialize descriptor.transfer and descriptor.transfer_theorem using
+   name_str(gname("Transfer_" + oid)) and
+   name_str(gname("transfer_" + oid)), respectively. Keep the actual accepted
+   input spelling in accepted_theorem when recording provenance; use parsed
+   components for dependency identity. No schema change is needed: these fields
+   and statement_identity elements are unrestricted strings in the existing
+   vscore-edge-certificate-v3 schema (:178-184, :233-240).
+
+This changes source name lookup/serialization only. It does not require changing
+the generated Lean source, target formulas, frozen expression representation,
+statement comparison, bounded reifier, import policy, or declaration hash format.
+Existing simple identifiers retain their current emitted spelling. Quoted names
+are represented consistently everywhere that the identity is claimed.
+
+4. Proposed generic tests after source hold release
+
+Use a small independent integer function and its ordinary accepted theorem, such
+as addition of a fixed literal. Reuse the existing generic bridge test plumbing;
+never obtain fixtures from task code or task proof artifacts. Put several IDs in
+one fresh goal to exercise coexistence and avoid repeated library compilation.
+
+Positive kernel integration:
+
+- One goal with Generic_1, Generic-1, Generic.1, and Generic:1, all bound to the
+  same generic theorem/formula. Compile/replay with the normal checker. Assert
+  that each transfer definition and theorem has exactly the two exported name
+  components, all transfer dependencies include the exact accepted theorem, and
+  the implementation IR re-encodes to the delivered source bytes. Include a pair
+  Generic-1 and Generic_1 in the same goal so a punctuation rewrite cannot pass.
+- Check canonical descriptor transfer fields and statement_identity against
+  actual exported name_str keys. Parse those output strings and assert the exact
+  components; merely checking that the strings contain quotes is insufficient.
+- Run ordinary concrete review replay with a Generic-1 obligation and at least
+  one dotted/colon obligation. Require the normal successful kernel result. This
+  covers replay.py independently of the checker acceptance path.
+- Keep one checked readable goal in the fixture or a focused target unit case;
+  prove that its expected Readable.RunEquals_entry_0 key has three components
+  while Transfer_Generic.1 still has two. This catches a helper that parses every
+  expected key or treats every expected key as one leaf.
+
+Focused name/statement positives:
+
+- An accepted name spelling Fixture.«contract» and an exported dependency
+  ["Fixture", "contract"] compare equal structurally. Also cover a quoted leaf
+  containing a literal dot, ["Fixture", "contract.part"], because its identity
+  differs from ["Fixture", "contract", "part"]. A small unit predicate test is
+  sufficient for alternate accepted input spellings if upstream accepted-package
+  generation requires canonical textual spellings.
+- Derive a target with the punctuation IDs, build an ordinary declaration dict
+  from each exact spec.expected type/value and exact component name, and require
+  statement_mismatches == []. This guards the existing quoted statement lookup.
+
+Meaningful audit negatives, preferably mutations of a real generic kernel export:
+
+- Remove the exact transfer_Generic-1 theorem while retaining transfer_Generic_1
+  and all correct Transfer_* definitions. The checker must report
+  STATEMENT_MISMATCH; review replay must remain Unsupported. This fails any fuzzy
+  punctuation or suffix lookup while keeping the statement gate satisfied.
+- Replace the transfer_Generic.1 theorem name with
+  [GOAL_MODULE, "transfer_Generic", 1] or
+  [GOAL_MODULE, "transfer_Generic", "1"]. Neither may satisfy the original
+  two-component name. Test these separately from the underscore/hyphen pair.
+- Retain the correct transfer declaration name but remove the accepted theorem
+  from its value_constants, or replace it with a different generic theorem.
+  Both audit paths must reject; a name fix must not remove the provenance check.
+- Retain the correct transfer name but change its kind from theorem to
+  definition. Both paths must reject even if its dependency list still contains
+  the accepted theorem.
+- For an accepted theorem leaf containing a dot, replace its dependency with
+  the corresponding multi-component namespace path. The parsed structural check
+  must reject this near match. Also retain the distinction between a numeric
+  component 1 and the string component "1" in a focused name case.
+- In statement_mismatches, remove or rename Transfer_Generic.1 to the split
+  namespace path, and separately mutate its type/value while leaving the name
+  correct. Both must be mismatches. These guard exact lookup and exact statements.
+- Re-export a valid punctuation-ID goal and verify exact IR. Then remove or
+  rename the fixed rawProgram declaration, or mutate its constructor tree. The
+  existing reexport must reject with IR_REIFICATION_MISMATCH. This guards the
+  unaffected exact lookup and bounded reifier while validating the full path.
+
+Clearly label changed exported records as host-audit boundary mutations. Their
+rejection is evidence for the host checks, not a claim that the edited records
+were independently kernel replayed. A real kernel positive plus these negatives
+is stronger coverage than tests that only exercise a name helper in isolation.
+
+Recommended existing checks to run after implementation:
+  tests/test_vscore3_bridge.py
+  tests/test_vscore3_review_replay.py
+  the focused readable statement/descriptor test affected by helper reuse
+Then only broaden checks if a changed site or failure requires it.

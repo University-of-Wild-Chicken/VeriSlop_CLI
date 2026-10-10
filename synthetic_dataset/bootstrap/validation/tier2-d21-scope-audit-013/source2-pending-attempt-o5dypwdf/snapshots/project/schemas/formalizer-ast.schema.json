@@ -1,0 +1,519 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:formalizer-ast:0.1",
+  "title": "Untrusted typed formalizer proposal; kernel-derived IR remains authoritative",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "encoding": {
+      "const": "verislop.formalizer-ast/0.1"
+    },
+    "records": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "$ref": "#/$defs/identifier"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/record"
+      }
+    },
+    "symbols": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "$ref": "#/$defs/identifier"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/symbol"
+      }
+    },
+    "predicates": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "$ref": "#/$defs/identifier"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/predicate"
+      }
+    },
+    "theorems": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "$ref": "#/$defs/identifier"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "formula": {
+            "type": "object"
+          },
+          "native": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/identifier"
+            }
+          },
+          "source": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/identifier"
+            }
+          }
+        },
+        "not": {
+          "required": ["native", "source"]
+        },
+        "anyOf": [
+          {
+            "required": [
+              "formula"
+            ]
+          },
+          {
+            "required": [
+              "native"
+            ]
+          },
+          {
+            "required": [
+              "source"
+            ]
+          }
+        ]
+      }
+    },
+    "obligations": {
+      "type": "object",
+      "maxProperties": 128,
+      "additionalProperties": {
+        "$ref": "#/$defs/binding"
+      }
+    },
+    "witness_obligations": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/witness"
+      }
+    },
+    "native_requirements": {
+      "type": "object",
+      "maxProperties": 32,
+      "propertyNames": {
+        "$ref": "#/$defs/identifier"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "symbol": {
+            "$ref": "#/$defs/identifier"
+          },
+          "requirements": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "items": {
+              "$ref": "#/$defs/native_requirement"
+            }
+          }
+        },
+        "required": [
+          "symbol",
+          "requirements"
+        ]
+      }
+    },
+    "source_requirements": {
+      "type": "object",
+      "maxProperties": 32,
+      "propertyNames": {
+        "$ref": "#/$defs/identifier"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "symbol": {
+            "$ref": "#/$defs/identifier"
+          },
+          "requirements": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "items": {
+              "$ref": "#/$defs/source_requirement"
+            }
+          }
+        },
+        "required": [
+          "symbol",
+          "requirements"
+        ]
+      }
+    }
+  },
+  "required": [
+    "encoding",
+    "records",
+    "symbols",
+    "predicates",
+    "theorems",
+    "obligations",
+    "witness_obligations"
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "not": {
+        "pattern": "^_vs_"
+      }
+    },
+    "sort": {
+      "oneOf": [
+        {
+          "enum": [
+            "Nat",
+            "Int",
+            "String",
+            "Bool",
+            "Unit"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "list": {
+              "$ref": "#/$defs/sort"
+            }
+          },
+          "required": [
+            "list"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "option": {
+              "$ref": "#/$defs/sort"
+            }
+          },
+          "required": [
+            "option"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "record": {
+              "$ref": "#/$defs/identifier"
+            }
+          },
+          "required": [
+            "record"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "result": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "error": {
+                  "$ref": "#/$defs/sort"
+                },
+                "ok": {
+                  "$ref": "#/$defs/sort"
+                }
+              },
+              "required": [
+                "error",
+                "ok"
+              ]
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      ]
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "$ref": "#/$defs/identifier"
+              },
+              "sort": {
+                "$ref": "#/$defs/sort"
+              }
+            },
+            "required": [
+              "name",
+              "sort"
+            ]
+          }
+        }
+      },
+      "required": [
+        "fields"
+      ]
+    },
+    "symbol": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sort"
+          }
+        },
+        "result": {
+          "$ref": "#/$defs/sort"
+        },
+        "body": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "args",
+        "result",
+        "body"
+      ]
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sort"
+          }
+        },
+        "formula": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "args",
+        "formula"
+      ]
+    },
+    "declaration_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "record",
+            "symbol",
+            "predicate"
+          ]
+        },
+        "name": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ]
+    },
+    "binding": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "theorem": {
+              "$ref": "#/$defs/identifier"
+            }
+          },
+          "required": [
+            "theorem"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "predicate": {
+              "$ref": "#/$defs/identifier"
+            }
+          },
+          "required": [
+            "predicate"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "declarations": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/declaration_ref"
+              }
+            }
+          },
+          "required": [
+            "declarations"
+          ]
+        },
+        {
+          "type": "object",
+          "maxProperties": 0
+        }
+      ]
+    },
+    "witness": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "theorem": {
+          "$ref": "#/$defs/identifier"
+        },
+        "witnesses_for": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "theorem",
+        "witnesses_for",
+        "description"
+      ]
+    },
+    "source_requirement": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {"const": "entry"},
+            "file": {"const": "program.vscore.json"},
+            "entry": {
+              "type": "string",
+              "maxLength": 128,
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+            },
+            "arity": {"type": "integer", "minimum": 0}
+          },
+          "required": ["tag", "file", "entry", "arity"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "enum": [
+                "typed_total",
+                "deterministic",
+                "input_preserved",
+                "no_external_io",
+                "no_floating_point",
+                "pure_data",
+                "restricted_runtime_only"
+              ]
+            }
+          },
+          "required": ["tag"]
+        }
+      ]
+    },
+    "native_requirement": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "entry"
+            },
+            "file": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "qualname": {
+              "$ref": "#/$defs/identifier"
+            },
+            "arity": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 16
+            }
+          },
+          "required": [
+            "tag",
+            "file",
+            "qualname",
+            "arity"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "enum": [
+                "pure_json",
+                "standard_runtime_only",
+                "no_external_io",
+                "input_preserved",
+                "deterministic",
+                "no_floating_point"
+              ]
+            }
+          },
+          "required": [
+            "tag"
+          ]
+        }
+      ]
+    }
+  },
+  "$comment": "Term/formula typing, predicate macro typing, frozen role/ID preservation, primitive-shadow exclusion, scope budgets, declaration cycles and witness semantics require formal_frontend and the existing kernel pipeline; JSON Schema proves structure only. Option payload cannot be Unit or another Option because native None would conflate constructors. Core terms include none(element_sort), some(value), option_get_or(value,default), option_is_some(value), ite(condition,then,else); branch and payload sorts are checked mechanically. Arithmetic adds list_range(stop:Nat), int_to_nat(value:Int), int_fdiv(left:Int,right:Int), with floor division and zero divisor yielding zero. Grouping adds list_get(value:List S,index:Nat) returning unambiguous Option S, list_sort(value:List Nat/Int/String) fixed ascending scalar ordering, list_unique(value:List Nat/Int/String/Bool) preserving first occurrences. Formulas lt/le admit matching String operands in Unicode scalar lexicographic order. Predicate calls are frontend-only and are never downstream accepted DSL nodes."
+}

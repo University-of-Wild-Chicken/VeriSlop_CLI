@@ -1,0 +1,91 @@
+{
+  "format": "verislop.independent-compile-process-review/1",
+  "decision": "REVISION_REQUIRED_CONCRETE_RELEASE_NORMALIZER_COMPATIBILITY_DEFECT",
+  "reviewer": "/root/tier2_semantics_audit",
+  "completed_utc": "2026-10-10T04:01:09.925763+00:00",
+  "specification": {
+    "path": "docs/bootstrap-tier2-compile-process-evidence.md",
+    "sha256": "sha256:c2252e17cf6f4e481d9f21629601c8f52ec6d4eb6c845cd53dfa682cd8c31631"
+  },
+  "reviewed_author_checkpoint": {
+    "directory": "validation/tier2-compile-process-evidence/compile-process-attempt-ea_69slk",
+    "validation_sha256": "sha256:b3f32ef1b9328ea1b5344eba612c5278dff998b152a30e60fc01ffb97ba66605",
+    "leanbridge_sha256": "sha256:5c1e346fa592f878e87fe568d9720c787d34bc5c8053077986ffd1e0daca93fc",
+    "checker_sha256": "sha256:f43db2af319f737ef112e3e4f0bc2aa14202bb86fa2cd7e1ccc8ee3205ba298e",
+    "agents_sha256": "sha256:3f949c606ada84dc60c4612312b1d64436eda2a1dfb50dfe540eb3b5dace1d7c",
+    "cli_sha256": "sha256:b2de5d092e2f38c2dd8fc78a9a261edc560cf9176fb701634505abd5fd43a922"
+  },
+  "executed": {
+    "focused_tests": 45,
+    "focused_test_result": "PASS",
+    "focused_argv": [
+      "python",
+      "-m",
+      "unittest",
+      "tests.test_compile_process_evidence",
+      "tests.test_compile_process_persistence",
+      "tests.test_vscore3_proof_support.CompleteProofDiagnosticsTests",
+      "tests.test_vscore3_workflow_unit",
+      "-v"
+    ],
+    "independent_pure_checks": 387,
+    "independent_pure_result": "PASS_ALL_EXPECTED_OBSERVATIONS_WITH_ONE_REPRODUCED_DEFECT",
+    "compiler_matrix_cases": 48,
+    "sandbox_run": "Always mocked; compiler/Lean/kernel/native/model invocations zero",
+    "evidence_persistence": "Actual EvidenceStore, registered raw evidence reader and release normalizer; unrelated synthetic data only"
+  },
+  "findings": [
+    {
+      "id": "CPE-AUDIT-01",
+      "severity": "blocking-compatibility",
+      "status": "REPRODUCED",
+      "producer": "verislop/bridges/vscore3_checker.py outputs, raw compile_process_evidence additive field",
+      "consumer": "verislop/review_projection.py RESULT_FIELDS alias and normalize exact-field check",
+      "witness": "normalizer-counterexample.json plus witness-publications/{legacy,new-telemetry}/evidence exact records/raw bytes",
+      "actual": "The legacy .3 producer raw result passes normalize. The same base result with the newly required compile_process_evidence field fails STALE_OR_UNBOUND_EVIDENCE: unknown or missing raw result fields for verislop.vscore3-checker.",
+      "implication": "New successful semantic bridge evidence cannot be incorporated into the registered release mechanical projection through the current closed producer adapter. This is independent of compiler/proof success; no native task outcome is inferred.",
+      "why_tests_missed": "The added persistence fixture checks EvidenceStore/raw-reader tamper binding and certificate/deterministic comparison but does not call the release normalizer. All 45 focused tests passed.",
+      "bounded_correction_requirement": "Amend the generic specification first and add an explicit .3 closed producer-result alternative preserving the full frozen telemetry payload and legacy compatibility, with an actual checker.outputs -> EvidenceStore -> normalize regression. Do not relax unknown-field checks or recursively delete telemetry. Future readable_support must have its own explicit closed extension. Root acknowledged this finding and owns the correction; this receipt remains the immutable pre-fix review."
+    }
+  ],
+  "checks_without_found_defects": [
+    "Both compile APIs preserve the prior success predicate across 48 completed-process combinations: zero/nonzero/negative return, timeout flag, parsed Lean error and missing/regular artifact. Metadata cannot make a rejected compile pass.",
+    "Exact requested and launcher argv, source/setup hashes, cwd, launcher returncode and actual timeout flag are retained independently; requested Lean heap and sandbox AS/CPU/file/core/wall limits match actual arguments to sandbox.run/_limits.",
+    "Full arbitrary-byte stdout/stderr including invalid UTF8, NUL and a panic preceding the legacy stderr tail survive losslessly with exact byte count, SHA256 and base64 roundtrip.",
+    "Reported memory-panic text coexists with parsed Lean errors; no peak RSS, host OOM cause, termination signal, specific failed memory boundary or proof-success-with-more-memory is inferred.",
+    "Completed process records survive existing stage/artifact infrastructure errors and later compiler-inventory/kernel/audit failures without changing existing diagnostic codes/severity; pre-invocation failures cannot inherit a prior record.",
+    "CompileResult and Build default fields keep old positional/synthetic consumers compatible; missing telemetry is explicitly unavailable; preview copies protect later mutation.",
+    "Actual hash-bound raw EvidenceStore results retain successful A/B module inventories, while DETERMINISTIC observations, semantic certificate descriptors and fresh clean-build comparison output fields remain unaffected by volatile telemetry.",
+    "Agent success check files and advisory CLI inventory file/path/hash retention pass; advisory data does not become a new proof predicate."
+  ],
+  "scope_and_provenance": {
+    "sources": "Exact immutable author checkpoint copied into isolated generic runtime; consulted workingtree modules and telemetry AST regions also captured. The runtime cannot observe concurrent readable edits.",
+    "concurrent_readable_edits": "No consulted telemetry function region changed in the later observation. Any future readable edits are separate; this review is bound to saved byte/region hashes and does not approve them.",
+    "closed_observation_boundary": "The new record is observational. Full consumed telemetry is frozen evidence; this audit does not recommend treating it as fresh A/B semantic output or stripping it recursively.",
+    "forbidden_actions_not_performed": [
+      "Production/source/test/doc edits",
+      "Subagents",
+      "Task/corpus/cohort candidate/proof/case/result reads",
+      "Model/native/Lean/kernel/gate calls",
+      "Existing sealed artifact mutation"
+    ]
+  },
+  "limitations": [
+    "Synthetic compiler process fixtures establish record handling and compatibility, not actual memory stress or native qualification.",
+    "Only actual completed subprocess records are treated as available; unmeasured resource facts remain unavailable.",
+    "The actual native qualification gate and later readable implementation review are parent-owned.",
+    "The single compatibility defect requires corrected-source review and focused regression before a PASS decision."
+  ],
+  "supporting_files": [
+    "capture.json",
+    "later-region-observations.json",
+    "focused.stdout.txt",
+    "focused.stderr.txt",
+    "independent_check.py",
+    "independent.stdout.txt",
+    "independent.stderr.txt",
+    "independent-checks.json",
+    "normalizer-counterexample.json",
+    "author-validation/validation.json"
+  ]
+}

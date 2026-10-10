@@ -1,0 +1,483 @@
+{
+  "format": "verislop.readable-constructor-correspondence-matrix/2",
+  "state": "DESIGN_ONLY_UNIMPLEMENTED",
+  "current_expr_constructor_count": 41,
+  "supported_constructor_count": 39,
+  "excluded_constructors": [
+    "variant",
+    "matchVariant"
+  ],
+  "universal_node_claim": "For the exact compileExpr witness c with exact resolved shape tau and Gamma, forall env:Env Gamma, cast_to_tau(c.2 env)=node_readable env. The cast must come from a kernel-checked c.1=tau, never a host shape assertion.",
+  "rule_status": "Every listed rule is a required finite recipe, not an established proof. Missing rule or resource failure makes the view unavailable; coverage cannot be claimed from this matrix alone.",
+  "rows": [
+    {
+      "constructor": "var",
+      "type_rule": "exact checked lookupVar result shape",
+      "environment": "Gamma; index 0 is env.1, successor descends env.2",
+      "readable_body": "named binder at exact de Bruijn index",
+      "normative_compiler_branch": "VSCore3.compileExpr.var",
+      "correspondence_recipe": "closed lookupVar equation; pointwise projection equality",
+      "negative_mutations": [
+        "same-sort neighboring parameter swap",
+        "drop capture"
+      ]
+    },
+    {
+      "constructor": "nat",
+      "type_rule": "Nat",
+      "environment": "no new binder; ignores Gamma",
+      "readable_body": "literal n",
+      "normative_compiler_branch": "VSCore3.compileExpr.nat",
+      "correspondence_recipe": "closed compiler literal equation; rfl; string scalar-validity guard kernel-checked",
+      "negative_mutations": [
+        "alter literal or sign",
+        "string codepoint replacement"
+      ]
+    },
+    {
+      "constructor": "int",
+      "type_rule": "Int",
+      "environment": "no new binder; ignores Gamma",
+      "readable_body": "literal signed n",
+      "normative_compiler_branch": "VSCore3.compileExpr.int",
+      "correspondence_recipe": "closed compiler literal equation; rfl; string scalar-validity guard kernel-checked",
+      "negative_mutations": [
+        "alter literal or sign",
+        "string codepoint replacement"
+      ]
+    },
+    {
+      "constructor": "string",
+      "type_rule": "String",
+      "environment": "no new binder; ignores Gamma",
+      "readable_body": "String.ofList (codepoints.map Char.ofNat)",
+      "normative_compiler_branch": "VSCore3.compileExpr.string",
+      "correspondence_recipe": "closed compiler literal equation; rfl; string scalar-validity guard kernel-checked",
+      "negative_mutations": [
+        "alter literal or sign",
+        "string codepoint replacement"
+      ]
+    },
+    {
+      "constructor": "bool",
+      "type_rule": "Bool",
+      "environment": "no new binder; ignores Gamma",
+      "readable_body": "literal b",
+      "normative_compiler_branch": "VSCore3.compileExpr.bool",
+      "correspondence_recipe": "closed compiler literal equation; rfl; string scalar-validity guard kernel-checked",
+      "negative_mutations": [
+        "alter literal or sign",
+        "string codepoint replacement"
+      ]
+    },
+    {
+      "constructor": "unit",
+      "type_rule": "Unit",
+      "environment": "no new binder; ignores Gamma",
+      "readable_body": "()",
+      "normative_compiler_branch": "VSCore3.compileExpr.unit",
+      "correspondence_recipe": "closed compiler literal equation; rfl; string scalar-validity guard kernel-checked",
+      "negative_mutations": [
+        "alter literal or sign",
+        "string codepoint replacement"
+      ]
+    },
+    {
+      "constructor": "enum",
+      "type_rule": "Shape.enum id exact accepted ctor list",
+      "environment": "Gamma ignored",
+      "readable_body": "Subtype constructor with exact ctor membership witness",
+      "normative_compiler_branch": "VSCore3.compileExpr.enum",
+      "correspondence_recipe": "closed resolveTy and membership equations; subtype proof irrelevance through kernel",
+      "negative_mutations": [
+        "nominal id or ctor replacement"
+      ]
+    },
+    {
+      "constructor": "bin",
+      "type_rule": "closed op/sort matrix; eq exact same Shape; other ops matching allowed scalar types",
+      "environment": "same Gamma for ordered left/right",
+      "readable_body": "eq: letI denoteDecidableEq shape; decide (a=b); Nat/Int +,-,*; scalar decide(<,<=); Bool &&,||",
+      "normative_compiler_branch": "VSCore3.compileExpr.bin",
+      "correspondence_recipe": "child pointwise IHs; castCompiled law; congruence for exact pinned operator; Bool compare stays Bool",
+      "negative_mutations": [
+        "sub argument swap",
+        "lt/le swap",
+        "eq different nominal shape"
+      ]
+    },
+    {
+      "constructor": "not",
+      "type_rule": "Bool -> Bool",
+      "environment": "same Gamma",
+      "readable_body": "!value",
+      "normative_compiler_branch": "VSCore3.compileExpr.not",
+      "correspondence_recipe": "child IH; Bool cast law; congrArg Bool.not",
+      "negative_mutations": [
+        "omit not"
+      ]
+    },
+    {
+      "constructor": "ite",
+      "type_rule": "Bool condition; identical branch result shape",
+      "environment": "same Gamma for all children",
+      "readable_body": "if cond then thenBody else elseBody",
+      "normative_compiler_branch": "VSCore3.compileExpr.ite",
+      "correspondence_recipe": "child IHs; Bool cases; branch cast law; pointwise if congruence",
+      "negative_mutations": [
+        "then/else swap",
+        "change condition"
+      ]
+    },
+    {
+      "constructor": "letE",
+      "type_rule": "body inferred under value shape :: Gamma",
+      "environment": "body [value] ++ outer",
+      "readable_body": "let value := a; body",
+      "normative_compiler_branch": "VSCore3.compileExpr.letE",
+      "correspondence_recipe": "pointwise IHs; pair/environment substitution and congruence, preserving sharing",
+      "negative_mutations": [
+        "drop binder",
+        "outer capture shifted"
+      ]
+    },
+    {
+      "constructor": "ok",
+      "type_rule": "result(errorShape,valueShape)",
+      "environment": "same Gamma",
+      "readable_body": "Sum.inr value",
+      "normative_compiler_branch": "VSCore3.compileExpr.ok",
+      "correspondence_recipe": "child IH plus exact resolved error shape; injection congruence",
+      "negative_mutations": [
+        "inl/inr replacement"
+      ]
+    },
+    {
+      "constructor": "error",
+      "type_rule": "result(valueShape,okShape)",
+      "environment": "same Gamma",
+      "readable_body": "Sum.inl value",
+      "normative_compiler_branch": "VSCore3.compileExpr.error",
+      "correspondence_recipe": "child IH plus exact resolved ok shape; injection congruence",
+      "negative_mutations": [
+        "inl/inr replacement"
+      ]
+    },
+    {
+      "constructor": "matchResult",
+      "type_rule": "scrutinee result(error,ok); identical branch output",
+      "environment": "ok [okPayload] ++ outer; error [errorPayload] ++ outer",
+      "readable_body": "match s with inr x => okBody | inl e => errorBody",
+      "normative_compiler_branch": "VSCore3.compileExpr.matchResult",
+      "correspondence_recipe": "scrutinee IH; Sum cases; branch IHs under exact extended env; output cast law",
+      "negative_mutations": [
+        "swap same-shape branches",
+        "payload capture shifted"
+      ]
+    },
+    {
+      "constructor": "record",
+      "type_rule": "exact nominal id, ordered field names/types, product payload ending Unit",
+      "environment": "every field same Gamma",
+      "readable_body": "named pack helper producing (field0,(field1,...,()))",
+      "normative_compiler_branch": "VSCore3.compileExpr.record",
+      "correspondence_recipe": "closed resolveTy/layout check; per-field IHs; packCompiled/envToProduct and cast law; pointwise pair congruence",
+      "negative_mutations": [
+        "swap same-sort fields",
+        "change id",
+        "remove Unit tail"
+      ]
+    },
+    {
+      "constructor": "project",
+      "type_rule": "resolved record and exact declared field",
+      "environment": "same Gamma",
+      "readable_body": "named exact right-product projection",
+      "normative_compiler_branch": "VSCore3.compileExpr.project",
+      "correspondence_recipe": "record child IH; closed findField equation; projection congruence",
+      "negative_mutations": [
+        "neighboring same-sort field projection"
+      ]
+    },
+    {
+      "constructor": "none",
+      "type_rule": "Option exact resolved element shape",
+      "environment": "Gamma ignored",
+      "readable_body": "(none : Option (Denote element))",
+      "normative_compiler_branch": "VSCore3.compileExpr.none",
+      "correspondence_recipe": "closed resolveTy equation; rfl",
+      "negative_mutations": [
+        "wrong element shape"
+      ]
+    },
+    {
+      "constructor": "some",
+      "type_rule": "Option child shape",
+      "environment": "same Gamma",
+      "readable_body": "some child",
+      "normative_compiler_branch": "VSCore3.compileExpr.some",
+      "correspondence_recipe": "child IH; constructor congruence",
+      "negative_mutations": [
+        "none replacement"
+      ]
+    },
+    {
+      "constructor": "matchOption",
+      "type_rule": "scrutinee Option(t); same output shape",
+      "environment": "none outer; some [payload] ++ outer",
+      "readable_body": "match s with none => n | some x => v",
+      "normative_compiler_branch": "VSCore3.compileExpr.matchOption",
+      "correspondence_recipe": "scrutinee IH; Option cases; branch IHs and cast law",
+      "negative_mutations": [
+        "swap option behavior",
+        "drop payload capture"
+      ]
+    },
+    {
+      "constructor": "nil",
+      "type_rule": "List exact resolved element shape",
+      "environment": "Gamma ignored",
+      "readable_body": "([] : List (Denote element))",
+      "normative_compiler_branch": "VSCore3.compileExpr.nil",
+      "correspondence_recipe": "closed resolveTy equation; rfl",
+      "negative_mutations": [
+        "wrong element shape"
+      ]
+    },
+    {
+      "constructor": "cons",
+      "type_rule": "head t; tail List(t)",
+      "environment": "same Gamma for ordered head/tail",
+      "readable_body": "head :: tail",
+      "normative_compiler_branch": "VSCore3.compileExpr.cons",
+      "correspondence_recipe": "child IHs; tail cast law; constructor congruence",
+      "negative_mutations": [
+        "head replacement",
+        "tail drop"
+      ]
+    },
+    {
+      "constructor": "matchList",
+      "type_rule": "scrutinee List(t); same output shape",
+      "environment": "nil outer; cons [tail,head] ++ outer",
+      "readable_body": "match xs with [] => n | head::tail => c",
+      "normative_compiler_branch": "VSCore3.compileExpr.matchList",
+      "correspondence_recipe": "scrutinee IH; List cases; c IH at (tail,(head,env)); cast law",
+      "negative_mutations": [
+        "swap same-sort capture with head",
+        "tail/head layout mutation"
+      ]
+    },
+    {
+      "constructor": "call",
+      "type_rule": "exact actual compiled helper params/result; actual argument list matches params",
+      "environment": "argument children same Gamma; helper input declared order",
+      "readable_body": "helper_named argument0 argument1 ...",
+      "normative_compiler_branch": "VSCore3.compileExpr.call",
+      "correspondence_recipe": "actual helper lookup equation; ordered packCompiled/castPacked laws; child IHs; helper universal RunEquals at exact declared-order Env",
+      "negative_mutations": [
+        "same-sort helper argument swap",
+        "look up different same-signature helper"
+      ]
+    },
+    {
+      "constructor": "listFold",
+      "type_rule": "source List(item); initial acc; step acc",
+      "environment": "step [item,accumulator] ++ outer",
+      "readable_body": "List.foldl (fun acc item => step) initial source",
+      "normative_compiler_branch": "VSCore3.compileExpr.listFold",
+      "correspondence_recipe": "source/initial IHs; step forall env acc item IH; reviewed pointwise foldl congruence; exact (item,(acc,env)); no execution bound",
+      "negative_mutations": [
+        "typable item/acc swap when both Nat or Int",
+        "outer capture swap"
+      ]
+    },
+    {
+      "constructor": "natFold",
+      "type_rule": "source Nat; initial acc; step acc",
+      "environment": "step [accumulator,index:Nat] ++ outer",
+      "readable_body": "Nat.rec initial (fun index acc => step) bound",
+      "normative_compiler_branch": "VSCore3.compileExpr.natFold",
+      "correspondence_recipe": "bound/initial IHs; step forall env index acc IH; reviewed pointwise Nat.rec congruence; exact (acc,(index,env)); no runtime fuel",
+      "negative_mutations": [
+        "typable Nat accumulator/index swap",
+        "index successor mutation"
+      ]
+    },
+    {
+      "constructor": "intNeg",
+      "type_rule": "Int -> Int",
+      "environment": "same Gamma",
+      "readable_body": "Int.neg value",
+      "normative_compiler_branch": "VSCore3.compileExpr.intNeg",
+      "correspondence_recipe": "child pointwise IHs; exact scalar cast law; exact primitive congruence",
+      "negative_mutations": [
+        "operator replacement",
+        "same-sort argument swap"
+      ]
+    },
+    {
+      "constructor": "intFdiv",
+      "type_rule": "Int,Int -> Int",
+      "environment": "same Gamma",
+      "readable_body": "Int.fdiv left right",
+      "normative_compiler_branch": "VSCore3.compileExpr.intFdiv",
+      "correspondence_recipe": "child pointwise IHs; exact scalar cast law; exact primitive congruence",
+      "negative_mutations": [
+        "operator replacement",
+        "same-sort argument swap"
+      ]
+    },
+    {
+      "constructor": "natToInt",
+      "type_rule": "Nat -> Int",
+      "environment": "same Gamma",
+      "readable_body": "Int.ofNat value",
+      "normative_compiler_branch": "VSCore3.compileExpr.natToInt",
+      "correspondence_recipe": "child pointwise IHs; exact scalar cast law; exact primitive congruence",
+      "negative_mutations": [
+        "operator replacement",
+        "same-sort argument swap"
+      ]
+    },
+    {
+      "constructor": "intToNat",
+      "type_rule": "Int -> Nat",
+      "environment": "same Gamma",
+      "readable_body": "Int.toNat value",
+      "normative_compiler_branch": "VSCore3.compileExpr.intToNat",
+      "correspondence_recipe": "child pointwise IHs; exact scalar cast law; exact primitive congruence",
+      "negative_mutations": [
+        "operator replacement",
+        "same-sort argument swap"
+      ]
+    },
+    {
+      "constructor": "listLength",
+      "type_rule": "List(t) -> Nat",
+      "environment": "same Gamma",
+      "readable_body": "List.length value",
+      "normative_compiler_branch": "VSCore3.compileExpr.listLength",
+      "correspondence_recipe": "child pointwise IHs; exact carrier/cast check; congruence of compiler-selected pinned primitive and instance",
+      "negative_mutations": [
+        "primitive replacement",
+        "append argument swap",
+        "descending sort comparator"
+      ]
+    },
+    {
+      "constructor": "listRange",
+      "type_rule": "Nat -> List(Nat)",
+      "environment": "same Gamma",
+      "readable_body": "List.range value",
+      "normative_compiler_branch": "VSCore3.compileExpr.listRange",
+      "correspondence_recipe": "child pointwise IHs; exact carrier/cast check; congruence of compiler-selected pinned primitive and instance",
+      "negative_mutations": [
+        "primitive replacement",
+        "append argument swap",
+        "descending sort comparator"
+      ]
+    },
+    {
+      "constructor": "listGet",
+      "type_rule": "List(t),Nat -> Option(t)",
+      "environment": "same Gamma",
+      "readable_body": "List.get?Internal value index",
+      "normative_compiler_branch": "VSCore3.compileExpr.listGet",
+      "correspondence_recipe": "child pointwise IHs; exact carrier/cast check; congruence of compiler-selected pinned primitive and instance",
+      "negative_mutations": [
+        "primitive replacement",
+        "append argument swap",
+        "descending sort comparator"
+      ]
+    },
+    {
+      "constructor": "listAppend",
+      "type_rule": "List(t),List(t) -> List(t)",
+      "environment": "same Gamma",
+      "readable_body": "left ++ right",
+      "normative_compiler_branch": "VSCore3.compileExpr.listAppend",
+      "correspondence_recipe": "child pointwise IHs; exact carrier/cast check; congruence of compiler-selected pinned primitive and instance",
+      "negative_mutations": [
+        "primitive replacement",
+        "append argument swap",
+        "descending sort comparator"
+      ]
+    },
+    {
+      "constructor": "listReverse",
+      "type_rule": "List(t) -> List(t)",
+      "environment": "same Gamma",
+      "readable_body": "List.reverse value",
+      "normative_compiler_branch": "VSCore3.compileExpr.listReverse",
+      "correspondence_recipe": "child pointwise IHs; exact carrier/cast check; congruence of compiler-selected pinned primitive and instance",
+      "negative_mutations": [
+        "primitive replacement",
+        "append argument swap",
+        "descending sort comparator"
+      ]
+    },
+    {
+      "constructor": "listSort",
+      "type_rule": "List Nat/Int/String only",
+      "environment": "same Gamma",
+      "readable_body": "List.mergeSort value (fun a b => decide (a <= b))",
+      "normative_compiler_branch": "VSCore3.compileExpr.listSort",
+      "correspondence_recipe": "child pointwise IHs; exact carrier/cast check; congruence of compiler-selected pinned primitive and instance",
+      "negative_mutations": [
+        "primitive replacement",
+        "append argument swap",
+        "descending sort comparator"
+      ]
+    },
+    {
+      "constructor": "listUnique",
+      "type_rule": "List Nat/Int/String/Bool only",
+      "environment": "same Gamma",
+      "readable_body": "List.eraseDups value",
+      "normative_compiler_branch": "VSCore3.compileExpr.listUnique",
+      "correspondence_recipe": "child pointwise IHs; exact carrier/cast check; congruence of compiler-selected pinned primitive and instance",
+      "negative_mutations": [
+        "primitive replacement",
+        "append argument swap",
+        "descending sort comparator"
+      ]
+    },
+    {
+      "constructor": "listMap",
+      "type_rule": "List(t); body under t::Gamma yields u",
+      "environment": "body [item] ++ outer",
+      "readable_body": "List.map (fun item => body) source",
+      "normative_compiler_branch": "VSCore3.compileExpr.listMap",
+      "correspondence_recipe": "source IH; body forall item/env IH; reviewed pointwise List.map congruence without function equality or broad simp",
+      "negative_mutations": [
+        "drop capture",
+        "same-sort item/capture swap"
+      ]
+    },
+    {
+      "constructor": "listFilter",
+      "type_rule": "List(t); body Bool under t::Gamma",
+      "environment": "body [item] ++ outer",
+      "readable_body": "List.filter (fun item => predicateBool) source",
+      "normative_compiler_branch": "VSCore3.compileExpr.listFilter",
+      "correspondence_recipe": "source IH; body forall item/env IH; Bool cast law; pointwise List.filter congruence",
+      "negative_mutations": [
+        "negate predicate",
+        "Bool/Prop substitution"
+      ]
+    },
+    {
+      "constructor": "listSum",
+      "type_rule": "List Nat/Int only",
+      "environment": "same Gamma",
+      "readable_body": "List.sum source",
+      "normative_compiler_branch": "VSCore3.compileExpr.listSum",
+      "correspondence_recipe": "source IH; exact selected scalar sum instance congruence",
+      "negative_mutations": [
+        "sum replaced by length"
+      ]
+    }
+  ],
+  "proof_identity_mode": "MODULE_BOUND_PROOF; no individual theorem proof AST/digest claim"
+}

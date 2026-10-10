@@ -1,0 +1,50 @@
+{
+  "observations": [
+    {
+      "selected": false,
+      "outcome": {
+        "kind": "RETURNED",
+        "selection": false
+      },
+      "prepared_metadata_rows": []
+    },
+    {
+      "selected": true,
+      "outcome": {
+        "kind": "EXCEPTION",
+        "type": "KeyError",
+        "message": "'node_id'"
+      },
+      "prepared_metadata_rows": [
+        {
+          "slot_id": "vscore-readable-diagnostic-0",
+          "role": "readable_diagnostic",
+          "path": "candidate-inputs/support/readable/diagnostics/0.json",
+          "size": 55,
+          "sha256": "sha256:18c1302026a0f83b7d3de978a96601a1a5e227ef5663256b6e388f1e5350e252"
+        },
+        {
+          "slot_id": "vscore-readable-selection",
+          "role": "readable_selection",
+          "path": "candidate-inputs/support/readable/selection.json",
+          "size": 2760,
+          "sha256": "sha256:9b5ed636a9412203bfdb022d5f234a49173374e149c25ad7b0c68928009856ba"
+        }
+      ]
+    }
+  ],
+  "real_boundaries": [
+    "canonical readable BASE schema/helper",
+    "candidate_files",
+    "prepare._assemble",
+    "bridge-plan/bridge-artifacts closed schemas",
+    "PackageReader",
+    "load_context"
+  ],
+  "isolated_boundary": "_obligation_from_package + synthetic accepted contract metadata; no contract acceptance or semantic kernel claim",
+  "source": "fresh Bool echo fixture; no retained task/corpus artifact",
+  "defects": [
+    "manifest rows omit node_id but new loader accesses it",
+    "selection and diagnostics prepared paths have candidate-inputs/ prefix but loader expects logical paths"
+  ]
+}

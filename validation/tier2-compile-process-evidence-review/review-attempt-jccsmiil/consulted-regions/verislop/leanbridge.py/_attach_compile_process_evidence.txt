@@ -1,0 +1,6 @@
+def _attach_compile_process_evidence(exc: InfrastructureError, process: dict[str, Any]) -> InfrastructureError:
+    """Preserve existing post-invocation infrastructure errors and their observations."""
+    for diagnostic in exc.diagnostics:
+        diagnostic.details = {**diagnostic.details,
+                              "process_evidence": {"availability": "available", "record": copy.deepcopy(process)}}
+    return exc

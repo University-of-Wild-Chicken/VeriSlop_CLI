@@ -1,0 +1,85 @@
+{
+  "format": "verislop.independent-collection-support-audit-plan/1",
+  "audit_id": "tier2-collection-proof-support-audit-017",
+  "mode": "preregistered_design_then_read_only_audit",
+  "state": "PREREGISTERED_AWAITING_NEW_FROZEN_QUALIFICATION",
+  "specification": "docs/bootstrap-tier2-collection-proof-support.md",
+  "initial_read_binding": "initial-current-inputs.json",
+  "final_binding_receipt": "final-frozen-binding.json",
+  "scope_policy": {
+    "allowed": ["current generic production", "current specification and schemas", "current generic tests and root-designated new frozen qualification artifacts"],
+    "excluded": ["tasks", "synthetic_dataset/bootstrap/stages", "historical task experiments", "historical candidates", "historical proofs", "hidden cases", "collaboration inventory", "production edits", "task solution evaluation"],
+    "final_audit_start": "Only after root explicitly provides NEW frozen qualification current package after implementations stop.",
+    "mutation_rule": "Relevant input, claim, control, driver or verifier mutation after freeze invalidates that attempt; preserve failures and require a distinct freeze and run.",
+    "no_retroactive_controls": true
+  },
+  "input_binding": {
+    "production_inventory": "Sorted union of verislop/ + CORE + every VERIFIERS source, and schemas/ + every VERIFIERS schema, evaluated from the frozen current verislop/verifiers.py; bind every resulting byte.",
+    "additional_required_inputs": ["docs/bootstrap-tier2-collection-proof-support.md", "tests/test_vscore3_proof_support.py", "tests/test_formal_frontend_enum_tier2.py", "verislop/lean/VSCore3/Transport.lean", "verislop/targets/vscore3_target.py", "verislop/bridges/vscore3_checker.py", "verislop/targets/vscore3_replay.py", "verislop/exprjson.py"],
+    "new_driver_binding": "Before executing final audit, root supplies exact current new collection test/driver paths. Record their bytes/hash, registered tests, control inventory, frozen fixture hashes and source freeze root in final-frozen-binding.json. A new path is an input binding only and cannot add or weaken any claim/control predicate registered here.",
+    "source_freeze": "Check exact file sets, hashes and canonical root of current checkout, registered-sources copies, source-freeze manifest and all referenced evidence. No omitted production/spec/schema/test/driver/fixture dependency; no stale prior root or verifier hash.",
+    "test_invocation": "Use the exact frozen registered workflow and driver command with VERISLOP_COLLECTION_QUALIFICATION_FREEZE pointing to the frozen manifest. An unset environment skip, partial collection or mocked acceptance does not qualify.",
+    "artifact_rebinding": "Bind plan bytes/hash, kernel/toolchain identity and imported olean closure, exact module source/parts, actual exports, inventories, accepted AST/profile/policy, witness/proofs, generated goals, source/relation/readable selection, A/B build results, closure/report/provenance, release and retained evidence; hash-verify before and after audit."
+  },
+  "claims": [
+    {
+      "id": "AUD017-01-FREEZE",
+      "pass": "All source/spec/schema/fixture/test/driver bytes and verifier identities equal the NEW frozen root; every evidence item uniquely identifies the same inputs and executable verifier; no mutation, missing file, stale evidence, retroactive control or skip.",
+      "block": ["INPUT_MUTATION", "CLAIM_MUTATION", "STALE_OR_UNBOUND_EVIDENCE", "VERIFIER_NOT_RUN", "MISSING_INPUT"],
+      "novel_evidence": "canonical frozen manifest and independent hash reconciliation"
+    },
+    {
+      "id": "AUD017-02-CATALOG",
+      "names": ["apply_ite", "apply_bool_ite", "ite_decide", "map_identity", "int_ofNat_eq_cast", "int_ofNat_add", "to_eq_iff", "decide_to_eq", "map_transport", "filter_transport", "foldl_transport"],
+      "pass": "Exactly these eleven VSCore3.ProofSupport catalog theorems bind current VSCore3.Transport source. Independently elaborate every advertised signature and compare it with each actual safe kernel-exported theorem type, level parameters, module and declaration Name. No new global simp registration, sorry, unsafe/partial proof declaration, module axiom or unresolved dependency. Inventory actual dependencies and full axiom closures for all eleven; new closures are [] for to_eq_iff and [propext] for each other new law. Two clean builds have equal expected module-part identities.",
+      "required_controls": ["actual Lean rejection of forall p : Prop, p", "actual Lean rejection of materially false universal collection pointwise agreement", "unrelated universally quantified map and fold examples with different element/result or accumulator carriers", "arbitrary lists and arbitrary fold accumulators"],
+      "block": ["KERNEL_REJECTION", "SIGNATURE_MISMATCH", "INADMISSIBLE_AXIOM", "UNDECLARED_DEPENDENCY", "CLEAN_BUILD_FAILURE", "NONDETERMINISM", "CONTROL_NOT_RUN"],
+      "novel_evidence": "actual kernel declaration/type/axiom/dependency inventories and Lean negative diagnostics"
+    },
+    {
+      "id": "AUD017-03-EXACT-NAMES",
+      "pass": "Hyphen, dot and colon obligation IDs occur together in actual generated goals and successful bridge checking, certificate construction and concrete review replay. A leaf such as transfer_G.map has Name [VeriSlopBridgeGoal, transfer_G.map]; its dot never creates an extra namespace component. Actual exported canonical spelling equals certificate transfer, transfer_theorem and statement_identity. Dependencies are compared by exact parsed components. Ordinary/plain serialization and reserved Readable nesting retain their specified distinction.",
+      "required_controls": ["missing transfer declaration", "hyphen/dot/colon near-name without exact declaration", "same displayed suffix with different namespace components", "transfer lacks original accepted theorem dependency", "wrong declaration kind", "exact statement/type/body mismatch"],
+      "control_execution": "Every required negative uses actual generated and kernel-exported declarations and blocks in the affected production checking/replay path; mocked acceptance alone cannot discharge this claim.",
+      "block": ["STATEMENT_MISMATCH", "NAME_IDENTITY_MISMATCH", "WRONG_KIND_ACCEPTED", "WRONG_DEPENDENCY_ACCEPTED", "CONTROL_NOT_RUN"],
+      "novel_evidence": "component-level actual declaration identity and certificate/replay reconciliation with real negative diagnostics"
+    },
+    {
+      "id": "AUD017-04-GENERATED-PACKAGE",
+      "pass": "Exactly one NEW unrelated fixture is frozen before its final run: Shade(light,dark,neutral), Parcel(shade,n:Nat), Envelope(parcel,active:Bool). It covers every alternative and unbounded mathematical Nat values. Its actual frontend pipeline compiles the frozen response, audits Lean denotation, accepts original contract proof and constructive witness, and reconstructs the accepted AST. No task or benchmark artifacts enter fixture authoring or evidence.",
+      "required_operations": ["map envelopes with captured Nat increment; preserve shade and active; actual helper-to-helper call and heterogeneous arguments in declared order", "stable duplicate-preserving filter by captured exact Parcel equality; supported enum/Nat field decisions in accepted DSL versus intrinsic record equality in source; universal predicate agreement", "fold matches for captured Shade through a helper from every Nat accumulator, with universal agreement for every step and accumulator", "two Shade values compared by exact fixed equality decisions", "distinct source-only entry and at least one Mixed value/source obligation"],
+      "block": ["FIXTURE_SCOPE_MISMATCH", "FRONTEND_NOT_REPLAYED", "MISSING_WITNESS", "WITNESS_INVALID", "IR_REIFICATION_MISMATCH"],
+      "novel_evidence": "fresh frozen fixture, actual frontend/denotation/acceptance/witness/reconstruction evidence"
+    },
+    {
+      "id": "AUD017-05-SEMANTIC-BRIDGE",
+      "pass": "Actual compiled source and CHECKED readable selection retain the helpers/captures and original Refines/EdgeProp. Universal refinements, raw-input coverage and every per-ID transfer hold, including the distinct source-only and Mixed cases. Every transfer depends on its original accepted theorem. Combined source proof closure actually depends on each of the five new production laws. Source-only operational delivery is not promoted into arbitrary reference-body equality.",
+      "required_controls": ["retain an actually failed direct-conversion baseline before successful law-assisted proof", "type-correct semantically wrong source cannot obtain semantic bridge acceptance", "readable selection tampering blocks through existing production checks"],
+      "block": ["MISSING_UNIVERSAL_REFINEMENT", "MISSING_RAW_COVERAGE", "MISSING_TRANSFER", "SOURCE_ONLY_SCOPE_LEAK", "LAW_DEPENDENCY_MISSING", "SEMANTIC_NEGATIVE_ACCEPTED", "SELECTION_TAMPER_ACCEPTED", "CONTROL_NOT_RUN"],
+      "novel_evidence": "exact generated universal goal statements, kernel edge and per-ID proof dependencies and retained semantic negatives"
+    },
+    {
+      "id": "AUD017-06-CLOSURE-AND-PORTABILITY",
+      "pass": "Registered current workflow reaches bridge acceptance and restricted_source closure. Actual isolated clean builds A/B bind the same frozen inputs and deterministically agree on proof inventory, correspondence, provenance, claim status, proposition identity, accepted source AST and expected reproducible module/artifact hashes. Concrete release probe is executed. Original temporary root is removed, retained package validates independently, and a second concrete release probe executes on that retained package.",
+      "nondeterministic_fields": ["timestamps", "elapsed durations", "absolute temporary-directory prefixes", "attempt identifiers only where not used as content identity"],
+      "normalization_rule": "Only these declared fields may be excluded, by frozen driver logic; their exclusion cannot mask semantic, dependency, correspondence or status differences.",
+      "block": ["CLEAN_BUILD_FAILURE", "NONDETERMINISM", "RELEASE_PROBE_UNRESOLVED", "RETAINED_VALIDATION_FAILURE", "TEMPORARY_ROOT_NOT_REMOVED", "STALE_OR_UNBOUND_EVIDENCE"],
+      "novel_evidence": "registered isolated build/release records and a retained probe after actual original-root removal"
+    },
+    {
+      "id": "AUD017-07-RECORD-AND-BOUNDARY",
+      "pass": "Complete immutable logs, kernel exports, inventories, failed attempts and exact hashes survive. Machine closure report and root engineering record reconstruct from actual current evidence with complete claim/evidence/verifier/input/trust provenance. PROVED denotes actual kernel acceptance, CHECKED structural/support results, optional TESTED remains separate, and declared logical axioms, Lean/toolchain, controller/reifier, CPython host, launcher/OS, hashing and hardware trust are explicit. Exclusions cover Python equivalence, extraction/compiler-chain/machine-code and physical resources, unlisted properties, future source revisions and natural-language interpretation proof.",
+      "block": ["ORPHAN_CLAIM", "UNDECLARED_DEPENDENCY", "MISSING_FAILURE_EVIDENCE", "LIFECYCLE_OVERCLAIM", "SCOPE_LEAK"],
+      "novel_evidence": "machine-readable evidence/provenance/status/trust reconciliation"
+    }
+  ],
+  "decision": {
+    "valid_final_states": ["VERIFIED", "BLOCKED", "INFRASTRUCTURE_FAILURE"],
+    "all_required_claims_must_pass": true,
+    "unknown_is_blocking": true,
+    "warnings_affecting_required_claims_are_blocking": true,
+    "manual_override_allowed": false,
+    "llm_review_is_not_claim_discharge": true,
+    "stop": "Evaluate this finite registered set, issue a machine-readable audit report bound to the NEW frozen qualification, then stop. No task run or task guarantee is audited here."
+  }
+}

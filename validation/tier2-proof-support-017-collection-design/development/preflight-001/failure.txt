@@ -1,0 +1,45 @@
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_source.py", line 771, in compile_surface
+    return source_bytes(parse_surface(text, enums))
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_source.py", line 767, in parse_surface
+    return parse(text, enums)
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 597, in parse_surface
+    prog = Parser(text).program()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 186, in program
+    helpers.append(self.function())
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 211, in function
+    body = self.expr()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 246, in expr
+    return self.or_expr()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 295, in or_expr
+    return self.binary(self.and_expr, {"||": "or"})
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 284, in binary
+    e = inner()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 298, in and_expr
+    return self.binary(self.eq_expr, {"&&": "and"})
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 284, in binary
+    e = inner()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 301, in eq_expr
+    return self.binary(self.cmp_expr, {"==": "eq"}, False)
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 284, in binary
+    e = inner()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 304, in cmp_expr
+    return self.binary(self.add_expr, {"<": "lt", "<=": "le"}, False)
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 284, in binary
+    e = inner()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 307, in add_expr
+    return self.binary(self.mul_expr, {"+": "add", "-": "sub"})
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 284, in binary
+    e = inner()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 310, in mul_expr
+    return self.binary(self.unary, {"*": "mul"})
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 284, in binary
+    e = inner()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 334, in unary
+    e = self.primary()
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 436, in primary
+    self.expect(",")
+  File "/home/augustus/VeriSlop_CLI/verislop/targets/vscore3_surface.py", line 106, in expect
+    raise core.SourceError(f"expected {value!r} at byte {self.tokens[self.pos].offset}")
+verislop.targets.vscore_source.SourceError: expected ',' at byte 373

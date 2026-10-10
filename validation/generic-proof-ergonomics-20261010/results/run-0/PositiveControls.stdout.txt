@@ -1,0 +1,45 @@
+/home/augustus/VeriSlop_CLI/validation/generic-proof-ergonomics-20261010/PositiveControls.lean:14:17: error: unsolved goals
+case cons.false
+x : Bundle
+xs : List Bundle
+ih :
+  List.map bundleAdapter.inv (List.filter (fun x => representedIvory x.fst.fst) (List.map bundleAdapter.to xs)) =
+    List.filter (fun x => ordinaryIvory x.payload.tint) xs
+h : True
+⊢ List.map
+      (fun x => { payload := { tint := tintAdapter.inv x.fst.fst, depth := VSCore3.natAdapter.inv x.fst.snd.fst } })
+      (List.filter (fun x => representedIvory x.fst.fst)
+        (List.map (fun x => ((tintAdapter.to x.payload.tint, VSCore3.natAdapter.to x.payload.depth, ()), ())) xs)) =
+    List.filter (fun x => ordinaryIvory x.payload.tint) xs
+
+case cons.true
+x : Bundle
+xs : List Bundle
+ih :
+  List.map bundleAdapter.inv (List.filter (fun x => representedIvory x.fst.fst) (List.map bundleAdapter.to xs)) =
+    List.filter (fun x => ordinaryIvory x.payload.tint) xs
+h : True
+⊢ {
+        payload :=
+          { tint := tintAdapter.inv (tintAdapter.to x.payload.tint),
+            depth := VSCore3.natAdapter.inv (VSCore3.natAdapter.to x.payload.depth) } } =
+      x ∧
+    List.map
+        (fun x => { payload := { tint := tintAdapter.inv x.fst.fst, depth := VSCore3.natAdapter.inv x.fst.snd.fst } })
+        (List.filter (fun x => representedIvory x.fst.fst)
+          (List.map (fun x => ((tintAdapter.to x.payload.tint, VSCore3.natAdapter.to x.payload.depth, ()), ())) xs)) =
+      List.filter (fun x => ordinaryIvory x.payload.tint) xs
+/home/augustus/VeriSlop_CLI/validation/generic-proof-ergonomics-20261010/PositiveControls.lean:20:36: warning: This simp argument is unused:
+  bundleAdapter.from_to
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [h, VSCore3.listAdapter, ih, filtered] at *
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/augustus/VeriSlop_CLI/validation/generic-proof-ergonomics-20261010/PositiveControls.lean:20:59: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [h, VSCore3.listAdapter, bundleAdapter.from_to, filtered] at *
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

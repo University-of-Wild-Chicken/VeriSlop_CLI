@@ -1,0 +1,24 @@
+program "vscore/0.3" profile "data-pipeline/0.3";
+record Parcel { shade: Enum(Shade); n: Nat; }
+record Envelope { parcel: Record(Parcel); active: Bool; }
+fn shiftParcel(increment:Nat,p:Record(Parcel))->Record(Parcel){
+  record Parcel{shade=p.shade,n=p.n+increment}
+}
+fn shiftEnvelope(increment:Nat,e:Record(Envelope))->Record(Envelope){
+  record Envelope{parcel=shiftParcel(increment,e.parcel),active=e.active}
+}
+fn keepEnvelope(needle:Record(Parcel),e:Record(Envelope))->Bool{e.parcel == needle}
+fn totalStep(chosen:Enum(Shade),acc:Nat,e:Record(Envelope))->Nat{
+  if e.parcel.shade == chosen then acc+e.parcel.n else acc
+}
+entry shiftEnvelopes(xs:List(Record(Envelope)),increment:Nat)->List(Record(Envelope)){
+  List.map(xs;e=>shiftEnvelope(increment,e))
+}
+entry keepParcel(xs:List(Record(Envelope)),needle:Record(Parcel))->List(Record(Envelope)){
+  List.filter(xs;e=>keepEnvelope(needle,e))
+}
+entry shadeTotal(xs:List(Record(Envelope)),initial:Nat,chosen:Enum(Shade))->Nat{
+  List.fold(xs,initial;acc,e=>totalStep(chosen,acc,e))
+}
+entry sameShade(x:Enum(Shade),y:Enum(Shade))->Bool{x == y}
+entry inspectEnvelope(e:Record(Envelope))->Nat{0}

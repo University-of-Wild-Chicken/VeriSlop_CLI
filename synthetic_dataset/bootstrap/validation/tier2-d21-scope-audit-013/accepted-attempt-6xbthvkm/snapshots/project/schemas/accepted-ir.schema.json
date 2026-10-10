@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:accepted-ir:0.1",
+  "title": "Immutable artifact-derived semantic IR, excluding mutable lifecycle overlays",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "artifact_kind": {
+      "const": "accepted_semantic_ir"
+    },
+    "contract_input_root": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "accepted_environment_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "acceptance_certificate_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "exporter_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "exporter_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "lean_toolchain": {
+      "type": "string",
+      "minLength": 1
+    },
+    "semantic_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "obligations": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "urn:verislop:schema:obligation:0.1#/$defs/semantic_record"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "contract_input_root",
+    "accepted_environment_hash",
+    "acceptance_certificate_ref",
+    "exporter_id",
+    "exporter_hash",
+    "lean_toolchain",
+    "semantic_profile",
+    "obligations"
+  ]
+}

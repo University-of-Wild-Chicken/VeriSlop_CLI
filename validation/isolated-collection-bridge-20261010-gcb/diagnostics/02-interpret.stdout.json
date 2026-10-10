@@ -1,0 +1,51 @@
+{
+  "artifacts": {
+    "draft": "draft.json",
+    "interpretation": "interpretation.json",
+    "routing": "request/routing.json"
+  },
+  "asserts_closure_verified": false,
+  "command": "interpret",
+  "diagnostics": [
+    {
+      "claims": [],
+      "code": "INVALID_CANDIDATE",
+      "message": "G-map: a draft record exists only after a recorded interpretation (INTERPRETED must be PASS)",
+      "obligations": [
+        "G-map"
+      ],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "INVALID_CANDIDATE",
+      "message": "G-filter: a draft record exists only after a recorded interpretation (INTERPRETED must be PASS)",
+      "obligations": [
+        "G-filter"
+      ],
+      "severity": "blocking"
+    },
+    {
+      "claims": [],
+      "code": "INVALID_CANDIDATE",
+      "message": "G-fold: a draft record exists only after a recorded interpretation (INTERPRETED must be PASS)",
+      "obligations": [
+        "G-fold"
+      ],
+      "severity": "blocking"
+    }
+  ],
+  "gate": "interpretation recorded with no unresolved blocking ambiguity",
+  "status": "BLOCKED",
+  "summary": {
+    "blocked_guarantees": {},
+    "interpretation_root": "sha256:8e238931c2d3599a272b1de721159c1ff5ac9f59b87373f51123e8687de8feb3",
+    "obligations": 3,
+    "routing": {
+      "decision": "SOFTWARE",
+      "reason": "--mode software bypasses classification by explicit user choice",
+      "routing_result": "OBLIGATION_PIPELINE"
+    },
+    "uncovered_segments": 0
+  }
+}

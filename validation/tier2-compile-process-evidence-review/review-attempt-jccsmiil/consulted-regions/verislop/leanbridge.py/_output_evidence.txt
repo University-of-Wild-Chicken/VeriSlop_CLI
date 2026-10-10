@@ -1,0 +1,4 @@
+def _output_evidence(data: bytes) -> dict[str, Any]:
+    """Losslessly retain subprocess output, including non-UTF-8 bytes."""
+    return {"byte_count": len(data), "sha256": canonical.digest(data),
+            "content_b64": base64.b64encode(data).decode("ascii")}

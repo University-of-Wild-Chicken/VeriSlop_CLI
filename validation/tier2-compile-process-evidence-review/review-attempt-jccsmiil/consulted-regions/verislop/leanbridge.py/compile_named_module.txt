@@ -1,0 +1,52 @@
+def compile_named_module(tc: Toolchain, workdir: Path, module: str, source: bytes,
+                         dependencies: dict[str, dict[str, str]], *, read_only: list[Path],
+                         timeout: float = 300, memory_mb: int = 8192, require_network_isolation: bool = True,
+                         require_filesystem_isolation: bool = True) -> tuple[CompileResult, dict[str, bytes]]:
+    """Compile `module` in the sandbox; imports resolve only to the given artifacts or the toolchain.
+
+    `dependencies` maps module names to their staged part paths (from `write_module_parts`).
+    The module header is used unchanged; a header import that is neither bound here nor in the
+    pinned toolchain fails to elaborate. Returns the result and the produced module parts.
+    """
+    workdir.mkdir(parents=True, exist_ok=True)
+    rel = module_relpath(module)
+    source_path = workdir / (rel + ".lean")
+    source_path.parent.mkdir(parents=True, exist_ok=True)
+    invocation_cwd = str(workdir.resolve())
+    _atomic_stage_write(source_path, source)
+    arts = {name: [[p[s] for s in MODULE_SUFFIXES if s in p], []] for name, p in sorted(dependencies.items())}
+    setup = {"name": module, "isModule": False, "importArts": arts, "dynlibs": [], "plugins": [], "options": {}}
+    setup_bytes = json.dumps(setup, sort_keys=True).encode()
+    _atomic_stage_write(workdir / "setup.json", setup_bytes)
+    argv = [str(tc.lean), "-j4", "--json", f"-M{memory_mb}", "--setup=setup.json", "-o", rel + ".olean", rel + ".lean"]
+    cpu_seconds = max(10, int(timeout) + 5)
+    try:
+        res = sandbox.run(
+            argv,
+            workdir, timeout=timeout, memory_mb=memory_mb + LEAN_AS_HEADROOM_MB,
+            cpu_seconds=cpu_seconds, fsize_mb=COMPILE_FILE_SIZE_MB,
+            require_network_isolation=require_network_isolation,
+            env_extra={"PATH": f"{tc.prefix / 'bin'}:/usr/bin:/bin"},
+            read_only_paths=[tc.prefix, *read_only],
+            require_filesystem_isolation=require_filesystem_isolation,
+        )
+    except RuntimeError as exc:
+        raise _infra(str(exc)) from None
+    process = _compile_process_evidence(res, argv=argv, working_directory=invocation_cwd, module=module, source=source,
+                                        timeout=timeout, memory_mb=memory_mb, cpu_seconds=cpu_seconds, setup=setup_bytes)
+    messages, errors, sorries = _messages(res)
+    olean = workdir / (rel + ".olean")
+    ok = res.returncode == 0 and not errors and not res.timed_out and _regular_artifact(olean, MAX_MODULE_PART_BYTES)
+    if res.timed_out:
+        errors.append(f"elaboration timed out after {timeout}s")
+    elif res.returncode != 0 and not errors:
+        errors.append(f"lean exited with code {res.returncode}: {res.stderr.decode('utf-8', 'replace')[-2000:]}")
+    elif res.returncode == 0 and not ok and not errors:
+        errors.append("compiled Lean artifact is missing, linked, non-regular, or oversized")
+    try:
+        parts = module_parts(workdir, module) if ok else {}
+    except InfrastructureError as exc:
+        raise _attach_compile_process_evidence(exc, process)
+    result = CompileResult(ok, olean if ok else None, messages, errors, sorries, res.timed_out, res.wall_seconds,
+                           res.isolation, res.stderr.decode("utf-8", "replace")[-4000:], process)
+    return result, parts

@@ -1,0 +1,976 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:vscore-source:0.2",
+  "title": "VSCore 0.2 canonical restricted source (vscore-json/0.2)",
+  "$comment": "Closed wire shapes only. VSCore2.parseSource in verislop/lean/VSCore2/Decode.lean normatively interprets exact source bytes. ASCII JSON without whitespace or escapes; strictly sorted unique object keys; canonical integer indices at most 2^53-1; naturals are decimal strings of at most1024digits. Host/schema checks are proposals and never discharge Lean parse/admission equations. The .vsc authoring text is not the certified endpoint.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "declarations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/declaration"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/function"
+      },
+      "minItems": 1
+    },
+    "helpers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/function"
+      }
+    },
+    "language": {
+      "const": "vscore/0.2"
+    },
+    "profile": {
+      "const": "pure-data/0.2"
+    }
+  },
+  "required": [
+    "declarations",
+    "entries",
+    "helpers",
+    "language",
+    "profile"
+  ],
+  "$defs": {
+    "type": {
+      "oneOf": [
+        {
+          "enum": [
+            "nat",
+            "bool",
+            "unit"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enum": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          "required": [
+            "enum"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "result": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "error": {
+                  "$ref": "#/$defs/type"
+                },
+                "ok": {
+                  "$ref": "#/$defs/type"
+                }
+              },
+              "required": [
+                "error",
+                "ok"
+              ]
+            }
+          },
+          "required": [
+            "result"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "record": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          "required": [
+            "record"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "variant": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          "required": [
+            "variant"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "option": {
+              "$ref": "#/$defs/type"
+            }
+          },
+          "required": [
+            "option"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "list": {
+              "$ref": "#/$defs/type"
+            }
+          },
+          "required": [
+            "list"
+          ]
+        }
+      ]
+    },
+    "expr": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "var"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "tag",
+            "index"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "nat"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)(?![\\s\\S])",
+              "maxLength": 1024
+            }
+          },
+          "required": [
+            "tag",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "bool"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "tag",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "unit"
+            }
+          },
+          "required": [
+            "tag"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "enum"
+            },
+            "enum": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "ctor": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          "required": [
+            "tag",
+            "enum",
+            "ctor"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "add"
+            },
+            "left": {
+              "$ref": "#/$defs/expr"
+            },
+            "right": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "sub"
+            },
+            "left": {
+              "$ref": "#/$defs/expr"
+            },
+            "right": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "mul"
+            },
+            "left": {
+              "$ref": "#/$defs/expr"
+            },
+            "right": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "lt"
+            },
+            "left": {
+              "$ref": "#/$defs/expr"
+            },
+            "right": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "le"
+            },
+            "left": {
+              "$ref": "#/$defs/expr"
+            },
+            "right": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "eq"
+            },
+            "left": {
+              "$ref": "#/$defs/expr"
+            },
+            "right": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "and"
+            },
+            "left": {
+              "$ref": "#/$defs/expr"
+            },
+            "right": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "or"
+            },
+            "left": {
+              "$ref": "#/$defs/expr"
+            },
+            "right": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "not"
+            },
+            "value": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "if"
+            },
+            "cond": {
+              "$ref": "#/$defs/expr"
+            },
+            "then": {
+              "$ref": "#/$defs/expr"
+            },
+            "else": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "cond",
+            "then",
+            "else"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "let"
+            },
+            "value": {
+              "$ref": "#/$defs/expr"
+            },
+            "body": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "value",
+            "body"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "ok"
+            },
+            "error_type": {
+              "$ref": "#/$defs/type"
+            },
+            "value": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "error_type",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "error"
+            },
+            "ok_type": {
+              "$ref": "#/$defs/type"
+            },
+            "value": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "ok_type",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "match_result"
+            },
+            "scrutinee": {
+              "$ref": "#/$defs/expr"
+            },
+            "ok": {
+              "$ref": "#/$defs/expr"
+            },
+            "error": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "scrutinee",
+            "ok",
+            "error"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "record"
+            },
+            "record": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "value": {
+                    "$ref": "#/$defs/expr"
+                  }
+                },
+                "required": [
+                  "id",
+                  "value"
+                ]
+              }
+            }
+          },
+          "required": [
+            "tag",
+            "record",
+            "fields"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "project"
+            },
+            "field": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "value": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "field",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "variant"
+            },
+            "variant": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "ctor": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/expr"
+              }
+            }
+          },
+          "required": [
+            "tag",
+            "variant",
+            "ctor",
+            "args"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "match_variant"
+            },
+            "scrutinee": {
+              "$ref": "#/$defs/expr"
+            },
+            "branches": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "ctor": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "body": {
+                    "$ref": "#/$defs/expr"
+                  }
+                },
+                "required": [
+                  "ctor",
+                  "body"
+                ]
+              }
+            }
+          },
+          "required": [
+            "tag",
+            "scrutinee",
+            "branches"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "none"
+            },
+            "element_type": {
+              "$ref": "#/$defs/type"
+            }
+          },
+          "required": [
+            "tag",
+            "element_type"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "some"
+            },
+            "value": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "match_option"
+            },
+            "scrutinee": {
+              "$ref": "#/$defs/expr"
+            },
+            "none": {
+              "$ref": "#/$defs/expr"
+            },
+            "some": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "scrutinee",
+            "none",
+            "some"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "nil"
+            },
+            "element_type": {
+              "$ref": "#/$defs/type"
+            }
+          },
+          "required": [
+            "tag",
+            "element_type"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "cons"
+            },
+            "head": {
+              "$ref": "#/$defs/expr"
+            },
+            "tail": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "head",
+            "tail"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "match_list"
+            },
+            "scrutinee": {
+              "$ref": "#/$defs/expr"
+            },
+            "nil": {
+              "$ref": "#/$defs/expr"
+            },
+            "cons": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "scrutinee",
+            "nil",
+            "cons"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "call"
+            },
+            "helper": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/expr"
+              }
+            }
+          },
+          "required": [
+            "tag",
+            "helper",
+            "args"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "list_fold"
+            },
+            "source": {
+              "$ref": "#/$defs/expr"
+            },
+            "initial": {
+              "$ref": "#/$defs/expr"
+            },
+            "step": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "source",
+            "initial",
+            "step"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "nat_fold"
+            },
+            "source": {
+              "$ref": "#/$defs/expr"
+            },
+            "initial": {
+              "$ref": "#/$defs/expr"
+            },
+            "step": {
+              "$ref": "#/$defs/expr"
+            }
+          },
+          "required": [
+            "tag",
+            "source",
+            "initial",
+            "step"
+          ]
+        }
+      ]
+    },
+    "function": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "$ref": "#/$defs/expr"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/type"
+          }
+        },
+        "result": {
+          "$ref": "#/$defs/type"
+        }
+      },
+      "required": [
+        "body",
+        "id",
+        "params",
+        "result"
+      ]
+    },
+    "declaration": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "record"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "type": {
+                    "$ref": "#/$defs/type"
+                  }
+                },
+                "required": [
+                  "id",
+                  "type"
+                ]
+              }
+            }
+          },
+          "required": [
+            "tag",
+            "id",
+            "fields"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag": {
+              "const": "variant"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "constructors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "params": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/type"
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "params"
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "tag",
+            "id",
+            "constructors"
+          ]
+        }
+      ]
+    }
+  }
+}

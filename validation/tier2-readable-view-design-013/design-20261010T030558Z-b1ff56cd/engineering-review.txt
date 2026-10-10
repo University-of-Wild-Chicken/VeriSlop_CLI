@@ -1,0 +1,118 @@
+Readable VSCore 0.3 denotation: proposed engineering milestone
+
+This directory is a design artifact only. No implementation, qualification,
+compiler experiment, Lean invocation, model call, task run or task artifact read
+was performed. It does not supply input to the frozen live run. Source, docs,
+tests and their frozen inventory remain untouched.
+
+The recommended first implementation is a deterministic typed source renderer
+plus a kernel correspondence gate. It is optional authoring support. Its purpose
+is to move compiler-administration reduction out of the proof author's work;
+proving the accepted function's behavior remains the author's existing universal
+refinement obligation.
+
+The current system already compiles source to ordinary total Lean functions.
+Generated source_fn functions, raw evaluator equations, exact adapters and raw
+coverage fix their connection to the delivered bytes. What is missing is a
+readable executable Lean view and a universal theorem connecting that view to
+those exact existing functions. The source constructor printer and goal term
+printer do not currently provide that view.
+
+The closed first-milestone constructor and primitive registry is specified in
+specification.json. It covers finite nesting of scalar, enum, Result, Option,
+List and acyclic nominal record types; source variables/literals/scalar
+operations/conditionals/lets; record construction/projection; list and Option
+matches; map/filter; list/natural folds; acyclic helpers; and the existing admitted
+total list primitives. Variant-dependent views and unknown future constructors
+are explicitly unavailable in this milestone. They remain subject to existing
+base source admission, whose capability boundary is not changed by view support.
+
+Readable definitions must retain exact meanings: saturating Nat subtraction,
+signed Int arithmetic, total Int.fdiv, Bool-valued comparisons, admitted Unicode
+scalar String construction, Option indexing, the same stable list operations,
+and exact nominal record layouts. The rendering IR records type and binder
+environment at each node. Source variable order is not Lean parameter order:
+entry/helper body parameters are reversed, list-fold body bindings are item then
+accumulator, nat-fold bindings are accumulator then index, and a list-match cons
+branch binds tail then head. Nested bodies preserve the outer environment.
+
+Standalone source-only output can use exact intrinsic Denote record carriers,
+with named packing and field projection helpers over their canonical ordered
+product payloads. This avoids inventing a second accepted record identity.
+Accepted-carrier readable_fn wrappers use the original adapters. Readability
+does not require changing source_fn, accepted domain types or any raw boundary.
+
+For the minimum integration, render the source-only definitions as one canonical
+block that compiles standalone and is embedded unchanged into the existing goal
+namespace. Add wrappers and universal correspondence theorems in that goal.
+This initially avoids new imported dynamic-module bookkeeping. Bind the block,
+definitions and theorems explicitly; the existing proposition hash does not
+cover helpers outside EdgeProp's dependency closure automatically.
+
+The kernel gate must check three exact universal laws: the compiled entry run
+equals readable_run for every intrinsic environment; unchanged source_fn equals
+readable_fn for every accepted argument tuple; and raw evaluation of the same
+encoded inputs produces the encoded readable result. The last law follows from
+the existing raw_eval/evalEntry_encoded leg. All signatures, bodies, dependencies
+and transitive axioms must be inspected after replay. A theorem of True, equality
+to itself or equality on a narrowed domain is not sufficient. No extra axioms,
+native_decide, sorry, unsafe code or additional undeclared trust is permitted.
+
+A checked view's manifest binds canonical source/profile/nominal registry,
+relation, exact adapters, renderer and coverage-registry hashes, typed IR,
+standalone artifact/block, generated goal, definition and theorem identities,
+dependency/axiom inventory, pinned toolchain/import closure and complete kernel
+records. Acceptance regenerates and replays any support used by an edge proof;
+advisory preview is not acceptance evidence.
+
+Packet status is explicit and optional: CHECKED, UNSUPPORTED, REJECTED or
+INFRASTRUCTURE_FAILURE. Only CHECKED exposes a usable equality helper. Every
+other status retains the unchanged standard packet and all required Refines,
+per-ID transfers, raw coverage and source-facet obligations, with durable full
+diagnostics and input-bound artifact references. Base verifier failures preserve
+their existing severity and stopping behavior. A missing optional view cannot
+create a success claim or silently repair source or contract.
+
+Named helpers in stable dependency order and lexical lets preserve sharing.
+Freeze view-only node/byte and generation-step budgets before qualification;
+exceeding those budgets makes the optional view unavailable. Fully inlining an
+acyclic helper graph can be exponential and is prohibited by this rendering
+contract. The design introduces no inference timeout or runtime input bound.
+
+A compiler-function normalization/prettyprint route is feasible in principle,
+but has not been established. It would start from exact replayed Lean expression
+bodies, selectively reduce only closed compiler/shape/cast/environment plumbing,
+and retain mathematical map/fold/recursor primitives and helper sharing. Stored
+source_fn expressions are not assumed normalized because elaboration used
+with_unfolding_all. Broad reduction can expose equality/typeclass/recursor
+internals, duplicate captures and helpers, and fail to cancel symbolic aggregate
+adapters. Pretty output then needs a separate elaboration round trip and the same
+exact universal kernel equality and identity gate. Implementing both routes in
+the first milestone would obscure the proof and cost boundary; prefer the typed
+source renderer, and defer normalization to a separately qualified prototype.
+
+Minimum future implementation scope is a new vscore3_readable proposal renderer;
+target integration for canonical blocks/wrappers/expected equality statements;
+checker integration for complete correspondence/manifest audits and artifacts;
+one packet attachment in agents.py; a focused new generic test module; and only
+the missing generic Lean congruence/representation lemmas if existing ones are
+insufficient. Renderer/support sources must enter registered verifier identity.
+A new intrinsic kernel AST is not required for this first milestone: the typed
+rendering IR remains untrusted until the correspondence gate passes.
+
+The principal unresolved engineering question is whether a finite reviewed
+structural correspondence generator proves the whole declared constructor
+registry efficiently through the existing dependent compiler transports.
+Nothing in this design establishes that performance or successful coverage.
+Engineering review should assess that generator before claiming the milestone
+implemented. Its failure must remain visible as unavailable view support.
+
+Future validation cases RV-T01 through RV-T11 in specification.json use only new
+generic schemas. They cover nested records/options/results/lists, scalar
+semantics, binder captures, list/natural fold order, helper sharing and source
+order, universal correspondence, semantically distinguishable renderer
+mutations, stale hashes, weakened theorem signatures, forbidden proof mechanisms,
+unavailable-view fallback, and two clean deterministic builds/kernel replays.
+Finite sanity executions may supplement these checks but cannot discharge the
+universal correspondence claim. Existing required accepted-theorem references,
+refinement inventories and source boundaries must be compared before/after.

@@ -1,0 +1,81 @@
+Readable VSCore denotation engineering design v2
+
+This is a sealed design-only revision. It supersedes v1 by adding concrete
+admission, replay, metadata, proof recipe and exhaustive audit requirements.
+Nothing is implemented or qualified here, and the frozen live source is unchanged.
+
+The first milestone remains a deterministic typed source renderer. It supports
+39 of the 41 current Expr constructors; variant and matchVariant, and all types
+depending on them, are unavailable for this optional view. Support is all-or-
+nothing over every actual source entry and helper, including unused helpers.
+The per-constructor matrix fixes precise compiler primitives and binder stacks.
+
+Current run_build hard-aborts generated-goal failures. The required integration
+is two-phase: kernel-admit the unchanged base goal; compile/replay appended
+optional enrichment in separate storage; promote CHECKED only after complete
+audit. Optional-only failures before proof authoring select the byte-identical
+base packet. INPUT_MUTATION and base/shared infrastructure never become fallback.
+Once CHECKED is frozen, all acceptance and published/materialization/link/closure
+replays must reproduce it. No replay may downgrade, even if the proof does not
+use a support lemma. BASE proofs cannot name absent readable support.
+
+Entry/helper readable_run takes the declared-order Env of exact resolved shapes.
+Its body sees envReverse and the original params.reverse de Bruijn stack. Named
+parameters convert to the exact right-nested declared-order tuple. Helpers are
+tied to actual checkedProgram.helpers.find? lookups, signature resolution and
+the normative compileHelperPass success context, not merely recompiled under
+the final helper list. Exact RunEquals universally quantifies every intrinsic
+environment and transports actual compiled parameter/result equalities.
+Original accepted wrappers, Refines, EdgeProp, transfers and raw coverage remain.
+
+The authoritative output sidecar is readable/manifest.json, closed schema
+verislop.vscore-readable-view/1. A separate frozen candidate selection metadata
+slot vscore-readable-selection requests the exact mode/descriptor before bridge
+roots form. Its status is never evidence until current replay. Fixed source and
+proof slots and relation fields are unchanged. Existing plan/artifact role strings
+can carry the metadata, but strict uniqueness/ownership/path/hash checks are
+required. Certificate, evidence, IR, build observation and closure schemas receive
+explicit registered readable_support fields; no undeclared JSON escape hatch.
+There is no current verify_accepted function: accepted semantic verification is
+verify_published, reached also through preparation and closure evidence selection.
+
+A complete support audit needs new machinery. The current kernel exporter
+explicitly omits theorem proof bodies, and decl_hash intentionally ignores those
+bodies. A narrow exact staged-support theorem-body export/digest request is a
+mandatory prerequisite. Every support declaration, even unused, must have checked
+kind, safety, levels, type, body, dependency and axiom inventory. Compare all goal
+additions and generated auxiliaries with expected names, and audit any new generic
+support library. No type-only or edge-root-only audit satisfies this specification.
+
+The finite proof recipe is structural: closed compiler/source/context witnesses,
+pointwise child laws and reviewed cast/environment/map/filter/fold/recursor
+congruences. It never authors accepted task refinement or guarantees. The main
+unresolved feasibility question remains whether the complete recipe efficiently
+handles dependent compiler casts and helper contexts under pinned Lean. Every
+39-row rule, RunEquals interface, helper provenance law and body exporter still
+needs implementation and kernel qualification. A normalizer/prettyprinter is a
+separate deferred prototype, not an alternate escape route in this milestone.
+
+Numeric node/depth/arity/helper/entry/output/generation-step budgets are fixed in
+specification.json and both schemas. They constrain the optional view only.
+Existing frozen Lean build/kernel/memory/isolation limits are retained; no model
+inference timeout is added. Timeout, evidence-backed OOM, process failure and
+output overflow have explicit unavailable reasons before proof freeze. Overflow
+records incomplete capture visibly and cannot promote CHECKED. Current stderr
+tail retention is insufficient; bounded full optional streams/resource metadata
+are an additional integration prerequisite.
+
+The validation plan has 18 fresh unrelated case families. Added cases prove
+source-only independence while accepted reference/guarantee bodies vary; reject
+typable same-sort parameter and fold-position swaps; exercise two-phase fallback
+and no-downgrade replay; audit malicious unused support; bind actual helper
+scheduler order; and test closed sidecar/certificate/evidence/closure boundaries.
+Finite examples supplement but never discharge universal equality. Two clean
+from-source builds/replays compare support outputs and unchanged original trust
+and obligations. No such validation was run to prepare this design.
+
+Implementation scope is larger than renderer+packet alone: checker phase splitting,
+all selected replay call sites, schemas and verifier registration, exact proof-
+body export, bounded diagnostics, backend materialize/link and closure artifact
+comparison are necessary. Engineering review must approve this complete slice
+before edits; the design grants no success claim or permission to alter old runs.

@@ -1,0 +1,249 @@
+{
+  "errors": [
+    "28:21: Tactic `rfl` failed: The left-hand side\n  match x with\n  | none => n\n  | some a => s a\nis not definitionally equal to the right-hand side\n  Option.casesOn x n s\n\nA : Type u\nB : Type v\nx : Option A\nn : B\ns : A \u2192 B\n\u22a2 (match x with\n    | none => n\n    | some a => s a) =\n    Option.casesOn x n s",
+    "32:21: Tactic `rfl` failed: The left-hand side\n  match xs with\n  | [] => n\n  | a :: tail => c a tail\nis not definitionally equal to the right-hand side\n  List.casesOn xs n c\n\nA : Type u\nB : Type v\nxs : List A\nn : B\nc : A \u2192 List A \u2192 B\n\u22a2 (match xs with\n    | [] => n\n    | a :: tail => c a tail) =\n    List.casesOn xs n c",
+    "37:21: Tactic `rfl` failed: The left-hand side\n  match x with\n  | Sum.inl a => l a\n  | Sum.inr c => r c\nis not definitionally equal to the right-hand side\n  Sum.casesOn x l r\n\nA : Type u\nC : Type v\nB : Type w\nx : A \u2295 C\nl : A \u2192 B\nr : C \u2192 B\n\u22a2 (match x with\n    | Sum.inl a => l a\n    | Sum.inr c => r c) =\n    Sum.casesOn x l r"
+  ],
+  "format": "verislop.generic-matcher-law-experiment/1",
+  "imports": [
+    "Std"
+  ],
+  "messages": [
+    {
+      "caption": "",
+      "data": "Tactic `rfl` failed: The left-hand side\n  match x with\n  | none => n\n  | some a => s a\nis not definitionally equal to the right-hand side\n  Option.casesOn x n s\n\nA : Type u\nB : Type v\nx : Option A\nn : B\ns : A \u2192 B\n\u22a2 (match x with\n    | none => n\n    | some a => s a) =\n    Option.casesOn x n s",
+      "endPos": {
+        "column": 24,
+        "line": 28
+      },
+      "fileName": "GenericMatcherLaw.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 21,
+        "line": 28
+      },
+      "severity": "error"
+    },
+    {
+      "caption": "",
+      "data": "Tactic `rfl` failed: The left-hand side\n  match xs with\n  | [] => n\n  | a :: tail => c a tail\nis not definitionally equal to the right-hand side\n  List.casesOn xs n c\n\nA : Type u\nB : Type v\nxs : List A\nn : B\nc : A \u2192 List A \u2192 B\n\u22a2 (match xs with\n    | [] => n\n    | a :: tail => c a tail) =\n    List.casesOn xs n c",
+      "endPos": {
+        "column": 24,
+        "line": 32
+      },
+      "fileName": "GenericMatcherLaw.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 21,
+        "line": 32
+      },
+      "severity": "error"
+    },
+    {
+      "caption": "",
+      "data": "Tactic `rfl` failed: The left-hand side\n  match x with\n  | Sum.inl a => l a\n  | Sum.inr c => r c\nis not definitionally equal to the right-hand side\n  Sum.casesOn x l r\n\nA : Type u\nC : Type v\nB : Type w\nx : A \u2295 C\nl : A \u2192 B\nr : C \u2192 B\n\u22a2 (match x with\n    | Sum.inl a => l a\n    | Sum.inr c => r c) =\n    Sum.casesOn x l r",
+      "endPos": {
+        "column": 24,
+        "line": 37
+      },
+      "fileName": "GenericMatcherLaw.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 21,
+        "line": 37
+      },
+      "severity": "error"
+    },
+    {
+      "caption": "",
+      "data": "'GenericMatcherLaw.option_apply' does not depend on any axioms",
+      "endPos": {
+        "column": 6,
+        "line": 39
+      },
+      "fileName": "GenericMatcherLaw.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 0,
+        "line": 39
+      },
+      "severity": "information"
+    },
+    {
+      "caption": "",
+      "data": "'GenericMatcherLaw.list_apply' does not depend on any axioms",
+      "endPos": {
+        "column": 6,
+        "line": 40
+      },
+      "fileName": "GenericMatcherLaw.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 0,
+        "line": 40
+      },
+      "severity": "information"
+    },
+    {
+      "caption": "",
+      "data": "'GenericMatcherLaw.sum_apply' does not depend on any axioms",
+      "endPos": {
+        "column": 6,
+        "line": 41
+      },
+      "fileName": "GenericMatcherLaw.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 0,
+        "line": 41
+      },
+      "severity": "information"
+    }
+  ],
+  "module_parts": {},
+  "ok": false,
+  "process": {
+    "availability": "available",
+    "record": {
+      "elapsed_seconds": "0.16170438201515935",
+      "format": "verislop.lean-compile-process/1",
+      "input": {
+        "module": "GenericMatcherLaw",
+        "module_source_sha256": "sha256:5b0f6a14ad812800effdc4a854a8fabe5742bd61ea40a2b0eb981148be7ded64",
+        "setup_sha256": "sha256:9c6a423a1fd3217f706c875bd3ec58e9ba409b2a744f5c47d32bb3ea83c11aa6"
+      },
+      "launcher_argv": [
+        "/usr/bin/bwrap",
+        "--unshare-user",
+        "--unshare-pid",
+        "--unshare-ipc",
+        "--unshare-uts",
+        "--die-with-parent",
+        "--new-session",
+        "--cap-drop",
+        "ALL",
+        "--unshare-net",
+        "--ro-bind",
+        "/usr",
+        "/usr",
+        "--ro-bind",
+        "/bin",
+        "/bin",
+        "--ro-bind",
+        "/sbin",
+        "/sbin",
+        "--ro-bind",
+        "/lib",
+        "/lib",
+        "--ro-bind",
+        "/lib64",
+        "/lib64",
+        "--ro-bind",
+        "/etc/ld.so.cache",
+        "/etc/ld.so.cache",
+        "--proc",
+        "/proc",
+        "--dev",
+        "/dev",
+        "--bind",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-readable-view-qualification/std-matcher-law-qbn7nam6/compile",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-readable-view-qualification/std-matcher-law-qbn7nam6/compile",
+        "--ro-bind",
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1",
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1",
+        "--remount-ro",
+        "/",
+        "--chdir",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-readable-view-qualification/std-matcher-law-qbn7nam6/compile",
+        "--",
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+        "-j4",
+        "--json",
+        "-M1024",
+        "--setup=setup.json",
+        "-o",
+        "GenericMatcherLaw.olean",
+        "GenericMatcherLaw.lean"
+      ],
+      "reported_stderr_panics": [],
+      "requested_argv": [
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+        "-j4",
+        "--json",
+        "-M1024",
+        "--setup=setup.json",
+        "-o",
+        "GenericMatcherLaw.olean",
+        "GenericMatcherLaw.lean"
+      ],
+      "requested_limits": {
+        "lean_heap_mb": 1024,
+        "sandbox_address_space_bytes": 18253611008,
+        "sandbox_core_bytes": 0,
+        "sandbox_cpu_hard_seconds": 40,
+        "sandbox_cpu_soft_seconds": 35,
+        "sandbox_file_size_bytes": 1073741824,
+        "wall_timeout_seconds": "30"
+      },
+      "returncode": 1,
+      "sandbox_profile": {
+        "filesystem_backend": "bubblewrap",
+        "filesystem_read_isolation": true,
+        "filesystem_write_isolation": true,
+        "inherited_file_descriptors": "stdin/stdout/stderr only",
+        "ipc_namespace": true,
+        "network_namespace": true,
+        "note": "Mount/PID/IPC containment; system runtimes and explicit read-only grants remain readable. Kernel, bubblewrap and runtime contents are trusted; no seccomp or aggregate cgroup limits.",
+        "pid_namespace": true,
+        "private_proc": true,
+        "process_group_kill_on_timeout": true,
+        "read_only_paths": [
+          "/usr",
+          "/bin",
+          "/sbin",
+          "/lib",
+          "/lib64",
+          "/etc/ld.so.cache",
+          "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1"
+        ],
+        "resource_limits": [
+          "RLIMIT_AS",
+          "RLIMIT_CPU",
+          "RLIMIT_FSIZE",
+          "RLIMIT_CORE"
+        ],
+        "scrubbed_environment": true,
+        "staged_working_directory": true,
+        "writable_host_paths": [
+          "<stage>"
+        ]
+      },
+      "stderr": {
+        "byte_count": 0,
+        "content_b64": "",
+        "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "byte_count": 2397,
+        "content_b64": "eyJjYXB0aW9uIjoiIiwiZGF0YSI6IlRhY3RpYyBgcmZsYCBmYWlsZWQ6IFRoZSBsZWZ0LWhhbmQgc2lkZVxuICBtYXRjaCB4IHdpdGhcbiAgfCBub25lID0+IG5cbiAgfCBzb21lIGEgPT4gcyBhXG5pcyBub3QgZGVmaW5pdGlvbmFsbHkgZXF1YWwgdG8gdGhlIHJpZ2h0LWhhbmQgc2lkZVxuICBPcHRpb24uY2FzZXNPbiB4IG4gc1xuXG5BIDogVHlwZSB1XG5CIDogVHlwZSB2XG54IDogT3B0aW9uIEFcbm4gOiBCXG5zIDogQSDihpIgQlxu4oqiIChtYXRjaCB4IHdpdGhcbiAgICB8IG5vbmUgPT4gblxuICAgIHwgc29tZSBhID0+IHMgYSkgPVxuICAgIE9wdGlvbi5jYXNlc09uIHggbiBzIiwiZW5kUG9zIjp7ImNvbHVtbiI6MjQsImxpbmUiOjI4fSwiZmlsZU5hbWUiOiJHZW5lcmljTWF0Y2hlckxhdy5sZWFuIiwiaXNTaWxlbnQiOmZhbHNlLCJrZWVwRnVsbFJhbmdlIjpmYWxzZSwia2luZCI6Ilthbm9ueW1vdXNdIiwicG9zIjp7ImNvbHVtbiI6MjEsImxpbmUiOjI4fSwic2V2ZXJpdHkiOiJlcnJvciJ9CnsiY2FwdGlvbiI6IiIsImRhdGEiOiJUYWN0aWMgYHJmbGAgZmFpbGVkOiBUaGUgbGVmdC1oYW5kIHNpZGVcbiAgbWF0Y2ggeHMgd2l0aFxuICB8IFtdID0+IG5cbiAgfCBhIDo6IHRhaWwgPT4gYyBhIHRhaWxcbmlzIG5vdCBkZWZpbml0aW9uYWxseSBlcXVhbCB0byB0aGUgcmlnaHQtaGFuZCBzaWRlXG4gIExpc3QuY2FzZXNPbiB4cyBuIGNcblxuQSA6IFR5cGUgdVxuQiA6IFR5cGUgdlxueHMgOiBMaXN0IEFcbm4gOiBCXG5jIDogQSDihpIgTGlzdCBBIOKGkiBCXG7iiqIgKG1hdGNoIHhzIHdpdGhcbiAgICB8IFtdID0+IG5cbiAgICB8IGEgOjogdGFpbCA9PiBjIGEgdGFpbCkgPVxuICAgIExpc3QuY2FzZXNPbiB4cyBuIGMiLCJlbmRQb3MiOnsiY29sdW1uIjoyNCwibGluZSI6MzJ9LCJmaWxlTmFtZSI6IkdlbmVyaWNNYXRjaGVyTGF3LmxlYW4iLCJpc1NpbGVudCI6ZmFsc2UsImtlZXBGdWxsUmFuZ2UiOmZhbHNlLCJraW5kIjoiW2Fub255bW91c10iLCJwb3MiOnsiY29sdW1uIjoyMSwibGluZSI6MzJ9LCJzZXZlcml0eSI6ImVycm9yIn0KeyJjYXB0aW9uIjoiIiwiZGF0YSI6IlRhY3RpYyBgcmZsYCBmYWlsZWQ6IFRoZSBsZWZ0LWhhbmQgc2lkZVxuICBtYXRjaCB4IHdpdGhcbiAgfCBTdW0uaW5sIGEgPT4gbCBhXG4gIHwgU3VtLmluciBjID0+IHIgY1xuaXMgbm90IGRlZmluaXRpb25hbGx5IGVxdWFsIHRvIHRoZSByaWdodC1oYW5kIHNpZGVcbiAgU3VtLmNhc2VzT24geCBsIHJcblxuQSA6IFR5cGUgdVxuQyA6IFR5cGUgdlxuQiA6IFR5cGUgd1xueCA6IEEg4oqVIENcbmwgOiBBIOKGkiBCXG5yIDogQyDihpIgQlxu4oqiIChtYXRjaCB4IHdpdGhcbiAgICB8IFN1bS5pbmwgYSA9PiBsIGFcbiAgICB8IFN1bS5pbnIgYyA9PiByIGMpID1cbiAgICBTdW0uY2FzZXNPbiB4IGwgciIsImVuZFBvcyI6eyJjb2x1bW4iOjI0LCJsaW5lIjozN30sImZpbGVOYW1lIjoiR2VuZXJpY01hdGNoZXJMYXcubGVhbiIsImlzU2lsZW50IjpmYWxzZSwia2VlcEZ1bGxSYW5nZSI6ZmFsc2UsImtpbmQiOiJbYW5vbnltb3VzXSIsInBvcyI6eyJjb2x1bW4iOjIxLCJsaW5lIjozN30sInNldmVyaXR5IjoiZXJyb3IifQp7ImNhcHRpb24iOiIiLCJkYXRhIjoiJ0dlbmVyaWNNYXRjaGVyTGF3Lm9wdGlvbl9hcHBseScgZG9lcyBub3QgZGVwZW5kIG9uIGFueSBheGlvbXMiLCJlbmRQb3MiOnsiY29sdW1uIjo2LCJsaW5lIjozOX0sImZpbGVOYW1lIjoiR2VuZXJpY01hdGNoZXJMYXcubGVhbiIsImlzU2lsZW50IjpmYWxzZSwia2VlcEZ1bGxSYW5nZSI6ZmFsc2UsImtpbmQiOiJbYW5vbnltb3VzXSIsInBvcyI6eyJjb2x1bW4iOjAsImxpbmUiOjM5fSwic2V2ZXJpdHkiOiJpbmZvcm1hdGlvbiJ9CnsiY2FwdGlvbiI6IiIsImRhdGEiOiInR2VuZXJpY01hdGNoZXJMYXcubGlzdF9hcHBseScgZG9lcyBub3QgZGVwZW5kIG9uIGFueSBheGlvbXMiLCJlbmRQb3MiOnsiY29sdW1uIjo2LCJsaW5lIjo0MH0sImZpbGVOYW1lIjoiR2VuZXJpY01hdGNoZXJMYXcubGVhbiIsImlzU2lsZW50IjpmYWxzZSwia2VlcEZ1bGxSYW5nZSI6ZmFsc2UsImtpbmQiOiJbYW5vbnltb3VzXSIsInBvcyI6eyJjb2x1bW4iOjAsImxpbmUiOjQwfSwic2V2ZXJpdHkiOiJpbmZvcm1hdGlvbiJ9CnsiY2FwdGlvbiI6IiIsImRhdGEiOiInR2VuZXJpY01hdGNoZXJMYXcuc3VtX2FwcGx5JyBkb2VzIG5vdCBkZXBlbmQgb24gYW55IGF4aW9tcyIsImVuZFBvcyI6eyJjb2x1bW4iOjYsImxpbmUiOjQxfSwiZmlsZU5hbWUiOiJHZW5lcmljTWF0Y2hlckxhdy5sZWFuIiwiaXNTaWxlbnQiOmZhbHNlLCJrZWVwRnVsbFJhbmdlIjpmYWxzZSwia2luZCI6Ilthbm9ueW1vdXNdIiwicG9zIjp7ImNvbHVtbiI6MCwibGluZSI6NDF9LCJzZXZlcml0eSI6ImluZm9ybWF0aW9uIn0K",
+        "sha256": "sha256:1e504f35e74714bbb8d222dec3558762931b940fcdd6e6264dc1fbdb924a039a"
+      },
+      "timed_out": false,
+      "working_directory": "/home/augustus/VeriSlop_CLI/validation/tier2-readable-view-qualification/std-matcher-law-qbn7nam6/compile"
+    }
+  },
+  "scope": "Generic eliminator normalization only; no task/VSCore source semantics qualification",
+  "source_sha256": "sha256:5b0f6a14ad812800effdc4a854a8fabe5742bd61ea40a2b0eb981148be7ded64"
+}

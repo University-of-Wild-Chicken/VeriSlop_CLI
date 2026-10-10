@@ -1,0 +1,12 @@
+program "vscore/0.3" profile "data-pipeline/0.3";
+record Atom { tone: Enum(Tone); n: Nat; }
+record Box { atom: Record(Atom); live: Bool; }
+entry raiseBoxes(xs: List(Record(Box))) -> List(Record(Box)) {
+  List.map(xs; b => record Box { atom = record Atom { tone = b.atom.tone, n = b.atom.n + 1 }, live = b.live })
+}
+entry keepAtom(xs: List(Record(Box)), needle: Record(Atom)) -> List(Record(Box)) {
+  List.filter(xs; b => b.atom == needle)
+}
+entry coldTotal(xs: List(Record(Box))) -> Nat {
+  List.fold(xs, 0; acc, b => if b.atom.tone == enum(Tone, cold) then acc + b.atom.n else acc)
+}

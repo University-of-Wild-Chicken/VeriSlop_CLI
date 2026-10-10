@@ -1,0 +1,16 @@
+def _compile_failure(code: str, message: str, ctx: EdgeContext, spec: T.GoalSpec,
+                     module: str, source: bytes, result: leanbridge.CompileResult,
+                     *, severity: str = "blocking", process_inventory: dict | None = None) -> EdgeFailure:
+    """Preserve every reported error before the isolated build is removed."""
+    details = {"format": "verislop.vscore-compile-diagnostics/1", "module": module,
+               "module_source_hash": canonical.digest(source), "goal_hash": canonical.digest(spec.text.encode()),
+               "input_hashes": {name: canonical.digest(data) for name, (_, data) in sorted(ctx.inputs.items())},
+               "error_count": len(result.errors), "errors": result.errors, "messages": result.messages,
+               "sorry_positions": result.sorry_positions, "timed_out": result.timed_out,
+               "stderr": result.raw_stderr,
+               "stderr_retention": {"tail_only_max_chars": 4000, "may_be_truncated": True},
+               "process_evidence": leanbridge.compile_process_details(result)}
+    if process_inventory is not None:
+        details["build_process_evidence"] = copy.deepcopy(process_inventory)
+    return EdgeFailure([Diagnostic(code, f"{message} ({len(result.errors)} reported errors; full inventory in details)",
+                                   severity=severity, claims=[ctx.claim["claim_id"]], details=details)])

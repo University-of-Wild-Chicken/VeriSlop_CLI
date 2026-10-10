@@ -1,0 +1,32 @@
+{
+  "artifacts": {
+    "candidate": "contract/candidate",
+    "challenge": "contract/challenge",
+    "claims": "claims.json"
+  },
+  "asserts_closure_verified": false,
+  "command": "formalize",
+  "diagnostics": [],
+  "gate": "statement-checked challenge frozen before proof search",
+  "status": "PASS",
+  "summary": {
+    "contract_input_root": "sha256:707814c456c9ab43068dc6726391014babfafaee4d49fa4a3613a6487aee0439",
+    "statements": {
+      "Gfilter": {
+        "display": "∀ x0 : List(Box), ∀ x1 : Atom, keepAtom(x0, x1) = list_filter(x0, fun x2 => (decide(x2.atom.tone = x1.tone) && decide(x2.atom.n = x1.n)))",
+        "hypotheses": [],
+        "representation": "contract_dsl"
+      },
+      "Gfold": {
+        "display": "∀ x0 : List(Box), coldTotal(x0) = list_foldl(x0, 0, fun x1 x2 => if decide(x2.atom.tone = Tone.cold) then (x1 + x2.atom.n) else x1)",
+        "hypotheses": [],
+        "representation": "contract_dsl"
+      },
+      "Gmap": {
+        "display": "∀ x0 : List(Box), raiseBoxes(x0) = list_map(x0, fun x1 => Box(Atom(x1.atom.tone, (x1.atom.n + 1)), x1.live))",
+        "hypotheses": [],
+        "representation": "contract_dsl"
+      }
+    }
+  }
+}

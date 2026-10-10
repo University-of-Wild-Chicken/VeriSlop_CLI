@@ -1,0 +1,30 @@
+--- original/tests/test_vscore3_collection_bridge.py
++++ repaired/tests/test_vscore3_collection_bridge.py
+@@ -423,7 +423,8 @@
+     test.assertIn("SourceAdequate_shiftEnvelopes", spec.expected)
+     test.assertNotIn("Refines_inspectEnvelope", str(spec.expected["EdgeProp"]))
+     selected_options = {"readable_selection": info["readable_selection"],
+-                        "readable_diagnostics": info["readable_candidate_artifacts"]}
++                        "readable_diagnostics": {path: data for path, data in info["readable_candidate_artifacts"].items()
++                                                 if path != readable.SELECTION_PATH}}
+     with test.assertRaises(checker.EdgeFailure) as failed:
+         retain_preview(root, "direct-conversion-baseline", pkg, delivered, relation,
+                        bridge_proof(spec, baseline=True), **selected_options)
+@@ -449,14 +450,15 @@
+     with test.assertRaises(checker.EdgeFailure) as failed:
+         retain_preview(root, "semantically-wrong-source", pkg, wrong, relation, bridge_proof(wrong_spec),
+                        readable_selection=wrong_info["readable_selection"],
+-                       readable_diagnostics=wrong_info["readable_candidate_artifacts"])
++                       readable_diagnostics={path: data for path, data in wrong_info["readable_candidate_artifacts"].items()
++                                             if path != readable.SELECTION_PATH})
+     test.assertTrue(any(d.code == "CANDIDATE_BUILD_FAILURE" for d in failed.exception.diagnostics))
+     tampered = canonical.loads(info["readable_selection"])
+     tampered["checked_descriptor"]["selected_goal_hash"] = "sha256:" + "0" * 64
+     with test.assertRaises(checker.EdgeFailure):
+         retain_preview(root, "tampered-readable-selection", pkg, delivered, relation, proof,
+                        readable_selection=canonical.dumps(tampered),
+-                       readable_diagnostics=info["readable_candidate_artifacts"])
++                       readable_diagnostics=selected_options["readable_diagnostics"])
+     candidate = root / "candidate"
+     for path, data in {"program.vscore.json": delivered, "relation.json": relation, "Proof.lean": proof,
+                        **info["readable_candidate_artifacts"]}.items():

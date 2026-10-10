@@ -1,0 +1,149 @@
+import VeriSlopBridgeGoal
+
+set_option maxRecDepth 100000
+set_option maxHeartbeats 20000000
+
+namespace VeriSlopBridgeProof
+
+open VeriSlopBridgeGoal VeriSlopReadableSource
+
+private theorem fold_transport {A B C : Type}
+    (encode : A → B) (f : A → C → A) (g : B → C → B)
+    (step : ∀ a c, g (encode a) c = encode (f a c))
+    (xs : List C) (a : A) :
+    xs.foldl g (encode a) = encode (xs.foldl f a) := by
+  induction xs generalizing a with
+  | nil => rfl
+  | cons c cs ih =>
+    simp only [List.foldl_cons, step, ih]
+
+private theorem filter_transport {A B : Type}
+    (encode : A → B) (p : A → Bool) (q : B → Bool)
+    (h : ∀ a, q (encode a) = p a) (xs : List A) :
+    (xs.map encode).filter q = (xs.filter p).map encode := by
+  induction xs with
+  | nil => rfl
+  | cons a xs ih =>
+    simp only [List.map_cons, List.filter_cons, h, ih]
+    cases p a <;> rfl
+
+private def stateEncode (s : VeriSlopAST.State) :
+    VSCore3.Denote helper_2_result :=
+  (adapter_9.to s.rows, (s.previous, ()))
+
+private def selected (i : VeriSlopAST.Input) (g : String)
+    (b : Int) (e : VeriSlopAST.Event) : Bool :=
+  decide (e.group = g) &&
+    (e.value.isSome &&
+      decide (b ≤ e.time ∧ e.time < b + i.width ∧ e.time < i.end))
+
+private theorem selected_eq (i : VeriSlopAST.Input) (g : String)
+    (b : Int) (e : VeriSlopAST.Event) :
+    helper_0_named (adapter_6.to i) g b (adapter_3.to e) =
+      selected i g b e := by
+  with_unfolding_all
+    cases e with
+    | mk group time value =>
+      cases value <;>
+        simp [helper_0_named, helper_0_run, helper_0_body,
+          VSCore3.envReverse, adapter_6, adapter_3, adapter_4,
+          adapter_2, adapter_1, adapter_0, VSCore3.listAdapter,
+          VSCore3.optionAdapter, VSCore3.intAdapter,
+          VSCore3.stringAdapter, selected, Bool.decide_and]
+
+private theorem stats_eq (i : VeriSlopAST.Input) (g : String) (b : Int) :
+    helper_1_named (adapter_6.to i) g b =
+      ((VeriSlopAST.bucket_stats i g b).count,
+        ((VeriSlopAST.bucket_stats i g b).sum, ())) := by
+  have hf :
+      ((i.events.map adapter_3.to).filter
+        (fun e => helper_0_named (adapter_6.to i) g b e)) =
+      (i.events.filter (selected i g b)).map adapter_3.to :=
+    filter_transport adapter_3.to (selected i g b)
+      (fun e => helper_0_named (adapter_6.to i) g b e)
+      (selected_eq i g b) i.events
+  have hv (e : VeriSlopAST.Event) :
+      Option.casesOn (adapter_3.to e).2.2.1 0 (fun v => v) =
+        e.value.getD 0 := by
+    cases e with
+    | mk group time value =>
+      cases value <;>
+        rfl
+  with_unfolding_all
+    simpa [helper_1_named, helper_1_run, helper_1_body,
+      VSCore3.envReverse, adapter_6, adapter_4, adapter_1,
+      VSCore3.listAdapter, VSCore3.intAdapter, hf,
+      List.map_map, hv, VeriSlopAST.bucket_stats, selected]
+
+private def acceptedStep (i : VeriSlopAST.Input) (g : String)
+    (s : VeriSlopAST.State) (k : Nat) : VeriSlopAST.State :=
+  let b := i.start + Int.ofNat k * i.width
+  let t := VeriSlopAST.bucket_stats i g b
+  ⟨s.rows ++ [⟨g, b, t.count,
+      cond (decide (0 < t.count)) (some t.sum)
+        (cond (decide (i.fill = .previous)) s.previous none)⟩],
+    cond (decide (0 < t.count)) (some t.sum) s.previous⟩
+
+private theorem step_eq (i : VeriSlopAST.Input) (g : String)
+    (s : VeriSlopAST.State) (k : Nat) :
+    helper_2_named (adapter_6.to i) g (stateEncode s) k =
+      stateEncode (acceptedStep i g s k) := by
+  with_unfolding_all
+    cases hfill : i.fill <;>
+      simp [helper_2_named, helper_2_run, helper_2_body,
+        VSCore3.envReverse, stats_eq, stateEncode, acceptedStep,
+        adapter_6, adapter_5, adapter_9, adapter_8, adapter_7,
+        adapter_2, adapter_1, adapter_0, adapter_4,
+        VSCore3.listAdapter, VSCore3.optionAdapter,
+        VSCore3.natAdapter, VSCore3.intAdapter,
+        VSCore3.stringAdapter, hfill, List.map_append,
+        VSCore3.ProofSupport.ite_decide]
+
+private theorem group_eq (i : VeriSlopAST.Input) (g : String) :
+    helper_3_named (adapter_6.to i) g =
+      adapter_9.to (VeriSlopAST.group_rows i g) := by
+  let ks := List.range
+    (Int.toNat (Int.fdiv (i.end - i.start + i.width - 1) i.width))
+  have h := fold_transport stateEncode (acceptedStep i g)
+    (fun s k => helper_2_named (adapter_6.to i) g s k)
+    (step_eq i g) ks (VeriSlopAST.State.mk [] none)
+  have hp := congrArg Prod.fst h
+  with_unfolding_all
+    simpa [helper_3_named, helper_3_run, helper_3_body,
+      VSCore3.envReverse, stateEncode, VeriSlopAST.group_rows,
+      acceptedStep, List.foldl_cons, List.foldl_nil,
+      adapter_6, adapter_4, adapter_1, adapter_9,
+      VSCore3.listAdapter, VSCore3.intAdapter, ks] using hp
+
+private theorem solve_eq (i : VeriSlopAST.Input) :
+    Readable.readable_fn_solve i = VeriSlopAST.solve i := by
+  let groups :=
+    (i.events.map VeriSlopAST.Event.group).eraseDups.mergeSort
+      (fun a b => decide (a ≤ b))
+  have hg :
+      ((i.events.map adapter_3.to).map (fun e => e.1)) =
+        i.events.map VeriSlopAST.Event.group := by
+    simp [List.map_map, adapter_3, adapter_0, VSCore3.stringAdapter]
+  have hs (rows : List VeriSlopAST.Row) (g : String) :
+      adapter_9.to rows ++ helper_3_named (adapter_6.to i) g =
+        adapter_9.to (rows ++ VeriSlopAST.group_rows i g) := by
+    rw [group_eq]
+    simp [adapter_9, VSCore3.listAdapter, List.map_append]
+  have h := fold_transport adapter_9.to
+    (fun rows g => rows ++ VeriSlopAST.group_rows i g)
+    (fun rows g => rows ++ helper_3_named (adapter_6.to i) g)
+    hs groups []
+  have hd := congrArg adapter_9.inv h
+  with_unfolding_all
+    simpa [Readable.readable_fn_solve, entry_0_run, entry_0_body,
+      VSCore3.envReverse, adapter_6, adapter_4, adapter_1,
+      VSCore3.listAdapter, VSCore3.intAdapter,
+      hg, groups, VeriSlopAST.solve, adapter_9.from_to] using hd
+
+theorem edge : VeriSlopBridgeGoal.EdgeProp := by
+  apply VeriSlopBridgeGoal.edge_of_refines
+  intro i
+  rw [VeriSlopBridgeGoal.Readable.source_eq_solve]
+  exact solve_eq i
+
+end VeriSlopBridgeProof

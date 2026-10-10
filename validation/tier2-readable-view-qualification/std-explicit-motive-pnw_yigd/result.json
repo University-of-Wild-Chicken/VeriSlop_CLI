@@ -1,0 +1,249 @@
+{
+  "errors": [
+    "8:21: Tactic `rfl` failed: The left-hand side\n  match x with\n  | none => n\n  | some a => s a\nis not definitionally equal to the right-hand side\n  Option.casesOn x n s\n\nA : Type u\nB : Type v\nx : Option A\nn : B\ns : A \u2192 B\n\u22a2 (match x with\n    | none => n\n    | some a => s a) =\n    Option.casesOn x n s",
+    "13:21: Tactic `rfl` failed: The left-hand side\n  match xs with\n  | [] => n\n  | a :: tail => c a tail\nis not definitionally equal to the right-hand side\n  List.casesOn xs n c\n\nA : Type u\nB : Type v\nxs : List A\nn : B\nc : A \u2192 List A \u2192 B\n\u22a2 (match xs with\n    | [] => n\n    | a :: tail => c a tail) =\n    List.casesOn xs n c",
+    "19:21: Tactic `rfl` failed: The left-hand side\n  match x with\n  | Sum.inl a => l a\n  | Sum.inr c => r c\nis not definitionally equal to the right-hand side\n  Sum.casesOn x l r\n\nA : Type u\nC : Type v\nB : Type w\nx : A \u2295 C\nl : A \u2192 B\nr : C \u2192 B\n\u22a2 (match x with\n    | Sum.inl a => l a\n    | Sum.inr c => r c) =\n    Sum.casesOn x l r"
+  ],
+  "format": "verislop.generic-explicit-motive-experiment/1",
+  "imports": [
+    "Std"
+  ],
+  "messages": [
+    {
+      "caption": "",
+      "data": "Tactic `rfl` failed: The left-hand side\n  match x with\n  | none => n\n  | some a => s a\nis not definitionally equal to the right-hand side\n  Option.casesOn x n s\n\nA : Type u\nB : Type v\nx : Option A\nn : B\ns : A \u2192 B\n\u22a2 (match x with\n    | none => n\n    | some a => s a) =\n    Option.casesOn x n s",
+      "endPos": {
+        "column": 24,
+        "line": 8
+      },
+      "fileName": "GenericExplicitMotive.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 21,
+        "line": 8
+      },
+      "severity": "error"
+    },
+    {
+      "caption": "",
+      "data": "Tactic `rfl` failed: The left-hand side\n  match xs with\n  | [] => n\n  | a :: tail => c a tail\nis not definitionally equal to the right-hand side\n  List.casesOn xs n c\n\nA : Type u\nB : Type v\nxs : List A\nn : B\nc : A \u2192 List A \u2192 B\n\u22a2 (match xs with\n    | [] => n\n    | a :: tail => c a tail) =\n    List.casesOn xs n c",
+      "endPos": {
+        "column": 24,
+        "line": 13
+      },
+      "fileName": "GenericExplicitMotive.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 21,
+        "line": 13
+      },
+      "severity": "error"
+    },
+    {
+      "caption": "",
+      "data": "Tactic `rfl` failed: The left-hand side\n  match x with\n  | Sum.inl a => l a\n  | Sum.inr c => r c\nis not definitionally equal to the right-hand side\n  Sum.casesOn x l r\n\nA : Type u\nC : Type v\nB : Type w\nx : A \u2295 C\nl : A \u2192 B\nr : C \u2192 B\n\u22a2 (match x with\n    | Sum.inl a => l a\n    | Sum.inr c => r c) =\n    Sum.casesOn x l r",
+      "endPos": {
+        "column": 24,
+        "line": 19
+      },
+      "fileName": "GenericExplicitMotive.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 21,
+        "line": 19
+      },
+      "severity": "error"
+    },
+    {
+      "caption": "",
+      "data": "'GenericExplicitMotive.option_direct' depends on axioms: [sorryAx]",
+      "endPos": {
+        "column": 6,
+        "line": 21
+      },
+      "fileName": "GenericExplicitMotive.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 0,
+        "line": 21
+      },
+      "severity": "information"
+    },
+    {
+      "caption": "",
+      "data": "'GenericExplicitMotive.list_direct' depends on axioms: [sorryAx]",
+      "endPos": {
+        "column": 6,
+        "line": 22
+      },
+      "fileName": "GenericExplicitMotive.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 0,
+        "line": 22
+      },
+      "severity": "information"
+    },
+    {
+      "caption": "",
+      "data": "'GenericExplicitMotive.sum_direct' depends on axioms: [sorryAx]",
+      "endPos": {
+        "column": 6,
+        "line": 23
+      },
+      "fileName": "GenericExplicitMotive.lean",
+      "isSilent": false,
+      "keepFullRange": false,
+      "kind": "[anonymous]",
+      "pos": {
+        "column": 0,
+        "line": 23
+      },
+      "severity": "information"
+    }
+  ],
+  "module_parts": {},
+  "ok": false,
+  "process": {
+    "availability": "available",
+    "record": {
+      "elapsed_seconds": "0.14630697600659914",
+      "format": "verislop.lean-compile-process/1",
+      "input": {
+        "module": "GenericExplicitMotive",
+        "module_source_sha256": "sha256:0c3395a66943c1f3494aae3ba9d8fcb038d7fa6b65edc8b40c75a3f3d244ff2b",
+        "setup_sha256": "sha256:598c281a7afcdc089280f5fa712822fadaad81715b298f034081f73b2c32afcb"
+      },
+      "launcher_argv": [
+        "/usr/bin/bwrap",
+        "--unshare-user",
+        "--unshare-pid",
+        "--unshare-ipc",
+        "--unshare-uts",
+        "--die-with-parent",
+        "--new-session",
+        "--cap-drop",
+        "ALL",
+        "--unshare-net",
+        "--ro-bind",
+        "/usr",
+        "/usr",
+        "--ro-bind",
+        "/bin",
+        "/bin",
+        "--ro-bind",
+        "/sbin",
+        "/sbin",
+        "--ro-bind",
+        "/lib",
+        "/lib",
+        "--ro-bind",
+        "/lib64",
+        "/lib64",
+        "--ro-bind",
+        "/etc/ld.so.cache",
+        "/etc/ld.so.cache",
+        "--proc",
+        "/proc",
+        "--dev",
+        "/dev",
+        "--bind",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-readable-view-qualification/std-explicit-motive-pnw_yigd/compile",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-readable-view-qualification/std-explicit-motive-pnw_yigd/compile",
+        "--ro-bind",
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1",
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1",
+        "--remount-ro",
+        "/",
+        "--chdir",
+        "/home/augustus/VeriSlop_CLI/validation/tier2-readable-view-qualification/std-explicit-motive-pnw_yigd/compile",
+        "--",
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+        "-j4",
+        "--json",
+        "-M1024",
+        "--setup=setup.json",
+        "-o",
+        "GenericExplicitMotive.olean",
+        "GenericExplicitMotive.lean"
+      ],
+      "reported_stderr_panics": [],
+      "requested_argv": [
+        "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean",
+        "-j4",
+        "--json",
+        "-M1024",
+        "--setup=setup.json",
+        "-o",
+        "GenericExplicitMotive.olean",
+        "GenericExplicitMotive.lean"
+      ],
+      "requested_limits": {
+        "lean_heap_mb": 1024,
+        "sandbox_address_space_bytes": 18253611008,
+        "sandbox_core_bytes": 0,
+        "sandbox_cpu_hard_seconds": 40,
+        "sandbox_cpu_soft_seconds": 35,
+        "sandbox_file_size_bytes": 1073741824,
+        "wall_timeout_seconds": "30"
+      },
+      "returncode": 1,
+      "sandbox_profile": {
+        "filesystem_backend": "bubblewrap",
+        "filesystem_read_isolation": true,
+        "filesystem_write_isolation": true,
+        "inherited_file_descriptors": "stdin/stdout/stderr only",
+        "ipc_namespace": true,
+        "network_namespace": true,
+        "note": "Mount/PID/IPC containment; system runtimes and explicit read-only grants remain readable. Kernel, bubblewrap and runtime contents are trusted; no seccomp or aggregate cgroup limits.",
+        "pid_namespace": true,
+        "private_proc": true,
+        "process_group_kill_on_timeout": true,
+        "read_only_paths": [
+          "/usr",
+          "/bin",
+          "/sbin",
+          "/lib",
+          "/lib64",
+          "/etc/ld.so.cache",
+          "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1"
+        ],
+        "resource_limits": [
+          "RLIMIT_AS",
+          "RLIMIT_CPU",
+          "RLIMIT_FSIZE",
+          "RLIMIT_CORE"
+        ],
+        "scrubbed_environment": true,
+        "staged_working_directory": true,
+        "writable_host_paths": [
+          "<stage>"
+        ]
+      },
+      "stderr": {
+        "byte_count": 0,
+        "content_b64": "",
+        "sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "byte_count": 2431,
+        "content_b64": "eyJjYXB0aW9uIjoiIiwiZGF0YSI6IlRhY3RpYyBgcmZsYCBmYWlsZWQ6IFRoZSBsZWZ0LWhhbmQgc2lkZVxuICBtYXRjaCB4IHdpdGhcbiAgfCBub25lID0+IG5cbiAgfCBzb21lIGEgPT4gcyBhXG5pcyBub3QgZGVmaW5pdGlvbmFsbHkgZXF1YWwgdG8gdGhlIHJpZ2h0LWhhbmQgc2lkZVxuICBPcHRpb24uY2FzZXNPbiB4IG4gc1xuXG5BIDogVHlwZSB1XG5CIDogVHlwZSB2XG54IDogT3B0aW9uIEFcbm4gOiBCXG5zIDogQSDihpIgQlxu4oqiIChtYXRjaCB4IHdpdGhcbiAgICB8IG5vbmUgPT4gblxuICAgIHwgc29tZSBhID0+IHMgYSkgPVxuICAgIE9wdGlvbi5jYXNlc09uIHggbiBzIiwiZW5kUG9zIjp7ImNvbHVtbiI6MjQsImxpbmUiOjh9LCJmaWxlTmFtZSI6IkdlbmVyaWNFeHBsaWNpdE1vdGl2ZS5sZWFuIiwiaXNTaWxlbnQiOmZhbHNlLCJrZWVwRnVsbFJhbmdlIjpmYWxzZSwia2luZCI6Ilthbm9ueW1vdXNdIiwicG9zIjp7ImNvbHVtbiI6MjEsImxpbmUiOjh9LCJzZXZlcml0eSI6ImVycm9yIn0KeyJjYXB0aW9uIjoiIiwiZGF0YSI6IlRhY3RpYyBgcmZsYCBmYWlsZWQ6IFRoZSBsZWZ0LWhhbmQgc2lkZVxuICBtYXRjaCB4cyB3aXRoXG4gIHwgW10gPT4gblxuICB8IGEgOjogdGFpbCA9PiBjIGEgdGFpbFxuaXMgbm90IGRlZmluaXRpb25hbGx5IGVxdWFsIHRvIHRoZSByaWdodC1oYW5kIHNpZGVcbiAgTGlzdC5jYXNlc09uIHhzIG4gY1xuXG5BIDogVHlwZSB1XG5CIDogVHlwZSB2XG54cyA6IExpc3QgQVxubiA6IEJcbmMgOiBBIOKGkiBMaXN0IEEg4oaSIEJcbuKKoiAobWF0Y2ggeHMgd2l0aFxuICAgIHwgW10gPT4gblxuICAgIHwgYSA6OiB0YWlsID0+IGMgYSB0YWlsKSA9XG4gICAgTGlzdC5jYXNlc09uIHhzIG4gYyIsImVuZFBvcyI6eyJjb2x1bW4iOjI0LCJsaW5lIjoxM30sImZpbGVOYW1lIjoiR2VuZXJpY0V4cGxpY2l0TW90aXZlLmxlYW4iLCJpc1NpbGVudCI6ZmFsc2UsImtlZXBGdWxsUmFuZ2UiOmZhbHNlLCJraW5kIjoiW2Fub255bW91c10iLCJwb3MiOnsiY29sdW1uIjoyMSwibGluZSI6MTN9LCJzZXZlcml0eSI6ImVycm9yIn0KeyJjYXB0aW9uIjoiIiwiZGF0YSI6IlRhY3RpYyBgcmZsYCBmYWlsZWQ6IFRoZSBsZWZ0LWhhbmQgc2lkZVxuICBtYXRjaCB4IHdpdGhcbiAgfCBTdW0uaW5sIGEgPT4gbCBhXG4gIHwgU3VtLmluciBjID0+IHIgY1xuaXMgbm90IGRlZmluaXRpb25hbGx5IGVxdWFsIHRvIHRoZSByaWdodC1oYW5kIHNpZGVcbiAgU3VtLmNhc2VzT24geCBsIHJcblxuQSA6IFR5cGUgdVxuQyA6IFR5cGUgdlxuQiA6IFR5cGUgd1xueCA6IEEg4oqVIENcbmwgOiBBIOKGkiBCXG5yIDogQyDihpIgQlxu4oqiIChtYXRjaCB4IHdpdGhcbiAgICB8IFN1bS5pbmwgYSA9PiBsIGFcbiAgICB8IFN1bS5pbnIgYyA9PiByIGMpID1cbiAgICBTdW0uY2FzZXNPbiB4IGwgciIsImVuZFBvcyI6eyJjb2x1bW4iOjI0LCJsaW5lIjoxOX0sImZpbGVOYW1lIjoiR2VuZXJpY0V4cGxpY2l0TW90aXZlLmxlYW4iLCJpc1NpbGVudCI6ZmFsc2UsImtlZXBGdWxsUmFuZ2UiOmZhbHNlLCJraW5kIjoiW2Fub255bW91c10iLCJwb3MiOnsiY29sdW1uIjoyMSwibGluZSI6MTl9LCJzZXZlcml0eSI6ImVycm9yIn0KeyJjYXB0aW9uIjoiIiwiZGF0YSI6IidHZW5lcmljRXhwbGljaXRNb3RpdmUub3B0aW9uX2RpcmVjdCcgZGVwZW5kcyBvbiBheGlvbXM6IFtzb3JyeUF4XSIsImVuZFBvcyI6eyJjb2x1bW4iOjYsImxpbmUiOjIxfSwiZmlsZU5hbWUiOiJHZW5lcmljRXhwbGljaXRNb3RpdmUubGVhbiIsImlzU2lsZW50IjpmYWxzZSwia2VlcEZ1bGxSYW5nZSI6ZmFsc2UsImtpbmQiOiJbYW5vbnltb3VzXSIsInBvcyI6eyJjb2x1bW4iOjAsImxpbmUiOjIxfSwic2V2ZXJpdHkiOiJpbmZvcm1hdGlvbiJ9CnsiY2FwdGlvbiI6IiIsImRhdGEiOiInR2VuZXJpY0V4cGxpY2l0TW90aXZlLmxpc3RfZGlyZWN0JyBkZXBlbmRzIG9uIGF4aW9tczogW3NvcnJ5QXhdIiwiZW5kUG9zIjp7ImNvbHVtbiI6NiwibGluZSI6MjJ9LCJmaWxlTmFtZSI6IkdlbmVyaWNFeHBsaWNpdE1vdGl2ZS5sZWFuIiwiaXNTaWxlbnQiOmZhbHNlLCJrZWVwRnVsbFJhbmdlIjpmYWxzZSwia2luZCI6Ilthbm9ueW1vdXNdIiwicG9zIjp7ImNvbHVtbiI6MCwibGluZSI6MjJ9LCJzZXZlcml0eSI6ImluZm9ybWF0aW9uIn0KeyJjYXB0aW9uIjoiIiwiZGF0YSI6IidHZW5lcmljRXhwbGljaXRNb3RpdmUuc3VtX2RpcmVjdCcgZGVwZW5kcyBvbiBheGlvbXM6IFtzb3JyeUF4XSIsImVuZFBvcyI6eyJjb2x1bW4iOjYsImxpbmUiOjIzfSwiZmlsZU5hbWUiOiJHZW5lcmljRXhwbGljaXRNb3RpdmUubGVhbiIsImlzU2lsZW50IjpmYWxzZSwia2VlcEZ1bGxSYW5nZSI6ZmFsc2UsImtpbmQiOiJbYW5vbnltb3VzXSIsInBvcyI6eyJjb2x1bW4iOjAsImxpbmUiOjIzfSwic2V2ZXJpdHkiOiJpbmZvcm1hdGlvbiJ9Cg==",
+        "sha256": "sha256:15e54b051aebbea8d04b8739897b193f575ba92dd82e7273868552bea805f4e2"
+      },
+      "timed_out": false,
+      "working_directory": "/home/augustus/VeriSlop_CLI/validation/tier2-readable-view-qualification/std-explicit-motive-pnw_yigd/compile"
+    }
+  },
+  "scope": "Generic eliminator normalization only; no task/VSCore source semantics qualification",
+  "source_sha256": "sha256:0c3395a66943c1f3494aae3ba9d8fcb038d7fa6b65edc8b40c75a3f3d244ff2b"
+}

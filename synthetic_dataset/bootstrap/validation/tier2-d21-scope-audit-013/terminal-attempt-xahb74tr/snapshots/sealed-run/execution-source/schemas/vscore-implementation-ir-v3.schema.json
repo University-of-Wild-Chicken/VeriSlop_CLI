@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:vscore-implementation-ir:0.3",
+  "title": "VSCore implementation IR re-exported from accepted goal declarations",
+  "$comment": "Reconstructed by bounded constructor reification of the replayed VeriSlopBridgeGoal.sourceBytes, rawProgram, signatures and profile declarations after kernel acceptance. The candidate AST and the host parse are never its authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.3"
+    },
+    "format": {
+      "const": "verislop.vscore-implementation-ir/0.3"
+    },
+    "language": {
+      "const": "vscore/0.3"
+    },
+    "semantics": {
+      "const": "vscore-semantics/0.3"
+    },
+    "bridge_id": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+    },
+    "edge_id": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+    },
+    "claim_id": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "slot_id": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        }
+      },
+      "required": [
+        "slot_id",
+        "size",
+        "sha256"
+      ]
+    },
+    "accepted_ir": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "acceptance_certificate": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "proposition_hash": {
+      "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+    },
+    "accepted_modules": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "module": {
+            "type": "string"
+          },
+          "sha256": {
+            "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+          }
+        },
+        "required": [
+          "module",
+          "sha256"
+        ]
+      }
+    },
+    "program": {
+      "$ref": "urn:verislop:schema:vscore-source:0.3"
+    },
+    "signatures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "params": {
+            "type": "array",
+            "items": {
+              "$ref": "urn:verislop:schema:vscore-source:0.3#/$defs/type"
+            }
+          },
+          "result": {
+            "$ref": "urn:verislop:schema:vscore-source:0.3#/$defs/type"
+          }
+        },
+        "required": [
+          "id",
+          "params",
+          "result"
+        ]
+      }
+    },
+    "enums": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "constructors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          }
+        },
+        "required": [
+          "id",
+          "constructors"
+        ]
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "entry": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "lean_decl": {
+            "type": "string",
+            "minLength": 1
+          },
+          "args": {
+            "type": "array"
+          },
+          "result": {}
+        },
+        "required": [
+          "symbol",
+          "entry",
+          "lean_decl",
+          "args",
+          "result"
+        ]
+      }
+    },
+    "exporter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verifier_id": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id"
+        },
+        "verifier_hash": {
+          "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash"
+        }
+      },
+      "required": [
+        "verifier_id",
+        "verifier_hash"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "language",
+    "semantics",
+    "bridge_id",
+    "edge_id",
+    "claim_id",
+    "source",
+    "accepted_ir",
+    "acceptance_certificate",
+    "proposition_hash",
+    "accepted_modules",
+    "program",
+    "signatures",
+    "enums",
+    "bindings",
+    "exporter"
+  ]
+}

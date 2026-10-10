@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:report:0.1",
+  "title": "Authoritative run report; terminal summaries and rendered views derive from it",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "artifact_kind": { "const": "run_report" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "terminal_status": { "enum": ["VERIFIED", "BLOCKED", "INFRASTRUCTURE_FAILURE"] },
+    "qualified_result": { "type": "string", "minLength": 1 },
+    "generated_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verifier": { "type": "string" },
+        "verifier_hash": { "$ref": "#/$defs/hash" },
+        "verislop_version": { "type": "string" }
+      },
+      "required": ["verifier", "verifier_hash", "verislop_version"]
+    },
+    "request": { "type": "object" },
+    "roots": { "type": "object", "additionalProperties": { "type": ["string", "null"] } },
+    "tier": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requested": { "type": ["integer", "null"] },
+        "endpoint": { "type": ["string", "null"] },
+        "requested_endpoint": { "type": ["string", "null"] },
+        "target": { "type": ["string", "null"] },
+        "require_state": { "type": ["string", "null"] },
+        "tier_default_applied": { "type": "boolean" }
+      },
+      "required": ["requested", "endpoint", "requested_endpoint", "target", "require_state", "tier_default_applied"]
+    },
+    "counts": { "type": "object" },
+    "obligations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": { "type": "string" },
+          "kind": { "type": "string" },
+          "revision": { "type": "integer" },
+          "required": { "type": "boolean" },
+          "state": { "type": "string" },
+          "outcomes": { "type": "object" },
+          "required_milestones": { "type": "array", "items": { "type": "string" } },
+          "proof_boundary": { "type": "string" },
+          "implementation_assurance": { "type": "string" },
+          "weakest_required_bridge": { "type": "string" },
+          "end_to_end": { "type": "string" },
+          "blocking": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["role", "kind", "revision", "required", "state", "outcomes", "required_milestones", "proof_boundary",
+                     "implementation_assurance", "weakest_required_bridge", "end_to_end", "blocking"]
+      }
+    },
+    "endpoint": { "type": "object" },
+    "mappings": { "type": "array" },
+    "witnesses": { "type": "object" },
+    "builds": { "type": "array" },
+    "determinism": { "type": "object" },
+    "provenance": { "type": "array" },
+    "axioms": { "type": "object" },
+    "hypotheses": { "type": "object" },
+    "surfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verified": { "type": "array", "items": { "type": "string" } },
+        "trusted": { "type": "array", "items": { "type": "string" } },
+        "excluded": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["verified", "trusted", "excluded"]
+    },
+    "review": { "type": "object" },
+    "bridge_preparations": { "type": "array", "items": { "type": "object" } },
+    "blocking_reasons": { "type": "array", "items": { "$ref": "#/$defs/diagnostic" } },
+    "infrastructure_errors": { "type": "array", "items": { "$ref": "#/$defs/diagnostic" } },
+    "warnings": { "type": "array", "items": { "$ref": "#/$defs/diagnostic" } },
+    "artifacts": { "type": "object", "additionalProperties": { "type": "string" } }
+  },
+  "required": [
+    "schema_version", "artifact_kind", "run_id", "terminal_status", "qualified_result", "generated_by", "request",
+    "roots", "tier", "counts", "obligations", "endpoint", "mappings", "witnesses", "builds", "determinism",
+    "provenance", "axioms", "hypotheses", "surfaces", "review", "blocking_reasons", "infrastructure_errors",
+    "warnings", "artifacts"
+  ],
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["blocking", "infrastructure", "warning", "info"] },
+        "message": { "type": "string" },
+        "obligations": { "type": "array", "items": { "type": "string" } },
+        "claims": { "type": "array", "items": { "type": "string" } },
+        "details": { "type": "object" }
+      },
+      "required": ["code", "severity", "message", "obligations", "claims"]
+    }
+  }
+}

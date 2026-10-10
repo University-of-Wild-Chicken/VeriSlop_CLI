@@ -1,0 +1,37 @@
+{
+  "format": "verislop.independent-readable-integration-review/1",
+  "utc": "2026-10-10T04:14:15.436938+00:00",
+  "decision": "REVISION_REQUIRED",
+  "prior_receipt": "/home/augustus/VeriSlop_CLI/validation/tier2-readable-integration-review/review-attempt-nsdv2ug5/review.json",
+  "snapshot": "snapshot.json",
+  "checks": [
+    {
+      "name": "tests",
+      "exit_code": 0
+    },
+    {
+      "name": "original-replay",
+      "exit_code": 1
+    },
+    {
+      "name": "declared-directory",
+      "exit_code": 0
+    }
+  ],
+  "tests": 36,
+  "resolved": "Exact original stale-selection witness now raises UsageError before publication.",
+  "finding": {
+    "id": "READABLE_DECLARED_ARTIFACT_DIRECTORY_COLLISION",
+    "source": "verislop/cli.py",
+    "lines": "582-588",
+    "witness": "declared-directory-witness.json",
+    "trigger": "Create output/support/readable/selection.json as a directory before a readable goal invocation.",
+    "observed": "Reserved tree scan permits directory at the exact artifact path; new Goal/model/profile are published before atomic_write raises IsADirectoryError.",
+    "correction": "Existing directories are allowed as hierarchy only, never at any emitted file path; reject before writes."
+  },
+  "limits": [
+    "Generic preview/packaging mocked; no Lean/native/model/task inputs.",
+    "Base runtime exact previous sealed snapshot plus fixed CLI/spec/test overlay.",
+    "No kernel or final readable support qualification claimed."
+  ]
+}

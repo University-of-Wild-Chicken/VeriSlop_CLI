@@ -1,0 +1,125 @@
+{
+  "format": "verislop.independent-readable-view-design-review/1",
+  "state": "SEALED_BOUNDED_DESIGN_REVIEW",
+  "decision": "PASS_DESIGN_ONLY_NOT_IMPLEMENTATION_QUALIFIED",
+  "reviewer": "/root/tier2_semantics_audit",
+  "completed_utc": "2026-10-10T03:50:41.090579+00:00",
+  "authority": {
+    "parent_design_specification": "sha256:27ebcb558b1c2dc63ca97ce8b1ef5c80b8368a58d59eb857cc433f7f7257cb09",
+    "parent_design_manifest": "sha256:fc250de564570c0cef9005f498ece732e490f5941a562b901d04d2c293725bce",
+    "normative_minimal_recipe_delta": "sha256:42a1ddd138f3beaaacdb424c7cffcdc870db2b6316bcabb444f4c7a67393ce38",
+    "delta_manifest": "sha256:6f9f9ce2848b0c00d46563f3fb80d1e2a1ad4f91635396f5b61fb103c4b22aa4",
+    "scope": "Superseding MODULE_BOUND_PROOF v2.1 plus additive sealed minimal recipe only; initial v2 is not a qualification target."
+  },
+  "concrete_defects_found": [],
+  "executed_checks": {
+    "count": 272,
+    "pass": 272,
+    "fail": 0,
+    "kinds": [
+      "Exact sealed artifact/parent hashes and byte sizes",
+      "Current 41-constructor syntax versus exact 39-row coverage matrix",
+      "Closed schema positive and negative structures including theorem/definition identity modes, mandatory metadata, BASE/CHECKED separation and fixed budgets",
+      "Seven binder metadata descriptions and declared-order tuple bookkeeping for arities 0..64",
+      "Exact current generic compiler/export/replay function and primitive anchors",
+      "Generic input byte stability after capture"
+    ],
+    "execution_boundary": "Pure Python/local file/hash/schema/API bookkeeping only; no Lean build/kernel/native/model/gate invocation."
+  },
+  "review_findings": [
+    {
+      "id": "RV-AUDIT-01",
+      "result": "PASS_BOUNDED",
+      "topic": "Universal correspondence recipe",
+      "evidence": [
+        "minimal-recipe-delta.normative_changes[0..7]",
+        "specification.compiled_inventory_and_laws.RunEquals_proposed_definition",
+        "Typing.lean compileFunction,compileHelperPass,compileHelpers"
+      ],
+      "finding": "A fixed intro-env / with_unfolding_all-rfl recipe is a defensible optional kernel proof strategy when applied to the independently expected universal equality for the actual looked-up compiled function. The hp.symm input transport and hr output transport in RunEquals have the correct direction. No finite runtime sample, input guard or accepted reference/guarantee body can discharge that required equality. Failed conversion preserves BASE only before proof freeze; frozen CHECKED failure is hard. This establishes a design requirement, not that the recipe succeeds for every covered source."
+    },
+    {
+      "id": "RV-AUDIT-02",
+      "result": "PASS_BOUNDED",
+      "topic": "Source operations, binder and helper provenance",
+      "evidence": [
+        "constructor-matrix.json",
+        "Typed.lean Env,Denote,envReverse,lookupVar,compileBin",
+        "Typing.lean compileExpr,compileFunction,compileHelperPass"
+      ],
+      "finding": "All 39 supported constructors correspond to current compiler operations/types. Entries/helpers face params.reverse; let/payload/map/filter add one top binder; matchList binds tail then head; listFold binds item then accumulator; natFold binds accumulator then index. Exact Int.fdiv, conversion, get?Internal, ascending mergeSort, primitive eraseDups, List.sum and Bool comparisons are specified. Helpers must use the actual original successful prefix rather than recompilation against a final context. The design includes unused helpers and exact lookup/signature/provenance equations."
+    },
+    {
+      "id": "RV-AUDIT-03",
+      "result": "PASS_BOUNDED",
+      "topic": "Honest theorem identity and exhaustive support",
+      "evidence": [
+        "VeriSlopKernel.lean constToJson,usedConstsOf,axiomsOf and replay module inventory",
+        "exprjson.py decl_identity,decl_hash,semantic_refs,closure",
+        "specification.proof_identity_choice",
+        "readable-view.schema.json support_declarations"
+      ],
+      "finding": "Current theorem export provides actual direct value_constants and transitive axiom/unknown walks but no proof AST. The design binds the complete regenerated source and actual full module parts plus independently expected types, safety, universe levels and reachable staged dependencies, explicitly MODULE_BOUND_PROOF with null body_hash and unavailable individual AST/digest. It does not mistake existing semantic closure or theorem decl_hash for proof-body identity. Every emitted/unused support declaration must be audited. Nonstaged proof dependencies remain explicitly pinned toolchain anchors; no full nonstaged proof DAG claim is made."
+    },
+    {
+      "id": "RV-AUDIT-04",
+      "result": "PASS_BOUNDED",
+      "topic": "Two-phase selection, fallback and all replay seams",
+      "evidence": [
+        "specification.two_phase_selection_and_replay",
+        "specification.integration_with_current_apis",
+        "current vscore3_checker.py run_build,_audit,verify_published",
+        "current vscore3_closure.py _clean_build,COMPARISON_SLOTS,validate_execution"
+      ],
+      "finding": "Base admission remains independently authoritative. Optional enrichment is appended after exact base text in separate isolated storage. A selected view has separately bound source/module/inventory identities outside EdgeProp closure. Every acceptance, no-proof materialization/link, published verification and clean closure build must reconstruct the selected mode; CHECKED is never downgraded, even if the edge proof does not use support. Legacy absent metadata is strictly BASE. Stored/hash-only checking is not represented as fresh kernel replay."
+    },
+    {
+      "id": "RV-AUDIT-05",
+      "result": "IMPLEMENTATION_REQUIREMENT_ALREADY_NORMATIVE",
+      "topic": "Repeated preview and returned-candidate selection persistence",
+      "evidence": [
+        "agents.py:1437",
+        "agents.py:1498",
+        "agents.py:1531",
+        "agents.py:1535",
+        "backends/vscore3.py:423",
+        "backends/vscore3.py:424"
+      ],
+      "finding": "Current callers rerun preview on each proof attempt and again before backend packaging, and currently return only source/relation/proof bytes. The implementation must persist the first source-attempt selection bytes through initial proof, every retry, successful return and exhausted-proof fallback, and explicitly replay that selection at backend packaging. Selection may be recomputed only for a new source attempt before its proof freeze. Legacy candidate directories with no selection must remain BASE. This is a concrete call-site requirement of the already sealed freeze/no-downgrade rules; no implementation yet exists to audit for compliance."
+    },
+    {
+      "id": "RV-AUDIT-06",
+      "result": "PASS_BOUNDED",
+      "topic": "Source-only independence, closed schemas and budgets",
+      "evidence": [
+        "specification.source_only_rendering",
+        "specification.numeric_view_only_budgets",
+        "specification.unavailable_and_hard_failures",
+        "readable-selection.schema.json",
+        "readable-view.schema.json",
+        "validation-plan.json RV-T13,RV-T14,RV-T15,RV-T18"
+      ],
+      "finding": "Source body/typed IR keys exclude accepted reference, guarantee and proof bodies; separate binding keys still authenticate accepted/profile/relation/adapter identities. Exact closed schemas separate CHECKED and BASE and distinguish definition body from theorem module identity. The schema is structural only: future semantic validators must independently enforce exact safe paths, unique whole inventory, support artifact set and replay identities. Numeric optional budgets and honest diagnostic completeness/resource evidence are fixed; unavailable measurements cannot become success claims. OPTIONAL_UNAVAILABLE is an additive future reason label in the sealed delta, not a new lifecycle status."
+    }
+  ],
+  "required_before_implementation_authorization": [
+    "Copy the reviewed v2.1 plus additive minimal-recipe contract into the normative repository specification before production code.",
+    "Freeze concrete selected-preview/agent-return/backend-packaging interfaces with selection bytes carried explicitly; preserve legacy BASE and unchanged .1/.2 paths."
+  ],
+  "required_before_engineering_qualification": [
+    "Implement and register the closed schemas, renderer/recipe hashes and any support module.",
+    "Demonstrate all 39 constructor rows with exact universal kernel equations, typable semantic mutations and exact helper-prefix provenance on fresh unrelated fixtures.",
+    "Demonstrate source-only body independence, complete unused support audit, exact module-bound same-type substitution rejection and every frozen selected replay seam.",
+    "Run focused negative tests and two independent clean from-source builds/replays comparing all emitted support artifacts under qualified telemetry."
+  ],
+  "limitations": [
+    "This review approves the bounded design; it does not approve an implementation or claim any covered input has a kernel-checked readable view.",
+    "No Lean source/proof was authored or compiled, and no native/model/task tools were invoked.",
+    "No retained task/corpus/cohort source, proof, carrier, case, answer or result was read for this review.",
+    "Initial v2 was read while awaiting the correct pointer, then treated as explicitly superseded; this decision targets only v2.1 plus the sealed delta.",
+    "The original design manifest contains earlier generic API observations, not a current source freeze. Current checker.py and leanbridge.py differ because the separately owned compiler telemetry increment landed; both current bytes were independently captured and double-hash checked here. No result from that increment is inferred.",
+    "Pure schema positives authenticate structure only; future exact inventory/hash/source/layout/closure validators are separate obligations.",
+    "Extern/implemented_by attributes are not independently exported by current constToJson. Their absence in supervisor-produced support must come from exact fixed regenerated source and registered library/source inventory, rather than an invented exporter observation.",
+    "Exact individual theorem proof AST/digest is unavailable by design; module hash is identified as module hash."
+  ]
+}

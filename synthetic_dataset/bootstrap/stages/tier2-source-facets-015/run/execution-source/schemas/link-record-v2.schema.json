@@ -1,0 +1,482 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:link-record:0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.2"
+    },
+    "format": {
+      "const": "verislop.link-record/0.2"
+    },
+    "artifact_kind": {
+      "const": "link_record"
+    },
+    "backend": {
+      "const": "verislop.backend.vscore/0.1"
+    },
+    "accepted_ir": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "implementation_root": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "decoded_program_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "materialization_inventory_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "bridge_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "source_node": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "endpoint_node": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "edge_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "edge_claim_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+    },
+    "plan_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "artifacts_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "profile_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "binding_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          },
+          "symbol": {
+            "type": "string",
+            "minLength": 1
+          },
+          "entry": {
+            "type": "string",
+            "minLength": 1
+          },
+          "accepted_declaration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "lean_decl": {
+                "type": "string",
+                "minLength": 1
+              },
+              "decl_hash": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/sort"
+                },
+                "minItems": 0
+              },
+              "result": {
+                "$ref": "#/$defs/sort"
+              }
+            },
+            "required": [
+              "lean_decl",
+              "decl_hash",
+              "args",
+              "result"
+            ]
+          },
+          "implementation_object": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "const": "vscore_entry"
+              },
+              "source_path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_hash": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "entry": {
+                "type": "string",
+                "minLength": 1
+              },
+              "signature": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*(?![\\s\\S])",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "params": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "urn:verislop:schema:vscore-source:0.1#/$defs/type"
+                    }
+                  },
+                  "result": {
+                    "$ref": "urn:verislop:schema:vscore-source:0.1#/$defs/type"
+                  }
+                },
+                "required": [
+                  "id",
+                  "params",
+                  "result"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "source_path",
+              "source_hash",
+              "entry",
+              "signature"
+            ]
+          },
+          "adapters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sort": {
+                  "$ref": "#/$defs/sort"
+                },
+                "decl_hash": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "name",
+                "sort",
+                "decl_hash"
+              ]
+            },
+            "minItems": 0
+          },
+          "profile_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "covered": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+                },
+                "revision": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "accepted_statement_hash": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "id",
+                "revision",
+                "accepted_statement_hash"
+              ]
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "binding_id",
+          "symbol",
+          "entry",
+          "accepted_declaration",
+          "implementation_object",
+          "adapters",
+          "profile_hash",
+          "covered"
+        ]
+      },
+      "minItems": 1
+    },
+    "declarations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "objects": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "accepted_enum",
+                        "accepted_constructor"
+                      ]
+                    },
+                    "lean_decl": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "decl_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    "enum": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "constructors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "minItems": 1
+                    },
+                    "profile_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "lean_decl",
+                    "decl_hash",
+                    "enum",
+                    "constructors",
+                    "profile_hash"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "kind": {
+                      "const": "accepted_function_type"
+                    },
+                    "lean_decl": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "decl_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    },
+                    "symbol": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "args": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/sort"
+                      },
+                      "minItems": 0
+                    },
+                    "result": {
+                      "$ref": "#/$defs/sort"
+                    },
+                    "profile_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "lean_decl",
+                    "decl_hash",
+                    "symbol",
+                    "args",
+                    "result",
+                    "profile_hash"
+                  ]
+                }
+              ]
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "objects"
+        ]
+      },
+      "minItems": 0
+    },
+    "covered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "accepted_statement_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "accepted_statement_hash"
+        ]
+      },
+      "minItems": 1
+    },
+    "correspondence": {
+      "const": "structural"
+    }
+  },
+  "required": [
+    "schema_version",
+    "format",
+    "artifact_kind",
+    "backend",
+    "accepted_ir",
+    "implementation_root",
+    "source",
+    "decoded_program_hash",
+    "materialization_inventory_hash",
+    "bridge_id",
+    "source_node",
+    "endpoint_node",
+    "edge_id",
+    "edge_claim_id",
+    "plan_hash",
+    "artifacts_hash",
+    "profile_hash",
+    "bindings",
+    "declarations",
+    "covered",
+    "correspondence"
+  ],
+  "$defs": {
+    "sort": {
+      "oneOf": [
+        {
+          "enum": [
+            "Nat",
+            "Bool",
+            "Unit"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enum": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "enum"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "result": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "error": {
+                  "$ref": "#/$defs/sort"
+                },
+                "ok": {
+                  "$ref": "#/$defs/sort"
+                }
+              },
+              "required": [
+                "error",
+                "ok"
+              ]
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      ]
+    }
+  }
+}

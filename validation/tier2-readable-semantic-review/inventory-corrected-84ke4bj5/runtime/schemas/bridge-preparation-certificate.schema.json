@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:bridge-preparation-certificate:0.1",
+  "title": "Supervisor-produced structural bridge preparation certificate",
+  "$comment": "Produced only after replayed contract import and a live registered structural checker PASS. Schema conformance is not authentication. References must be independently bound to the frozen artifacts and current supervisor evidence. The evidence path is relative to the prepared bridge bundle root. This descriptor and evidence are outside their input manifest. No semantic edge or lifecycle milestone is discharged.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "format": { "const": "verislop.bridge-preparation-certificate/0.1" },
+    "bridge_id": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/id" },
+    "plan_hash": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" },
+    "artifacts_hash": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" },
+    "accepted_ir_hash": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" },
+    "acceptance_certificate_hash": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" },
+    "checker": { "$ref": "urn:verislop:schema:semantic-edge-certificate:0.1#/$defs/checker" },
+    "evidence": { "$ref": "urn:verislop:schema:semantic-edge-certificate:0.1#/$defs/evidence" },
+    "contract_import": { "$ref": "#/$defs/contract_import" },
+    "pending_semantic_claims": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/nonempty_ids" },
+    "structural_acceptance": { "const": true },
+    "semantic_acceptance": { "const": false },
+    "assigns_end_to_end_verified": { "const": false }
+  },
+  "required": ["schema_version", "format", "bridge_id", "plan_hash", "artifacts_hash", "accepted_ir_hash", "acceptance_certificate_hash", "checker", "evidence", "contract_import", "pending_semantic_claims", "structural_acceptance", "semantic_acceptance", "assigns_end_to_end_verified"],
+  "$defs": {
+    "contract_import": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "source_contract_root": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" },
+        "source_ir_hash": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" },
+        "source_certificate_hash": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" },
+        "receipt_sha256": { "$ref": "urn:verislop:schema:bridge-plan:0.1#/$defs/hash" }
+      },
+      "required": ["source_contract_root", "source_ir_hash", "source_certificate_hash", "receipt_sha256"]
+    }
+  }
+}

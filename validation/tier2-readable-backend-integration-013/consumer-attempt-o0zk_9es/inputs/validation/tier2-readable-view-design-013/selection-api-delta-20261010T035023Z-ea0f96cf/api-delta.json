@@ -1,0 +1,67 @@
+{
+  "format": "verislop.readable-view-selection-api-delta/1",
+  "state": "SEALED_DESIGN_ONLY_UNIMPLEMENTED",
+  "parent_design": {
+    "directory": "validation/tier2-readable-view-design-013/design-v2-module-bound-20261010T034049Z-790249cc",
+    "manifest_sha256": "sha256:fc250de564570c0cef9005f498ece732e490f5941a562b901d04d2c293725bce"
+  },
+  "recipe_delta": {
+    "directory": "validation/tier2-readable-view-design-013/minimal-recipe-delta-20261010T034501Z-52b56a72",
+    "manifest_sha256": "sha256:6f9f9ce2848b0c00d46563f3fb80d1e2a1ad4f91635396f5b61fb103c4b22aa4"
+  },
+  "scope": "Freeze concrete integration API before code. No implementation or execution. Original source/proof/relation requirements and telemetry persistence unchanged.",
+  "constant_names": {
+    "READABLE_SELECTION_SLOT": "vscore-readable-selection",
+    "READABLE_SELECTION_ROLE": "readable_selection",
+    "READABLE_SELECTION_PATH": "support/readable/selection.json",
+    "READABLE_SELECTION_FORMAT": "verislop.vscore-readable-selection/1",
+    "READABLE_MANIFEST_PATH": "readable/manifest.json",
+    "READABLE_MANIFEST_FORMAT": "verislop.vscore-readable-view/1"
+  },
+  "preview_signature": "preview(pkg, source, relation_bytes, proof=None, obligations=None, *, readable_selection: bytes | None = None, select_readable: bool = False) -> tuple[GoalSpec, Build, dict]",
+  "preview_modes": [
+    "readable_selection is None and select_readable=False: strict legacy BASE behavior; original callers and .1 backend remain unaffected; no implicit support selection or new sidecar.",
+    "readable_selection is None and select_readable=True: explicit first source preview only (proof must be None). Admit unchanged BASE, try isolated optional enrichment, freeze CHECKED or unavailable BASE selection before any proof authoring. Return exact selection bytes; all later calls replay them.",
+    "readable_selection is bytes: schema/hash validate and replay exact frozen mode and checked descriptor, never attempt a new optional selection. select_readable must be False. Any byte mutation/mismatched source/profile/relation/renderer/base goal is rejected. Frozen CHECKED failure cannot fallback.",
+    "No empty-byte sentinel or author-controlled executable readable body. .1 rejects/does not receive readable arguments; agent dispatch supplies these options only for .3."
+  ],
+  "preview_info_keys": {
+    "existing": "Preserve current proposition_hash, obligations, required_obligations, symbols, proof_checked, edge_axioms, model, profile and optional compile_process_evidence unchanged.",
+    "readable_selection": "Exact canonical bytes or None. Present with bytes after explicit selection/replay; do not embed bytes directly in JSON records.",
+    "readable_source_view": "JSON-serializable bounded authoring packet: version, selected_mode, status, selection_hash, source_hash, source_key, base_goal_hash, selected_goal_hash, renderer descriptor, exact helper/entry equality inventory/ref names and bound artifact references; unavailable reasons/full diagnostic refs. No authority beyond current checked preview.",
+    "readable_artifacts": "dict[str, bytes] of durable source/IR/correspondence/export/inventory/diagnostic preview files under fixed relative readable/ paths, plus support/readable/selection.json bytes. Agents retain files once. Only exact selection and its declared diagnostic input files are candidate metadata inputs; accepted support code is always regenerated, never read as supplied code.",
+    "readable_candidate_artifacts": "dict[str, bytes] containing exactly support/readable/selection.json and closed selection.diagnostic_inputs artifact paths/bytes; used for returned candidate and candidate_files. Checked code artifacts are not candidate-supplied executable input."
+  },
+  "goal_context_build_fields": {
+    "EdgeContext.readable_selection": "bytes | None, loaded from one exact role/slot/path of target node; separate from unchanged five ctx.inputs. Also retain bound diagnostic input bytes with reader recheck.",
+    "GoalSpec.base_text": "Exact unchanged base text; spec.text is exact selected BASE/enriched text. Existing program/profile/adapters/symbols/obligations/expected stay base-derived. Legacy base_text may default to text.",
+    "GoalSpec.readable_selection": "bytes | None plus source-derived descriptor needed for selected rendering; never grants CHECKED until run_build replay audit.",
+    "Build.readable_support": "dict | None canonical checked support descriptor required for certificate/IR/evidence/closure bindings, no volatile process telemetry. Includes selected_mode/status/selection ref/output manifest ref/support inventory and module-part hash/selected goal hash.",
+    "Build.readable_artifacts": "dict[str, bytes], exact accepted output readable artifact set regenerated in this build. Existing modules/observation/proposition_hash/ir/axioms and separately owned defaulted process_evidence remain intact."
+  },
+  "derive_and_run_contract": [
+    "derive_goal(ctx) derives the unchanged base spec first, then if ctx has frozen selection deterministically reconstructs its selected text/metadata and validates static source/renderer/goal hashes. This is pure derivation, not kernel qualification. BASE remains byte-identical; CHECKED selected text is appendix to full base bytes.",
+    "run_build(tc,ctx,spec,with_proof=...) preserves current call signature. For frozen CHECKED selected specs it first admits/replays exact base with no candidate proof, then freshly compiles/replays exact selected enrichment and validates complete frozen descriptor; compile proof only against selected goal. No downgrade path. Legacy/BASE uses unchanged goal path.",
+    "Source preview qualification uses a separate try_readable_view after an admitted base build, returns selected GoalSpec/Build/info. An optional failure may fallback only at that explicit initial source selection step.",
+    "check_edge returns selected spec plus two fresh selected builds; outputs persists Build.readable_support/artifacts, source selected goal and exact support certificate/evidence refs. Existing callers of derive_goal then run_build therefore reproduce frozen selection rather than BASE-only execution.",
+    "All current return signatures remain backward-compatible; added dataclass fields are defaulted. The telemetry-owned Build.process_evidence/compile_process_evidence pipeline and diagnostic helpers are preserved and not overlapped."
+  ],
+  "candidate_files_contract": [
+    "candidate_files keeps its existing signature. If info has selection bytes, add fixed selection metadata slot and declared diagnostic input slots/roles to proposal.artifacts and reproducible_slots, hash/preserve exact bytes and verify info candidate map matches selection.",
+    "With no selection metadata, emit the existing five-slot proposal, strictly legacy BASE. Source_slot/proof_slot stay vscore-source/vscore-proof; relation unchanged.",
+    "Never call optional qualification/reselection from candidate_files. Never trust supplied support source/module/theorem/status to establish correspondence."
+  ],
+  "agent_persistence_contract": [
+    "For .3 first source checked preview explicitly sets select_readable=True. Retain exact selected goal plus info.readable_artifacts once under that source stage. Store selection hash/ref and bounded readable packet in checks/source.json while retaining root compile_process_evidence persistence.",
+    "Every initial/proposed proof preview passes identical selection bytes with select_readable=False. The prover receives selected generated_goal and readable_source_view; status never changes during that source search.",
+    "Every successful or exhausted source candidate return includes info.readable_candidate_artifacts along with source/relation/Proof.lean. A source candidate BASE legacy without metadata remains unchanged. No new task source/proof is generated by view support."
+  ],
+  "backend_integration_contract": [
+    "vscore3.generate reads optional fixed selection file from explicit candidate, or takes identical bytes from returned agent files. It passes those bytes to proof-free preview with select_readable=False. Missing sidecar is legacy BASE, not an opportunity to select support.",
+    "It packages candidate_files from the resulting replayed info, requiring exact sidecar/candidate metadata preservation. A frozen run compares sidecar and diagnostic inputs as well as existing source/relation/proof; mutations require a new run.",
+    "Existing _materialize and link derive selected context/spec and call unchanged run_build signature, which now replays frozen support. No separate inferred mode from proof usage.",
+    "Closure loads selection through context, replays exact selected spec from freshly accepted contract, copies every Build.readable_artifacts file through outputs, adds readable_support comparison slot and requires all corresponding refs. No preview/stored goal module reuse."
+  ],
+  "closed_schema_note": "Parent closed selection/view schemas remain normative plus minimal recipe OPTIONAL_UNAVAILABLE reason enum addition. Concrete API keys are transport fields, not authorization fields. If implementation minimizes artifact duplication, it must preserve these exact mode/hash/inventory semantics and independently verified refs; no silent API retry or fallback.",
+  "validation_addition": "Mocked source preview -> repeated proof previews -> agent candidate return -> generate repackaging must preserve identical selection bytes, selected goal hash, mode and metadata inputs; force optional unavailable on a replay and verify CHECKED is blocking rather than reselected BASE. Real generic integration and two builds still required."
+}

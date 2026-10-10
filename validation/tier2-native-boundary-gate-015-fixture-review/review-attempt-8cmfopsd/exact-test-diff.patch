@@ -1,0 +1,21 @@
+--- validation/tier2-compile-process-evidence/compile-process-attempt-ea_69slk/inputs/tests/test_compile_process_evidence.py
++++ tests/test_compile_process_evidence.py
+@@ -381,7 +381,7 @@
+                     "bindings": [{"symbol": "generic", "entry": "generic"}]}
+         inventory = {"Generic.Process": {"availability": "unavailable", "record": None}}
+         build = checker.Build({}, {}, {}, "generic proposition", {}, [], inventory)
+-        spec = SimpleNamespace(symbols=[])
++        spec = SimpleNamespace(symbols=[], readable_selection=None)
+         with patch.object(export, "verified_ir", return_value=({"obligations": {}}, "generic IR", cert, [])), \
+              patch.object(checker, "derive_goal", return_value=spec), \
+              patch.object(leanbridge, "resolve_toolchain", return_value=self.tc), \
+@@ -391,6 +391,9 @@
+         self.assertIs(got_build, build)
+         self.assertEqual(info["compile_process_evidence"], inventory)
+         self.assertTrue(info["proof_checked"])
++        self.assertIsNone(info["readable_selection"])
++        self.assertIsNone(info["readable_source_view"])
++        self.assertEqual(info["readable_candidate_artifacts"], {})
+         self.assertEqual(info["proposition_hash"], "generic proposition")
+         self.assertIsInstance(info["model"], bytes)
+         self.assertIsInstance(info["profile"], bytes)

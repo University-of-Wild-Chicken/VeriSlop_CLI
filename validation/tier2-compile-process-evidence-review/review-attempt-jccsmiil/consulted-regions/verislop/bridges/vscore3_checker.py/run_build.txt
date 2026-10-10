@@ -1,0 +1,95 @@
+def run_build(tc: leanbridge.Toolchain, ctx: EdgeContext, spec: T.GoalSpec, *, with_proof: bool = True) -> Build:
+    """One isolated build. Without the proof, only the library, contract and goal are replayed."""
+    cid = ctx.claim["claim_id"]
+    pol = ctx.policy
+    opts = {"timeout": pol["build_timeout_seconds"], "memory_mb": pol["memory_mb"],
+            "require_network_isolation": pol["require_network_isolation"],
+            "require_filesystem_isolation": pol["require_filesystem_isolation"]}
+    compiles: dict[str, dict] = {}
+    processes: dict[str, dict] = {}
+
+    def compile_once(directory: Path, module: str, source: bytes, dependencies: dict, *, read_only: list[Path]):
+        try:
+            result, parts = leanbridge.compile_named_module(tc, directory, module, source, dependencies,
+                                                           read_only=read_only, **opts)
+        except VeriSlopError as exc:
+            for diagnostic in exc.diagnostics:
+                if "process_evidence" in diagnostic.details:
+                    processes[module] = copy.deepcopy(diagnostic.details["process_evidence"])
+            raise _attach_build_process_evidence(exc, processes)
+        processes[module] = leanbridge.compile_process_details(result)
+        return result, parts
+
+    with fsutil.temporary_directory(prefix="verislop-vscore-build-") as tmp:
+        root = Path(tmp)
+        lib, contract, goal, proof = (root / d for d in ("lib", "contract", "goal", "proof"))
+        modules: dict[str, dict[str, bytes]] = {}
+        deps: dict[str, dict[str, str]] = {}
+        for m, source in T.library_sources().items():
+            res, parts = compile_once(lib, m, source, dict(deps), read_only=[])
+            compiles[m] = {"ok": res.ok, "errors": res.errors, "sorries": len(res.sorry_positions)}
+            if not res.ok or res.sorry_positions:
+                raise _compile_failure("VERIFIER_FAILURE", f"verifier-owned library module {m} failed to build",
+                                       ctx, spec, m, source, res, severity="infrastructure", process_inventory=processes)
+            modules[m] = parts
+            deps[m] = {s: str(lib / (leanbridge.module_relpath(m) + s)) for s in parts}
+        contract.mkdir()
+        staged = contract / "bundle"
+        staged.write_bytes(ctx.contract_module)
+        try:
+            leanbridge._stage_module(staged, contract)
+            staged.unlink()
+            modules[T.CONTRACT_MODULE] = leanbridge.module_parts(contract, T.CONTRACT_MODULE)
+        except VeriSlopError as exc:
+            raise _attach_build_process_evidence(exc, processes)
+        deps[T.CONTRACT_MODULE] = {s: str(contract / (T.CONTRACT_MODULE + s)) for s in modules[T.CONTRACT_MODULE]}
+        res, parts = compile_once(goal, T.GOAL_MODULE, spec.text.encode(), dict(deps), read_only=[lib, contract])
+        compiles[T.GOAL_MODULE] = {"ok": res.ok, "errors": res.errors, "sorries": len(res.sorry_positions)}
+        if not res.ok or res.sorry_positions:
+            raise _compile_failure("UNSUPPORTED_CAPABILITY",
+                                   "the derived bridge goal could not be established for this program and contract "
+                                   "(parse/typing equations, adapters or transfer proofs)",
+                                   ctx, spec, T.GOAL_MODULE, spec.text.encode(), res, process_inventory=processes)
+        modules[T.GOAL_MODULE] = parts
+        deps[T.GOAL_MODULE] = {s: str(goal / (T.GOAL_MODULE + s)) for s in parts}
+        isolation = res.isolation
+        if with_proof:
+            res, parts = compile_once(proof, T.PROOF_MODULE, ctx.inputs["proof_source"][1], dict(deps),
+                                      read_only=[lib, contract, goal])
+            compiles[T.PROOF_MODULE] = {"ok": res.ok, "errors": res.errors, "sorries": len(res.sorry_positions),
+                                        "timed_out": res.timed_out}
+            if not res.ok:
+                raise _compile_failure("CANDIDATE_BUILD_FAILURE", "candidate proof module failed to elaborate",
+                                       ctx, spec, T.PROOF_MODULE, ctx.inputs["proof_source"][1], res,
+                                       process_inventory=processes)
+            modules[T.PROOF_MODULE] = parts
+            isolation = res.isolation
+        for m, ps in modules.items():
+            # The candidate compile could only read these artifacts; rebind them after it ran.
+            if m != T.PROOF_MODULE:
+                base = {T.CONTRACT_MODULE: contract, T.GOAL_MODULE: goal}.get(m, lib)
+                try:
+                    current_parts = leanbridge.module_parts(base, m)
+                except VeriSlopError as exc:
+                    raise _attach_build_process_evidence(exc, processes)
+                if current_parts != ps:
+                    raise _attach_build_process_evidence(
+                        _fail("INPUT_MUTATION", f"dependency module {m} changed during the candidate build", cid), processes)
+        # The build directory is fresh for every invocation. Preserve every isolation
+        # property while replacing only that explicitly volatile directory prefix.
+        isolation = dict(isolation)
+        isolation["read_only_paths"] = [
+            "<build>/" + str(Path(path).relative_to(root)) if Path(path).is_relative_to(root) else path
+            for path in isolation.get("read_only_paths", [])
+        ]
+    root_module = T.PROOF_MODULE if with_proof else T.GOAL_MODULE
+    try:
+        resp = leanbridge.run_kernel_tool_modules(tc, modules, root_module, {"export": True, "axioms": True},
+                                                  timeout=pol["kernel_timeout_seconds"], memory_mb=pol["memory_mb"],
+                                                  require_network_isolation=pol["require_network_isolation"],
+                                                  require_filesystem_isolation=pol["require_filesystem_isolation"])
+        build = _audit(tc, ctx, spec, resp, modules, compiles, isolation, with_proof)
+    except (EdgeFailure, VeriSlopError) as exc:
+        raise _attach_build_process_evidence(exc, processes)
+    build.process_evidence = processes
+    return build

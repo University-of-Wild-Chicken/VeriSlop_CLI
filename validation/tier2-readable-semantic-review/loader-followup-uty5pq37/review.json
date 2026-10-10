@@ -1,0 +1,33 @@
+{
+  "format": "verislop.independent-readable-semantic-review/1",
+  "utc": "2026-10-10T04:26:50.856833+00:00",
+  "decision": "REVISION_REQUIRED_PROVISIONAL_LOADER_FOLLOWUP",
+  "snapshot": "snapshot.json",
+  "prior_receipt": "/home/augustus/VeriSlop_CLI/validation/tier2-readable-semantic-review/review-attempt-bh1tqr98/review.json",
+  "resolved": [
+    "READABLE_PREPARED_PATH_MAPPING",
+    "READABLE_MANIFEST_OWNER_LOOKUP"
+  ],
+  "finding": {
+    "id": "READABLE_PREPARED_EXTRA_METADATA_SLOTS",
+    "source": "verislop/bridges/vscore3_checker.py:208",
+    "concrete_trigger": "Add a unique structurally valid proposal artifact owned by target node with role readable_diagnostic or readable_selection, outside sidecar declared diagnostic/selection inventory.",
+    "observed": "Actual production candidate_files/prepare._assemble and closed proposal/plan/manifest schemas succeed; load_context returns and silently drops extra metadata rows.",
+    "witness": "prepared-context-witness.json",
+    "required_correction": "Compare full readable-role inventory in plan and manifest against exactly frozen selection plus ordered declared diagnostic slots; reject missing/extra/foreign owners."
+  },
+  "checks": {
+    "real_loader_cases": 4,
+    "legacy_control": "RETURNED",
+    "exact_selected_control": "RETURNED",
+    "extra_diagnostic": "RETURNED incorrectly",
+    "extra_selection": "RETURNED incorrectly",
+    "exit": 0
+  },
+  "limits": [
+    "Same initial generic source snapshot with corrected provisional checker/spec overlays.",
+    "Synthetic accepted metadata/reconstruction isolated; no contract kernel acceptance or lifecycle authority.",
+    "No Lean/native/model/task artifacts or code edits by reviewer.",
+    "Final renderer/kernel qualification pending."
+  ]
+}

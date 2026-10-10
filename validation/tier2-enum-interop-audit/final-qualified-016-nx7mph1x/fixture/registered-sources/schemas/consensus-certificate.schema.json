@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:verislop:schema:consensus-certificate:0.1",
+  "title": "Review consensus certificate: a workflow/provenance claim, never proof evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "artifact_kind": { "const": "consensus_certificate" },
+    "campaign_id": { "type": "string", "minLength": 1 },
+    "checkpoint": { "enum": ["interpretation", "formal_contract", "implementation", "release"] },
+    "review_target_root": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "target_components": { "type": "object" },
+    "scope": { "type": "array", "items": { "type": "string" } },
+    "config_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tier_id": { "type": "string", "minLength": 1 },
+          "membership": { "type": "array", "items": { "type": "string" } },
+          "ballots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "slot_id": { "type": "string" },
+                "ballot_ref": { "type": "string" },
+                "ballot_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+                "verdict": { "enum": ["ACCEPT", "REJECT", "ABSTAIN"] }
+              },
+              "required": ["slot_id", "ballot_ref", "ballot_hash", "verdict"]
+            }
+          },
+          "execution_failures": { "type": "array", "items": { "type": "object" } },
+          "result": { "enum": ["TIER_ACCEPTED", "CHANGES_REQUESTED", "INCOMPLETE", "NOT_REACHED"] },
+          "tally": { "type": "object" },
+          "policy": { "type": "object" }
+        },
+        "required": ["tier_id", "membership", "ballots", "execution_failures", "result", "tally", "policy"]
+      }
+    },
+    "final": { "enum": ["REVIEW_ACCEPTED", "CHANGES_REQUESTED", "INCOMPLETE"] },
+    "mechanical_veto": { "type": "array", "items": { "type": "string" } }
+  },
+  "required": ["schema_version", "artifact_kind", "campaign_id", "checkpoint", "review_target_root", "target_components",
+               "scope", "config_hash", "tiers", "final", "mechanical_veto"]
+}

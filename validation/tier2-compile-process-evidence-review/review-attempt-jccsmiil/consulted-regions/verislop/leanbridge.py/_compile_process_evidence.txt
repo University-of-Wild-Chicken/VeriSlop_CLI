@@ -1,0 +1,36 @@
+def _compile_process_evidence(res: sandbox.SandboxResult, *, argv: list[str], working_directory: str,
+                              module: str, source: bytes, timeout: float, memory_mb: int,
+                              cpu_seconds: int, setup: bytes | None = None) -> dict[str, Any]:
+    """Record observations separately from requested limits; do not attribute a failure.
+
+    SandboxResult.argv and returncode describe the launcher, which may be a wrapper.
+    In particular, a memory-panic report does not establish which boundary failed.
+    Decimal text keeps measured durations compatible with strict canonical JSON.
+    """
+    elapsed = res.wall_seconds
+    measured_elapsed = str(elapsed) if isinstance(elapsed, (int, float)) and math.isfinite(elapsed) else None
+    return {
+        "format": COMPILE_PROCESS_FORMAT,
+        "input": {"module": module, "module_source_sha256": canonical.digest(source),
+                  "setup_sha256": canonical.digest(setup) if setup is not None else None},
+        "requested_argv": list(argv),
+        "launcher_argv": list(res.argv),
+        "working_directory": working_directory,
+        "returncode": res.returncode,
+        "timed_out": res.timed_out,
+        "requested_limits": {
+            "lean_heap_mb": memory_mb,
+            "sandbox_address_space_bytes": (memory_mb + LEAN_AS_HEADROOM_MB) * 1024 * 1024,
+            "sandbox_cpu_soft_seconds": cpu_seconds,
+            "sandbox_cpu_hard_seconds": cpu_seconds + 5,
+            "sandbox_file_size_bytes": COMPILE_FILE_SIZE_MB * 1024 * 1024,
+            "sandbox_core_bytes": 0,
+            "wall_timeout_seconds": str(timeout),
+        },
+        "elapsed_seconds": measured_elapsed,
+        "sandbox_profile": copy.deepcopy(res.isolation),
+        "stdout": _output_evidence(res.stdout),
+        "stderr": _output_evidence(res.stderr),
+        "reported_stderr_panics": ([{"kind": "out_of_memory", "report": "INTERNAL PANIC: out of memory"}]
+                                   if b"INTERNAL PANIC: out of memory" in res.stderr else []),
+    }

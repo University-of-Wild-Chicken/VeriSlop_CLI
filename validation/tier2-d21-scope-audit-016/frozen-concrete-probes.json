@@ -1,0 +1,1438 @@
+{
+  "cases": [
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 0
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 2,
+          "value": 0
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 4,
+          "value": 0
+        }
+      ],
+      "id": "public-example-1",
+      "input": {
+        "end": 5,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": 2
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": -2
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F11"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 0,
+          "group": "z",
+          "start": 0,
+          "value": null
+        }
+      ],
+      "id": "public-example-2",
+      "input": {
+        "end": 1,
+        "events": [
+          {
+            "group": "z",
+            "time": -1,
+            "value": 9
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F11"
+      ]
+    },
+    {
+      "expected": [],
+      "id": "empty-events-none",
+      "input": {
+        "end": 4,
+        "events": [],
+        "fill": "none",
+        "start": -3,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F01",
+        "F02"
+      ]
+    },
+    {
+      "expected": [],
+      "id": "zero-range-none",
+      "input": {
+        "end": 0,
+        "events": [
+          {
+            "group": "z",
+            "time": 0,
+            "value": 8
+          },
+          {
+            "group": "",
+            "time": 0,
+            "value": null
+          }
+        ],
+        "fill": "none",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F01",
+        "F03"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": -2,
+          "value": 5
+        }
+      ],
+      "id": "width-exceeds-range-none",
+      "input": {
+        "end": 3,
+        "events": [
+          {
+            "group": "a",
+            "time": -3,
+            "value": 100
+          },
+          {
+            "group": "a",
+            "time": -2,
+            "value": 1
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": null
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": 4
+          },
+          {
+            "group": "a",
+            "time": 3,
+            "value": 200
+          }
+        ],
+        "fill": "none",
+        "start": -2,
+        "width": 9
+      },
+      "public_clause_ids": [
+        "F03",
+        "F04",
+        "F08"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 3
+        },
+        {
+          "count": 2,
+          "group": "a",
+          "start": 2,
+          "value": 12
+        },
+        {
+          "count": 1,
+          "group": "a",
+          "start": 4,
+          "value": 16
+        }
+      ],
+      "id": "half-open-boundaries-none",
+      "input": {
+        "end": 5,
+        "events": [
+          {
+            "group": "a",
+            "time": -1,
+            "value": 99
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": 1
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": 2
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": 4
+          },
+          {
+            "group": "a",
+            "time": 3,
+            "value": 8
+          },
+          {
+            "group": "a",
+            "time": 4,
+            "value": 16
+          },
+          {
+            "group": "a",
+            "time": 5,
+            "value": 100
+          }
+        ],
+        "fill": "none",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F03",
+        "F04",
+        "F08"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 6
+        }
+      ],
+      "id": "null-and-duplicates-none",
+      "input": {
+        "end": 2,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": null
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": 3
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": 3
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": null
+          }
+        ],
+        "fill": "none",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F04",
+        "F09"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 0,
+          "group": "a",
+          "start": 0,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 1,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 2,
+          "value": null
+        }
+      ],
+      "id": "all-null-none",
+      "input": {
+        "end": 3,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": null
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": null
+          }
+        ],
+        "fill": "none",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F04",
+        "F06",
+        "F07"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 0
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 2,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 4,
+          "value": null
+        }
+      ],
+      "id": "zero-cancellation-none",
+      "input": {
+        "end": 5,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": 10
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": -10
+          }
+        ],
+        "fill": "none",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F09"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 0,
+          "group": "a",
+          "start": 0,
+          "value": null
+        },
+        {
+          "count": 1,
+          "group": "a",
+          "start": 1,
+          "value": 7
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 2,
+          "value": null
+        },
+        {
+          "count": 1,
+          "group": "a",
+          "start": 3,
+          "value": -2
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 4,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 0,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 1,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 2,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 3,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 4,
+          "value": null
+        }
+      ],
+      "id": "persistent-group-local-history-none",
+      "input": {
+        "end": 5,
+        "events": [
+          {
+            "group": "a",
+            "time": -1,
+            "value": 999
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": 7
+          },
+          {
+            "group": "a",
+            "time": 3,
+            "value": -2
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": null
+          },
+          {
+            "group": "b",
+            "time": -1,
+            "value": 8
+          }
+        ],
+        "fill": "none",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F02",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "F10"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 3
+        },
+        {
+          "count": 2,
+          "group": "a",
+          "start": 2,
+          "value": 9
+        },
+        {
+          "count": 1,
+          "group": "b",
+          "start": 0,
+          "value": -1
+        },
+        {
+          "count": 1,
+          "group": "b",
+          "start": 2,
+          "value": 8
+        }
+      ],
+      "id": "unsorted-time-occurrences-none",
+      "input": {
+        "end": 4,
+        "events": [
+          {
+            "group": "b",
+            "time": 2,
+            "value": 8
+          },
+          {
+            "group": "a",
+            "time": 3,
+            "value": 5
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": 2
+          },
+          {
+            "group": "b",
+            "time": 0,
+            "value": -1
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": 1
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": 4
+          }
+        ],
+        "fill": "none",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F02",
+        "F03",
+        "F04",
+        "F10"
+      ]
+    },
+    {
+      "expected": [],
+      "id": "empty-events-previous",
+      "input": {
+        "end": 4,
+        "events": [],
+        "fill": "previous",
+        "start": -3,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F01",
+        "F02"
+      ]
+    },
+    {
+      "expected": [],
+      "id": "zero-range-previous",
+      "input": {
+        "end": 0,
+        "events": [
+          {
+            "group": "z",
+            "time": 0,
+            "value": 8
+          },
+          {
+            "group": "",
+            "time": 0,
+            "value": null
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F01",
+        "F03"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": -2,
+          "value": 5
+        }
+      ],
+      "id": "width-exceeds-range-previous",
+      "input": {
+        "end": 3,
+        "events": [
+          {
+            "group": "a",
+            "time": -3,
+            "value": 100
+          },
+          {
+            "group": "a",
+            "time": -2,
+            "value": 1
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": null
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": 4
+          },
+          {
+            "group": "a",
+            "time": 3,
+            "value": 200
+          }
+        ],
+        "fill": "previous",
+        "start": -2,
+        "width": 9
+      },
+      "public_clause_ids": [
+        "F03",
+        "F04",
+        "F08"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 3
+        },
+        {
+          "count": 2,
+          "group": "a",
+          "start": 2,
+          "value": 12
+        },
+        {
+          "count": 1,
+          "group": "a",
+          "start": 4,
+          "value": 16
+        }
+      ],
+      "id": "half-open-boundaries-previous",
+      "input": {
+        "end": 5,
+        "events": [
+          {
+            "group": "a",
+            "time": -1,
+            "value": 99
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": 1
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": 2
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": 4
+          },
+          {
+            "group": "a",
+            "time": 3,
+            "value": 8
+          },
+          {
+            "group": "a",
+            "time": 4,
+            "value": 16
+          },
+          {
+            "group": "a",
+            "time": 5,
+            "value": 100
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F03",
+        "F04",
+        "F08"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 6
+        }
+      ],
+      "id": "null-and-duplicates-previous",
+      "input": {
+        "end": 2,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": null
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": 3
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": 3
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": null
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F04",
+        "F09"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 0,
+          "group": "a",
+          "start": 0,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 1,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 2,
+          "value": null
+        }
+      ],
+      "id": "all-null-previous",
+      "input": {
+        "end": 3,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": null
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": null
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F04",
+        "F06",
+        "F07"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 0
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 2,
+          "value": 0
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 4,
+          "value": 0
+        }
+      ],
+      "id": "zero-cancellation-previous",
+      "input": {
+        "end": 5,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": 10
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": -10
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F09"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 0,
+          "group": "a",
+          "start": 0,
+          "value": null
+        },
+        {
+          "count": 1,
+          "group": "a",
+          "start": 1,
+          "value": 7
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 2,
+          "value": 7
+        },
+        {
+          "count": 1,
+          "group": "a",
+          "start": 3,
+          "value": -2
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 4,
+          "value": -2
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 0,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 1,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 2,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 3,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "b",
+          "start": 4,
+          "value": null
+        }
+      ],
+      "id": "persistent-group-local-history-previous",
+      "input": {
+        "end": 5,
+        "events": [
+          {
+            "group": "a",
+            "time": -1,
+            "value": 999
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": 7
+          },
+          {
+            "group": "a",
+            "time": 3,
+            "value": -2
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": null
+          },
+          {
+            "group": "b",
+            "time": -1,
+            "value": 8
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F02",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "F10"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 3
+        },
+        {
+          "count": 2,
+          "group": "a",
+          "start": 2,
+          "value": 9
+        },
+        {
+          "count": 1,
+          "group": "b",
+          "start": 0,
+          "value": -1
+        },
+        {
+          "count": 1,
+          "group": "b",
+          "start": 2,
+          "value": 8
+        }
+      ],
+      "id": "unsorted-time-occurrences-previous",
+      "input": {
+        "end": 4,
+        "events": [
+          {
+            "group": "b",
+            "time": 2,
+            "value": 8
+          },
+          {
+            "group": "a",
+            "time": 3,
+            "value": 5
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": 2
+          },
+          {
+            "group": "b",
+            "time": 0,
+            "value": -1
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": 1
+          },
+          {
+            "group": "a",
+            "time": 2,
+            "value": 4
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F02",
+        "F03",
+        "F04",
+        "F10"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 1,
+          "group": "",
+          "start": 0,
+          "value": 1
+        },
+        {
+          "count": 1,
+          "group": "a",
+          "start": 0,
+          "value": 1
+        },
+        {
+          "count": 1,
+          "group": "é",
+          "start": 0,
+          "value": 1
+        },
+        {
+          "count": 1,
+          "group": "é",
+          "start": 0,
+          "value": 1
+        },
+        {
+          "count": 1,
+          "group": "￿",
+          "start": 0,
+          "value": 1
+        },
+        {
+          "count": 1,
+          "group": "𐀀",
+          "start": 0,
+          "value": 1
+        },
+        {
+          "count": 1,
+          "group": "😀",
+          "start": 0,
+          "value": 1
+        }
+      ],
+      "id": "unicode-codepoint-order",
+      "input": {
+        "end": 1,
+        "events": [
+          {
+            "group": "𐀀",
+            "time": 0,
+            "value": 1
+          },
+          {
+            "group": "é",
+            "time": 0,
+            "value": 1
+          },
+          {
+            "group": "é",
+            "time": 0,
+            "value": 1
+          },
+          {
+            "group": "",
+            "time": 0,
+            "value": 1
+          },
+          {
+            "group": "😀",
+            "time": 0,
+            "value": 1
+          },
+          {
+            "group": "￿",
+            "time": 0,
+            "value": 1
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": 1
+          }
+        ],
+        "fill": "none",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F02",
+        "F10",
+        "F13"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 0,
+          "group": "a",
+          "start": 0,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 1,
+          "value": null
+        },
+        {
+          "count": 1,
+          "group": "m",
+          "start": 0,
+          "value": 1
+        },
+        {
+          "count": 0,
+          "group": "m",
+          "start": 1,
+          "value": 1
+        },
+        {
+          "count": 0,
+          "group": "z",
+          "start": 0,
+          "value": null
+        },
+        {
+          "count": 0,
+          "group": "z",
+          "start": 1,
+          "value": null
+        }
+      ],
+      "id": "out-of-range-group-order",
+      "input": {
+        "end": 2,
+        "events": [
+          {
+            "group": "z",
+            "time": 100,
+            "value": null
+          },
+          {
+            "group": "a",
+            "time": -1,
+            "value": 100
+          },
+          {
+            "group": "m",
+            "time": 0,
+            "value": 1
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F02",
+        "F07",
+        "F08",
+        "F10"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": -10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
+          "value": 0
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": -9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999998,
+          "value": 0
+        },
+        {
+          "count": 1,
+          "group": "a",
+          "start": -9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999996,
+          "value": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
+        }
+      ],
+      "id": "large-integer-offset-and-cancellation",
+      "input": {
+        "end": -9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999995,
+        "events": [
+          {
+            "group": "a",
+            "time": -10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
+            "value": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+          },
+          {
+            "group": "a",
+            "time": -9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999,
+            "value": -10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+          },
+          {
+            "group": "a",
+            "time": -9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999996,
+            "value": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
+          },
+          {
+            "group": "a",
+            "time": -9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999995,
+            "value": 999
+          }
+        ],
+        "fill": "previous",
+        "start": -10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
+        "width": 2
+      },
+      "public_clause_ids": [
+        "F03",
+        "F04",
+        "F07",
+        "F08",
+        "F09",
+        "F13"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 1,
+          "group": "a",
+          "start": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
+          "value": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,
+          "value": null
+        },
+        {
+          "count": 1,
+          "group": "a",
+          "start": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002,
+          "value": 1
+        }
+      ],
+      "id": "large-positive-offset",
+      "input": {
+        "end": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003,
+        "events": [
+          {
+            "group": "a",
+            "time": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
+            "value": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+          },
+          {
+            "group": "a",
+            "time": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002,
+            "value": 1
+          }
+        ],
+        "fill": "none",
+        "start": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F03",
+        "F04",
+        "F06",
+        "F13"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 2,
+          "group": "a",
+          "start": 0,
+          "value": 1
+        }
+      ],
+      "id": "large-width",
+      "input": {
+        "end": 2,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": 2
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": -1
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      },
+      "public_clause_ids": [
+        "F03",
+        "F04",
+        "F13"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 4,
+          "group": "a",
+          "start": 0,
+          "value": -8
+        }
+      ],
+      "id": "repeated-identical-occurrences",
+      "input": {
+        "end": 1,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": -2
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": -2
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": -2
+          },
+          {
+            "group": "a",
+            "time": 0,
+            "value": -2
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F04",
+        "F09"
+      ]
+    },
+    {
+      "expected": [
+        {
+          "count": 1,
+          "group": "a",
+          "start": 0,
+          "value": 0
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 1,
+          "value": 0
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 2,
+          "value": 0
+        },
+        {
+          "count": 0,
+          "group": "a",
+          "start": 3,
+          "value": 0
+        }
+      ],
+      "id": "zero-nonempty-then-null-only",
+      "input": {
+        "end": 4,
+        "events": [
+          {
+            "group": "a",
+            "time": 0,
+            "value": 0
+          },
+          {
+            "group": "a",
+            "time": 1,
+            "value": null
+          },
+          {
+            "group": "a",
+            "time": 3,
+            "value": null
+          }
+        ],
+        "fill": "previous",
+        "start": 0,
+        "width": 1
+      },
+      "public_clause_ids": [
+        "F04",
+        "F05",
+        "F07",
+        "F09"
+      ]
+    }
+  ],
+  "execution_boundary": "Audit host interpretation only; not normative Lean execution, optional TESTED rescore, or universal proof.",
+  "expected_value_authority": "Explicit finite examples derived independently from the public prompt only. No hidden cases, old results or candidate-generated expected values.",
+  "schema_version": "verislop.audit-public-probes/0.1"
+}

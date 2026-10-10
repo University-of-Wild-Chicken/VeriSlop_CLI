@@ -1,0 +1,128 @@
+{
+  "format": "verislop.readable-view-validation-plan/2.1",
+  "state": "DESIGN_ONLY_NOT_EXECUTED",
+  "fresh_schema_rule": "Invent these unrelated fixtures anew. No task/corpus/stage reads, examples, expected outputs or retained task proof are qualifying inputs. Test descriptions here create no source program or proof.",
+  "cases": [
+    {
+      "id": "RV-T01",
+      "schema": "scalar-only, three distinct parameters over Nat/Int/Bool",
+      "exercise": "Declaration-order parameters, reversed source environment, nested lets, both conditional branches and noncommutative arithmetic.",
+      "pass": "Universal exact compiled-run and wrapper equalities replay; comparisons remain Bool and Nat/Int operations preserve their own semantics."
+    },
+    {
+      "id": "RV-T02",
+      "schema": "record PulseMark { label:String, enabled:Bool, delta:Int }; record WrapMark { marker:Option(PulseMark), history:List(Option(PulseMark)) }",
+      "exercise": "Nested ordered nominal records, Option payload matches, construction/projection, map/filter with outer scalar/string/record captures and let-bound repeated uses.",
+      "pass": "Universal correspondence under exact layouts/adapters; no independent accepted record identity or hidden casts assumed."
+    },
+    {
+      "id": "RV-T03",
+      "schema": "record FoldMemo { state:Int, seen:Nat, chosen:Option(String) }; source parameters include List(Option(PulseMark))",
+      "exercise": "Left fold with record accumulator, branch payloads, helper calls and surrounding immutable captures.",
+      "pass": "Universal correspondence retains item/accumulator positions and every outer binder; no finite-list bound added."
+    },
+    {
+      "id": "RV-T04",
+      "schema": "Nat bound, scalar state and captured Option/List/record values",
+      "exercise": "Natural fold with index and accumulator referenced distinctly, nested let, map or helper use in a step.",
+      "pass": "Universal equality for every natural bound with exact Nat.rec order and no runtime fuel."
+    },
+    {
+      "id": "RV-T05",
+      "schema": "List(Result(Option(PulseMark),WrapMark)) and accepted finite Enum ToggleMark",
+      "exercise": "Nested Result/Option/List branches and enum constructors, typed equality and shape-correct payload handling.",
+      "pass": "All branch types and case order correspond universally; nominal identity and exact enum registry retained."
+    },
+    {
+      "id": "RV-T06",
+      "schema": "Acyclic diamond helper dependency graph over supported scalar/list/record signatures",
+      "exercise": "Repeated named helper use, out-of-dependency-order source declarations, fold/map calls and captures passed as actual helper arguments.",
+      "pass": "Stable dependency rendering, correct argument order, sharing without exponential inlining, universal helper and entry correspondence."
+    },
+    {
+      "id": "RV-T07",
+      "schema": "Int/Nat/String/Bool lists and scalar parameters",
+      "exercise": "Exact fdiv, conversions, Bool-valued comparison, Unicode scalar construction, Option indexing and fixed sort/unique/list primitives.",
+      "pass": "Universal equality uses the same pinned primitive constants; independent closed sanity examples may supplement but cannot replace it."
+    },
+    {
+      "id": "RV-T08",
+      "schema": "The previous fresh schemas only",
+      "exercise": "Mutate renderer output: noncommutative argument swap, changed scalar operator, changed comparison boundary, swapped Option/Result branch, item/accumulator swap, natural index/accumulator swap, altered record field order or nominal ID, missing captured variable.",
+      "pass": "Exact typing/layout or universal kernel correspondence rejects each semantically distinguishable mutation; no CHECKED packet is emitted."
+    },
+    {
+      "id": "RV-T09",
+      "schema": "Two independent fresh admitted sources/profiles with different nominal registries",
+      "exercise": "Replay a view/theorem/manifest under altered source, profile, relation, adapter, renderer, theorem type or artifact bytes; attempt narrowed equality or theorem of True.",
+      "pass": "Identity/theorem checks reject stale, substituted or weakened correspondence even if a pretty name or base proposition hash matches."
+    },
+    {
+      "id": "RV-T10",
+      "schema": "Fresh supported program and an unrelated internal variant-dependent program",
+      "exercise": "Unsupported constructor/type, renderer-only byte/node budget, failed correspondence, missing tooling and injected sorry/axiom/unsafe/import violation.",
+      "pass": "Complete unavailable reasons/artifacts, correct optional status and unchanged standard packet; base required failures remain failures; no forbidden equality is exposed."
+    },
+    {
+      "id": "RV-T11",
+      "schema": "All positive fresh schemas, multiple bound entries and mixed source/value obligation fixtures",
+      "exercise": "Two isolated clean generations/builds/replays and downstream exact-edge replay using the checked equality helper.",
+      "pass": "Deterministic artifacts/declarations/theorem inventories; original Refines inventory, per-ID accepted theorem references, raw coverage, source facets and trust boundaries unchanged."
+    },
+    {
+      "id": "RV-T12",
+      "schema": "Fresh entry/helpers with (a:Nat,b:Nat,c:Nat), List(Nat) fold with Nat accumulator, and Nat fold with Nat accumulator",
+      "exercise": "Generate valid source then mutate readable parameter projection a/b; helper actual a/b; listFold item/acc; natFold index/acc. All mutations remain typable. Use distinct noncommutative operations and independently checked universal equations so equal sorts cannot mask ordering.",
+      "pass": "Kernel correspondence rejects every semantic swap, retains exact original Env order and rejects CHECKED. No finite sample is the equality authority."
+    },
+    {
+      "id": "RV-T13",
+      "schema": "Identical fresh source and body-independent enum/record registry with two accepted reference function bodies and two accepted guarantee bodies under unchanged signatures",
+      "exercise": "Change only accepted reference/guarantee/proof bodies and corresponding valid accepted artifact identities; run source renderer separately from accepted wrapper/binding construction.",
+      "pass": "Source-only block, typed IR, primitive choices, helper graph, source_key and generated source correspondence recipe are byte-identical. Acceptance/goal/binding manifests change as required; accepted equality/guarantees still independently required. Renderer rejects accidental reference/body inputs."
+    },
+    {
+      "id": "RV-T14",
+      "schema": "Fresh nested record+Option+List source admitted by existing base, plus optional supported and unsupported views",
+      "exercise": "Base succeeds; optional correspondence compile fails, times out, exhausts evidenced memory, hits output/node/step budget, or has optional tool failure. Also inject base failure/shared infrastructure or input mutation.",
+      "pass": "Before authoring, local optional-only failure yields byte-identical BASE goal/module identity/original packet with complete reasons. Base/shared infrastructure and all INPUT_MUTATION remain hard. Full stream retention is verified; overflow is explicit incomplete/unavailable, never CHECKED."
+    },
+    {
+      "id": "RV-T15",
+      "schema": "Fresh CHECKED source with multiple entries and unused helper; frozen CHECKED selection and edge proof depending on a view equality",
+      "exercise": "During frozen CHECKED acceptance/verify/materialize/link/closure replay mutate helper/source/selected mode/renderer/registry/adapter, omit a helper inventory row, narrow equality, replace theorem-generating source with a same-type proof, change compiled goal module parts or actual proof value_constants, or force optional failure. Repeat when edge proof does not use support.",
+      "pass": "Every frozen CHECKED change/failure rejects; no BASE fallback. Whole helper/entry/support source/module/type/definition-body/ref/axiom identities are compared. Same theorem type alone is insufficient; no individual proof AST hash is asserted."
+    },
+    {
+      "id": "RV-T16",
+      "schema": "Fresh admitted program with safe unused support helper and a separate unused support theorem",
+      "exercise": "Inject unused axiom/sorry/unsafe/partial/opaque/unregistered universe/unresolved ref/extra support; alter same-type theorem-generating source/module bytes; omit value_constants, safety/levels/type, module bindings or definition body export; inject omitted unsafe support auxiliary.",
+      "pass": "Exhaustive unused support audit rejects outside EdgeProp/edge closure. Definitions require exported body hash. Theorems require complete actual value_constants/type/safety/levels/axioms and MODULE_BOUND_PROOF source/module hashes; their individual AST/digest stays explicitly unavailable."
+    },
+    {
+      "id": "RV-T17",
+      "schema": "Fresh acyclic helper graph declared in an order requiring compileHelperPass retries, with a diamond and a later unused helper",
+      "exercise": "Record actual successful prefix contexts and compiled order, compare helper lookup/signature/RunEquals inventories. Mutate source-index/compiled-index/context/signature or replace actual lookup with freshly compiled final-context helper.",
+      "pass": "Actual normative helper scheduler/provenance laws and one-to-one whole-program inventory establish correspondence; proposed substitutions reject or require exact fresh equality, never assumption."
+    },
+    {
+      "id": "RV-T18",
+      "schema": "Fresh BASE legacy and new BASE/CHECKED selection metadata; existing closed certificate/evidence/IR/build/closure schemas",
+      "exercise": "Unknown sidecar field/path/version; missing, duplicate, foreign-owner slot; certificate/IR/evidence descriptor omission; stale manifest body/type hash; no-rebuild tampering; build output omission; A/B support nondeterminism; CHECKED-to-BASE downgrade.",
+      "pass": "Schema/semantic validators reject; mode identities and complete support artifacts are bound in current verifier/schema roots and closure comparison. Legacy absence admits BASE only with no readable names."
+    },
+    {
+      "id": "RV-T19",
+      "schema": "Fresh universally equal source/readable entry and unused correspondence theorem; same expected theorem type under two distinct generated proof-source texts",
+      "exercise": "Substitute alternative same-type proof source or compiled module while retaining type-only decl_hash; omit module part, fabricate individual body digest, change actual value_constants or claim unavailable proof AST was inspected. Also inspect honest output when no proof AST is available.",
+      "pass": "Frozen source/module/inventory identity rejects substitutions; schema rejects wrong identity mode/body_hash or fake AST claim. Honest theorem identity is MODULE_BOUND_PROOF with null body_hash and explicit UNAVAILABLE individual AST/digest. Kernel replays actual module body and exhaustively checks unused theorem refs/axioms/safety/levels."
+    }
+  ],
+  "matrix_qualification": "Every 39 supported constructor row has a positive universal entry/helper equation and meaningful negatives. Existing exporter theorem AST omission is explicit, not failure: current types/ref/axiom/safety/levels plus exact regenerated source/full module parts establish MODULE_BOUND_PROOF. Definitions require actual exported body. Variant/matchVariant optional unavailable leaves base admission unchanged.",
+  "required_commands_future": [
+    "Python focused renderer/schema/packet/negative tests",
+    "Pinned Lean generic library/interface/kernel replay checks using existing exporter and MODULE_BOUND_PROOF identity",
+    "Two fresh isolated compile/kernel replay executions through semantic acceptance and closure"
+  ],
+  "current_execution": "Only this design JSON syntax/finite inventory will be checked; no engineering test/build/Lean/model/task execution authorized now."
+}

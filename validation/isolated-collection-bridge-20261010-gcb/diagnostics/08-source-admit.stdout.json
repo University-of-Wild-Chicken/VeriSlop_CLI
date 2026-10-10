@@ -1,0 +1,880 @@
+{
+  "artifacts": {},
+  "asserts_closure_verified": false,
+  "command": "vscore check",
+  "diagnostics": [],
+  "gate": "exact 0.3 canonical-source admission and reconstructed AST; two kernel replays",
+  "status": "PASS",
+  "summary": {
+    "authoritative_for": "source admission only",
+    "implementation_ir": {
+      "enums": [
+        {
+          "constructors": [
+            "cold",
+            "warm"
+          ],
+          "id": "Tone"
+        }
+      ],
+      "format": "verislop.vscore3-source-ir/0.1",
+      "input_root": "sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+      "language": "vscore/0.3",
+      "program": {
+        "declarations": [
+          {
+            "fields": [
+              {
+                "id": "tone",
+                "type": {
+                  "enum": "Tone"
+                }
+              },
+              {
+                "id": "n",
+                "type": "nat"
+              }
+            ],
+            "id": "Atom",
+            "tag": "record"
+          },
+          {
+            "fields": [
+              {
+                "id": "atom",
+                "type": {
+                  "record": "Atom"
+                }
+              },
+              {
+                "id": "live",
+                "type": "bool"
+              }
+            ],
+            "id": "Box",
+            "tag": "record"
+          }
+        ],
+        "entries": [
+          {
+            "body": {
+              "body": {
+                "fields": [
+                  {
+                    "id": "atom",
+                    "value": {
+                      "fields": [
+                        {
+                          "id": "tone",
+                          "value": {
+                            "field": "tone",
+                            "tag": "project",
+                            "value": {
+                              "field": "atom",
+                              "tag": "project",
+                              "value": {
+                                "index": 0,
+                                "tag": "var"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "id": "n",
+                          "value": {
+                            "left": {
+                              "field": "n",
+                              "tag": "project",
+                              "value": {
+                                "field": "atom",
+                                "tag": "project",
+                                "value": {
+                                  "index": 0,
+                                  "tag": "var"
+                                }
+                              }
+                            },
+                            "right": {
+                              "tag": "nat",
+                              "value": "1"
+                            },
+                            "tag": "add"
+                          }
+                        }
+                      ],
+                      "record": "Atom",
+                      "tag": "record"
+                    }
+                  },
+                  {
+                    "id": "live",
+                    "value": {
+                      "field": "live",
+                      "tag": "project",
+                      "value": {
+                        "index": 0,
+                        "tag": "var"
+                      }
+                    }
+                  }
+                ],
+                "record": "Box",
+                "tag": "record"
+              },
+              "tag": "list_map",
+              "value": {
+                "index": 0,
+                "tag": "var"
+              }
+            },
+            "id": "raiseBoxes",
+            "params": [
+              {
+                "list": {
+                  "record": "Box"
+                }
+              }
+            ],
+            "result": {
+              "list": {
+                "record": "Box"
+              }
+            }
+          },
+          {
+            "body": {
+              "body": {
+                "left": {
+                  "field": "atom",
+                  "tag": "project",
+                  "value": {
+                    "index": 0,
+                    "tag": "var"
+                  }
+                },
+                "right": {
+                  "index": 1,
+                  "tag": "var"
+                },
+                "tag": "eq"
+              },
+              "tag": "list_filter",
+              "value": {
+                "index": 1,
+                "tag": "var"
+              }
+            },
+            "id": "keepAtom",
+            "params": [
+              {
+                "list": {
+                  "record": "Box"
+                }
+              },
+              {
+                "record": "Atom"
+              }
+            ],
+            "result": {
+              "list": {
+                "record": "Box"
+              }
+            }
+          },
+          {
+            "body": {
+              "initial": {
+                "tag": "nat",
+                "value": "0"
+              },
+              "source": {
+                "index": 0,
+                "tag": "var"
+              },
+              "step": {
+                "cond": {
+                  "left": {
+                    "field": "tone",
+                    "tag": "project",
+                    "value": {
+                      "field": "atom",
+                      "tag": "project",
+                      "value": {
+                        "index": 0,
+                        "tag": "var"
+                      }
+                    }
+                  },
+                  "right": {
+                    "ctor": "cold",
+                    "enum": "Tone",
+                    "tag": "enum"
+                  },
+                  "tag": "eq"
+                },
+                "else": {
+                  "index": 1,
+                  "tag": "var"
+                },
+                "tag": "if",
+                "then": {
+                  "left": {
+                    "index": 1,
+                    "tag": "var"
+                  },
+                  "right": {
+                    "field": "n",
+                    "tag": "project",
+                    "value": {
+                      "field": "atom",
+                      "tag": "project",
+                      "value": {
+                        "index": 0,
+                        "tag": "var"
+                      }
+                    }
+                  },
+                  "tag": "add"
+                }
+              },
+              "tag": "list_fold"
+            },
+            "id": "coldTotal",
+            "params": [
+              {
+                "list": {
+                  "record": "Box"
+                }
+              }
+            ],
+            "result": "nat"
+          }
+        ],
+        "helpers": [],
+        "language": "vscore/0.3",
+        "profile": "data-pipeline/0.3"
+      },
+      "required_features": [
+        "base",
+        "nominalData",
+        "list",
+        "listFold",
+        "pureList"
+      ],
+      "signatures": [
+        {
+          "id": "raiseBoxes",
+          "params": [
+            {
+              "list": {
+                "record": "Box"
+              }
+            }
+          ],
+          "result": {
+            "list": {
+              "record": "Box"
+            }
+          }
+        },
+        {
+          "id": "keepAtom",
+          "params": [
+            {
+              "list": {
+                "record": "Box"
+              }
+            },
+            {
+              "record": "Atom"
+            }
+          ],
+          "result": {
+            "list": {
+              "record": "Box"
+            }
+          }
+        },
+        {
+          "id": "coldTotal",
+          "params": [
+            {
+              "list": {
+                "record": "Box"
+              }
+            }
+          ],
+          "result": "nat"
+        }
+      ],
+      "source_hash": "sha256:e1c7ace9ca60f875ef507dd0ece6e6627fae549f0a002c86fbe30ecc16f29c94"
+    },
+    "report": {
+      "assigns_end_to_end_verified": false,
+      "assigns_obligation_milestones": false,
+      "blocking_reasons": [],
+      "builds": [
+        {
+          "compiles": {
+            "VSCore.Decode": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore.Syntax": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Decode": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Equality": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Proofs": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Semantics": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.SourceFacts": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Syntax": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Transport": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Typed": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Typing": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3SourceCheck": {
+              "ok": true,
+              "sorries": 0
+            }
+          },
+          "format": "verislop.vscore3-source-build/0.1",
+          "implementation_ir_hash": "sha256:9c4e889a7c9e18bdb6fd7e4251651a5ef752cecc9ef96de96a8035023faf744e",
+          "isolation": {
+            "filesystem_backend": "bubblewrap",
+            "filesystem_read_isolation": true,
+            "filesystem_write_isolation": true,
+            "inherited_file_descriptors": "stdin/stdout/stderr only",
+            "ipc_namespace": true,
+            "network_namespace": true,
+            "note": "Mount/PID/IPC containment; system runtimes and explicit read-only grants remain readable. Kernel, bubblewrap and runtime contents are trusted; no seccomp or aggregate cgroup limits.",
+            "pid_namespace": true,
+            "private_proc": true,
+            "process_group_kill_on_timeout": true,
+            "read_only_paths": [
+              "/usr",
+              "/bin",
+              "/sbin",
+              "/lib",
+              "/lib64",
+              "/etc/ld.so.cache",
+              "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1"
+            ],
+            "resource_limits": [
+              "RLIMIT_AS",
+              "RLIMIT_CPU",
+              "RLIMIT_FSIZE",
+              "RLIMIT_CORE"
+            ],
+            "scrubbed_environment": true,
+            "staged_working_directory": true,
+            "writable_host_paths": [
+              "<stage>"
+            ]
+          },
+          "kernel_export_hash": "sha256:ae7737bae654be99709b0c4108bc9d70d2eaf84bddcf7115916fc6246b4f20a5",
+          "kernel_tool_hash": "sha256:d55d01a37b8442488b093a14a2f1497bdcc1fc879443b8a9e673fe998a57bcc6",
+          "modules": {
+            "VSCore.Decode": "sha256:aa7b1846774e3139ac63dbd81bb04f31d650e5556394b5ebbbde2cc578ca2d67",
+            "VSCore.Syntax": "sha256:e79b694abed36b78e98448d4e48f9f2853806c0ce653e78869886a04acc05d26",
+            "VSCore3": "sha256:35fe964c018710a70d58885cd792190362492795a9541a094aa01460b17ef19e",
+            "VSCore3.Decode": "sha256:c1ab118d1087986acf42f91af46f7862bec1f4f27d06b9ea58b72586702421dc",
+            "VSCore3.Equality": "sha256:4642fc03da9e7da79e9a5e1b96e55e71d454b2eda83ac915e69741addc0d5b5f",
+            "VSCore3.Proofs": "sha256:df297b0be87e1cb203d860d1a9393041c44e4c2f5a7543edfeeb8c303313e0f4",
+            "VSCore3.Semantics": "sha256:c73fe90cdfdb6292c733205f5459e784f87f65dae16e043e447875389d475ec9",
+            "VSCore3.SourceFacts": "sha256:63ef66bbc50655b590a2f01c1fee4220d0cbf456f6fe1aa9a5d157ed24b10c8a",
+            "VSCore3.Syntax": "sha256:ec372c612a4be7ee3da6f9327cbd2f8ea0d72c25f77510bb458b0e442fa3ebbc",
+            "VSCore3.Transport": "sha256:7fecacf72f908c22f6bd8ab71d7f3479914324b4cf953e40c272d190caefa4f8",
+            "VSCore3.Typed": "sha256:3c3d4f4706f819ec9e63ae45743e3bcd87021bd7428874180558ca5c4954f8c6",
+            "VSCore3.Typing": "sha256:8b556f798bb3105b5974c918de96d624f58bfb7bfe127be9bfb1fc526cb2d084",
+            "VSCore3SourceCheck": "sha256:102f45e6a425a4529e029c840dbd7030b09a3970af4a0de87bdba8954ac3dea1"
+          },
+          "replayed_constants": 2757,
+          "theorem_axioms": {
+            "source_checks": [
+              "Classical.choice",
+              "Quot.sound",
+              "propext"
+            ],
+            "source_parses": [
+              "Classical.choice",
+              "Quot.sound",
+              "propext"
+            ]
+          },
+          "toolchain": {
+            "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+            "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+            "pin": "leanprover/lean4:v4.34.1",
+            "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+          },
+          "toolchain_olean_closure": "sha256:6b125d3bef943761a2f1005838a31a58c449d410c94e4c2f61624a8aa15943f2"
+        },
+        {
+          "compiles": {
+            "VSCore.Decode": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore.Syntax": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Decode": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Equality": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Proofs": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Semantics": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.SourceFacts": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Syntax": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Transport": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Typed": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3.Typing": {
+              "ok": true,
+              "sorries": 0
+            },
+            "VSCore3SourceCheck": {
+              "ok": true,
+              "sorries": 0
+            }
+          },
+          "format": "verislop.vscore3-source-build/0.1",
+          "implementation_ir_hash": "sha256:9c4e889a7c9e18bdb6fd7e4251651a5ef752cecc9ef96de96a8035023faf744e",
+          "isolation": {
+            "filesystem_backend": "bubblewrap",
+            "filesystem_read_isolation": true,
+            "filesystem_write_isolation": true,
+            "inherited_file_descriptors": "stdin/stdout/stderr only",
+            "ipc_namespace": true,
+            "network_namespace": true,
+            "note": "Mount/PID/IPC containment; system runtimes and explicit read-only grants remain readable. Kernel, bubblewrap and runtime contents are trusted; no seccomp or aggregate cgroup limits.",
+            "pid_namespace": true,
+            "private_proc": true,
+            "process_group_kill_on_timeout": true,
+            "read_only_paths": [
+              "/usr",
+              "/bin",
+              "/sbin",
+              "/lib",
+              "/lib64",
+              "/etc/ld.so.cache",
+              "/home/augustus/.elan/toolchains/leanprover--lean4---v4.34.1"
+            ],
+            "resource_limits": [
+              "RLIMIT_AS",
+              "RLIMIT_CPU",
+              "RLIMIT_FSIZE",
+              "RLIMIT_CORE"
+            ],
+            "scrubbed_environment": true,
+            "staged_working_directory": true,
+            "writable_host_paths": [
+              "<stage>"
+            ]
+          },
+          "kernel_export_hash": "sha256:ae7737bae654be99709b0c4108bc9d70d2eaf84bddcf7115916fc6246b4f20a5",
+          "kernel_tool_hash": "sha256:d55d01a37b8442488b093a14a2f1497bdcc1fc879443b8a9e673fe998a57bcc6",
+          "modules": {
+            "VSCore.Decode": "sha256:aa7b1846774e3139ac63dbd81bb04f31d650e5556394b5ebbbde2cc578ca2d67",
+            "VSCore.Syntax": "sha256:e79b694abed36b78e98448d4e48f9f2853806c0ce653e78869886a04acc05d26",
+            "VSCore3": "sha256:35fe964c018710a70d58885cd792190362492795a9541a094aa01460b17ef19e",
+            "VSCore3.Decode": "sha256:c1ab118d1087986acf42f91af46f7862bec1f4f27d06b9ea58b72586702421dc",
+            "VSCore3.Equality": "sha256:4642fc03da9e7da79e9a5e1b96e55e71d454b2eda83ac915e69741addc0d5b5f",
+            "VSCore3.Proofs": "sha256:df297b0be87e1cb203d860d1a9393041c44e4c2f5a7543edfeeb8c303313e0f4",
+            "VSCore3.Semantics": "sha256:c73fe90cdfdb6292c733205f5459e784f87f65dae16e043e447875389d475ec9",
+            "VSCore3.SourceFacts": "sha256:63ef66bbc50655b590a2f01c1fee4220d0cbf456f6fe1aa9a5d157ed24b10c8a",
+            "VSCore3.Syntax": "sha256:ec372c612a4be7ee3da6f9327cbd2f8ea0d72c25f77510bb458b0e442fa3ebbc",
+            "VSCore3.Transport": "sha256:7fecacf72f908c22f6bd8ab71d7f3479914324b4cf953e40c272d190caefa4f8",
+            "VSCore3.Typed": "sha256:3c3d4f4706f819ec9e63ae45743e3bcd87021bd7428874180558ca5c4954f8c6",
+            "VSCore3.Typing": "sha256:8b556f798bb3105b5974c918de96d624f58bfb7bfe127be9bfb1fc526cb2d084",
+            "VSCore3SourceCheck": "sha256:102f45e6a425a4529e029c840dbd7030b09a3970af4a0de87bdba8954ac3dea1"
+          },
+          "replayed_constants": 2757,
+          "theorem_axioms": {
+            "source_checks": [
+              "Classical.choice",
+              "Quot.sound",
+              "propext"
+            ],
+            "source_parses": [
+              "Classical.choice",
+              "Quot.sound",
+              "propext"
+            ]
+          },
+          "toolchain": {
+            "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+            "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+            "pin": "leanprover/lean4:v4.34.1",
+            "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+          },
+          "toolchain_olean_closure": "sha256:6b125d3bef943761a2f1005838a31a58c449d410c94e4c2f61624a8aa15943f2"
+        }
+      ],
+      "claim_counts": {
+        "blocked": 0,
+        "passed": 5,
+        "total": 5,
+        "unresolved": 0
+      },
+      "claims": [
+        {
+          "build_indices": [
+            0,
+            1
+          ],
+          "closure_id": "vscore3-source-sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "execution_environment": {
+            "host": {
+              "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+              "python": "3.10.11",
+              "python_implementation": "CPython",
+              "verislop": "0.1.0"
+            },
+            "toolchain": {
+              "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+              "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+              "pin": "leanprover/lean4:v4.34.1",
+              "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+            }
+          },
+          "exit_code": 0,
+          "id": "exact_source_decoding",
+          "input_root": "sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "pass_condition": "kernel replay accepts source_parses for frozen bytes and AST",
+          "status": "PASS",
+          "verifier_hash": "sha256:3c01b2095996e0739320b5ac5f139b57c993e949fb902aa40f2d26764907195f",
+          "verifier_id": "verislop.vscore3-source-checker"
+        },
+        {
+          "build_indices": [
+            0,
+            1
+          ],
+          "closure_id": "vscore3-source-sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "execution_environment": {
+            "host": {
+              "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+              "python": "3.10.11",
+              "python_implementation": "CPython",
+              "verislop": "0.1.0"
+            },
+            "toolchain": {
+              "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+              "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+              "pin": "leanprover/lean4:v4.34.1",
+              "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+            }
+          },
+          "exit_code": 0,
+          "id": "program_admission",
+          "input_root": "sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "pass_condition": "kernel replay accepts source_checks for frozen profile, AST and signatures",
+          "status": "PASS",
+          "verifier_hash": "sha256:3c01b2095996e0739320b5ac5f139b57c993e949fb902aa40f2d26764907195f",
+          "verifier_id": "verislop.vscore3-source-checker"
+        },
+        {
+          "build_indices": [
+            0,
+            1
+          ],
+          "closure_id": "vscore3-source-sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "execution_environment": {
+            "host": {
+              "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+              "python": "3.10.11",
+              "python_implementation": "CPython",
+              "verislop": "0.1.0"
+            },
+            "toolchain": {
+              "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+              "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+              "pin": "leanprover/lean4:v4.34.1",
+              "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+            }
+          },
+          "exit_code": 0,
+          "id": "accepted_ast_reconstruction",
+          "input_root": "sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "pass_condition": "replayed constructor values re-encode to exact frozen bytes and profile",
+          "status": "PASS",
+          "verifier_hash": "sha256:3c01b2095996e0739320b5ac5f139b57c993e949fb902aa40f2d26764907195f",
+          "verifier_id": "verislop.vscore3-source-checker"
+        },
+        {
+          "build_indices": [
+            0,
+            1
+          ],
+          "closure_id": "vscore3-source-sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "execution_environment": {
+            "host": {
+              "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+              "python": "3.10.11",
+              "python_implementation": "CPython",
+              "verislop": "0.1.0"
+            },
+            "toolchain": {
+              "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+              "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+              "pin": "leanprover/lean4:v4.34.1",
+              "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+            }
+          },
+          "exit_code": 0,
+          "id": "two_clean_builds",
+          "input_root": "sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "pass_condition": "both isolated clean compilations and complete supplied-module replays succeed",
+          "status": "PASS",
+          "verifier_hash": "sha256:3c01b2095996e0739320b5ac5f139b57c993e949fb902aa40f2d26764907195f",
+          "verifier_id": "verislop.vscore3-source-checker"
+        },
+        {
+          "build_indices": [
+            0,
+            1
+          ],
+          "closure_id": "vscore3-source-sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "execution_environment": {
+            "host": {
+              "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+              "python": "3.10.11",
+              "python_implementation": "CPython",
+              "verislop": "0.1.0"
+            },
+            "toolchain": {
+              "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+              "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+              "pin": "leanprover/lean4:v4.34.1",
+              "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+            }
+          },
+          "exit_code": 0,
+          "id": "determinism",
+          "input_root": "sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+          "pass_condition": "normalized build observations and reconstructed IR are identical",
+          "status": "PASS",
+          "verifier_hash": "sha256:3c01b2095996e0739320b5ac5f139b57c993e949fb902aa40f2d26764907195f",
+          "verifier_id": "verislop.vscore3-source-checker"
+        }
+      ],
+      "closure_id": "vscore3-source-sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+      "correspondence": {
+        "boundary": "replayed source bytes, program, profile and signatures",
+        "status": "PASS"
+      },
+      "dependencies": {
+        "trusted": [
+          "Lean 4 kernel and elaborator of the pinned toolchain, with its toolchain .olean files",
+          "VeriSlop kernel tool (replay driver, exporter, axiom walker, witness extractor)",
+          "VeriSlop reifier, DSL denotation builder and canonical serializer (round trip checked per value)",
+          "VeriSlop launcher, bubblewrap and Linux namespace confinement; explicitly mounted runtime roots remain readable",
+          "logical axioms permitted by the acceptance policy (actual use listed per theorem)",
+          "CPython interpreter and byte compiler of the supervisor host",
+          "closure orchestration, manifest canonicalisation and hashing",
+          "operating system and hardware"
+        ],
+        "undeclared": [],
+        "verified": [
+          "exact_source_decoding",
+          "program_admission",
+          "accepted_ast_reconstruction",
+          "two_clean_builds",
+          "determinism"
+        ]
+      },
+      "determinism": {
+        "required": true,
+        "status": "PASS"
+      },
+      "excluded": [
+        "natural-language fidelity",
+        "accepted-contract refinement and obligation transfer",
+        "surface text semantics",
+        "host execution and native compilation",
+        "TESTED campaigns"
+      ],
+      "format": "verislop.vscore3-source-check/0.1",
+      "infrastructure_errors": [],
+      "input_root": "sha256:1511612e47b48b01c51644fad834287a0176d8f7a8cf0ed3a970933bca3cc342",
+      "inputs": {
+        "claims": [
+          {
+            "id": "exact_source_decoding",
+            "pass_condition": "kernel replay accepts source_parses for frozen bytes and AST"
+          },
+          {
+            "id": "program_admission",
+            "pass_condition": "kernel replay accepts source_checks for frozen profile, AST and signatures"
+          },
+          {
+            "id": "accepted_ast_reconstruction",
+            "pass_condition": "replayed constructor values re-encode to exact frozen bytes and profile"
+          },
+          {
+            "id": "two_clean_builds",
+            "pass_condition": "both isolated clean compilations and complete supplied-module replays succeed"
+          },
+          {
+            "id": "determinism",
+            "pass_condition": "normalized build observations and reconstructed IR are identical"
+          }
+        ],
+        "enums": {
+          "Tone": [
+            "cold",
+            "warm"
+          ]
+        },
+        "goal": "sha256:1653b3e9b0706655e3c031512933dac9d20c9eb3996e7e4a0b3240e80d252d4e",
+        "host_environment": {
+          "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.39",
+          "python": "3.10.11",
+          "python_implementation": "CPython",
+          "verislop": "0.1.0"
+        },
+        "library": {
+          "VSCore.Decode": "sha256:16560e2dd234bcd17f46fdf37e1fd8e1216d2fa6c6dc51ca80b9bd1abd5290ae",
+          "VSCore.Syntax": "sha256:ee0faaa1b79c628926ea2205037e8ddda27679fdb26b00cad121a5db2cf25cd9",
+          "VSCore3": "sha256:56151ad3d8ccc7ae9c42911c1562a42383dc95020bdd68ded0e23c2455082e1c",
+          "VSCore3.Decode": "sha256:3b20afa33a068d0044034030f503cf9f749bf36a8f946a742f6894f5b5671798",
+          "VSCore3.Equality": "sha256:ac41505ea252f6ebb9a90c37f15a1d8f6c22dfd650a056b8ebb51d9fbe923f43",
+          "VSCore3.Proofs": "sha256:da5e517bc44612a3bb3c7a1c11abfccf5000c0b8e21433112e2591cb6003e806",
+          "VSCore3.Semantics": "sha256:fdcb212ec711c263526483c050974c4c8ebe39c58e639c10a5a96e8a356954d2",
+          "VSCore3.SourceFacts": "sha256:abccaf22aee85dc85a3b8ea8aef81dc5bfb4fb86eb6eff6ba3d1b64c3d1b9576",
+          "VSCore3.Syntax": "sha256:62a95e3064a425499d178a6707503c89680a6e9a1b05e5cd3d8ccaf7ea3dd3bf",
+          "VSCore3.Transport": "sha256:f71746e55d5b0c1011086af3be9088b58a3ce1b05a7f83b3d24f9fdc83fbcf19",
+          "VSCore3.Typed": "sha256:7e8063a62728c44c03339282503b0234abdf66f73801a5495bd2b60f20bdea38",
+          "VSCore3.Typing": "sha256:3560ac3400b56b9cdff6e39689bea87fed3777ba1746149f3aec4bef91fea2d4"
+        },
+        "permitted_nondeterminism": [
+          "temporary build directory prefixes in isolation metadata"
+        ],
+        "policy": {
+          "allowed_axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ],
+          "allowed_import_roots": [
+            "Init",
+            "Std",
+            "Lean"
+          ],
+          "build_timeout_seconds": 300,
+          "forbid_module_axioms": true,
+          "gate": "accepted_and_proved",
+          "id": "verislop.policy.strict/0.1",
+          "kernel_timeout_seconds": 300,
+          "memory_mb": 8192,
+          "require_filesystem_isolation": true,
+          "require_kernel_replay": true,
+          "require_network_isolation": true,
+          "require_witnesses": true
+        },
+        "source": "sha256:e1c7ace9ca60f875ef507dd0ece6e6627fae549f0a002c86fbe30ecc16f29c94",
+        "toolchain": {
+          "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+          "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "pin": "leanprover/lean4:v4.34.1",
+          "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+        },
+        "total_timeout_seconds": 1800,
+        "trusted_dependencies": [
+          "Lean 4 kernel and elaborator of the pinned toolchain, with its toolchain .olean files",
+          "VeriSlop kernel tool (replay driver, exporter, axiom walker, witness extractor)",
+          "VeriSlop reifier, DSL denotation builder and canonical serializer (round trip checked per value)",
+          "VeriSlop launcher, bubblewrap and Linux namespace confinement; explicitly mounted runtime roots remain readable",
+          "logical axioms permitted by the acceptance policy (actual use listed per theorem)",
+          "CPython interpreter and byte compiler of the supervisor host",
+          "closure orchestration, manifest canonicalisation and hashing",
+          "operating system and hardware"
+        ],
+        "verifier": "sha256:3c01b2095996e0739320b5ac5f139b57c993e949fb902aa40f2d26764907195f"
+      },
+      "provenance": {
+        "fully_bound": 5,
+        "orphan_claims": 0,
+        "public_claims": 5
+      },
+      "scope": "delivered vscore-json/0.3 source admission under its normative Lean checker",
+      "status": "VERIFIED",
+      "toolchain": {
+        "githash": "5045d0056413266e57c625dcd7c365b10e377c52",
+        "lean_binary_sha256": "sha256:e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+        "pin": "leanprover/lean4:v4.34.1",
+        "version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)"
+      },
+      "trusted": [
+        "Lean 4 kernel and elaborator of the pinned toolchain, with its toolchain .olean files",
+        "VeriSlop kernel tool (replay driver, exporter, axiom walker, witness extractor)",
+        "VeriSlop reifier, DSL denotation builder and canonical serializer (round trip checked per value)",
+        "VeriSlop launcher, bubblewrap and Linux namespace confinement; explicitly mounted runtime roots remain readable",
+        "logical axioms permitted by the acceptance policy (actual use listed per theorem)",
+        "CPython interpreter and byte compiler of the supervisor host",
+        "closure orchestration, manifest canonicalisation and hashing",
+        "operating system and hardware"
+      ],
+      "verifier": "verislop.vscore3-source-checker"
+    }
+  }
+}
