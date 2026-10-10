@@ -1,0 +1,3 @@
+# Additional control correction before focused development rerun
+
+Run004 retained 3 PASS and 1 harness FAIL. The unsupported-carrier control compiled and replayed both genuinely dependent and recursive carriers, then incorrectly indexed optional empty-profile maps (`records`/`enums`). Correct this to `.get(..., {})` and rerun only that unresolved control with a fresh source freeze and actual compiler/kernel calls. Previously passed controls are not rescored or rerun. Production/candidate code and resource caps remain unchanged. All evidence is DEVELOPMENT_ONLY and has no ROOT003 qualification authority.

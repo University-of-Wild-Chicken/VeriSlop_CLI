@@ -1,0 +1,23 @@
+--- a/tests/test_tier2_carrier_views.py
++++ b/tests/test_tier2_carrier_views.py
+@@ -318,7 +318,7 @@
+         self.assertNotIn("verdict", record)
+         self.assertNotIn("lifecycle", record)
+         message = viewer.agent_message(reference)
+-        for phrase in ("grant no ACCEPT", "cannot attest that an LLM consumed", "semantic search", "literal FINAL", "call/repair budgets", "No wall deadline"):
++        for phrase in ("grant no ACCEPT", "cannot attest that an LLM consumed", "semantic search", "literal FINAL", "model/call/repair/output/compiler budgets", "No inference, retrieval or review deadline"):
+             self.assertIn(phrase, message)
+         configuration = transport.configuration()
+         self.assertEqual(2, configuration["review"]["budgets"]["max_repair_rounds"])
+@@ -334,7 +334,10 @@
+     def test_inline_message_and_snapshot_binding(self):
+         reference, _ = self.carrier()
+         message = viewer.agent_message(reference)
+-        self.assertIn(viewer.inline_command(reference), message)
++        self.assertIn(viewer.initial_session_template(reference), message)
++        self.assertIn(viewer.next_session_template(reference), message)
++        self.assertIn(json.dumps(viewer.inline_prefix(reference), ensure_ascii=True),
++                      viewer.initial_session_template(reference))
+         self.assertIn("bootstrap_tier2_carrier_view.py", '\n'.join(bootstrap.TRANSPORT_FILES))
+         repo = self.root / "synthetic-source"
+         for name in bootstrap.TRANSPORT_FILES:

@@ -1,0 +1,280 @@
+{
+  "$defs": {
+    "artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "canonical_root": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "hash": {
+      "pattern": "^(sha256:)?[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "path": {
+      "pattern": "^/",
+      "type": "string"
+    },
+    "pointer": {
+      "pattern": "^($|/)",
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "activation_authority": {
+      "const": false
+    },
+    "cohort": {
+      "const": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-019/run"
+    },
+    "controller_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "fork_turns": {
+          "const": "none"
+        },
+        "inference_deadline": {
+          "const": null
+        },
+        "literal_response_forwarding": {
+          "const": true
+        },
+        "max_outstanding_authors": {
+          "const": 1
+        },
+        "message_source": {
+          "const": "exact native pending.agent_message"
+        },
+        "requested_model": {
+          "const": "gpt-6.1-sol"
+        },
+        "resampling": {
+          "const": false
+        },
+        "retrieval_deadline": {
+          "const": null
+        },
+        "review_deadline": {
+          "const": null
+        }
+      },
+      "required": [
+        "requested_model",
+        "fork_turns",
+        "max_outstanding_authors",
+        "message_source",
+        "literal_response_forwarding",
+        "inference_deadline",
+        "retrieval_deadline",
+        "review_deadline",
+        "resampling"
+      ],
+      "type": "object"
+    },
+    "created_at_utc": {
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T",
+      "type": "string"
+    },
+    "engineering_record": {
+      "$ref": "#/$defs/artifact"
+    },
+    "format": {
+      "const": "verislop.native019-qualification-prerequisite-binding/1"
+    },
+    "input_root": {
+      "$ref": "#/$defs/canonical_root"
+    },
+    "native_activation_amendment": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver019-activation-amendment-001/source-binding-amendment.json"
+        },
+        "sha256": {
+          "const": "sha256:df3918b1d2f64dccca03cb5a85496a10c449ec92c616b875da990e2559e56165"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "native_driver": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver-019/driver.py"
+        },
+        "sha256": {
+          "const": "sha256:afeed7df381d443ad60051bc9e0a04ff84a9a82611a49b7373c9545468445830"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "native_driver_manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver-019/hash-manifest.json"
+        },
+        "sha256": {
+          "const": "sha256:06f75555119779873187668c3a19fc32913cf990736f19e578787bd0b34be863"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "native_driver_seal": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver-019/SEAL.sha256"
+        },
+        "sha256": {
+          "const": "sha256:98c15d19006c80c39b4a957d261a18381713e500655fbc5bdf8cf40dfbd1a376"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "native_generation_started": {
+      "const": false
+    },
+    "preregistration_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "project": {
+      "const": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-019/project"
+    },
+    "project_snapshot_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "protocol_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "qualification_admission_receipt": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_claim_ids": {
+      "const": [
+        "Q018-01",
+        "Q018-02",
+        "Q018-03",
+        "Q018-04",
+        "Q018-05",
+        "Q018-06",
+        "Q018-07",
+        "Q018-08",
+        "Q018-09",
+        "Q018-10",
+        "Q018-11",
+        "Q018-12",
+        "Q018-13",
+        "Q018-14",
+        "Q018-15",
+        "Q018-16",
+        "Q018-17",
+        "Q018-18",
+        "Q019-01",
+        "Q019-02",
+        "Q019-03",
+        "Q019-04",
+        "Q019-05",
+        "Q019-06",
+        "Q019-07",
+        "Q019-08",
+        "Q019-09"
+      ]
+    },
+    "qualification_closure_id": {
+      "pattern": "^support019-final-current-root-[0-9]{3}$",
+      "type": "string"
+    },
+    "qualification_independent_admission": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_independent_report": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_report": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_root": {
+      "pattern": "^/home/augustus/VeriSlop_CLI/validation/tier2-support-019-qualification-[0-9]{3}$",
+      "type": "string"
+    },
+    "scope_plan_root": {
+      "const": "64e246b31a78939aa6eb0aa5061ea5c3b0331fc07b492215ded16f22183168bb"
+    },
+    "scope_reader": {
+      "$ref": "#/$defs/artifact"
+    },
+    "source_freeze": {
+      "$ref": "#/$defs/artifact"
+    },
+    "source_root": {
+      "$ref": "#/$defs/canonical_root"
+    },
+    "status": {
+      "const": "PREREQUISITES_BOUND"
+    }
+  },
+  "required": [
+    "format",
+    "status",
+    "activation_authority",
+    "native_generation_started",
+    "created_at_utc",
+    "qualification_root",
+    "qualification_closure_id",
+    "source_root",
+    "input_root",
+    "qualification_claim_ids",
+    "qualification_report",
+    "qualification_independent_report",
+    "qualification_independent_admission",
+    "qualification_admission_receipt",
+    "engineering_record",
+    "source_freeze",
+    "native_driver",
+    "native_driver_manifest",
+    "native_driver_seal",
+    "native_activation_amendment",
+    "project",
+    "cohort",
+    "protocol_sha256",
+    "preregistration_sha256",
+    "project_snapshot_sha256",
+    "scope_reader",
+    "scope_plan_root",
+    "controller_policy"
+  ],
+  "title": "Append-only actual native019 qualification prerequisite binding; no activation authority",
+  "type": "object"
+}

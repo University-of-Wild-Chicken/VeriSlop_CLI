@@ -137,6 +137,9 @@ def main():
         if str(p) not in r.first:raise AssertionError("external hooked read not bound")
         p.write_bytes(b"hooked-input-changed"); r.finalize()
     test("C24-external-hook-read-final-mutation-rejected",external_hook,True)
+    def external_deleted():
+        r=m.Reads(); p=control_file("external-deleted"); r.raw(p); p.unlink(); r.finalize()
+    test("C24-bound-external-deletion-rejected",external_deleted,True)
     def unregistered_temporary():
         r=m.Reads(); r.enable_hook=True; p=output/"never-created-temporary"
         r.hook("tempfile.mkdtemp",(str(p),))
@@ -146,7 +149,7 @@ def main():
         # An unrelated lifetime-format witness, not a production API invocation.
         r=m.Reads(); root=output/"synthetic-ephemeral"; root.mkdir(); p=root/"control.bin"; p.write_bytes(b"ephemeral-control")
         r.archive_root=output/"synthetic-archive"; r.temporary_roots[root]={"root":str(root),"event":"SYNTHETIC_CONTROL_ONLY"}
-        r.raw(p); shutil.rmtree(root); r.finalize()
+        r._observe(p,p.read_bytes(),"unrelated generated lifetime format witness"); shutil.rmtree(root); r.finalize()
         if len(r.first)!=1 or not any(row.get("lifetime")=="ephemeral" for row in r.rows):raise AssertionError("ephemeral archive not retained")
     test("C24-generated-lifetime-lossless-archive",ephemeral_archive)
 

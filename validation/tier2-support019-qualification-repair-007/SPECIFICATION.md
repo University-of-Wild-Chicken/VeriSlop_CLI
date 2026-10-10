@@ -1,0 +1,11 @@
+# Support019 qualification repair007 — specification before implementation
+
+Qualification `support019-final-current-root-001` is terminal BLOCKED. Preserve its frozen inputs and all actual observations. The interrupted suite (-15) and launcher (2) are deliberate stop observations, not a compiler timeout or a completed suite result. No PASS from this input root may be reused.
+
+F007: independent Reader.channel dereferences original_channel.directory and original_channel.verifier_path; final configuration uses the canonical capture_root and comparator fields. Its first operation is therefore undefined for the actual frozen configuration. Correct the reader to use the canonical fields. Do not add unbound invented runtime aliases, change the comparator, or weaken any channel result predicate.
+
+Before another qualification freeze, inspect every literal runtime configuration path in the Reader, Reconciler and Additional predicates and compare it mechanically with the new registration. Check the current producers' actual output schemas, bases for evidence paths, and receipts. Any further concrete mismatch must receive a named prerepair amendment and source-only review before patching. This inspection grants no runtime verification status.
+
+The next candidate must use a new closure ID and regenerated manifests. Preserve all 27 finite claim statements, original test/control floors, the 191 registered test IDs, equality55 and carrier30 controls, exact source semantics and budgets. Keep the production source root unchanged unless a separately specified production defect requires repair. All required actual checks, current independent admission and audit must run fresh. The author remains unique, gpt-6.1-sol requested with fork_turns none, exact own inline carrier only, literal FINAL, no deadlines or resampling. No task proof/candidate hints, old positive results or model consumption claims.
+
+A23 remains immutable under its existing stage010 result. The revised D21 deliverable remains VSCore under the explicit revised functional contract; Tier2 is restricted-source semantics only. TESTED remains PENDING absent a separately registered task test campaign. No Tier3/4, Python equivalence, extraction or machine-code claim is added.

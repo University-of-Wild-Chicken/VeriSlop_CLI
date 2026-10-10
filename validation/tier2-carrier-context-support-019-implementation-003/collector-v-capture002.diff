@@ -1,0 +1,40 @@
+--- capture002/collector_templates.py
++++ candidate003/capture-amendment-003/collector_templates.py
+@@ -1,8 +1,8 @@
+ """Prepare fixed observable collector recipes; never execute a tool/model call.
+ 
+-This offline factory reads only the frozen generic002 source. Emitted viewer
++This offline factory reads only the candidate003 generic source source. Emitted viewer
+ recipes retain the inline reader and read only their exact own carrier.
+-The actual model author still receives the unmodified candidate002 message.
++The actual model author still receives the candidate003 author message (with explicit non-VIEW checkpoint/hash recipes).
+ """
+ import hashlib
+ import importlib.util
+@@ -12,7 +12,7 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ CANDIDATE_PATH = HERE.parent / "bootstrap_tier2_carrier_view.py"
+-CANDIDATE_SHA256 = "sha256:9930beff878848b05c8d69245fff12c1388f14254b6630504b36748c4c294366"
++CANDIDATE_SHA256 = "sha256:1f70b9f4925ec0c1ff657f3e68f36c7f65e2222764ea1bc6c1d038868e5585d5"
+ CASE_IDS = ("AC002-001", "AC002-002", "AC002-003", "AC002-004")
+ NORMAL_FORWARD = "text(await tools.exec_command({cmd, max_output_tokens: 16384}));"
+ NORMAL_ACTUAL_RESULT = "const ACTUAL_RESULT = await tools.exec_command({cmd, max_output_tokens: 16384});"
+@@ -26,8 +26,8 @@
+ def _candidate():
+     raw = CANDIDATE_PATH.read_bytes()
+     if "sha256:" + hashlib.sha256(raw).hexdigest() != CANDIDATE_SHA256:
+-        raise ValueError("FROZEN_CANDIDATE002_MISMATCH")
+-    spec = importlib.util.spec_from_file_location("frozen_collector_candidate002", CANDIDATE_PATH)
++        raise ValueError("FROZEN_CANDIDATE003_MISMATCH")
++    spec = importlib.util.spec_from_file_location("frozen_collector_candidate003", CANDIDATE_PATH)
+     candidate = importlib.util.module_from_spec(spec)
+     spec.loader.exec_module(candidate)
+     return candidate
+@@ -82,5 +82,5 @@
+ 
+ 
+ def plain_author_message(reference: dict[str, str]) -> str:
+-    """Original frozen002 message; collector observer never enters the author."""
++    """Candidate003 author message; legacy collector observer never enters author."""
+     return _candidate().agent_message(reference)

@@ -1,0 +1,281 @@
+{
+  "$defs": {
+    "artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "canonical_root": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "hash": {
+      "pattern": "^(sha256:)?[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "path": {
+      "pattern": "^/",
+      "type": "string"
+    },
+    "pointer": {
+      "pattern": "^($|/)",
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authorization": {
+      "const": "root-explicit-new-qualified-paths-before-generation"
+    },
+    "cohort": {
+      "const": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-019/run"
+    },
+    "controller_inputs": {
+      "description": "All prospective public controller018 preregistration/configuration inputs. Reader hashes these files and the sole driver; it executes none.",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "engineering_record": {
+      "$ref": "#/$defs/artifact"
+    },
+    "expected_qualification_input_root": {
+      "$ref": "#/$defs/canonical_root"
+    },
+    "expected_source_root": {
+      "$ref": "#/$defs/canonical_root"
+    },
+    "format": {
+      "const": "verislop.d21-pre-generation-binding-spec/1"
+    },
+    "native_driver": {
+      "$ref": "#/$defs/artifact"
+    },
+    "preregistration_input_root_hash": {
+      "const": "26dc5d744d613351dd079af56a60f7f6b900b432696434a87f49c18f3cd7702d"
+    },
+    "preregistration_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "project": {
+      "const": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-019/project"
+    },
+    "project_snapshot_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "protocol_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "qualification_admission_receipt": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_admission_verifier": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_ancillary_index_hashes": {
+      "additionalProperties": false,
+      "properties": {
+        "author": {
+          "$ref": "#/$defs/canonical_root"
+        },
+        "carrier": {
+          "$ref": "#/$defs/canonical_root"
+        },
+        "equality": {
+          "$ref": "#/$defs/canonical_root"
+        },
+        "pure": {
+          "$ref": "#/$defs/canonical_root"
+        }
+      },
+      "required": [
+        "equality",
+        "carrier",
+        "author",
+        "pure"
+      ],
+      "type": "object"
+    },
+    "qualification_closure_id": {
+      "pattern": "^support019-final-current-root-[0-9]{3}$",
+      "type": "string"
+    },
+    "qualification_finalizer_receipt": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_independent_admission": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_independent_report": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_input_manifest": {
+      "additionalProperties": false,
+      "description": "Actual registered qualification input inventory; the selected value's qualified-project canonical digest must equal the actual report input_root.",
+      "properties": {
+        "canonical_pointer": {
+          "$ref": "#/$defs/pointer"
+        },
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "canonical_pointer"
+      ],
+      "type": "object"
+    },
+    "qualification_links": {
+      "description": "Preserved current final report hash pointers for exact fresh Q002 engineering record/source freeze; no synthetic equality or former result reuse.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "artifact": {
+            "enum": [
+              "engineering_record",
+              "source_freeze"
+            ]
+          },
+          "expected": {
+            "$ref": "#/$defs/hash"
+          },
+          "report_pointer": {
+            "$ref": "#/$defs/pointer"
+          }
+        },
+        "required": [
+          "artifact",
+          "report_pointer",
+          "expected"
+        ],
+        "type": "object"
+      },
+      "minItems": 2,
+      "type": "array"
+    },
+    "qualification_predicate_receipt": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_process_output_index": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_process_receipts": {
+      "description": "Preserved final report-authenticated actual numeric-zero phase receipt links; additional direct finalizer/reader/admission receipts are required separately.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "$ref": "#/$defs/path"
+          },
+          "report_sha256_pointer": {
+            "$ref": "#/$defs/pointer"
+          },
+          "returncode_pointer": {
+            "$ref": "#/$defs/pointer"
+          },
+          "sha256": {
+            "$ref": "#/$defs/hash"
+          }
+        },
+        "required": [
+          "path",
+          "sha256",
+          "returncode_pointer",
+          "report_sha256_pointer"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "qualification_report": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_report_schema": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_report_schema_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "qualification_root": {
+      "pattern": "^/home/augustus/VeriSlop_CLI/validation/tier2-support-019-qualification-[0-9]{3}$",
+      "type": "string"
+    },
+    "qualification_specification": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_verifier": {
+      "$ref": "#/$defs/artifact"
+    },
+    "reader_schema_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "reader_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "source_freeze": {
+      "$ref": "#/$defs/artifact"
+    },
+    "stage": {
+      "const": "tier2-source-facets-019"
+    }
+  },
+  "required": [
+    "format",
+    "authorization",
+    "stage",
+    "project",
+    "cohort",
+    "reader_sha256",
+    "reader_schema_sha256",
+    "preregistration_input_root_hash",
+    "expected_source_root",
+    "expected_qualification_input_root",
+    "qualification_report",
+    "qualification_report_schema_sha256",
+    "qualification_verifier",
+    "qualification_specification",
+    "qualification_links",
+    "qualification_input_manifest",
+    "qualification_process_receipts",
+    "engineering_record",
+    "source_freeze",
+    "protocol_sha256",
+    "preregistration_sha256",
+    "project_snapshot_sha256",
+    "native_driver",
+    "controller_inputs",
+    "qualification_independent_report",
+    "qualification_independent_admission",
+    "qualification_finalizer_receipt",
+    "qualification_predicate_receipt",
+    "qualification_admission_receipt",
+    "qualification_process_output_index",
+    "qualification_ancillary_index_hashes",
+    "qualification_report_schema",
+    "qualification_admission_verifier",
+    "qualification_root",
+    "qualification_closure_id"
+  ],
+  "title": "D21 stage019 future pre-generation binding; freshly admitted all27 support019 current root plus actual independent admission",
+  "type": "object"
+}

@@ -1,0 +1,151 @@
+{
+  "format": "verislop.cc019.actual-channel-terminal-report/1",
+  "status": "FAILED_RECIPE_AND_INCOMPLETE",
+  "collectorStopped": true,
+  "stopAuthority": "Root instruction: no further views in this sequence; preserve call23 FAILED_RECIPE; no advancement or promotion.",
+  "cause": "COLLECTOR_COPY_FAILURE",
+  "productionDefectProved": false,
+  "activation_authority": false,
+  "caseResults": {
+    "CC019-AC-001": {
+      "status": "FAILED_RECIPE_AND_INCOMPLETE",
+      "failedRecord": 23,
+      "lastAcceptedRecipeRecord": 22,
+      "lastAcceptedRegisteredCursor": {
+        "system": {
+          "char": 888,
+          "utf8": 888,
+          "eof": true
+        },
+        "user": {
+          "char": 42584,
+          "utf8": 65503,
+          "eof": false
+        }
+      },
+      "fullSystemEOF": true,
+      "fullUserEOF": false,
+      "tailInspected": false,
+      "emptyControlMaterialized": true,
+      "emptyControlActualExecuted": false
+    },
+    "CC019-AC-002": {
+      "status": "FINITE_TRUNCATION_REJECTION_AND_SAME_CURSOR_RETRY_OBSERVED",
+      "failedTruncatedRecord": 3,
+      "rejectedWithoutAdvance": true,
+      "retryRecord": 4,
+      "selector": "/user",
+      "start_char": 0,
+      "cap": 4096,
+      "reserve": 2048,
+      "retryOriginalSlice": [
+        0,
+        897
+      ],
+      "qualificationAuthority": false
+    },
+    "CC019-AC-003": {
+      "status": "FINITE_OUTER_TRUNCATION_REJECTION_AND_SAME_CURSOR_RETRY_OBSERVED",
+      "failedTruncatedRecord": 5,
+      "rejectedWithoutAdvance": true,
+      "retryRecord": 6,
+      "selector": "/user",
+      "start_char": 0,
+      "cap": 4096,
+      "reserve": 2048,
+      "retryOriginalSlice": [
+        0,
+        897
+      ],
+      "qualificationAuthority": false
+    }
+  },
+  "actualState": {
+    "viewerCalls": 23,
+    "firstTemplateExecutions": 1,
+    "lastActualRecord": 23,
+    "lastActualNestedExitCode": 0,
+    "lastActualChunkId": "bddcb5",
+    "lastActualView": {
+      "metadata_reserve_bytes": 2048,
+      "operation": "field",
+      "output_cap_bytes": 8192,
+      "selector": "/user",
+      "start_char": 42584
+    },
+    "lastActualTransportSlice": {
+      "charHalfOpen": [
+        42584,
+        45244
+      ],
+      "utf8HalfOpen": [
+        65503,
+        69597
+      ],
+      "exactOriginalSlice": true,
+      "fieldEOF": false
+    },
+    "observerProvisionalTransportProgress": {
+      "system": {
+        "char": 888,
+        "utf8": 888,
+        "eof": true
+      },
+      "user": {
+        "char": 45244,
+        "utf8": 69597,
+        "eof": false
+      }
+    },
+    "registeredCursorAfterRejectedRecipe": {
+      "system": {
+        "char": 888,
+        "utf8": 888,
+        "eof": true
+      },
+      "user": {
+        "char": 42584,
+        "utf8": 65503,
+        "eof": false
+      }
+    }
+  },
+  "deviation": {
+    "description": "Actual outer JavaScript source duplicated the existing metadata reserve lower bound guard. Frozen literal recipe bytes changed.",
+    "actualSourceSha256": "sha256:f82f65fd944e468fcc906b132344c87c7f528f5422af7eb3bf4527bb7a64ed0d",
+    "expectedInstantiatedRecipeSha256": "sha256:63a958deb1b519d9d0b74457df9566286d23a79453a0e0e5eaa9bde2b0aa5dc7",
+    "readerReferenceBudgetsVIEWAndCallCountsUnchanged": true,
+    "rescored": false,
+    "normalized": false,
+    "promoted": false
+  },
+  "evidenceLimits": {
+    "nativeHiddenFunctionsExecEnvelope": "UNAVAILABLE",
+    "outerReturns": "MANUAL_RENDERED_OBSERVATIONS_ONLY",
+    "nestedReturns": "FULL_UNMODIFIED_EXPOSED_OBJECTS",
+    "separateStdoutStderr": "UNAVAILABLE",
+    "pid": "UNAVAILABLE",
+    "semanticConsumption": "UNATTESTED",
+    "nativeTaskArtifactReads": [],
+    "freshAuthorCallsByCollector": 0
+  },
+  "failedObserverInitialization": {
+    "status": "FAILED_INITIALIZATION_NOT_RESCORING",
+    "actualViewerCallsAtAttempt": 0,
+    "artifact": "observer-initialization-attempt-001.status.json"
+  },
+  "knownEvidencePrecisionCorrections": [
+    {
+      "record": 1,
+      "artifact": "record-0001/functions-source-precision-correction.json",
+      "note": "Frozen spaced first VIEW was reconstructed exactly after observer initially inferred compact whitespace; earlier inference retained, no result rescore."
+    },
+    {
+      "record": 23,
+      "artifact": "record-0023/recipe-failure.json",
+      "note": "Actual duplicated guard source retained; expected source retained separately. accepted:true in original observer record is original-slice transport validation only and confers no recipe acceptance."
+    }
+  ],
+  "remainingRequiredWork": "A complete fresh registered actual sequence must inspect full fields through EOF and empty control. This stopped failed sequence cannot supply AC-001 qualification.",
+  "authorityClaims": false
+}

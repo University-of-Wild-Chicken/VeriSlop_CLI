@@ -1,0 +1,36 @@
+{
+  "format": "verislop.source-only-review-receipt/1",
+  "created_at_utc": "2026-10-10T20:33:03.781849+00:00",
+  "reviewer": "/root/support018_source_review",
+  "reviewer_state": "STOP",
+  "scope": "generic frozen reader003/route003/public schemas only",
+  "task_artifact_reads": false,
+  "executions": false,
+  "edits": false,
+  "reader_sha256": "59ecf91d9c255161a304d7ee3b7ae1ad5647fbcfa36d656ae4bf95aea207260c",
+  "route_sha256": "3242fa6e96b6370ea3a641d0971b17299ae4ad7f58a41a220f6593371fa028ec",
+  "manifest_sha256": "a84f7d338204592c6e6191e57df7c9ed25057bb416acaf676758be6a1422156b",
+  "findings": [
+    {
+      "id": "003-F1",
+      "kind": "honest-format-false-block",
+      "witness": "reader constants42/46 use nonexistent qualification-003/independent-audit-003 while frozen specification and actual authorized evidence use002; ENGINEERING derives wrong path",
+      "required_fix": "pin unchanged ROOT002 paths and add constant/spec consistency controls"
+    },
+    {
+      "id": "003-F2",
+      "kind": "honest-format-false-block",
+      "witness": "schema-valid bare64 pre_route ref used in final/record/actualargv authenticates bytes, but genuine route prefixed ref/first-read digest fails literal equality in reader379\u2013381",
+      "required_fix": "normalize digest spelling in authenticated comparisons, retain raw hashes and actualargv"
+    },
+    {
+      "id": "003-F3",
+      "kind": "closed-format-false-accept",
+      "witness": "add final_binding_sha256 inside pre-route actor_stop and copy same object to final; top-level-only validation/authentication accepts nested future-output ref although schema closes nested path/sha256 refs",
+      "required_fix": "enforce all nested closed schema constraints in both reader and route"
+    }
+  ],
+  "next_version": "004",
+  "terminal_execution_authorized": false,
+  "original_24_checks_and_9_probes": "UNCHANGED"
+}

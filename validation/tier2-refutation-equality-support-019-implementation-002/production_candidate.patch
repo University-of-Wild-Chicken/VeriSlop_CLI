@@ -1,0 +1,67 @@
+--- verislop/contract_refutation.py
++++ implementation002/contract_refutation_candidate.py
+@@ -362,8 +362,8 @@
+             "require_filesystem_isolation": pol["require_filesystem_isolation"]}
+ 
+ 
+-def _derivations(profile: dsl.Profile) -> str:
+-    """Derive concrete equality bottom-up for dependent record carriers."""
++def _derivations(profile: dsl.Profile, expected_env: contract.Env, *, namespace: str) -> str:
++    """Reuse audited equality or derive it bottom-up for concrete carriers."""
+     names = [e["lean_decl"] for e in profile.enums.values()]
+     done = set()
+ 
+@@ -390,7 +390,34 @@
+ 
+     for rid in profile.records:
+         visit_record(rid)
+-    return "\n".join("deriving instance DecidableEq for " + _qualified(name) for name in names)
++    lines = []
++    for index, name in enumerate(names):
++        equality_type = app(const("DecidableEq", [1]), const(name))
++        candidates = sorted(n for n, row in expected_env.decls.items()
++                            if row.get("type") == equality_type)
++        for equality_name in candidates:
++            try:
++                equality_reference = _qualified(equality_name)
++            except ValueError:
++                # Private kernel names can contain numeric components that the
++                # existing printer cannot express. Try other audited definitions.
++                continue
++            try:
++                # This existing audit checks the nominal type and computable
++                # declaration closure; its checks apply to record carriers too.
++                reify._enum_equality_declaration(equality_name, name,
++                                                expected_env.decls, expected_env.hashes)
++            except reify.Unsupported:
++                continue
++            alias = "_vr_eq_" + str(index)
++            if namespace + "." + alias in expected_env.decls:
++                raise ValueError("generated equality alias name already exists")
++            lines.append("local instance " + alias + " : _root_.DecidableEq "
++                         + _qualified(name) + " := " + equality_reference)
++            break
++        else:
++            lines.append("deriving instance _root_.DecidableEq for " + _qualified(name))
++    return "\n".join(lines)
+ 
+ 
+ def _compile(tc: leanbridge.Toolchain, pol: dict, source: bytes, directory: Path):
+@@ -407,10 +434,13 @@
+     root = ns + ".closed_check"
+     if root in expected_env.decls:
+         return {"ok": False, "reason": "generated proof name already exists"}
+-    # DecidableEq derivations are proof-producing and cannot alter the explicit denotation.
+-    # They permit concrete equality of record outputs without requiring the proposal to
+-    # have declared instances. Any derivation unsupported by Lean simply yields UNKNOWN.
+-    derives = _derivations(profile)
++    # Equality preparation reuses actual audited definitions or derives missing
++    # carriers without altering the explicit denotation. Unsupported derivation
++    # or a generated-name collision simply yields UNKNOWN.
++    try:
++        derives = _derivations(profile, expected_env, namespace=ns)
++    except ValueError as exc:
++        return {"ok": False, "reason": str(exc)}
+     extra = (f"\nnamespace {ns}\n{derives}\n"
+              f"theorem closed_check : {_expr_lean(expr)} := by decide +kernel\nend {ns}\n").encode()
+     source = base + extra

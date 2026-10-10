@@ -1,0 +1,47 @@
+{
+  "format": "verislop.carrier-context-capture-amendment/1",
+  "status": "PROSPECTIVE_CAPTURE_ONLY_NOT_QUALIFIED_NOT_ACTIVE",
+  "candidate_revision": "002",
+  "capture_amendment": "001",
+  "source_review_status_from_root": "FINAL/STOP, no concrete code finding",
+  "source_review_manifest_sha256_from_root": "sha256:2afddb4392e882beee35e48f75dac2f7dc2df7ab8fba25a23a1c357d8f3359a0",
+  "concrete_mismatch": "functions.exec exposes rendered items but not its hidden native outer HTTP/MCP envelope or separated exec_command stdout/stderr/PID; the original protocol no-augmentation rule cannot provide an externally complete nested result when the outer rendered item truncates",
+  "scope": "Qualification collector capture only; original002 candidate, source helpers, source tests, protocol and model author message stay immutable",
+  "authorized_observer_transformation": {
+    "original_line": "text(await tools.exec_command({cmd, max_output_tokens: 16384}));",
+    "replacement": [
+      "const ACTUAL_RESULT = await tools.exec_command({cmd, max_output_tokens: 16384});",
+      "text(ACTUAL_RESULT);",
+      "store(<literal fixed own collector result key>, {result: ACTUAL_RESULT, view: VIEW});"
+    ],
+    "key": "Render OWN_COLLECTOR_RESULT_KEY as a literal JSON string in store; freeze its own carrier path/rawSHA and registered collector case identity before execution",
+    "unchanged": ["reader", "reference", "PREFIX", "VIEW", "normal outer20000/nested16384", "one nested call", "one actual-result forward"],
+    "permitted_other_change": "Only previously registered fault-case budget256 overrides, isolated from normal recipes",
+    "forbidden": ["eval", "function from source string", "loop", "batch", "automatic cursor advancement", "viewer helper file read", "second result forward", "synthetic result substituted for actual tool object"]
+  },
+  "observable_evidence": {
+    "nested_object": "Actual JavaScript object returned by exec_command, assigned before one text forward and retained with exact explicit VIEW in own collector session state",
+    "nested_output": "Exact returned output string, which the tool exposes as combined output; hash strict UTF8 bytes without labeling it separate stdout or stderr",
+    "completion": "Actual returned integer exit_code when present; unresolved/missing completion cannot certify a completed view",
+    "outer": "Exact visible rendered items and explicit observed outer truncation; do not label these the hidden native outer envelope",
+    "submitted_code": "Exact frozen submitted recipe, command string and explicit VIEW bytes/hash"
+  },
+  "unavailable_evidence": {
+    "hidden_native_outer_http_mcp_envelope": "UNAVAILABLE",
+    "separated_exec_command_stdout": "UNAVAILABLE",
+    "separated_exec_command_stderr": "UNAVAILABLE",
+    "exec_command_pid": "UNAVAILABLE",
+    "rule": "Never fabricate, infer or relabel unavailable evidence; outside all availability claims"
+  },
+  "trusted_boundary": "Availability and retry claims explicitly trust the tool runtime to return the actual exec_command object, forward text(ACTUAL_RESULT), finish the store after rendered truncation and retain exact own-session values. No hidden-envelope identity or LLM consumption is certified.",
+  "retained_qualification": [
+    "Fresh >400000 decoded user character full system-before-user exact reconstruction to EOF/tail",
+    "Both actual256 truncation faults with unchanged cursor and normal-cap same-cursor retry",
+    "Actual both-empty explicit EOF control",
+    "Exactly one fresh gpt-6.1-sol fork-none unrelated author using ORIGINAL plain002 exact agent_message",
+    "Old001 failed attempt immutable and unrescored"
+  ],
+  "execution_gate": "Root source-only review, registered capture freeze and explicit authorization; no fixture materialization, actual channel or model call now",
+  "production_or_sealed_root_edits": [],
+  "activation_authority": false
+}

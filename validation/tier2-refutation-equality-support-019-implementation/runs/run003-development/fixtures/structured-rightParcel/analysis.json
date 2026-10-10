@@ -1,0 +1,372 @@
+{
+  "defeq_requests": [
+    {
+      "expr": {
+        "pi": {
+          "bi": "default",
+          "body": {
+            "app": [
+              {
+                "const": [
+                  "Eq"
+                ],
+                "levels": [
+                  1
+                ]
+              },
+              {
+                "const": [
+                  "VeriSlopAST",
+                  "AParcel"
+                ],
+                "levels": []
+              },
+              {
+                "app": [
+                  {
+                    "const": [
+                      "VeriSlopAST",
+                      "carry"
+                    ],
+                    "levels": []
+                  },
+                  {
+                    "app": [
+                      {
+                        "const": [
+                          "VeriSlopAST",
+                          "carry"
+                        ],
+                        "levels": []
+                      },
+                      {
+                        "bvar": 0
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "bvar": 0
+              }
+            ]
+          },
+          "name": [
+            "x"
+          ],
+          "type": {
+            "const": [
+              "VeriSlopAST",
+              "AParcel"
+            ],
+            "levels": []
+          }
+        }
+      },
+      "id": "O1",
+      "theorem": [
+        "VeriSlopAST",
+        "rightParcel"
+      ]
+    }
+  ],
+  "diagnostics": [],
+  "profile": {
+    "data_semantics": "String is a sequence of Unicode scalar values; lists preserve order and duplicates; records have fixed ordered fields",
+    "dsl": "verislop.contract-dsl/0.2",
+    "enums": {
+      "Token": {
+        "constructors": [
+          "amber",
+          "violet"
+        ],
+        "decidable_eq": {
+          "decl_hash": "sha256:70e862711ee75a03091f62b62bea6890c8871a174565a57b66f56223f47d715d",
+          "lean_decl": "VeriSlopAST.instDecidableEqToken"
+        },
+        "decl_hash": "sha256:87d92f142744082b94898f5124b09c81fc814561b51f4c1337e2174a9d4919d8",
+        "lean_constructors": [
+          "VeriSlopAST.Token.amber",
+          "VeriSlopAST.Token.violet"
+        ],
+        "lean_decl": "VeriSlopAST.Token"
+      }
+    },
+    "evaluation_semantics": "pure total functions; no I/O, mutation, concurrency or nondeterminism",
+    "numeric_semantics": "Nat denotes Lean's arbitrary-precision natural numbers; sub is truncated subtraction; no machine width; Int denotes arbitrary-precision signed integers with exact add/sub/mul/neg",
+    "predicates": {},
+    "profile_id": "equality019.structured",
+    "records": {
+      "AParcel": {
+        "constructor_hash": "sha256:1eeb02c0618bdb394982742a63131539ba8c4131bf570af47628f4bfd5711c61",
+        "decl_hash": "sha256:7f886de37bb7dfdeb77871e03c002b0adce996408f30e1caef3fb55a89200cb6",
+        "fields": [
+          {
+            "lean_projection": "VeriSlopAST.AParcel.leaf",
+            "name": "leaf",
+            "projection_hash": "sha256:bcf9748fb897ef495b023cddc45a36d65b1bcd1b19835047ee63745490d1328b",
+            "sort": {
+              "record": "ZLeaf"
+            }
+          },
+          {
+            "lean_projection": "VeriSlopAST.AParcel.spare",
+            "name": "spare",
+            "projection_hash": "sha256:9456c7984382190feaf0b5209b02a98d4ee6be75a12a92f65c29f626c478317f",
+            "sort": {
+              "option": {
+                "enum": "Token"
+              }
+            }
+          },
+          {
+            "lean_projection": "VeriSlopAST.AParcel.history",
+            "name": "history",
+            "projection_hash": "sha256:5a950860f8fae799d29eb5fea92a0bcab619e37a7328cceae6264ff69888bfd8",
+            "sort": {
+              "list": {
+                "record": "ZLeaf"
+              }
+            }
+          },
+          {
+            "lean_projection": "VeriSlopAST.AParcel.outcome",
+            "name": "outcome",
+            "projection_hash": "sha256:d45d69a01b518ba42b54dc4171d88a57166ffc47b4b341a57dd8d9f7f3b17df5",
+            "sort": {
+              "result": {
+                "error": {
+                  "enum": "Token"
+                },
+                "ok": {
+                  "record": "ZLeaf"
+                }
+              }
+            }
+          }
+        ],
+        "lean_constructor": "VeriSlopAST.AParcel.mk",
+        "lean_decl": "VeriSlopAST.AParcel"
+      },
+      "ZLeaf": {
+        "constructor_hash": "sha256:c09526131755e1476827310aa1cc44622fb3786867926674f72d3f3c3b60fa18",
+        "decl_hash": "sha256:0c478f1cd45a7a24d3899f3bd5febaf2e01339546a1953caa3ee04fc76393a84",
+        "fields": [
+          {
+            "lean_projection": "VeriSlopAST.ZLeaf.token",
+            "name": "token",
+            "projection_hash": "sha256:1573eb1afdeded17e3dcc3f9793244482e4b3e4bcd8345f378b2ebca41b57ae9",
+            "sort": {
+              "enum": "Token"
+            }
+          },
+          {
+            "lean_projection": "VeriSlopAST.ZLeaf.amount",
+            "name": "amount",
+            "projection_hash": "sha256:c219c216acd363abcf4cfe955f3bf3196a573c6bba04e8425bd50c4b41da3565",
+            "sort": "Nat"
+          }
+        ],
+        "lean_constructor": "VeriSlopAST.ZLeaf.mk",
+        "lean_decl": "VeriSlopAST.ZLeaf"
+      }
+    },
+    "result_semantics": "Result(E, A) denotes Except E A; the error sort is the first parameter",
+    "symbols": {
+      "carry": {
+        "args": [
+          {
+            "record": "AParcel"
+          }
+        ],
+        "decl_hash": "sha256:c5da8f3249ac74557e95ae915639353edfa54c379c7ba40d9121a1a3a257bbb2",
+        "lean_decl": "VeriSlopAST.carry",
+        "level_params": [],
+        "result": {
+          "record": "AParcel"
+        }
+      },
+      "ctorIdx": {
+        "args": [
+          {
+            "enum": "Token"
+          }
+        ],
+        "decl_hash": "sha256:f2d5e04532ac85c3b72bf2258391d4078aa0362cfbebd6346ce940745fb769e2",
+        "lean_decl": "VeriSlopAST.Token.ctorIdx",
+        "level_params": [],
+        "result": "Nat"
+      },
+      "swap": {
+        "args": [
+          {
+            "enum": "Token"
+          }
+        ],
+        "decl_hash": "sha256:5964c515d0c33458d9e9f158c1363f6f1141350963e9bcc3192743f6125ec685",
+        "lean_decl": "VeriSlopAST.swap",
+        "level_params": [],
+        "result": {
+          "enum": "Token"
+        }
+      }
+    }
+  },
+  "registry": [
+    {
+      "acceptance_criteria": [],
+      "bindings": [
+        "VeriSlopAST.Token",
+        "VeriSlopAST.ZLeaf",
+        "VeriSlopAST.AParcel",
+        "VeriSlopAST.swap",
+        "VeriSlopAST.carry"
+      ],
+      "dependencies": [],
+      "id": "D1",
+      "kind": "entity",
+      "required": true,
+      "revision": 1,
+      "role": "declaration",
+      "scope": [
+        "generic-equality019"
+      ],
+      "source_refs": [],
+      "statement": "Fresh unrelated equality support fixture"
+    },
+    {
+      "acceptance_criteria": [],
+      "bindings": [
+        "VeriSlopAST.rightParcel"
+      ],
+      "dependencies": [],
+      "id": "O1",
+      "kind": "postcondition",
+      "required": true,
+      "revision": 1,
+      "role": "guarantee",
+      "scope": [
+        "generic-equality019"
+      ],
+      "source_refs": [],
+      "statement": "Fresh unrelated equality support fixture"
+    }
+  ],
+  "statements": {
+    "D1": {
+      "bindings": [
+        "VeriSlopAST.Token",
+        "VeriSlopAST.ZLeaf",
+        "VeriSlopAST.AParcel",
+        "VeriSlopAST.swap",
+        "VeriSlopAST.carry"
+      ],
+      "hypotheses": [],
+      "id": "D1",
+      "kind": "entity",
+      "lean_symbol": "VeriSlopAST.Token",
+      "representation": "typed_metadata",
+      "revision": 1,
+      "role": "declaration",
+      "semantic_closure": {
+        "VeriSlopAST.AParcel": "sha256:7f886de37bb7dfdeb77871e03c002b0adce996408f30e1caef3fb55a89200cb6",
+        "VeriSlopAST.AParcel.history": "sha256:5a950860f8fae799d29eb5fea92a0bcab619e37a7328cceae6264ff69888bfd8",
+        "VeriSlopAST.AParcel.leaf": "sha256:bcf9748fb897ef495b023cddc45a36d65b1bcd1b19835047ee63745490d1328b",
+        "VeriSlopAST.AParcel.mk": "sha256:1eeb02c0618bdb394982742a63131539ba8c4131bf570af47628f4bfd5711c61",
+        "VeriSlopAST.AParcel.outcome": "sha256:d45d69a01b518ba42b54dc4171d88a57166ffc47b4b341a57dd8d9f7f3b17df5",
+        "VeriSlopAST.AParcel.spare": "sha256:9456c7984382190feaf0b5209b02a98d4ee6be75a12a92f65c29f626c478317f",
+        "VeriSlopAST.Token": "sha256:87d92f142744082b94898f5124b09c81fc814561b51f4c1337e2174a9d4919d8",
+        "VeriSlopAST.Token.amber": "sha256:d5c3f730b1cee7aa541c939f21eb4b52316c976feaf0b6fb98f30aab29ef5e5d",
+        "VeriSlopAST.Token.casesOn": "sha256:0e287963d8bdbdca036d82e3c28b93551e82fd785e113d2f82c2dd7fb134ea7e",
+        "VeriSlopAST.Token.ctorIdx": "sha256:f2d5e04532ac85c3b72bf2258391d4078aa0362cfbebd6346ce940745fb769e2",
+        "VeriSlopAST.Token.rec": "sha256:7f22af1c9fcf14498f1a445bdd5cae44127d96865d457706cfb8f761e597ba90",
+        "VeriSlopAST.Token.violet": "sha256:fccccecb371c4b7b08bfd1adac5185752306cff2504a9b00f8c1a84b7fb872c4",
+        "VeriSlopAST.ZLeaf": "sha256:0c478f1cd45a7a24d3899f3bd5febaf2e01339546a1953caa3ee04fc76393a84",
+        "VeriSlopAST.ZLeaf.amount": "sha256:c219c216acd363abcf4cfe955f3bf3196a573c6bba04e8425bd50c4b41da3565",
+        "VeriSlopAST.ZLeaf.mk": "sha256:c09526131755e1476827310aa1cc44622fb3786867926674f72d3f3c3b60fa18",
+        "VeriSlopAST.ZLeaf.token": "sha256:1573eb1afdeded17e3dcc3f9793244482e4b3e4bcd8345f378b2ebca41b57ae9",
+        "VeriSlopAST.carry": "sha256:c5da8f3249ac74557e95ae915639353edfa54c379c7ba40d9121a1a3a257bbb2",
+        "VeriSlopAST.instDecidableEqToken": "sha256:70e862711ee75a03091f62b62bea6890c8871a174565a57b66f56223f47d715d",
+        "VeriSlopAST.instDecidableEqToken._proof_1": "sha256:95933ac06f962c4b7c28f40d649e5f2b87fb15c2e784b89fa2bd5c0058c01044",
+        "VeriSlopAST.instDecidableEqToken._proof_2": "sha256:80708e6932d88cc6fa4d9c695cd923d4d116d62378b992c8926cbdb98c7f431e",
+        "VeriSlopAST.swap": "sha256:5964c515d0c33458d9e9f158c1363f6f1141350963e9bcc3192743f6125ec685"
+      },
+      "semantic_closure_hash": "sha256:1c49c305ab810bc32ceaa3b1781668175d9888bc0d3550692c74bb39fdc4736f",
+      "statement_hash": "sha256:198ea43f2c62ec16c05567a4caf6909434e134e61032ff942ebc8e5c64f6f8c1",
+      "unfolded_predicates": []
+    },
+    "O1": {
+      "bindings": [
+        "VeriSlopAST.rightParcel"
+      ],
+      "display": "\u2200 x0 : AParcel, carry(carry(x0)) = x0",
+      "formula_package": {
+        "encoding": "verislop.contract-dsl/0.2",
+        "formula": {
+          "body": {
+            "left": {
+              "args": [
+                {
+                  "args": [
+                    {
+                      "index": 0,
+                      "tag": "var"
+                    }
+                  ],
+                  "symbol": "carry",
+                  "tag": "call"
+                }
+              ],
+              "symbol": "carry",
+              "tag": "call"
+            },
+            "right": {
+              "index": 0,
+              "tag": "var"
+            },
+            "tag": "eq"
+          },
+          "sort": {
+            "record": "AParcel"
+          },
+          "tag": "forall"
+        },
+        "semantic_profile": "equality019.structured"
+      },
+      "hypotheses": [],
+      "id": "O1",
+      "kind": "postcondition",
+      "lean_symbol": "VeriSlopAST.rightParcel",
+      "representation": "contract_dsl",
+      "revision": 1,
+      "role": "guarantee",
+      "semantic_closure": {
+        "VeriSlopAST.AParcel": "sha256:7f886de37bb7dfdeb77871e03c002b0adce996408f30e1caef3fb55a89200cb6",
+        "VeriSlopAST.AParcel.history": "sha256:5a950860f8fae799d29eb5fea92a0bcab619e37a7328cceae6264ff69888bfd8",
+        "VeriSlopAST.AParcel.leaf": "sha256:bcf9748fb897ef495b023cddc45a36d65b1bcd1b19835047ee63745490d1328b",
+        "VeriSlopAST.AParcel.mk": "sha256:1eeb02c0618bdb394982742a63131539ba8c4131bf570af47628f4bfd5711c61",
+        "VeriSlopAST.AParcel.outcome": "sha256:d45d69a01b518ba42b54dc4171d88a57166ffc47b4b341a57dd8d9f7f3b17df5",
+        "VeriSlopAST.AParcel.spare": "sha256:9456c7984382190feaf0b5209b02a98d4ee6be75a12a92f65c29f626c478317f",
+        "VeriSlopAST.Token": "sha256:87d92f142744082b94898f5124b09c81fc814561b51f4c1337e2174a9d4919d8",
+        "VeriSlopAST.Token.amber": "sha256:d5c3f730b1cee7aa541c939f21eb4b52316c976feaf0b6fb98f30aab29ef5e5d",
+        "VeriSlopAST.Token.casesOn": "sha256:0e287963d8bdbdca036d82e3c28b93551e82fd785e113d2f82c2dd7fb134ea7e",
+        "VeriSlopAST.Token.ctorIdx": "sha256:f2d5e04532ac85c3b72bf2258391d4078aa0362cfbebd6346ce940745fb769e2",
+        "VeriSlopAST.Token.rec": "sha256:7f22af1c9fcf14498f1a445bdd5cae44127d96865d457706cfb8f761e597ba90",
+        "VeriSlopAST.Token.violet": "sha256:fccccecb371c4b7b08bfd1adac5185752306cff2504a9b00f8c1a84b7fb872c4",
+        "VeriSlopAST.ZLeaf": "sha256:0c478f1cd45a7a24d3899f3bd5febaf2e01339546a1953caa3ee04fc76393a84",
+        "VeriSlopAST.ZLeaf.amount": "sha256:c219c216acd363abcf4cfe955f3bf3196a573c6bba04e8425bd50c4b41da3565",
+        "VeriSlopAST.ZLeaf.mk": "sha256:c09526131755e1476827310aa1cc44622fb3786867926674f72d3f3c3b60fa18",
+        "VeriSlopAST.ZLeaf.token": "sha256:1573eb1afdeded17e3dcc3f9793244482e4b3e4bcd8345f378b2ebca41b57ae9",
+        "VeriSlopAST.carry": "sha256:c5da8f3249ac74557e95ae915639353edfa54c379c7ba40d9121a1a3a257bbb2",
+        "VeriSlopAST.instDecidableEqToken": "sha256:70e862711ee75a03091f62b62bea6890c8871a174565a57b66f56223f47d715d",
+        "VeriSlopAST.instDecidableEqToken._proof_1": "sha256:95933ac06f962c4b7c28f40d649e5f2b87fb15c2e784b89fa2bd5c0058c01044",
+        "VeriSlopAST.instDecidableEqToken._proof_2": "sha256:80708e6932d88cc6fa4d9c695cd923d4d116d62378b992c8926cbdb98c7f431e",
+        "VeriSlopAST.rightParcel": "sha256:861ea8ddb5c063bd2522c91914d4761a5ced46056fab56fd44b4266d06c91e03",
+        "VeriSlopAST.swap": "sha256:5964c515d0c33458d9e9f158c1363f6f1141350963e9bcc3192743f6125ec685"
+      },
+      "semantic_closure_hash": "sha256:0e90abb1dc972ecfefb1cc3fe0c8208d9c80dafcb163519a240a8901fd017018",
+      "statement_hash": "sha256:449f693450796abe1c52d692effb6e4fce41e19ea461531208fe8e8fdbdbd46f",
+      "unfolded_predicates": []
+    }
+  }
+}

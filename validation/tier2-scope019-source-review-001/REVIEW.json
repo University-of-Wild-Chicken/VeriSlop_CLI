@@ -1,0 +1,155 @@
+{
+  "findings": [
+    {
+      "affected": [
+        "AUD-01",
+        "AUD-02",
+        "AUD-03"
+      ],
+      "class": "MISSING_EXACT_BINDING",
+      "concrete_counterexample": {
+        "native_driver": {
+          "path": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver-019/orchestration-specification.json",
+          "sha256": "5b195970c8294e9cf28256ad23becdfdd9b0970ca932572dc013b01a7ae6c04a"
+        }
+      },
+      "defect": "Replacing only native_driver in an otherwise acceptable future spec with the sealed orchestration JSON satisfies every driver-specific source guard. The binder hashes this JSON as the sole driver, though it is not driver.py. It does not authenticate exact driver.py or its sealed driver manifest/seal. No actual full binding was run.",
+      "id": "SRC019-01",
+      "predicate_result": {
+        "driver.is_relative_to(DRIVER_ROOT)": true,
+        "path_text_accepts_regular_resolved_path": true,
+        "reader.raw_hash_is_actual": true
+      },
+      "repair": "Freeze and enforce the exact driver.py path and its registered seal/manifest binding, preserving current bytes.",
+      "source": "bind-pre-generation-001.py:631"
+    },
+    {
+      "affected": [
+        "AUD-01",
+        "AUD-02",
+        "AUD-03"
+      ],
+      "class": "SCHEMA_PATH_EXCLUSION",
+      "concrete_counterexample": {
+        "controller_inputs_item": {
+          "path": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver019-activation-amendment-001/source-binding-amendment.json",
+          "sha256": "df3918b1d2f64dccca03cb5a85496a10c449ec92c616b875da990e2559e56165"
+        }
+      },
+      "defect": "The append-only fresh-root activation amendment is outside DRIVER_ROOT, so the only public controller-metadata binding field rejects it. The binder has no dedicated activation-amendment/actual-activation-record field. This is a concrete interface gap for direct authentication of the required supersession; external root authentication remains mandatory and can be implemented separately.",
+      "id": "SRC019-02",
+      "predicate_result": {
+        "activation_specific_schema_field_exists": false,
+        "p.is_relative_to(DRIVER_ROOT)": false
+      },
+      "repair": "Before activation, add a separately registered activation binding or a separate registered root activation checker. Keep the sealed native019 source unchanged; require all actual prerequisites and exact fresh roots.",
+      "source": "bind-pre-generation-001.py:638"
+    },
+    {
+      "affected": [
+        "AUD-01",
+        "AUD-03"
+      ],
+      "class": "CLOSED_SCHEMA_NOT_ENFORCED",
+      "concrete_counterexample": {
+        "extension_to_otherwise_valid_spec": {
+          "unexpected_binding_field": true
+        }
+      },
+      "defect": "The registered schema prohibits extra top-level fields, but main/execute only hash the schema and read selected spec keys; they never validate the spec against it or compare its key set. An unused extra field does not affect any source guard. This is a closed-schema conformance gap, not evidence that qualification claims can be bypassed.",
+      "id": "SRC019-03",
+      "predicate_result": {
+        "execute_calls_schema_validation": false,
+        "schema_additionalProperties": false
+      },
+      "repair": "Enforce the complete closed binding schema or equivalent exact typed-key checks before imports or binding.",
+      "source": "bind-pre-generation-001.py:586"
+    }
+  ],
+  "format": "verislop.scope019-bounded-source-review/1",
+  "future_roots_unresolved": true,
+  "interfaces": {
+    "actual_phase_index_eight_serialized_receipts_outputs_checked": true,
+    "all27_final_and_predicate_claim_ids_and_source_roots_are_checked": true,
+    "binding_PASS_does_not_authorize_generation": true,
+    "complete_input_map_is_rehashed": true,
+    "exact_registered_finalizer_predicate_admission_argv_and_positive_pid_numeric_zero_status_checked": true,
+    "source_semantic_boundary_preserved": "Tier2 restricted_source only; Python/Tier3/Tier4/compiler/machine/physical guarantees excluded; optional TESTED PENDING; model/consumption UNATTESTED",
+    "whole_engineering_record_validator_is_called_from_authenticated_project_copy": true
+  },
+  "no_old_PASS_reuse_authorized": true,
+  "preservation": {
+    "activation_amendment_bindings_match": true,
+    "checks": [
+      "AUD-01",
+      "AUD-02",
+      "AUD-03",
+      "AUD-04",
+      "AUD-05",
+      "AUD-06",
+      "AUD-07",
+      "AUD-08",
+      "AUD-09",
+      "AUD-10",
+      "AUD-11",
+      "AUD-12",
+      "AUD-13",
+      "AUD-14",
+      "AUD-15",
+      "AUD-16",
+      "AUD-17",
+      "AUD-18",
+      "AUD-19",
+      "AUD-20",
+      "AUD-21",
+      "AUD-22",
+      "AUD-23",
+      "AUD-24"
+    ],
+    "original_ids": [
+      "D1",
+      "A1",
+      "O1",
+      "O2",
+      "O3",
+      "O4",
+      "O5",
+      "O6",
+      "O7",
+      "I1",
+      "S1"
+    ],
+    "public_probes": 9,
+    "scope_plan_root_matches": true,
+    "scope_source_seal_matches": true,
+    "sealed_source_count": 16,
+    "sealed_sources_match": true,
+    "six_definitions_byte_identical018": true,
+    "statement_plus_acceptance_clauses": 42
+  },
+  "review_boundary": "Static finite source checks and conditional source counterexamples only. No runtime, task, current admission, lifecycle or closure PASS. Root must resolve findings with specification-first new source/binding packages, and execute separate fresh registered checks.",
+  "runtime_authority": false,
+  "static_counterexample_observations": {
+    "activation_amendment_is_absolute_resolved": true,
+    "activation_amendment_passes_controller_root_guard": false,
+    "activation_amendment_top_level_schema_field_present": false,
+    "controller_input_schema_properties": {
+      "description": "All prospective public controller018 preregistration/configuration inputs. Reader hashes these files and the sole driver; it executes none.",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "native_driver_schema_properties": {
+      "$ref": "#/$defs/artifact"
+    },
+    "wrong_driver_is_absolute_resolved": true,
+    "wrong_driver_is_driver_py": false,
+    "wrong_driver_is_regular": true,
+    "wrong_driver_passes_driver_root_guard": true
+  },
+  "status": "SOURCE_FINDINGS_PRESENT_RUNTIME_UNQUALIFIED",
+  "target_execution_count": 0,
+  "task_artifact_reads": []
+}

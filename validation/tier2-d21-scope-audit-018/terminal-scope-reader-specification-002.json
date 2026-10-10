@@ -830,8 +830,8 @@
     }
   },
   "read_classification": {
-    "bound": "All explicit Reads.raw/artifact inputs, every external verifier Python read not in a newly-created registered temporary tree, and every archive copy. First digest immutable; final reopen/hash all paths.",
-    "ephemeral": "Only observed fresh tempfile.mkdtemp roots created while qualified terminal execution is enabled, outside all existing bound paths. Qualified route source/path and creation event retained; each read version archived losslessly under audit output. Existing paths, including existing /tmp evidence, cannot be reclassified.",
+    "bound": "Every explicit Reads.raw/artifact input is always bound, regardless of path or any transient classification. Every external verifier Python read outside an actually newly-created registered temporary tree and every lossless archive copy are bound. All roots under the repository, including HERE/COHORT/DRIVER/project/source/qualification/receipt paths, can never be classified transient. First digest immutable; independently reopen/hash every bound path at completion, including mutated/deleted external paths.",
+    "ephemeral": "Only an observed fresh tempfile.mkdtemp event whose stack contains the exact loaded, source-bound fsutil.temporary_directory.__wrapped__.__code__ object can admit a new root outside the entire repository. The root must not already exist or contain any first-bound path. Merely a source filename, /tmp location or prefix grants no exemption. Each hook-observed generated read version is losslessly archived. Explicit raw/artifact reads still force bound treatment; generated work cleanup is allowed only for these separately archived transient observations.",
     "phase_boundary": "Complete AUD24 final reread immediately before reporting; no further verification/task/evidence reads are permitted after its bound set is finalized."
   },
   "registered_routes": [
@@ -875,6 +875,18 @@
     "AUD24": "Every external/input first-read path has a permanent initial digest. Every later read of that same path must match, including verifier-hook reads. The completion check independently reopens every such path and hashes actual bytes; missing/changed paths fail. This includes binding/interpretation/actorstop/seals/actual process receipts/external references. Only actual newly created verification temporary directories observed through tempfile.mkdtemp during registered execution can be classified ephemeral; each ephemeral read is losslessly archived and cannot exempt an already-bound path. Existing /tmp inputs remain bound; final archives are themselves bound and rehashed."
   },
   "retained_route": {
+    "actual_process_required": [
+      "argv",
+      "cwd",
+      "timeout_seconds (null; no outer timeout override)",
+      "returncode (actual integer0)",
+      "timed_out (false)",
+      "started_at_utc",
+      "ended_at_utc",
+      "output_files (exact new result basename -> exact result SHA256)",
+      "stdout (path,sha256)",
+      "stderr (path,sha256)"
+    ],
     "actual_result_format": "verislop.stage018-retained-route-result/2",
     "apis": [
       "verislop.bridges.vscore3_checker.verify_published(pkg, \"implementation\", rebuild=False)",
@@ -927,6 +939,7 @@
       "second_probe_process",
       "second_probe_result"
     ],
+    "result_binding": "Full accepted publication list, mechanical snapshot, supervisor-reconstructed native claim and current roots equal actual independent current API results; selected required edge claim root_kind determines the expected root, which is not assumed to be closure_root. Full first/second/current probe equality and registered source/checker/process identity are independently required.",
     "root_removal_observation_format": "verislop.stage018-root-removal-observation/1"
   },
   "sealed_inventory": {

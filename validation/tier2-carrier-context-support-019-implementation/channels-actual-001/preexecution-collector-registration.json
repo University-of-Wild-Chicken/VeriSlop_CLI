@@ -1,0 +1,43 @@
+{
+  "format": "verislop.cc019.actual-channel-collector-registration/1",
+  "status": "REGISTERED_BEFORE_EXECUTION",
+  "rootFreeze": "/home/augustus/VeriSlop_CLI/validation/tier2-carrier-context-support-019-implementation/root-reviewed-frozen-candidate-001.json",
+  "inputFreeze": "/home/augustus/VeriSlop_CLI/validation/tier2-carrier-context-support-019-implementation/fixture-input-freeze-actual-001.json",
+  "fixtureOnly": true,
+  "activation_authority": false,
+  "cases": [
+    "CC019-AC-001",
+    "CC019-AC-002",
+    "CC019-AC-003"
+  ],
+  "exactForwardingOriginal": "text(await tools.exec_command({cmd, max_output_tokens: 16384}));\n",
+  "exactReplacement": "const ACTUAL_RESULT = await tools.exec_command({cmd, max_output_tokens: 16384});\ntext(ACTUAL_RESULT);\nstore(\"verislop.cc019.collector.pending\", {nested_result: ACTUAL_RESULT, cmd, view: VIEW, prefix: PREFIX});\n",
+  "normalOuterCap": 20000,
+  "normalNestedCap": 16384,
+  "negativeNestedCap": 100,
+  "negativeOuterCap": 100,
+  "negativeAndRetryView": {
+    "operation": "field",
+    "selector": "/user",
+    "start_char": 0,
+    "output_cap_bytes": 4096,
+    "metadata_reserve_bytes": 2048
+  },
+  "rule": "one explicitly selected closed VIEW per actual functions.exec call; separate collector calls may read evaluator original and write own collector records; no viewer helper/loop/batch/automatic cursor advance",
+  "outerCapture": "manual exact visible completion and rendered raw output; hidden metadata UNAVAILABLE",
+  "stdioSeparation": "UNAVAILABLE: tool reports merged output only",
+  "pid": "UNAVAILABLE",
+  "emptyControl": {
+    "required": true,
+    "materializeBeforeFirstActual": true,
+    "system": "",
+    "user": "",
+    "request_id": "unrelated-empty-019-control",
+    "referenceTemplateChange": "test-only own empty carrier path and exact hashes; preserve inline reader"
+  },
+  "authorityLimits": [
+    "finite availability/progress only",
+    "no semantic consumption/correctness/review/TESTED/lifecycle/token claim",
+    "no fresh author execution by collector"
+  ]
+}

@@ -1,0 +1,24 @@
+--- sealed-implementation001/contract_refutation_candidate.py
++++ implementation002/contract_refutation_candidate.py
+@@ -397,6 +397,12 @@
+                             if row.get("type") == equality_type)
+         for equality_name in candidates:
+             try:
++                equality_reference = _qualified(equality_name)
++            except ValueError:
++                # Private kernel names can contain numeric components that the
++                # existing printer cannot express. Try other audited definitions.
++                continue
++            try:
+                 # This existing audit checks the nominal type and computable
+                 # declaration closure; its checks apply to record carriers too.
+                 reify._enum_equality_declaration(equality_name, name,
+@@ -407,7 +413,7 @@
+             if namespace + "." + alias in expected_env.decls:
+                 raise ValueError("generated equality alias name already exists")
+             lines.append("local instance " + alias + " : _root_.DecidableEq "
+-                         + _qualified(name) + " := " + _qualified(equality_name))
++                         + _qualified(name) + " := " + equality_reference)
+             break
+         else:
+             lines.append("deriving instance _root_.DecidableEq for " + _qualified(name))

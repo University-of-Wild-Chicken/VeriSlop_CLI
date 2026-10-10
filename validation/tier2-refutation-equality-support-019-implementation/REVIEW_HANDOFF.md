@@ -1,0 +1,13 @@
+# Candidate 019 review handoff
+
+Status DEVELOPMENT_ONLY_READY_FOR_ROOT_SOURCE_REVIEW. Production is unchanged, installation is not authorized by this artifact, and none of these passes can be reused as ROOT003 qualification.
+
+The candidate changes only `_derivations` and the `_proof` preparation call: exact actual-Env equality definitions are audited through the existing computable-closure validator and reused through deterministic proof-local aliases; missing enum/record equality derives in the existing dependency order. Namespace-aware alias collision checks fail closed. All source from the unchanged proof theorem construction through kernel acceptance, hash/defeq/axiom checks, receipts and the rest of the file is byte-identical to production. Compiler/kernel resource caps are unchanged.
+
+The latest actual development evidence covers 44 controls, all PASS. Complete raw results are preserved by attempt: run001 interrupted (0 PASS/5 FAIL), run002 (1/38), run003-development (37/2), run004 additional (3/1), run005 focused admission (1/0), and run006 focused unresolved controls (3/0). Earlier failures are neither overwritten nor rescored. Fixture corrections and their scope are recorded in frozen amendments. DEVELOPMENT review maps each final control to its actual run and source freeze.
+
+Across all attempts, 339 complete process receipts are retained: 156 compiler and 183 kernel processes, with zero completed process timeouts. One interrupted run001 kernel invocation has no returned SandboxResult; its unavailability is explicit. The evidence includes requested/launcher commands, resource options, raw stdout/stderr, compiler process details, fresh staged source/module parts, kernel requests/responses and fresh proof receipts. Positive proofs retain exact original declaration hashes, closed safe roots, zero sorry dependencies, exact theorem defeq and artifact/receipt hashes. Deliberate synthetic Env/export mutations are distinctly labeled negative controls.
+
+The result-field positive fixtures explicitly supply a safe proof-producing Except equality prerequisite, whose actual replayed type, closure, axioms and declaration hashes are recorded. Its absence remains UNKNOWN. This does not claim production result-equality support or repair the preexisting behavior where all-profile derivations can block an unrelated enum proof on an unsupported record.
+
+No production/docs/tests edits, native task/artifact contents, old task answers, inference deadline changes or model calls were used. The sealed manifest binds candidate/tests, original production inputs, all attempt evidence and this handoff. Stop here for separate root/source review and future installation authorization.

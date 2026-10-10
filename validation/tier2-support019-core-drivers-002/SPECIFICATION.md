@@ -1,0 +1,13 @@
+# Support019 carrier-pure observational witnesses: specification before code
+
+Status PROSPECTIVE_SOURCE_ONLY_SPECIFICATION_FROZEN. This new driver revision preserves core-drivers001 and adds observation to its exact 30 carrier/capture pure controls. No tests, models, builds, fixtures, actual channels, probes or task artifacts are executed or accessed during preparation. Only this new directory may be written.
+
+The driver is copied from `validation/tier2-support019-core-drivers-001/verify_carrier_controls.py`. Its exact control IDs/start/result accounting, assertions, candidate binding (`9930beff878848b05c8d69245fff12c1388f14254b6630504b36748c4c294366`), frozen source/hash guards, and acceptance predicates remain unchanged. This amendment supplies independently interpretable observations and does not turn control labels into semantic authority.
+
+Observational delegating wrappers are added around the original candidate `node_templates`, capture `inert_node`, each test instance's `carrier` and `read` after the original `setUp`, and actual `subprocess.run`. Each wrapper captures its exact supplied arguments and the original actual return object (or exception), without changing arguments, outputs, object identity, control assertions, fixture semantics or adding I/O while the call is observed. Carrier calls retain raw supplied bytes where present and exact returned reference/document. Read calls retain exact reference/VIEW and returned bytes. Subprocess calls retain argv/options, returncode/args/stdout/stderr and the original result type.
+
+The new `semantic-witnesses.json` sidecar binds source/input roots, source references/hashes, producer identity and exact case IDs to globally sequenced, role-indexed observed frames and parent-call relationships. Byte values retain base64, SHA-256 and byte count; strings retain exact Unicode and UTF-8 binding. This permits an independent reader to reconstruct generated own fixtures, decode actual reader/subprocess outputs, and recompute one-forward/own-state/default/server-malformed and original-byte comparisons instead of relying on a producer's case label. The reader's agreed schema is frozen before driver code is written.
+
+The existing producer report gains the exact sidecar path/hash/byte count. Sidecar contents contain observations, not semantic PASS assertions. Sidecar writing occurs only after the unchanged tests and final source/hash guard finish in a future separately frozen run. The prepared amendment is SOURCE_REVIEW_READY_NOT_RUN, grants no qualification reuse and leaves unresolved closure obligations BLOCKED.
+
+FINAL/STOP after source preparation and sealing. Core001, production sources, original tests/assertions and all existing evidence remain unchanged by this task.

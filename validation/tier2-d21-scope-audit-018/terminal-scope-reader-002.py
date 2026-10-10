@@ -127,10 +127,10 @@ class Reads:
             raise Block("INPUT_MUTATION: a previously read path changed: " + key)
         self.first.setdefault(key, digest)
 
-    def _observe(self, p, data, purpose):
+    def _observe(self, p, data, purpose, *, force_bound=False):
         # A pre-existing bound input can never become a generated temporary.
         roots = [root for root in self.temporary_roots if p.is_relative_to(root)]
-        if not roots or str(p) in self.first:
+        if force_bound or not roots or str(p) in self.first:
             self._bound(p, data, purpose)
             return
         need(self.archive_root is not None, "EVIDENCE_MISSING", "temporary-read archive is unavailable")
@@ -156,7 +156,7 @@ class Reads:
             self.busy = False
         self.busy = True
         try:
-            self._observe(p, data, purpose)
+            self._observe(p, data, purpose, force_bound=True)
         finally:
             self.busy = False
         if expected is not None:
@@ -215,7 +215,7 @@ class Reads:
                 if name in self.verification_sources or name == str(HERE / "terminal-scope-reader-002.py"):
                     callers.append({"path":name,"function":frame.f_code.co_name})
                 frame = frame.f_back
-            if actual_creator and not root.exists() and any(c["path"] == str(PROJECT / "verislop/fsutil.py") and
+            if actual_creator and not root.exists() and not root.is_relative_to(REPO) and any(c["path"] == str(PROJECT / "verislop/fsutil.py") and
                                          c["function"] == "temporary_directory" for c in callers):
                 need(not any(Path(path).is_relative_to(root) for path in self.first),
                      "INPUT_MUTATION", "a bound input was reclassified as temporary")

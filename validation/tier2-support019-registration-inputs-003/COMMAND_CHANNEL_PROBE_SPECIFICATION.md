@@ -1,0 +1,3 @@
+# Generic large-command channel prerequisite
+
+Before adopting a checkpoint hash recipe that puts the complete reconstructed field into a shell command, test the actual exposed command channel with a harmless140000-character comment followed by a small Python print. The probe uses no carrier, task input, model, proof, fixture expected answer or output file. Register the exact command bytes before invoking them; retain the actual result or error unchanged. Success establishes only that this generic command is accepted by the current tool channel. Failure is a concrete transport constraint requiring an alternative own-state hashing recipe. It grants no runtime qualification or lifecycle authority.

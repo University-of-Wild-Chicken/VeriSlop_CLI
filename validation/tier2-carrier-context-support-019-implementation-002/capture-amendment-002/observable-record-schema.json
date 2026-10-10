@@ -1,0 +1,39 @@
+{
+  "format": "verislop.carrier-context-observable-record-schema/2",
+  "capture_amendment": "002",
+  "status": "PROSPECTIVE_SCHEMA_NO_ACTUAL_RECORD",
+  "record_requirements": {
+    "case_id": "Registered case identity",
+    "submitted_recipe_utf8_sha256": "Hash exact submitted source bytes, including literal fixed own collector key, explicit VIEW and registered caps",
+    "submitted_tool_cmd_utf8_sha256": "Hash exact cmd string passed to exec_command; source-bound tool input, not hidden native argv or PID",
+    "own_result_key": "Exact frozen literal own collector case/path/rawSHA key",
+    "retained_result": "Actual exec_command return object read from only that own key, unmodified",
+    "retained_view": "Exact VIEW object stored beside that actual result",
+    "retained_result_serialization_sha256": "Hash explicit registered canonical JSON representation of observable object; never call it native wire/envelope bytes",
+    "returned_output_utf8_sha256": "Hash exact strictUTF8 bytes of actual returned combined output string; never label as separate stdout or stderr",
+    "completion": "Actual integer exit_code if available; otherwise record INCOMPLETE and forbid advancement",
+    "outer_rendered_observation": "INTACT or TRUNCATED or UNAVAILABLE, based only on actual visible rendered items",
+    "outer_visible_items": "Exact visible rendered text/items when obtainable; retain actual truncation text/metadata as visible observations",
+    "cursor_before": "Explicit selected selector/start before this view",
+    "cursor_decision": "ADVANCE only after intact original-slice validation, otherwise RETAIN",
+    "cursor_after": "Same selector/start on either actual truncation fault or incomplete/error result",
+    "tool_runtime_trust": "Explicit registered runtime return/forward/store trust boundary"
+  },
+  "always_unavailable": {
+    "hidden_native_outer_http_mcp_envelope": "UNAVAILABLE",
+    "separated_stdout": "UNAVAILABLE",
+    "separated_stderr": "UNAVAILABLE",
+    "pid": "UNAVAILABLE"
+  },
+  "rules": [
+    "Schema strings describe requirements, not actual observations or values",
+    "Never fabricate hidden envelope, PID, separated streams, raw transport hashes or a truncation observation",
+    "Rendered truncation and retained nested output are different records; intact stored data does not make the outer rendered item intact",
+    "Observer retrieval does not itself advance the VIEW cursor or certify model consumption",
+    "A missing own result record fails capture availability; do not substitute guessed or resynthesized result data",
+    "If a call errors or fails before the observer store, a retained prior result is stale and cannot qualify this call; retain the error and do not advance or reuse the prior record",
+    "Full original field/identity/unit/bounds/gap/tail/EOF validation remains required for byte availability",
+    "Only observable byte availability and retry progress under explicit runtime trust are in scope"
+  ],
+  "activation_authority": false
+}

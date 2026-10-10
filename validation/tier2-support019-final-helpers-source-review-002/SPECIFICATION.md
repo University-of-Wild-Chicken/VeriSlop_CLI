@@ -1,0 +1,7 @@
+# Bounded final helper source review002
+
+Written before target-source inspection. Apply the already read mechanical-closure-verification skill and closure protocol. This is source inspection only and does not execute or inherit qualification. Preserve earlier review001 and all candidate files.
+
+Review sealed adapters002 (declared hash-manifest SHA256199c73e95c3d76c2818ed8972961410942be33d2c63e248509216d75b3039c51), orchestration002 receipt.report addition, channel-recorder002 inventory cursor None, and qualification-plan003 prefreeze clone and verification-source-manifest lifecycle. Inspect their static specifications and necessary generic caller/source hashing interfaces only. Map concrete executable counterexamples to original Q018-01..18 or additional Q019-01..09, with exact trigger and before/after disposition. No subjective assurance or additional unregistered acceptance predicates.
+
+Do not execute candidates, tests, controls, materializers, VIEW recipes, audit main, compilers, probes, models, channels, native APIs or qualification. No current/historical task/native source, candidate, formula, proof, report, output or execution-answer reads; no task/history traversal; no delegation or agent inventory. Source/AST/JSON inspection and metadata-only hashing are permitted. Edit no candidate, production, sealed root or past review. Write only this new source-review directory, recording actual inspected hashes, findings or scoped no-findings, review limits and FINAL/STOP.

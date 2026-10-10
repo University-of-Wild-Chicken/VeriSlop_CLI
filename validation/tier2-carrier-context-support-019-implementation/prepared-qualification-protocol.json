@@ -1,0 +1,73 @@
+{
+  "format": "verislop.carrier-context-prepared-qualification/1",
+  "status": "PREPARED_NOT_EXECUTED_REQUIRES_ROOT_REVIEW_AND_FREEZE",
+  "activation_authority": false,
+  "fixture_preparation": {
+    "program": "prepare_unrelated_fixture.py",
+    "execute_now": false,
+    "gate": "Root followup authorizes materialization after reviewing and freezing exact candidate source",
+    "required_frozen_manifest": {
+      "status": "ROOT_REVIEWED_FROZEN_CANDIDATE",
+      "candidate_sha256": "exact hash of bootstrap_tier2_carrier_view.py",
+      "activation_authority": false
+    },
+    "user_chars_minimum": 400000,
+    "families": ["ASCII", "multibyte scalars", "combining scalars", "JSON escapes", "control characters", "interior markers", "final Unicode and whitespace tail"],
+    "expected_output_access": "fixture-only evaluator; do not pass expectation file, hashes or answers to the fresh author"
+  },
+  "actual_channel_cases": [
+    {
+      "id": "CC019-AC-001",
+      "operation": "Run exact first template once, then exact next template once per explicitly selected contiguous view",
+      "constraints": ["outer max_output_tokens20000", "one nested exec_command max_output_tokens16384", "one actual forwarded tool result", "no loop or automatic cursor advancement"],
+      "required_result": "Independently validate every intact view against original unrelated fields; reconstruct full system then full user through explicit EOF, including empty-field control and final tail"
+    },
+    {
+      "id": "CC019-AC-002",
+      "operation": "Nested truncation negative control, then intact same-cursor retry",
+      "fault_injection": "Reviewer-approved test-only reduction of nested output budget sufficient to cause an actual tool truncation; do not install that template or budget as candidate production guidance",
+      "invariant": "Exact reader/reference prefix and closed VIEW selector/start remain identical; retain the full actual envelope, output/truncation metadata and integer completion status",
+      "required_result": "Reject the truncated response without advancing; retry the same selector/start with exact normal template caps20000/16384 and VIEW cap4096/reserve2048, then validate intact original slice"
+    },
+    {
+      "id": "CC019-AC-003",
+      "operation": "Outer truncation negative control, then intact same-cursor retry",
+      "fault_injection": "Reviewer-approved test-only reduction of outer output budget sufficient to cause actual functions.exec truncation while retaining the actual nested result in own fixture collector state; do not install that template or budget as candidate production guidance",
+      "invariant": "Exactly one nested call and one forwarded actual result; reader/reference prefix and closed VIEW selector/start remain unchanged",
+      "required_result": "Reject the outer-truncated response without advancing; retry the same selector/start with exact normal template caps20000/16384 and VIEW cap4096/reserve2048, then validate intact original slice"
+    }
+  ],
+  "fresh_author_case": {
+    "id": "CC019-FA-001",
+    "execute_now": false,
+    "gate": "Root followup after review/freeze authorizes exactly one fresh unrelated smoke author",
+    "model": "gpt-6.1-sol",
+    "fork_turns": "none",
+    "message": "Exact generated candidate agent_message bound only to own unrelated carrier reference",
+    "sole_readable_file": "own-unrelated-carrier.json",
+    "expected_behavior": "Full system-before-user contiguous inspection through both explicit EOF views; no hints, examples, previous task answers, helper/history/other-agent reads, retrieval deadline or resampling",
+    "structured_output": "One literal syntactically valid JSON response naming all preregistered fixture-only markers and exact reconstructed field SHA256 roots, EOF and decoded character totals",
+    "syntax_control": "Author may JSON.parse only its own exact draft in memory and fix syntax within the same request; controller retains and forwards literal FINAL without cleanup",
+    "required_retention": "Every original response/draft that is actually exposed, literal FINAL, actual tool envelope, native message bytes/hash, unique author identity, source/input freeze, and failed result; no cleanup or retry author",
+    "inspection_assertion_status": "UNATTESTED"
+  },
+  "required_actual_records": [
+    "Full unmodified actual exec_command result envelopes and functions.exec result envelopes, including truncation observations",
+    "Exact source/prefix/VIEW/template bytes and SHA256 roots",
+    "Exact nested command argv interpretation: python -I -B -, isolated inline source stdin, no helper file",
+    "Integer completion status; no unresolved session result counts as a completed view",
+    "Raw stdout, stderr, forwarded output and literal FINAL bytes/hashes",
+    "Explicit before/after selector and cursor for every intact, truncated, rejected and same-cursor retry record",
+    "Independent gap/overlap/tail/Unicode/UTF8/cap/EOF reconstruction against unrelated original fixture only"
+  ],
+  "authority_limits": [
+    "Prepared protocol and pure controls are not actual-channel or fresh-agent qualification",
+    "Fault injection requires explicit root review because exact normal caps exceed the bounded view size and do not guarantee actual truncation",
+    "Finite fixture availability/progress success does not attest semantic consumption or grant ACCEPT, TESTED, END_TO_END_VERIFIED, proof or lifecycle authority",
+    "No production activation before new immutable whole source/input roots, fresh registered whole-root qualification, independent actual audit and fresh native task stage",
+    "No prior source-root PASS reuse, stage018 mutation, old task answers, task-specific hints or token reduction claim"
+  ],
+  "executed_actual_channel_cases": [],
+  "executed_fresh_author_cases": [],
+  "native_task_artifact_reads": []
+}
