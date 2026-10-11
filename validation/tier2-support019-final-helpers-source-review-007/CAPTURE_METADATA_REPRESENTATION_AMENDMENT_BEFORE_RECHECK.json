@@ -1,0 +1,12 @@
+{
+  "actual_diagnostic_exit_code": 1,
+  "actual_diagnostic_pid": 3418697,
+  "actual_runtime_qualification_calls": 0,
+  "concrete_failure": "Capture CASE_IDS AST literal is a Python tuple; frozen JSON metadata represents it as a list. Reviewer compared tuple directly to list. Existing unchanged Reader.capture_literals explicitly converts top-level tuple literals to lists. All6 function hashes match and every other constant matches; canonical JSON equality confirms CASE_IDS identity.",
+  "format": "verislop.adapters006-source-review-diagnostic-amendment/1",
+  "original_diagnostic_receipt": "source-comparison-actual-process-receipt.json",
+  "qualification_authority": false,
+  "repair": "Apply exactly the already-preserved top-level tuple->list normalization to reviewer capture constant comparison. Retain original registration, process receipt, raw logs, and unchanged164 source guards; do not classify this reviewer representation mismatch as a candidate runtime/source defect.",
+  "scope": "Reviewer comparison harness representation repair only; candidate006 unchanged.",
+  "source_protocol_basis": "predicate_reader.py Reader.capture_literals unchanged005: value=ast.literal_eval(node.value); constants[...] = list(value) if isinstance(value,tuple) else value"
+}

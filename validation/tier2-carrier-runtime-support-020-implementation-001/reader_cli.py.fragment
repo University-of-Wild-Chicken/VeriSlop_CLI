@@ -1,0 +1,38 @@
+
+
+def runtime_reader_main():
+    try:
+        if len(sys.argv) != 2:
+            raise ViewError("INVALID_READER_ARGUMENTS")
+        payload = json.loads(sys.argv[1], object_pairs_hook=_pairs,
+                             parse_float=_forbidden_number,
+                             parse_constant=_forbidden_number, parse_int=_integer)
+        if type(payload) is not dict or set(payload) != {"reference", "view", "reader_sha256"}:
+            raise ViewError("INVALID_READER_ARGUMENTS")
+        expected = payload["reader_sha256"]
+        if (type(expected) is not str or len(expected) != 71 or not expected.startswith("sha256:")
+                or any(char not in "0123456789abcdef" for char in expected[7:])):
+            raise ViewError("INVALID_READER_SOURCE_IDENTITY")
+        with open(__file__, "rb") as stream:
+            actual = "sha256:" + hashlib.sha256(stream.read()).hexdigest()
+        if actual != expected:
+            raise ViewError("READER_SOURCE_IDENTITY_MISMATCH")
+        view = payload["view"]
+        required = {"operation", "output_cap_bytes", "metadata_reserve_bytes"}
+        if type(view) is not dict:
+            raise ViewError("INVALID_CLOSED_VIEW")
+        if view.get("operation") == "field":
+            required |= {"selector", "start_char"}
+        elif view.get("operation") != "inventory":
+            raise ViewError("INVALID_CLOSED_VIEW")
+        if set(view) != required:
+            raise ViewError("INVALID_CLOSED_VIEW")
+        return emit_view(payload["reference"], view)
+    except (ViewError, ValueError, TypeError, UnicodeError, OSError) as exc:
+        code = str(exc) if isinstance(exc, ViewError) else "INVALID_READER_ARGUMENTS"
+        sys.stdout.buffer.write(_failure(code, 8192))
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(runtime_reader_main())

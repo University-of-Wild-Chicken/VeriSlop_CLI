@@ -1,0 +1,23 @@
+{
+  "format": "verislop.bounded-generic-reproduction-specification/1",
+  "scope": "Unrelated public tiny partially-confirmed own carrier; source/read-only-checkpoint support interface only",
+  "authority": "NO_QUALIFICATION_AUTHORITY",
+  "historical_cause": "UNKNOWN; this probe cannot explain Q007",
+  "fixed_inputs": ["synthetic_dataset/tools/carrier_runtime020-registration.json", "synthetic_dataset/tools/carrier_runtime020/compact_protocol.py", "synthetic_dataset/tools/carrier_runtime020/reader.py", "synthetic_dataset/tools/carrier_runtime020/carrier_runtime.js", "/usr/bin/node", "/usr/bin/python3.12"],
+  "fixture": {"system": "empty string", "user": "New unrelated public 1024 ASCII scalars followed by Unicode scalars; exact bytes independently specified before runtime execution", "request_id": "public-runtime021-checkpoint-001", "task_payload": false},
+  "registered_sequence": [
+    {"id": "P01", "operation": "view", "view": {"operation": "inventory", "output_cap_bytes": 8192, "metadata_reserve_bytes": 2048}},
+    {"id": "P02", "operation": "confirm", "pending_from": "P01", "ack": "Actually exposed chunk_id and observed intact complete integer-zero outer response"},
+    {"id": "P03", "operation": "view", "view": {"operation": "field", "selector": "/system", "start_char": 0, "output_cap_bytes": 4096, "metadata_reserve_bytes": 2048}},
+    {"id": "P04", "operation": "confirm", "pending_from": "P03", "ack": "Actually exposed chunk_id and observed intact complete integer-zero outer response"},
+    {"id": "P05", "operation": "view", "view": {"operation": "field", "selector": "/user", "start_char": 0, "output_cap_bytes": 2048, "metadata_reserve_bytes": 1792}},
+    {"id": "P06", "operation": "confirm", "pending_from": "P05", "ack": "Actually exposed chunk_id and observed intact complete integer-zero outer response"},
+    {"id": "P07", "operation": "checkpoint", "view": "NONE", "expectation": "INVALID_RUNTIME_OPERATION integer status 2; accepted state bytes and all carrier/source guards unchanged"},
+    {"id": "P08", "operation": "view", "view": {"operation": "field", "selector": "/user", "start_char": "ONLY_DYNAMIC_FIELD: actual accepted P06 /user next_char", "output_cap_bytes": 2048, "metadata_reserve_bytes": 1792}},
+    {"id": "P09", "operation": "confirm", "pending_from": "P08", "ack": "Actually exposed chunk_id and observed intact complete integer-zero outer response", "expectation": "Normal advancement from the same actual accepted cursor"}
+  ],
+  "observations": ["BEFORE_SEQUENCE", "BEFORE_CHECKPOINT", "AFTER_CHECKPOINT", "AFTER_RECOVERY_VIEW", "AFTER_RECOVERY_CONFIRM"],
+  "recording": "Retain exact request, submitted runtime source/command, complete actual functions.exec nested tool result/chunk/status and combined output. Own observation helper exposes its actual PID; native runtime/reader PID and separate stderr are UNAVAILABLE if not exposed. Never substitute synthetic metadata.",
+  "constraints": "One explicit runtime operation per tool call, one reader VIEW only for each view operation. No loops, automatic retrieval, HASH, models, Q007 reads/followups, task artifacts, proofs, Lean, native activation, current27 or qualification. Proposed checkpoint is not a newly authorized production operation; this generic probe tests closed rejection only. Stop sequence on an unexpected concrete failure, retain it, and report.",
+  "claims": ["C01 current closed runtime rejects checkpoint without accepting state", "C02 rejected checkpoint does not change accepted session bytes or carrier/source identities", "C03 an explicit VIEW at the previously accepted cursor remains usable and confirms normally", "C04 the current public source provides no permitted zero-VIEW read-only checkpoint recipe; exact replay confirmation is an existing alternate state-mutating operation"]
+}

@@ -1,0 +1,229 @@
+"""Six registered source controls; JS is parsed, never executed."""
+from pathlib import Path
+import ast
+import copy
+import hashlib
+import importlib.util
+import json
+import os
+import subprocess
+import sys
+import unittest
+
+ROOT = Path(__file__).resolve().parents[2]
+HERE = Path(__file__).resolve().parent
+OLD = ROOT / "validation/tier2-support019-author-diagnostic-implementation-005"
+NEW = ROOT / "validation/tier2-support019-author-recovery-implementation-006"
+ADAPTERS = ROOT / "validation/tier2-support-019-qualification-adapters-007"
+OLD_HASH = "sha256:a56590eb051ebac28312031b157195caab0d747aa20ebc4557d70ff5b1b2921f"
+NEW_HASH = "sha256:f855de49fa8522cfc91053fe3f1f0db1ebd3c199260acbb97618d0f998c5eb4a"
+NODE = "/usr/local/bin/node"
+
+
+def load(name, path):
+    definition = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(definition)
+    definition.loader.exec_module(module)
+    return module
+
+
+def sha(raw):
+    return "sha256:" + hashlib.sha256(raw).hexdigest()
+
+
+def dump(node):
+    return ast.dump(node, include_attributes=False)
+
+
+def instruction(tree):
+    function = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "agent_message")
+    assert len(function.body) == 7
+    statement = function.body[4]
+    assert isinstance(statement, ast.Assign) and statement.targets[0].id == "instruction"
+    assert isinstance(statement.value, ast.Constant) and type(statement.value.value) is str
+    return statement.value
+
+
+def outside_literal(raw, node):
+    lines = raw.splitlines(keepends=True)
+    start = sum(map(len, lines[:node.lineno - 1])) + node.col_offset
+    end = sum(map(len, lines[:node.end_lineno - 1])) + node.end_col_offset
+    return raw[:start] + b"<REGISTERED_INSTRUCTION_LITERAL>" + raw[end:]
+
+
+def node_syntax(case_id, source):
+    """A registered parser subprocess; no recipe function or JS is run."""
+    path = HERE / "node-syntax-002" / case_id
+    path.mkdir(parents=True, exist_ok=False)
+    raw = source.encode("utf-8", "strict")
+    (path / "submitted-source.js").write_bytes(raw)
+    argv = [NODE, "--input-type=module", "--check"]
+    process = subprocess.Popen(argv, cwd=ROOT, stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate(raw)
+    (path / "stdout.log").write_bytes(stdout)
+    (path / "stderr.log").write_bytes(stderr)
+    record = {"format": "verislop.source-only-node-syntax-receipt/1",
+              "case_id": case_id, "argv": argv, "cwd": str(ROOT), "pid": process.pid,
+              "integer_returncode": process.returncode,
+              "stdin": {"path": (path / "submitted-source.js").relative_to(ROOT).as_posix(),
+                        "sha256": sha(raw), "byte_count": len(raw)},
+              "stdout_sha256": sha(stdout), "stderr_sha256": sha(stderr),
+              "parser_only": True, "recipe_execution": False,
+              "qualification_authority": False, "historical_cause": "UNAVAILABLE"}
+    (path / "actual-process-receipt.json").write_text(json.dumps(record, indent=2) + "\n")
+    return process.returncode, stderr.decode("utf-8", "strict")
+
+
+class IndependentSourceControls(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        assert sys.version_info[:2] == (3, 12) and sys.executable == "/usr/bin/python3.12"
+        cls.old_raw = (OLD / "bootstrap_tier2_carrier_view.py").read_bytes()
+        cls.new_raw = (NEW / "bootstrap_tier2_carrier_view.py").read_bytes()
+        assert sha(cls.old_raw) == OLD_HASH and sha(cls.new_raw) == NEW_HASH
+        cls.helper = load("review006_immutable_reconstruction", ADAPTERS / "author_protocol_reconstruction.py")
+        cls.old_schema = cls.helper.extract_schema(cls.old_raw)
+        cls.new_schema = cls.helper.extract_schema(cls.new_raw)
+        # These producer functions only render source strings; expected strings
+        # are reconstructed separately by the immutable source-schema algorithm.
+        cls.producer = load("review006_pure_message_renderer", NEW / "bootstrap_tier2_carrier_view.py")
+        cls.cases = json.loads((HERE / "INDEPENDENT_CONTROL_CASES_BEFORE_HARNESS.json").read_bytes())
+        cls.refs = [{"path": item["reference_path"],
+                     "sha256": "sha256:" + item["source_hash_digits"] * 64,
+                     "request_sha256": "sha256:" + item["request_hash_digits"] * 64}
+                    for item in cls.cases["fixtures"]]
+
+    def test_IC006_01_exact_literal_and_factory_delta(self):
+        old, new = ast.parse(self.old_raw), ast.parse(self.new_raw)
+        old_literal, new_literal = instruction(old), instruction(new)
+        append = (NEW / "RECOVERY_INSTRUCTION_LITERAL.txt").read_text()
+        self.assertEqual(new_literal.value, old_literal.value + append)
+        self.assertEqual(outside_literal(self.old_raw, old_literal), outside_literal(self.new_raw, new_literal))
+        old_functions = {n.name: dump(n) for n in old.body if isinstance(n, ast.FunctionDef)}
+        new_functions = {n.name: dump(n) for n in new.body if isinstance(n, ast.FunctionDef)}
+        self.assertEqual(len(old_functions), 18)
+        self.assertEqual(set(old_functions), set(new_functions))
+        for name in old_functions:
+            if name != "agent_message":
+                self.assertEqual(old_functions[name], new_functions[name], name)
+        new_literal.value = old_literal.value
+        self.assertEqual(dump(old), dump(new))
+        old_factory = (OLD / "capture-amendment-003/collector_templates.py").read_bytes()
+        new_factory = (NEW / "capture-amendment-003/collector_templates.py").read_bytes()
+        self.assertEqual(old_factory.count(OLD_HASH.encode()), 1)
+        self.assertEqual(old_factory.replace(OLD_HASH.encode(), NEW_HASH.encode()), new_factory)
+        self.assertEqual((OLD / "diagnostic_failure_parser.py").read_bytes(),
+                         (NEW / "diagnostic_failure_parser.py").read_bytes())
+        self.assertEqual(self.old_schema["constants"], self.new_schema["constants"])
+
+    def test_IC006_02_historical_interpreter_hash_witness(self):
+        historical = json.loads((OLD / "independent-carrier-literals.json").read_bytes())
+        current = self.old_schema["function_ast_hashes"]
+        self.assertEqual(set(current), set(historical["function_ast_hashes"]))
+        self.assertEqual(len(current), 18)
+        tree = ast.parse(self.old_raw)
+        projected = {}
+        for node in tree.body:
+            if isinstance(node, ast.FunctionDef):
+                self.assertEqual(node.type_params, [])
+                self.assertNotEqual(current[node.name], historical["function_ast_hashes"][node.name])
+                copied = copy.deepcopy(node)
+                del copied.type_params
+                projected[node.name] = sha(dump(copied).encode())
+        self.assertEqual(projected, historical["function_ast_hashes"])
+        (HERE / "HISTORICAL_INTERPRETER_WITNESS.json").write_text(json.dumps({
+            "format": "verislop.source-only-historical-ast-witness/1",
+            "registered_interpreter": sys.executable,
+            "old_source_sha256": OLD_HASH,
+            "historical_function_hashes": historical["function_ast_hashes"],
+            "actual_current_function_hashes": current,
+            "after_removing_only_empty_type_params": projected,
+            "exact_matches": 18, "historical_profile_retained": True,
+            "qualification_authority": False}, indent=2) + "\n")
+
+    def test_IC006_03_independent_message_and_six_recipe_fidelity(self):
+        raw006 = (ROOT / "validation/tier2-support-019-qualification-adapters-006/author_protocol_reconstruction.py").read_bytes()
+        raw007 = (ADAPTERS / "author_protocol_reconstruction.py").read_bytes()
+        self.assertEqual(raw006, raw007)
+        profile = json.loads((NEW / "independent-carrier-literals.json").read_bytes())
+        self.helper.validate_literals(self.new_raw, profile)
+        self.assertEqual(profile["function_ast_hashes"], self.new_schema["function_ast_hashes"])
+        observations = []
+        for number, reference in enumerate(self.refs):
+            expected = self.helper.author_message(self.new_schema, reference)
+            actual = self.producer.agent_message(reference).encode("utf-8", "strict")
+            self.assertEqual(expected, actual)
+            old = self.helper.recipes(self.old_schema, reference)
+            new = self.helper.recipes(self.new_schema, reference)
+            self.assertEqual(old, new)
+            self.assertEqual(set(new), {"legacy_first", "legacy_next", "author_first", "author_next", "confirm", "hash"})
+            observations.append({"reference": reference, "full_message_sha256": sha(expected),
+                                 "full_message_bytes": len(expected),
+                                 "fixed_recipe_hashes": {k: sha(v.encode()) for k, v in new.items()}})
+            (HERE / ("independently-reconstructed-message-%d.txt" % number)).write_bytes(expected)
+        (HERE / "INDEPENDENT_RECONSTRUCTION_OBSERVATIONS.json").write_text(json.dumps({
+            "format": "verislop.source-only-message-reconstruction/1",
+            "expected_algorithm": "immutable007 helper; independently extracted actual006 AST",
+            "producer_used_for_expected": False, "registered_interpreter": sys.executable,
+            "observations": observations, "qualification_authority": False}, indent=2) + "\n")
+
+    def test_IC006_04_valid_closed_scalar_transcription_node_syntax(self):
+        for i, reference in enumerate(self.refs):
+            for j, chunk in enumerate(self.cases["confirmation_chunks"]):
+                fixed = self.helper.recipes(self.new_schema, reference,
+                                            confirmation={"chunk_id": chunk, "outer_output_intact": True})["confirm"]
+                code, error = node_syntax("valid-confirm-%d-%d" % (i, j), fixed)
+                self.assertEqual(code, 0, error)
+            code, error = node_syntax("valid-hash-%d" % i,
+                                      self.helper.recipes(self.new_schema, reference)["hash"])
+            self.assertEqual(code, 0, error)
+
+    def test_IC006_05_malformed_value_witness_and_closed_restoration(self):
+        reference = self.refs[0]
+        chunk = self.cases["malformed_transcription"]["canonical_chunk"]
+        canonical = self.helper.recipes(self.new_schema, reference,
+                                         confirmation={"chunk_id": chunk, "outer_output_intact": True})["confirm"]
+        token = json.dumps(chunk, ensure_ascii=True)
+        malformed = self.cases["malformed_transcription"]["unescaped_chunk_expression"]
+        self.assertEqual(canonical.count(token), 1)
+        attempted = canonical.replace(token, malformed, 1)
+        code, error = node_syntax("repair-unescaped-own-chunk", attempted)
+        self.assertNotEqual(code, 0)
+        self.assertIn("SyntaxError", error)
+        restored = attempted.replace(malformed, token, 1)
+        self.assertEqual(restored, canonical)
+        code, error = node_syntax("repair-closed-own-chunk-restored", restored)
+        self.assertEqual(code, 0, error)
+        for name in ("confirm", "hash"):
+            complete = self.helper.recipes(self.new_schema, reference)[name]
+            offset = complete.index("{", complete.index("\n") + 1) + 1
+            code, error = node_syntax("repair-partial-" + name, complete[:offset])
+            self.assertNotEqual(code, 0)
+            self.assertIn("SyntaxError", error)
+            code, error = node_syntax("repair-partial-" + name + "-restored", complete)
+            self.assertEqual(code, 0, error)
+
+    def test_IC006_06_exact_instruction_recovery_contract(self):
+        append = (NEW / "RECOVERY_INSTRUCTION_LITERAL.txt").read_text()
+        for exact in ("CANONICAL FIXED-TEMPLATE RESTORATION:",
+                      "restore the exact canonical template",
+                      "Retain only the already allowed closed VIEW/CONFIRM substitutions",
+                      "a parse failure must not advance accepted state",
+                      "No helper/file/network/history/other-agent access",
+                      "No helper/file/network/history/other-agent access, callable storage, dynamic wrapper, automatic VIEW loop",
+                      "reproduction.availability UNAVAILABLE",
+                      "without an exact canonical-template attempt and its concrete observed failure",
+                      "Never infer success, inspection or acceptance from syntax repair",
+                      "Failure stays UNATTESTED and unsuccessful"):
+            self.assertIn(exact, append)
+        self.assertEqual(self.producer.READER_SOURCE, self.old_schema["constants"]["READER_SOURCE"])
+        self.assertEqual(self.producer.CHECKPOINT_VALIDATOR_SOURCE,
+                         self.old_schema["constants"]["CHECKPOINT_VALIDATOR_SOURCE"])
+        self.assertEqual(self.producer.OWN_SHA256_SOURCE, self.old_schema["constants"]["OWN_SHA256_SOURCE"])
+
+
+if __name__ == "__main__":
+    print(json.dumps({"actual_control_pid": os.getpid(), "registered_interpreter": sys.executable,
+                      "scope": "SOURCE_ONLY_NO_RECIPE_EXECUTION_OR_QUALIFICATION"}), flush=True)
+    unittest.main(verbosity=2, failfast=True)

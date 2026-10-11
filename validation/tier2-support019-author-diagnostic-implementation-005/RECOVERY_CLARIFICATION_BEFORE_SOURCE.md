@@ -1,0 +1,3 @@
+# Root recovery clarification before literal revision
+
+The root requires the appended recovery policy to state explicitly that incomplete reading or large input alone is not a concrete failure. The same sole actor continues each permitted explicit VIEW/CONFIRM until both EOFs unless an actual exposed blocking operation prevents progress. Preserve authorized own checkpoints/notes across compression. A failed FINAL cites actual observed error/reproduction or explicitly UNKNOWN/unavailable, never completed inspection. This changes only the new appended instruction literal and its actual module/factory hash binding; no old instruction prefix, recipe, schema, actor count, deadline or semantic/acceptance requirement changes.

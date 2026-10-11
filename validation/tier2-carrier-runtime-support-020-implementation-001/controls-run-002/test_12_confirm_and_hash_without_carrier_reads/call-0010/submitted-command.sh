@@ -1,0 +1,9 @@
+/usr/bin/python3.12 -I -B -c 'import hashlib,json,os,sys
+r=json.loads(sys.argv[1]);c=r["code"]
+assert c["node_path"]=="/usr/bin/node" and c["python_path"]=="/usr/bin/python3.12"
+for k in ("runtime","reader"):
+ p=c[k+"_path"];assert os.path.isabs(p) and os.path.realpath(p)==p
+ with open(p,"rb") as f: actual="sha256:"+hashlib.sha256(f.read()).hexdigest()
+ if actual!=c[k+"_sha256"]:raise SystemExit("REGISTERED_CODE_HASH_MISMATCH")
+os.execv(c["node_path"],[c["node_path"],c["runtime_path"],sys.argv[1]])
+' '{"code":{"node_path":"/usr/bin/node","python_path":"/usr/bin/python3.12","reader_path":"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/reader.py","reader_sha256":"sha256:c917f273389e2b9ee56be04b5c6e56ed889c49a29e4262dbf1dfb68294d67e5f","runtime_path":"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/carrier_runtime.js","runtime_sha256":"sha256:49437d060a0da10c84bd6c4483f9c55b0d57cf8512840a906b6ab98ae6b4feb7","session_directory":"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/controls-run-002/test_12_confirm_and_hash_without_carrier_reads/own-session-output"},"format":"verislop.carrier-runtime-request/0.1","operation":"hash","reference":{"path":"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/controls-run-002/test_12_confirm_and_hash_without_carrier_reads/unrelated-carrier.json","request_sha256":"sha256:4899431650879589d69e50180d66f649b2a807ba5507058d2ff8e6d4285d9ab2","sha256":"sha256:bd911a56a015ad066430961fd6bf6be1a7b1fa8e0e3e48588a583d1059d6a6fc"},"session_path":"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/controls-run-002/test_12_confirm_and_hash_without_carrier_reads/own-session-output/verislop-runtime020-67bddf4a5688daa3edbccf62fb5c5de5556cc529c3b37615a2f4c3e18a43a69d.json"}'

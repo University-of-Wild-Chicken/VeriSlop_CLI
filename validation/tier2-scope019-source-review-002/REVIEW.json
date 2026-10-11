@@ -1,0 +1,210 @@
+{
+  "activation_authority": false,
+  "actual_Lean_runs": 0,
+  "actual_models": 0,
+  "actual_observations": [
+    {
+      "exit_code": 0,
+      "purpose": "initial exact decimal/underflow pure helper counterexamples",
+      "tool_chunk_id": "6f1fe4"
+    },
+    {
+      "exit_code": 0,
+      "purpose": "source/seal/public definition/AST authentication",
+      "tool_chunk_id": "fd112b"
+    },
+    {
+      "exit_code": 0,
+      "purpose": "complete registered activation schema and ordinary isolated controls",
+      "tool_chunk_id": "af5e08"
+    }
+  ],
+  "actual_target_execution_count": 0,
+  "controls": {
+    "control_result_authority": "Only isolated helper/schema source behavior; never runtime/task/activation/proof discharge",
+    "numeric_counterexamples": 3,
+    "ordinary_pure_controls": 24
+  },
+  "exclusions": [
+    "binder/target verifier/native driver/bootstrap invocation",
+    "qualified project/cohort source import",
+    "Lean/compiler/model/task generation",
+    "task positive candidate/proof/implementation/held-out oracle artifacts",
+    "runtime PASS reuse",
+    "source review as task/lifecycle authority"
+  ],
+  "findings": [
+    {
+      "additional_generic_counterexamples": [
+        {
+          "exact_decimal_equals_const": false,
+          "id": "SRC019-04-GENERIC-1",
+          "literal_numeric_token": "1.0000000000000001",
+          "parsed_python_type": "float",
+          "parsed_value_repr": "1.0",
+          "schema": {
+            "const": 1,
+            "type": "integer"
+          },
+          "schema_accepted": true
+        },
+        {
+          "exact_decimal_equals_const": false,
+          "id": "SRC019-04-GENERIC-0",
+          "literal_numeric_token": "1e-9999",
+          "parsed_python_type": "float",
+          "parsed_value_repr": "0.0",
+          "schema": {
+            "const": 0,
+            "type": "integer"
+          },
+          "schema_accepted": true
+        }
+      ],
+      "affected_frozen_claims": [
+        "AUD-01",
+        "AUD-03"
+      ],
+      "bounded_implication": "The frozen closed-schema correspondence predicate cannot be discharged for this source. This finding does not establish that all27 qualification checks can be bypassed or that any native invocation/task/model/release occurred.",
+      "class": "NUMERIC_LITERAL_ROUNDING_BREAKS_CLOSED_SCHEMA_CONST",
+      "concrete_counterexample": {
+        "actual_registered_schema": "native-activation-binding-schema.json",
+        "exact_decimal_equals_const": false,
+        "id": "SRC019-04-C01",
+        "instance_pointer": "/controller_policy/max_outstanding_authors",
+        "literal_numeric_token": "1.0000000000000001",
+        "parsed_python_type": "float",
+        "parsed_value_repr": "1.0",
+        "required_schema_const": 1,
+        "schema_accepted": true,
+        "scope": "Complete synthetic activation instance only; no actual prerequisites or target binding",
+        "synthetic_instance_bytes_sha256": "2ac0018f7b489e897b25c83b3717a98cd5b09484b441689154a50775ede35870"
+      },
+      "defect": "strict_json converts decimal numeric literals to binary float before validating numeric const/integer constraints. The literal1.0000000000000001 becomes float1.0, so the actual registered controller_policy.max_outstanding_authors const1 accepts a mathematically distinct noninteger JSON value. Generic1e-9999 also collapses to0.0 and passes integer/const0.",
+      "id": "SRC019-04",
+      "mechanical_expected": "The exact decimal token differs from the schema integer constant; schema validation must reject this instance or preserve its exact numeric value.",
+      "repair": "Preserve exact numeric value through const/integer validation or explicitly reject lossy decimal/exponent token conversion before validation; keep bool/integer distinctions and all existing schema/qualification/activation requirements unchanged. Prepare a new version and independent source review; do not mutate sealed019-002.",
+      "schema_ref": {
+        "byte_count": 6961,
+        "path": "validation/tier2-d21-scope-audit-019-002/native-activation-binding-schema.json",
+        "sha256": "sha256:daabfef5b6133065e5de052a460a9bb4634be5d5cda045d3ec68187f0b1971fe"
+      },
+      "source_functions": [
+        "strict_json.number",
+        "json_equal",
+        "validate_closed_schema"
+      ],
+      "source_ref": {
+        "byte_count": 7832,
+        "path": "validation/tier2-d21-scope-audit-019-002/binding_schema.py",
+        "sha256": "sha256:5d57a30a7cf89bc16251eb77459919aafdc101ac87b9f7eb9a751e0840393a69"
+      }
+    }
+  ],
+  "format": "verislop.scope019-bounded-independent-source-review/1",
+  "future_project_cohort_absent": true,
+  "local_inspector_and_fixture_diagnostics": {
+    "chunks": [
+      "85434e",
+      "ba19a2",
+      "b6c68b",
+      "d372af"
+    ],
+    "source_manifest_shape": "Initial inspector assumed canonical_manifest.files map; corrected actual frozen list shape before bound source report. No target defect inferred.",
+    "synthetic_builder": "Preliminary source-only fixture construction required enum and fixed activation-sibling path support; schema correctly rejected invalid fixture. Only review-local script changed; no target/source/schema mutation or runtime evidence reused."
+  },
+  "mode": "READ_ONLY_SOURCE_REVIEW_PLUS_PURE_HELPER_CONTROLS",
+  "preservation": {
+    "AUD_predicate_objects": 24,
+    "all27_qualification_function_AST_unchanged": true,
+    "closed_schema_first_execute_operation": true,
+    "exact_driver_guard_second_execute_operation": true,
+    "native_source_manifest_seal_authenticated": true,
+    "original_functional_clauses": 42,
+    "original_obligation_IDs": [
+      "D1",
+      "A1",
+      "O1",
+      "O2",
+      "O3",
+      "O4",
+      "O5",
+      "O6",
+      "O7",
+      "I1",
+      "S1"
+    ],
+    "prior_source_review_manifest_seal_authenticated": true,
+    "public_probe_objects_and_expected_bytes": 9,
+    "scope_source_manifest_seal_authenticated": true,
+    "six_public_definitions_byte_identical019_and018": true
+  },
+  "prior_findings": {
+    "SRC019-01": {
+      "observations": [
+        "Fixed canonical native019/driver.py and actual driver SHA enforced",
+        "Fixed native source manifest/seal identities authenticated; all3 sealed members exact",
+        "Wrong orchestration JSON driver rejected by actual registered schema and pure exact reference helper"
+      ],
+      "runtime_claim_discharge": false,
+      "source_disposition": "REPAIR_PRESENT"
+    },
+    "SRC019-02": {
+      "observations": [
+        "Required dedicated immutable native_activation_amendment and native_activation_binding fields exist outside controller_inputs",
+        "Exact source amendment fixed SHA/canonical path agrees with current bytes and prospective Q003 root/closure",
+        "Actual prerequisite record is separate append-only sibling; exact current source/input/27IDs/driver/source/engineering/protocol/reader refs required",
+        "Prerequisite status PREREQUISITES_BOUND/activation_authority false; later independent actual binder receipt remains external, avoiding self-reference",
+        "Admission completion chronology checked before prerequisite acceptance"
+      ],
+      "runtime_claim_discharge": false,
+      "source_disposition": "REPAIR_PRESENT"
+    },
+    "SRC019-03": {
+      "observations": [
+        "execute first operation validates entire input schema before claim fields or qualified imports",
+        "Local helper and both closed schemas authenticated by exact registered hash",
+        "Extra keys/required/type/nonfinite/malformed/unsupported/ref-cycle rejection controls discriminate",
+        "Numeric parsing loses values required by actual const constraints; see SRC019-04"
+      ],
+      "runtime_claim_discharge": false,
+      "source_disposition": "VALIDATION_ORDER_REPAIR_PRESENT_WITH_NEW_NUMERIC_FIDELITY_FINDING"
+    }
+  },
+  "pure_control_observations_ref": {
+    "byte_count": 5907,
+    "path": "validation/tier2-scope019-source-review-002/PURE_CONTROL_OBSERVATIONS.json",
+    "sha256": "sha256:989b548539028e8ee2790316a92dba48c19608022259dd9ea556a815e405288b"
+  },
+  "pure_controls_registration_ref": {
+    "byte_count": 1356,
+    "path": "validation/tier2-scope019-source-review-002/PURE_CONTROLS_REGISTRATION.json",
+    "sha256": "sha256:c61df5f4f118a123ef7b6469b4edf524be841e896b6e34676fb5ba5a9b203116"
+  },
+  "qualification_authority": false,
+  "qualification_or_circularity_observations": {
+    "actual_all27_root_and_native_activation": "UNRESOLVED",
+    "all27_reports_claims_current_roots_receipts_source_bindings_remain_mandatory": true,
+    "dedicated_binding_lacks_native_invocation_authority": true,
+    "later_actual_binder_receipt_not_an_input_to_its_own_prerequisite_record": true,
+    "no_actual_current_qualification_evidence_checked": "SOURCE_ONLY",
+    "no_concrete_all27_qualification_bypass_observed": true
+  },
+  "reviewed_source": "validation/tier2-d21-scope-audit-019-002",
+  "runtime_authority": false,
+  "source_identity_observations_ref": {
+    "byte_count": 6266,
+    "path": "validation/tier2-scope019-source-review-002/SOURCE_IDENTITY_OBSERVATIONS.json",
+    "sha256": "sha256:d9b6da998c75929a252024b9764fdc3ca06e73491792e129cbf3b77afcd0ca11"
+  },
+  "source_readiness": "BLOCKED_BY_CONCRETE_SOURCE_COUNTEREXAMPLE",
+  "status": "SOURCE_FINDINGS_PRESENT_RUNTIME_UNQUALIFIED",
+  "stop": true,
+  "task_positive_artifact_reads": [],
+  "unresolved": [
+    "actual fresh all27 qualification/admission",
+    "fresh engineering/project/cohort/pre-generation binding/actual numeric-zero binder receipt",
+    "final external native activation",
+    "task Tier2 result and optional TESTED"
+  ]
+}

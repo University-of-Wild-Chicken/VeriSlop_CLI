@@ -1,0 +1,186 @@
+{
+  "format": "verislop.bounded-generic-reproduction-report/1",
+  "status": "SOURCE_INTERFACE_GAP_REPRODUCED_KNOWN_CURSOR_RECOVERY_DEMONSTRATED_UNQUALIFIED",
+  "actual_report_builder_pid": 3593611,
+  "authority": "NO_QUALIFICATION_AUTHORITY",
+  "historical_cause": "UNKNOWN; neither Q007 carrier nor author state/trace was read; this generic result cannot establish its cause",
+  "specification": {
+    "path": "validation/tier2-runtime021-checkpoint-reproduction-001/SPECIFICATION_BEFORE_FIXTURE_AND_EXECUTION.json",
+    "sha256": "sha256:fa434f8a896732cba1a2e9e215237c28510ae7cdac9c87b622f376de53721357"
+  },
+  "registration": {
+    "path": "validation/tier2-runtime021-checkpoint-reproduction-001/CONTROL_REGISTRATION_BEFORE_EXECUTION.json",
+    "sha256": "sha256:91257af8bceca1fe2ccc250c1e37f0d75f640f1da3676e904e9ae860b6d9ad47"
+  },
+  "findings": [
+    {
+      "id": "C01",
+      "resolution": "REPRODUCED",
+      "counterexample": "Closed own checkpoint operation against partially confirmed public session",
+      "actual_chunk_id": "04b055",
+      "actual_integer_status": 2,
+      "actual_error": "INVALID_RUNTIME_OPERATION",
+      "zero_view": "Source operation enum rejects before state dispatch or reader invocation"
+    },
+    {
+      "id": "C02",
+      "resolution": "OBSERVED",
+      "before_and_after_state_sha256": "sha256:a136d149198efaf62f153be5c24902ce8461ef716d2d9a47cc1b8f8f91b82bac",
+      "state_bytes": 5856,
+      "carrier_and_source_guards_unchanged": true,
+      "nonempty_guard_count": 14
+    },
+    {
+      "id": "C03",
+      "resolution": "OBSERVED",
+      "accepted_cursor_before": 254,
+      "explicit_recovery_view_chunk": "aa3022",
+      "explicit_recovery_confirm_chunk": "16fb80",
+      "accepted_cursor_after": 508,
+      "system_eof": true,
+      "user_eof": false
+    },
+    {
+      "id": "C04",
+      "resolution": "SOURCE_WITNESS",
+      "meaning": "No fixed zero-VIEW read-only checkpoint/resume operation or template exists; summary is only returned by confirmation, which atomically writes accepted observations. Existing explicit known-cursor retrieval succeeds; exact replay confirmation can return a summary via a state-mutating operation. This does not prove continuation impossible."
+    }
+  ],
+  "actual_runtime_results": {
+    "P01": {
+      "chunk_id": "90acde",
+      "exit_code": 0,
+      "native_runtime_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "native_reader_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "separate_stderr": "UNAVAILABLE_FROM_COMBINED_OUTPUT",
+      "result_ref": "validation/tier2-runtime021-checkpoint-reproduction-001/P01-actual-result.json",
+      "result_sha256": "sha256:aadf38ddcd7d6ce6f6b62578ed99d5ed08fb4dfa71f4cef90d733a9d7a042394"
+    },
+    "P02": {
+      "chunk_id": "3b157e",
+      "exit_code": 0,
+      "native_runtime_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "native_reader_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "separate_stderr": "UNAVAILABLE_FROM_COMBINED_OUTPUT",
+      "result_ref": "validation/tier2-runtime021-checkpoint-reproduction-001/P02-actual-result.json",
+      "result_sha256": "sha256:254761fe4f786545a0c768fc1a8977e0240c7354b317db3a9822a96ff014a5a6"
+    },
+    "P03": {
+      "chunk_id": "8cc5d2",
+      "exit_code": 0,
+      "native_runtime_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "native_reader_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "separate_stderr": "UNAVAILABLE_FROM_COMBINED_OUTPUT",
+      "result_ref": "validation/tier2-runtime021-checkpoint-reproduction-001/P03-actual-result.json",
+      "result_sha256": "sha256:e75b3d727a8df9d38175f33b844c4c83042e69360b9fcf3014b9de14021bb3cb"
+    },
+    "P04": {
+      "chunk_id": "661013",
+      "exit_code": 0,
+      "native_runtime_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "native_reader_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "separate_stderr": "UNAVAILABLE_FROM_COMBINED_OUTPUT",
+      "result_ref": "validation/tier2-runtime021-checkpoint-reproduction-001/P04-actual-result.json",
+      "result_sha256": "sha256:8bb96413d67678a22900e2302236ede839691da22e9f6c7ebedb08e9b6e08594"
+    },
+    "P05": {
+      "chunk_id": "617e1c",
+      "exit_code": 0,
+      "native_runtime_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "native_reader_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "separate_stderr": "UNAVAILABLE_FROM_COMBINED_OUTPUT",
+      "result_ref": "validation/tier2-runtime021-checkpoint-reproduction-001/P05-actual-result.json",
+      "result_sha256": "sha256:2a9ab6da79c7a05c7134642dba30787177809a64227a8da2f813fbee3a05c3db"
+    },
+    "P06": {
+      "chunk_id": "edd069",
+      "exit_code": 0,
+      "native_runtime_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "native_reader_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "separate_stderr": "UNAVAILABLE_FROM_COMBINED_OUTPUT",
+      "result_ref": "validation/tier2-runtime021-checkpoint-reproduction-001/P06-actual-result.json",
+      "result_sha256": "sha256:fe55090cd1a133801d12bc1e093c88e2e74b808b3201be6572e5780364de5971"
+    },
+    "P07": {
+      "chunk_id": "04b055",
+      "exit_code": 2,
+      "native_runtime_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "native_reader_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "separate_stderr": "UNAVAILABLE_FROM_COMBINED_OUTPUT",
+      "result_ref": "validation/tier2-runtime021-checkpoint-reproduction-001/P07-actual-result.json",
+      "result_sha256": "sha256:9dd5d2fabd6becdc3e2347f79020da1494b888b8cd1b6762bb1e0dd6b0509b81"
+    },
+    "P08": {
+      "chunk_id": "aa3022",
+      "exit_code": 0,
+      "native_runtime_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "native_reader_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "separate_stderr": "UNAVAILABLE_FROM_COMBINED_OUTPUT",
+      "result_ref": "validation/tier2-runtime021-checkpoint-reproduction-001/P08-actual-result.json",
+      "result_sha256": "sha256:72358d96698de6aa5848a5ecbc4571fef73a5e9993be9cd13b4bdb14581ebd9d"
+    },
+    "P09": {
+      "chunk_id": "16fb80",
+      "exit_code": 0,
+      "native_runtime_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "native_reader_pid": "UNAVAILABLE_FROM_EXEC_COMMAND",
+      "separate_stderr": "UNAVAILABLE_FROM_COMBINED_OUTPUT",
+      "result_ref": "validation/tier2-runtime021-checkpoint-reproduction-001/P09-actual-result.json",
+      "result_sha256": "sha256:b3529be8f762555ff35b0b2e937bdc93059066d235b43525c54745069bdddb0c"
+    }
+  },
+  "observations": {
+    "BEFORE_SEQUENCE": {
+      "actual_observer_pid": 3591857,
+      "accepted_state_sha256": null,
+      "guard_count": 14
+    },
+    "BEFORE_CHECKPOINT": {
+      "actual_observer_pid": 3592404,
+      "accepted_state_sha256": "sha256:a136d149198efaf62f153be5c24902ce8461ef716d2d9a47cc1b8f8f91b82bac",
+      "guard_count": 14
+    },
+    "AFTER_CHECKPOINT": {
+      "actual_observer_pid": 3592517,
+      "accepted_state_sha256": "sha256:a136d149198efaf62f153be5c24902ce8461ef716d2d9a47cc1b8f8f91b82bac",
+      "guard_count": 14
+    },
+    "AFTER_RECOVERY_VIEW": {
+      "actual_observer_pid": 3592655,
+      "accepted_state_sha256": "sha256:a136d149198efaf62f153be5c24902ce8461ef716d2d9a47cc1b8f8f91b82bac",
+      "guard_count": 14
+    },
+    "AFTER_RECOVERY_CONFIRM": {
+      "actual_observer_pid": 3592797,
+      "accepted_state_sha256": "sha256:f41133a0d0bdc0a0c98d7a7acfb6b4c46409e783d73d0cdd79660f49d446c381",
+      "guard_count": 14
+    }
+  },
+  "preimages": {
+    "synthetic_dataset/tools/carrier_runtime020-registration.json": {
+      "path": "validation/tier2-runtime021-checkpoint-reproduction-001/preimages/synthetic_dataset/tools/carrier_runtime020-registration.json",
+      "sha256": "sha256:98322d02e2d71268672c9d67889a25fb93e572f2dbc03de87ea734702b840d20",
+      "binding_role": "HISTORICAL_ACTUAL_CURRENT_SOURCE_DURING_PROBE; immutable raw preimage"
+    },
+    "synthetic_dataset/tools/carrier_runtime020/compact_protocol.py": {
+      "path": "validation/tier2-runtime021-checkpoint-reproduction-001/preimages/synthetic_dataset/tools/carrier_runtime020/compact_protocol.py",
+      "sha256": "sha256:a9f57d34ab8a25a1d598c39d20a96526152ba3ebf15b86fcfe155963060ced37",
+      "binding_role": "HISTORICAL_ACTUAL_CURRENT_SOURCE_DURING_PROBE; immutable raw preimage"
+    },
+    "synthetic_dataset/tools/carrier_runtime020/reader.py": {
+      "path": "validation/tier2-runtime021-checkpoint-reproduction-001/preimages/synthetic_dataset/tools/carrier_runtime020/reader.py",
+      "sha256": "sha256:c917f273389e2b9ee56be04b5c6e56ed889c49a29e4262dbf1dfb68294d67e5f",
+      "binding_role": "HISTORICAL_ACTUAL_CURRENT_SOURCE_DURING_PROBE; immutable raw preimage"
+    },
+    "synthetic_dataset/tools/carrier_runtime020/carrier_runtime.js": {
+      "path": "validation/tier2-runtime021-checkpoint-reproduction-001/preimages/synthetic_dataset/tools/carrier_runtime020/carrier_runtime.js",
+      "sha256": "sha256:49437d060a0da10c84bd6c4483f9c55b0d57cf8512840a906b6ab98ae6b4feb7",
+      "binding_role": "HISTORICAL_ACTUAL_CURRENT_SOURCE_DURING_PROBE; immutable raw preimage"
+    }
+  },
+  "accepted_state_after": {
+    "sha256": "sha256:f41133a0d0bdc0a0c98d7a7acfb6b4c46409e783d73d0cdd79660f49d446c381",
+    "bytes": 7860
+  },
+  "limitations": "Partial unrelated public generic session only; Unicode literal independently retained but the two partial user slices contain ASCII only. No whole-field HASH, semantic consumption, proof, TESTED, lifecycle, current27, admission, native activation, model, author continuation, hidden/task/expected data, or historical causal authority. No additional probes or retries."
+}

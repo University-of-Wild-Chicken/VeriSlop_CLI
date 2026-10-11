@@ -1,0 +1,9 @@
+Source review019-002 found one new concrete defect, SRC019-04, affecting AUD-01/AUD-03. Source readiness is blocked; runtime qualification and activation remain unresolved.
+
+The authenticated pure helper parses `1.0000000000000001` as float1.0. A complete synthetic record then passes the actual registered activation schema's `/controller_policy/max_outstanding_authors` constant1, although the exact decimal value differs from1. Generic underflow `1e-9999` similarly becomes0.0 and passes integer/constant0. This is a numeric closed-schema fidelity defect; no all27 qualification bypass, native invocation or task failure is claimed.
+
+SRC019-01's exact driver.py/hash/manifest/seal guard and SRC019-02's dedicated immutable amendment/prerequisite linkage are present. SRC019-03 validates the full closed schema before claim fields or qualified imports, but the new numeric finding blocks complete schema fidelity. The prerequisite record grants no activation and does not self-reference its later binder output; external actual binder receipts remain mandatory.
+
+Current scope/native/prior-review seals authenticate, all six public definitions remain byte-identical to019/018, all24 AUD objects/42 clauses/11 IDs/9 public probe objects are preserved, and all27 qualification functions retain their prior AST. Independent controls ran only pure helper functions with synthetic in-memory values. No binder, target, project/cohort, compiler/Lean, model, native/bootstrap or task-positive artifact was invoked/read. Source-only controls provide no qualification, proof, TESTED or lifecycle authority.
+
+Repair numeric parsing/validation in a new specified source version, preserve all existing qualification and activation requirements, and perform a fresh bounded review. Sealed019-002 remains unchanged. STOP.

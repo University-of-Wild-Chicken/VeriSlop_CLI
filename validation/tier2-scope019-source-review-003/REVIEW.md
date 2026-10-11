@@ -1,0 +1,7 @@
+The minimal scope019-003 source delta is accepted; runtime qualification and native activation remain unresolved.
+
+SRC019-04's exact actual-schema witness now parses as Decimal1.0000000000000001 and rejects at the integer/constant1 constraint for `/controller_policy/max_outstanding_authors`. The integer token1 is accepted. Decimal1.0, exponent1e0, boolean true, wrong integers, exact underflow1e-9999, nonfinite constants and binary floats reject in14 independent pure controls. The source defines a stricter lexical registration integer domain before future execution; no float rounding confers integer or constant authority.
+
+Both source seals authenticate. All26 binder function/class ASTs are identical to019-002; the complete binder AST changes only five registered source hash constants. All six public definitions and24AUD/42clauses/11IDs/9probes are preserved. The activation schema changes only the explicit integer constraint, current scope-plan binding and explanatory title. No broad unchanged predicate review was repeated.
+
+These source checks do not discharge runtime claims, proofs, TESTED, qualification or activation. No binder, project, cohort, bootstrap, native, qualification verifier, Lean/compiler, model, task or hidden positive answer was imported/invoked/read. Fresh all27 claims and independent admission, fresh engineering and scope binding, actual numeric-zero binder receipts and external activation remain required before native work. STOP.

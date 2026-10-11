@@ -1,0 +1,13 @@
+# Adapters006 source specification before changes
+
+Adapters006 is a source-only successor to sealed adapters005 for carrier checkpoint candidate003. It does not install production, freeze qualification003, execute a materializer, model, Lean, registered qualification verifier, native/task or read an evaluator's hidden expected answer. Sealed005, sealed003 carrier and all prior actual evidence stay unchanged.
+
+Preserve all27 claim objects, mandatory floors, runtime limits, main legacy carrier VIEW recipes, unbounded inference/retrieval/review policy, current-root/input/source checks and the actual singleton task_name spawn-schema correction from005. No alias or synthetic missing tool field is introduced.
+
+Independently reconstruct the exact candidate003 agent_message and author FIRST/NEXT/CONFIRM/HASH recipes from frozen source-derived literals and function ASTs. Existing legacy main recipe reconstruction must remain separate, exact and unchanged. Bind candidate003 CHECKPOINT_VALIDATOR_SOURCE, OWN_SHA256_SOURCE, explicit fixed instruction/transform literals and all author function ASTs; reject source/literal/schema inconsistencies and extra/missing authority. The independent verifier may not invoke candidate agent_message or template functions to obtain its expected bytes, trust a declared message hash, or accept a self-described author protocol.
+
+Retain exact original whole-message comparison, unique fresh author count1, requested Sol/none fork, actual singleton task_name field, literal FINAL unchanged, markers/root/totals/full EOF/current-root predicates and explicit UNATTESTED semantic-consumption/model identity. Revise only an obsolete literal ACTUAL_RESULT-absence implementation control to allow own pending capture while rejecting every collector result key/observer in the author message. Confirm/hash are explicit zero-VIEW exceptions; the reader source itself and main one-VIEW full-result collector surface stay unchanged.
+
+Specify source reconstruction and control registrations before source changes. Generic unrelated reference schemas, source/AST identity, exact message reconstruction positive controls and concrete tampered literal/recipe/pending-vs-collector negative controls are allowed source-only. No live task fixture or evaluator expected response may be read, supplied or used. Source checks carry no qualification, author-result, task TESTED, proof, release or lifecycle authority.
+
+After bounded source controls, seal exact candidate source bytes/manifests and report changed methods, literal updates, complete claim preservation and future root-review/registration work. STOP with a source candidate; no frozen-root mutation or runtime authority.

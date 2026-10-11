@@ -1,0 +1,141 @@
+--- synthetic_dataset/tools/carrier_runtime020/carrier_runtime.js
++++ validation/tier2-carrier-runtime-support-022-implementation-001/carrier_runtime.js
+@@ -357,7 +357,7 @@
+     : request && request.operation === "confirm" ? ["pending", "confirmation"] : [];
+   checkpointKeys(request, ["format", "operation", "reference", "session_path", "code"].concat(extras), "INVALID_RUNTIME_REQUEST");
+   checkpointNeed(request.format === RUNTIME_FORMAT
+-    && ["view", "confirm", "hash"].includes(request.operation), "INVALID_RUNTIME_OPERATION");
++    && ["view", "confirm", "hash", "checkpoint"].includes(request.operation), "INVALID_RUNTIME_OPERATION");
+   runtimeCodeGuard(request.code);
+   runtimeReferenceAndSession(request);
+   if (request.operation === "view") {
+@@ -375,6 +375,13 @@
+   }
+   const output = runtimeLocked(request.session_path, () => {
+     const state = runtimeState(request.session_path, request.reference);
++    if (request.operation === "checkpoint") {
++      runtimeCodeGuard(request.code);
++      return state === undefined
++        ? {format: "verislop.own-view-availability-summary/0.1", status: "EMPTY",
++          availability_only: true, semantic_consumption: "UNATTESTED", semantic_acceptance_authority: false}
++        : checkpointSummary(state);
++    }
+     if (request.operation === "hash") {
+       const hashes = runtimeHash(state, request.reference);
+       runtimeCodeGuard(request.code);
+--- synthetic_dataset/tools/carrier_runtime020/compact_protocol.py
++++ validation/tier2-carrier-runtime-support-022-implementation-001/compact_protocol.py
+@@ -10,7 +10,7 @@
+ import os
+ import shlex
+ 
+-API_REVISION = "support020-compact-runtime/1"
++API_REVISION = "support022-compact-runtime/1"
+ REQUEST_FORMAT = "verislop.carrier-runtime-request/0.1"
+ EXEC_PRAGMA = '// @exec: {"max_output_tokens": 20000}\n'
+ NODE_PATH = "/usr/bin/node"
+@@ -162,19 +162,25 @@
+     return _recipe(_request(reference, code, "hash"), reference)
+ 
+ 
++def runtime_checkpoint_template(reference, code):
++    return _recipe(_request(reference, code, "checkpoint"), reference)
++
++
+ def runtime_agent_message(reference, code):
+     reference = _reference(reference); code = _code(code)
+-    return ("COMPACT REGISTERED CARRIER RUNTIME — support020/1\n"
++    return ("COMPACT REGISTERED CARRIER RUNTIME — support022/1\n"
+             "Read this own carrier completely through the exact fixed recipes below. This version explicitly permits invoking only the registered local runtime and its fixed reader/code guard. The runtime may read its fixed source files, this exact own carrier on VIEW only, and the declared own-session file. It may persist only that session. Other helpers, carriers, files, history, network, agents and expected-answer/root oracles are outside this permission.\n"
+             "Reference: " + _json(reference) + "\nRegistered code: " + _json(code)
+             + "\nOwn session file: " + session_path(reference, code) + "\n"
+             "FIRST requests inventory; NEXT requests one explicit closed VIEW per call. Every VIEW output_cap_bytes is an integer from 256 through 8192 inclusive; metadata_reserve_bytes is an integer with 128 <= metadata_reserve_bytes < output_cap_bytes. Field start_char is an exact nonnegative JSON-safe integer counting decoded Unicode scalars; selector is exactly /system or /user. Confirm inventory, complete /system EOF, then complete /user EOF. Edit ONLY NEXT VIEW selector/start_char/cap/reserve, never REQUEST, code, reference, session, launcher or wrapper. No recipe selects or retrieves the next cursor automatically. Every recipe forwards the complete actual tool result. FIRST/NEXT stage only that exact result under your bound own pending key and do not commit accepted state.\n"
+             "After observing complete integer-zero completion, its actually exposed chunk_id and intact outer response, use CONFIRM. Edit ONLY CONFIRM.chunk_id and outer_output_intact; true asserts that you checked the visible outer output is intact, not hidden-envelope attestation. CONFIRM performs zero VIEW but one explicitly permitted runtime tool call. It validates status, exact original identity/Unicode/UTF8/cursors/bounds and persists atomically only on success. Rejected/malformed/truncated/nonzero/running output never advances accepted state. For an observed INVALID_CLOSED_VIEW_BOUNDS or another rejected editable VIEW argument, criticize the actual selector/start_char/cap/reserve against the bounds above and explicitly issue a fresh valid NEXT at the SAME accepted selector and start_char, using output_cap_bytes 8192 and metadata_reserve_bytes 2048. Restore the last accepted selector/cursor if the rejected attempt used an invalid selector or cursor. Do not CONFIRM the rejected result, advance accepted state, or return an incomplete FINAL merely because this first editable request was rejected. For actual nested or outer truncation, explicitly retry that SAME accepted selector/cursor with output_cap_bytes 4096 and metadata_reserve_bytes 2048. Continue each permitted explicit VIEW and CONFIRM through both EOFs; incomplete reading or a large input alone is not a fixed-source blocker. Stop only when an actual exposed blocking operation cannot be corrected using permitted closed values, and report its concrete observed error or explicitly UNKNOWN/unavailable. OWN_SESSION_BUSY requires an explicit retry of the same confirmation; no automatic retry or retrieval is performed.\n"
+             "Confirm inventory, then complete /system EOF, then complete /user EOF, including explicit EOF for empty fields. Use HASH only after both confirmed EOFs and complete totals. HASH is zero VIEW but one runtime tool call, reconstructs original accepted observations and hashes exact scalar UTF8 fields without reading the carrier. Do not invent roots or replace full field coverage with hashes or summaries. Validate each intact actual response. Own state survives compression as availability only.\n"
++            "After compression, a lost accepted cursor, or a lost unconfirmed VIEW, and before every FINAL, explicitly execute the fixed CHECKPOINT recipe below. CHECKPOINT is zero VIEW: it reads only the accepted own-session observations, validates their exact replay and returns accepted availability cursors/totals/EOF without reading the carrier, invoking the reader, computing roots or committing state. An EMPTY report means no accepted inventory exists: resume FIRST and CONFIRM inventory. For an existing summary, continue the first incomplete field in the required /system then /user order by explicitly editing NEXT to its exact returned next_char, and then CONFIRM the intact result. If an unconfirmed VIEW was lost, re-request that SAME accepted cursor; no rejected or unconfirmed attempt advances it. If all fields have confirmed EOF, HASH remains the only fixed field-hash recipe. A checkpoint summary does not replace your inspection or any SYSTEM-defined requirement. If CHECKPOINT itself has an actual exposed blocker, retain that error without inventing a summary. No recipe automatically chooses a cursor, retries, loops over VIEW or retrieves content.\n"
+             "Keep exact SYSTEM-defined response/review/search/proof requirements and literal FINAL. Report only concrete observed errors or explicitly UNKNOWN/unavailable; this revised transport does not explain the historical failure. Availability/checkpoints/hashes establish no semantic consumption, understanding, ACCEPT, proof, TESTED, lifecycle or end-to-end authority. No inference, retrieval or review deadline, resampling, additional agent or automatic VIEW loop is authorized.\n"
+             "FIRST functions.exec (execute unchanged):\n```javascript\n" + runtime_initial_template(reference, code)
+             + "```\nNEXT functions.exec (edit ONLY closed VIEW):\n```javascript\n" + runtime_next_template(reference, code)
+             + "```\nCONFIRM functions.exec (edit ONLY closed confirmation after intact observed completion):\n```javascript\n" + runtime_confirm_template(reference, code)
++            + "```\nCHECKPOINT functions.exec (execute unchanged after compression/lost cursor and before FINAL):\n```javascript\n" + runtime_checkpoint_template(reference, code)
+             + "```\nHASH functions.exec (execute unchanged after both confirmed EOFs):\n```javascript\n" + runtime_hash_template(reference, code) + "```\n")
+ 
+ 
+--- synthetic_dataset/tools/bootstrap_tier2_runtime_integration.py
++++ validation/tier2-carrier-runtime-support-022-implementation-001/bootstrap_tier2_runtime_integration.py
+@@ -13,7 +13,7 @@
+ FORMAT = "verislop.carrier-runtime-registration/1"
+ REGISTRATION_PATH = "synthetic_dataset/tools/carrier_runtime020-registration.json"
+ INTEGRATION_PATH = "synthetic_dataset/tools/bootstrap_tier2_runtime_integration.py"
+-REVISION = "support020-compact-runtime/1"
++REVISION = "support022-compact-runtime/1"
+ ROLES = {"generator", "reader", "runtime"}
+ CODE_KEYS = {"runtime_path", "runtime_sha256", "reader_path", "reader_sha256",
+              "node_path", "python_path", "session_directory"}
+--- synthetic_dataset/tools/carrier_runtime020-registration.json
++++ validation/tier2-carrier-runtime-support-022-implementation-001/carrier_runtime020-registration.json
+@@ -1,5 +1,5 @@
+ {
+-  "api_revision": "support020-compact-runtime/1",
++  "api_revision": "support022-compact-runtime/1",
+   "format": "verislop.carrier-runtime-registration/1",
+   "interpreters": {
+     "node": {
+@@ -20,7 +20,7 @@
+   "source_files": {
+     "generator": {
+       "path": "synthetic_dataset/tools/carrier_runtime020/compact_protocol.py",
+-      "sha256": "sha256:a9f57d34ab8a25a1d598c39d20a96526152ba3ebf15b86fcfe155963060ced37"
++      "sha256": "sha256:9c1943e329bf021df8ae75fc001c8d757e3aa333b2ac9163df4844b80ad09943"
+     },
+     "reader": {
+       "path": "synthetic_dataset/tools/carrier_runtime020/reader.py",
+@@ -28,7 +28,7 @@
+     },
+     "runtime": {
+       "path": "synthetic_dataset/tools/carrier_runtime020/carrier_runtime.js",
+-      "sha256": "sha256:49437d060a0da10c84bd6c4483f9c55b0d57cf8512840a906b6ab98ae6b4feb7"
++      "sha256": "sha256:2f8e15c975b7ddc07629be4cad65a0252b802605b6f441cf6067dc7815d90889"
+     }
+   }
+ }
+--- validation/tier2-support-019-qualification-adapters-008/author_protocol_reconstruction.py
++++ validation/tier2-carrier-runtime-support-022-implementation-001/author_protocol_reconstruction.py
+@@ -269,7 +269,7 @@
+ COMPACT_ROLES = {"generator", "reader", "runtime", "descriptor"}
+ PURE_FUNCTIONS = {"_request", "session_path", "own_pending_key", "runtime_command", "_recipe",
+                   "runtime_initial_template", "runtime_next_template", "runtime_confirm_template",
+-                  "runtime_hash_template", "runtime_agent_message"}
++                  "runtime_hash_template", "runtime_checkpoint_template", "runtime_agent_message"}
+ 
+ 
+ def compact_json(value):
+@@ -331,7 +331,7 @@
+                         isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant) and
+                         type(node.value.value) is str, "COMPACT_TOP_LEVEL_UNSUPPORTED")
+         require(PURE_FUNCTIONS.issubset(self.functions), "COMPACT_SOURCE_API_ABSENT")
+-        require(self.constants.get("API_REVISION") == "support020-compact-runtime/1" and
++        require(self.constants.get("API_REVISION") == "support022-compact-runtime/1" and
+                 self.constants.get("REQUEST_FORMAT") == "verislop.carrier-runtime-request/0.1" and
+                 self.constants.get("EXEC_PRAGMA") == '// @exec: {"max_output_tokens": 20000}\n' and
+                 self.constants.get("NODE_PATH") == "/usr/bin/node" and
+--- validation/tier2-carrier-runtime-support-021-implementation-001/diagnostic_failure_parser.py
++++ validation/tier2-carrier-runtime-support-022-implementation-001/diagnostic_failure_parser.py
+@@ -5,7 +5,7 @@
+ 
+ MAX_SAFE_INTEGER = 2**53 - 1
+ SUCCESS_KEYS = {"markers", "field_roots", "field_eof", "field_chars"}
+-STAGES = {"FIRST_INVENTORY", "NEXT_SYSTEM", "NEXT_USER", "CONFIRM", "HASH", "FINAL_ASSEMBLY", "UNKNOWN"}
++STAGES = {"FIRST_INVENTORY", "NEXT_SYSTEM", "NEXT_USER", "CONFIRM", "HASH", "CHECKPOINT", "FINAL_ASSEMBLY", "UNKNOWN"}
+ SOURCES = {"NESTED_ACTUAL_RESULT", "OUTER_ACTUAL_RESPONSE", "PURE_EXCEPTION_RESPONSE", "OWN_VISIBLE_PROTOCOL_STATE"}
+ 
+ 
+@@ -170,7 +170,7 @@
+ 
+ def _reproduction(value):
+     _keys(value, {"template", "view", "confirmation", "own_input_literal", "expected_observed_error_literal", "availability"}, "INVALID_REPRODUCTION")
+-    _enum(value["template"], {"FIRST", "NEXT", "CONFIRM", "HASH", "FINAL_SCHEMA", "UNAVAILABLE"}, "INVALID_REPRODUCTION_TEMPLATE")
++    _enum(value["template"], {"FIRST", "NEXT", "CONFIRM", "HASH", "CHECKPOINT", "FINAL_SCHEMA", "UNAVAILABLE"}, "INVALID_REPRODUCTION_TEMPLATE")
+     if value["view"] is not None:
+         _view(value["view"])
+     if value["confirmation"] is not None:

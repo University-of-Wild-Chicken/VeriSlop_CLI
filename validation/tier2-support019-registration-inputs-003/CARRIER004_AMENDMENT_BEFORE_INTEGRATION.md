@@ -1,0 +1,3 @@
+# Carrier004 integration amendment
+
+Independent candidate003 source review found C003-01: unsupported nonempty request_id excludes valid reader inputs. Sealed candidate004 removes only this restriction and adds a generic regression; all other carrier ASTs are exact003. This amendment precedes integration source preparation and supersedes candidate003 path/digest in INSTALLATION_AND_PURE_INTEGRATION_BEFORE_SOURCE.md. Actual new candidate digest is774081ab079b0bb9086479782d065c9e4b91c372ecce765c248b533c1c2b666a. The collector revision remains003 under implementation004. Production installation still waits for bounded independent delta source review; runtime qualification remains unresolved.

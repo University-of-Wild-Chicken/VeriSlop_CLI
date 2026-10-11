@@ -1,0 +1,33 @@
+{
+  "format": "verislop.compact-runtime-candidate-source-specification/1",
+  "status": "SPECIFIED_BEFORE_CANDIDATE_SOURCE",
+  "root_specification": {
+    "path": "validation/tier2-carrier-runtime-support-020-design/SPECIFICATION_BEFORE_IMPLEMENTATION.json",
+    "sha256": "sha256:b6cedabb18fffc949337a49f1b7739af5b09e0d729661c819d3ceec91f0c206e",
+    "byte_count": 3872
+  },
+  "baseline_source": {
+    "path": "validation/tier2-support019-author-recovery-implementation-006/bootstrap_tier2_carrier_view.py",
+    "sha256": "sha256:f855de49fa8522cfc91053fe3f1f0db1ebd3c199260acbb97618d0f998c5eb4a",
+    "byte_count": 52313
+  },
+  "new_versioned_api_only": true,
+  "legacy_module_byte_exact_copy": "legacy006.py",
+  "static_sources": {
+    "reader.py": "Exact READER_SOURCE followed by a closed CLI; one reader invocation per view.",
+    "carrier_runtime.js": "Static exact CHECKPOINT_VALIDATOR_SOURCE and OWN_SHA256_SOURCE between declared header/tail; no eval or dynamic function compilation.",
+    "compact_protocol.py": "New separable compact templates, literal/source profile, proper POSIX JSON quoting and fixed hash guard before runtime launch."
+  },
+  "own_state": "Explicit declared session_directory and session_path; basename is SHA256 of all three canonical own reference fields. Reject reference/session mismatch. Own state only; canonical JSON and observation replay checked.",
+  "commit": "Exclusive own-session lock and atomic temporary-file rename only after successful unchanged checkpointConfirm. Rejected confirmation never changes accepted file. Replay retains unchanged inventory/fields/cursors; exact observation replay may append as in the original algorithm. Concurrent busy lock returns concrete SESSION_BUSY without commit or automatic retries.",
+  "operations": {
+    "view": "No accepted-state read/write. One unchanged reader child only. Forward complete reader stdout; stage full actual outer tool result in own functions store.",
+    "confirm": "Zero views and carrier reads. Pass exact stored pending plus explicit intact outer acknowledgment, validate and replay own state, then atomic commit.",
+    "hash": "Zero views and carrier reads. Replay own accepted state, require both complete confirmed EOFs, hash reconstructed original scalar fields only."
+  },
+  "trusted_revision": "Registered helper invocation is explicitly allowed in this revision. No semantic consumption, ACCEPT, proof, TESTED, lifecycle or historical cause authority.",
+  "guards": "Short fixed Python launcher hashes Node runtime and reader before Node exec; runtime repeats source identity checks before any operation and before its sole view reader child.",
+  "test_plan": "Register bounded creator controls before running; two fresh generic control directories, exact source guards, actual PIDs/integer status/logs; no model/VIEW tool/gate fixture oracle/task/Lean/native. Independent reviewer only after receipts exist.",
+  "qualification_authority": false,
+  "activation_authority": false
+}

@@ -1,0 +1,7 @@
+// @exec: {"max_output_tokens": 20000}
+const PREFIX = load("verislop.exact-carrier-session/0.1:{\"path\":\"/home/augustus/VeriSlop_CLI/validation/tier2-support019-registration-inputs-005/fixture-current-whole-gate-005/own-unrelated-carrier.json\",\"sha256\":\"sha256:d5f32660a2e386a69a407ed5bbaa929f48b88bfa477f441aca19d4f652b0dcbe\"}");
+if (typeof PREFIX !== "string") { throw new Error("OWN_CARRIER_PREFIX_ABSENT"); }
+const VIEW = {"metadata_reserve_bytes": 2048, "operation": "field", "output_cap_bytes": 8192, "selector": "/system", "start_char": 0};
+const cmd = PREFIX + "VIEW = json.loads(" + JSON.stringify(JSON.stringify(VIEW))
+  + ")\nraise SystemExit(emit_view(REFERENCE, VIEW))\nVERISLOP_EXACT_CARRIER_VIEW\n";
+text(await tools.exec_command({cmd, max_output_tokens: 16384}));

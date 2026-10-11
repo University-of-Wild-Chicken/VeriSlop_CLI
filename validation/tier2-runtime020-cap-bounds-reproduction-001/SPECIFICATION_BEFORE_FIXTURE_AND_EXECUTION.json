@@ -1,0 +1,55 @@
+{
+  "format": "verislop.runtime020-cap-bounds-reproduction-specification/1",
+  "status": "SPECIFIED_BEFORE_FIXTURE_AND_EXECUTION",
+  "scope": "One new unrelated public small Unicode fixture; generic installed runtime only",
+  "sequence": [
+    {
+      "id": "P01",
+      "operation": "view",
+      "view": "inventory cap8192/res2048"
+    },
+    {
+      "id": "P02",
+      "operation": "confirm",
+      "pending": "exact actual P01 tool result and exposed chunk; outer observed intact"
+    },
+    {
+      "id": "P03",
+      "operation": "view",
+      "view": "/system cursor0 cap4096/res2048 (empty field)"
+    },
+    {
+      "id": "P04",
+      "operation": "confirm",
+      "pending": "exact actual P03 result and exposed chunk; outer observed intact"
+    },
+    {
+      "id": "P05",
+      "operation": "view",
+      "view": "/user cursor0 cap65536/res2048; expected integer2 INVALID_CLOSED_VIEW_BOUNDS, accepted state exact unchanged"
+    },
+    {
+      "id": "P06",
+      "operation": "view",
+      "view": "explicit SAME /user cursor0 cap4096/res2048; expected integer0 exact complete Unicode field, accepted state unchanged until confirmation"
+    },
+    {
+      "id": "P07",
+      "operation": "confirm",
+      "pending": "exact actual P06 result and exposed chunk; outer observed intact; expected successful complete own user EOF"
+    }
+  ],
+  "source_witnesses": [
+    "runtime_agent_message instruction allows editing cap/reserve and retry4096 but omits allowed numeric range256..8192",
+    "diagnostic_failure_parser._operation bounds output_cap_bytes high8192 and therefore rejects concrete rejected-input cap65536"
+  ],
+  "actual_evidence": "Retain actual functions.exec nested tool response/chunk/status/full output; runtime/reader native PIDs are UNAVAILABLE if interface does not expose them. No synthetic actual metadata.",
+  "prohibited": [
+    "Q006 carrier/author/expected/evidence reads",
+    "model/task/proof/Lean/native/current27/qualification invocation",
+    "new fixture oracle or any historical expected read",
+    "source fixes or production edits"
+  ],
+  "qualification_authority": false,
+  "historical_author_cause": "UNATTESTED; generic reproduction does not attest actual historical author causal chain"
+}

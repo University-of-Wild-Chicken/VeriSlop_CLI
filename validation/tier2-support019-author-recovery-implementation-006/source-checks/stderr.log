@@ -1,0 +1,29 @@
+test_01_constructed_minimal_transcription_counterexample (__main__.PureSyntaxControls.test_01_constructed_minimal_transcription_counterexample) ... ok
+test_02_minimal_canonical_positive (__main__.PureSyntaxControls.test_02_minimal_canonical_positive) ... ok
+test_03_whole_canonical_confirm_compiles (__main__.PureSyntaxControls.test_03_whole_canonical_confirm_compiles) ... ok
+test_04_whole_transcription_counterexample_fails_syntax (__main__.PureSyntaxControls.test_04_whole_transcription_counterexample_fails_syntax) ... ok
+test_05_exact_restoration_compiles_original (__main__.PureSyntaxControls.test_05_exact_restoration_compiles_original) ... ok
+test_06_unchanged_validator_rejects_then_corrects_same_pending (__main__.PureSyntaxControls.test_06_unchanged_validator_rejects_then_corrects_same_pending) ... ok
+test_07_only_instruction_bytes_and_ast_change (__main__.SourceFidelity.test_07_only_instruction_bytes_and_ast_change) ... ok
+test_08_all_constants_and_other_function_asts_unchanged (__main__.SourceFidelity.test_08_all_constants_and_other_function_asts_unchanged) ... ok
+test_09_factory_only_candidate_hash_change (__main__.SourceFidelity.test_09_factory_only_candidate_hash_change) ... ok
+test_10_source_owned_literals_all_recipes_and_whole_messages (__main__.SourceFidelity.test_10_source_owned_literals_all_recipes_and_whole_messages) ... ERROR
+test_11_independent_reconstruction_rejects_tampered_source_and_instruction (__main__.SourceFidelity.test_11_independent_reconstruction_rejects_tampered_source_and_instruction) ... ok
+test_12_recovery_instruction_scope_and_no_historical_identifiers (__main__.SourceFidelity.test_12_recovery_instruction_scope_and_no_historical_identifiers) ... ok
+
+======================================================================
+ERROR: test_10_source_owned_literals_all_recipes_and_whole_messages (__main__.SourceFidelity.test_10_source_owned_literals_all_recipes_and_whole_messages)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/augustus/VeriSlop_CLI/validation/tier2-support019-author-recovery-implementation-006/test_recovery_source006.py", line 134, in test_10_source_owned_literals_all_recipes_and_whole_messages
+    HELPER.validate_literals((directory / "bootstrap_tier2_carrier_view.py").read_bytes(), profile)
+  File "/home/augustus/VeriSlop_CLI/validation/tier2-support-019-qualification-adapters-006/author_protocol_reconstruction.py", line 156, in validate_literals
+    require(literals[name] == extracted[name], "AUTHOR_LITERAL_OR_AST_MISMATCH:" + name)
+  File "/home/augustus/VeriSlop_CLI/validation/tier2-support-019-qualification-adapters-006/author_protocol_reconstruction.py", line 21, in require
+    raise ValueError(code)
+ValueError: AUTHOR_LITERAL_OR_AST_MISMATCH:function_ast_hashes
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.716s
+
+FAILED (errors=1)

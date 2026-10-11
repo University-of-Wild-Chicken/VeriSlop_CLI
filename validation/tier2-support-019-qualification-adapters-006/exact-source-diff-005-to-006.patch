@@ -1,0 +1,363 @@
+--- validation/tier2-support-019-qualification-adapters-005/predicate_reader.py
++++ validation/tier2-support-019-qualification-adapters-006/predicate_reader.py
+@@ -8,6 +8,7 @@
+ import datetime
+ import hashlib
+ import json
++import importlib.util
+ import re
+ import sys
+ 
+@@ -635,23 +636,23 @@
+     def recipe_literals(self):
+         literals=self.registered_doc(self.adapters['predicate_reader_carrier_literals'])
+         source=self.read(literals['source']['path'],literals['source']['sha256'])
+-        tree=ast.parse(source.decode('utf-8','strict'))
+-        constants={}
+-        functions={}
+-        for node in tree.body:
+-            if isinstance(node,ast.Assign) and len(node.targets)==1 and isinstance(node.targets[0],ast.Name):
+-                name=node.targets[0].id
+-                if name in literals['constants']: constants[name]=ast.literal_eval(node.value)
+-            elif isinstance(node,ast.FunctionDef) and node.name in literals['function_ast_hashes']:
+-                functions[node.name]=sha(ast.dump(node,include_attributes=False).encode())
+-        need(constants==literals['constants'] and functions==literals['function_ast_hashes'], 'CARRIER_LITERAL_OR_FUNCTION_AST_CHANGED')
+-        def flatten(node):
+-            return flatten(node.left)+flatten(node.right) if isinstance(node,ast.BinOp) and isinstance(node.op,ast.Add) else [node]
+-        message=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='agent_message')
+-        parts=flatten(message.body[0].value)
+-        need(isinstance(parts[0],ast.Constant) and parts[0].value==literals['agent_message_prefix'] and
+-             [n.value for n in parts[2:] if isinstance(n,ast.Constant)]==literals['message_suffix_parts'], 'CARRIER_MESSAGE_LITERALS_NOT_SOURCE_DERIVED')
++        protocol=self.author_protocol_module(literals)
++        protocol.validate_literals(source,literals)
+         return literals
++
++    def author_protocol_module(self, literals):
++        identity=literals['author_protocol']['reconstruction_source']
++        need(type(identity) is dict and set(identity)=={'path','sha256'} and
++             self.hashes.get(identity['path'])==identity['sha256'], 'AUTHOR_RECONSTRUCTION_SOURCE_NOT_FROZEN')
++        path=self.path(identity['path']); self.read(path,identity['sha256'])
++        definition=importlib.util.spec_from_file_location('support019_independent_author_protocol006',path)
++        module=importlib.util.module_from_spec(definition)
++        definition.loader.exec_module(module)
++        return module
++
++    def author_message(self, reference):
++        literals=self.recipe_literals()
++        return self.author_protocol_module(literals).author_message(literals,reference)
+ 
+     def closed_view(self, view):
+         need(type(view) is dict and view.get('operation') in ('inventory','field'), 'VIEW_NOT_CLOSED')
+@@ -1213,11 +1214,7 @@
+              author['spawn_count']==1 and author['requested_model']=='gpt-6.1-sol' and author['fork_turns']=='none' and
+              author['model_identity']==author['semantic_consumption']=='UNATTESTED', 'AUTHOR_COUNT_REQUEST_OR_IDENTITY_OVERCLAIM')
+         fixture,reference=self.fresh_fixture(author['fresh_fixture']); literal=self.recipe_literals()
+-        message=(literal['agent_message_prefix']+json.dumps(reference,sort_keys=True,ensure_ascii=True)+
+-                 '\n\nFIRST functions.exec (execute unchanged):\n```javascript\n'+
+-                 self.recipe(reference,{'operation':'inventory','output_cap_bytes':8192,'metadata_reserve_bytes':2048},True).decode()+
+-                 '```\n\nNEXT functions.exec (edit ONLY closed VIEW):\n```javascript\n'+
+-                 self.recipe(reference,{'operation':'field','selector':'/system','start_char':0,'output_cap_bytes':8192,'metadata_reserve_bytes':2048}).decode()+'```\n').encode('utf-8')
++        message=self.author_message(reference)
+         need(self.fresh_ref(author['submitted_message_ref'])==self.fresh_ref(author['expected_literal_message_ref'])==message, 'ORIGINAL_PLAIN_AGENT_MESSAGE_BYTES_CHANGED')
+         spawn=parse(self.fresh_ref(author['spawn_request_ref'])); response=parse(self.fresh_ref(author['spawn_result_ref']))
+         need(type(response) is dict and set(response)=={'task_name'} and
+--- validation/tier2-support-019-qualification-adapters-005/additional_predicates.py
++++ validation/tier2-support-019-qualification-adapters-006/additional_predicates.py
+@@ -428,8 +428,11 @@
+     def carrier_pure(self):
+         observed = self.additional_index("pure")
+         expected = self.config["exact_pure_test_ids"]
++        installed_hash = self.hashes.get("synthetic_dataset/tools/bootstrap_tier2_carrier_view.py")
++        require(type(installed_hash) is str and re.fullmatch(r"sha256:[0-9a-f]{64}", installed_hash) is not None,
++                "PURE_INSTALLED_SOURCE_NOT_CURRENT_FROZEN_INPUT")
+         require(observed["format"] == "verislop.support019-carrier-pure-observations/1" and observed["status"] == "OBSERVED" and
+-                observed["installed_source_sha256"] == "sha256:9930beff878848b05c8d69245fff12c1388f14254b6630504b36748c4c294366" and
++                observed["installed_source_sha256"] == installed_hash and
+                 observed["registered_test_ids"] == observed["started_ids"] == expected and observed["cases"] ==
+                 [{"test_id": name, "status": "PASS"} for name in expected] and observed["tests_run"] == len(expected) == 30 and
+                 len(set(expected)) == 30 and all(type(observed[key]) is int and observed[key] == 0 for key in
+@@ -757,10 +760,16 @@
+                 index["replacement_author_or_resampling"] is False and
+                 index["evaluator_expectations_sent_to_author"] is False, "FRESH_AUTHOR_COUNT_OR_AUTHORITY_BOUNDARY")
+         fixture, reference = self.carrier_fixture(index["fresh_fixture"])
+-        viewer = self.module("support019_installed_plain_viewer", self.path("synthetic_dataset/tools/bootstrap_tier2_carrier_view.py"))
++        literals = self.document(self.registered(self.path(self.config["predicate_reader_carrier_literals"])))
++        reconstruction = literals["author_protocol"]["reconstruction_source"]
++        require(type(reconstruction) is dict and set(reconstruction) == {"path", "sha256"} and
++                self.hashes.get(reconstruction["path"]) == reconstruction["sha256"], "AUTHOR_RECONSTRUCTION_SOURCE_NOT_FROZEN")
++        source = self.read(self.registered(self.path(literals["source"]["path"])), literals["source"]["sha256"])
++        protocol = self.module("support019_independent_author_protocol006", self.path(reconstruction["path"]))
++        protocol.validate_literals(source, literals)
+         message = self.additional_ref(index["submitted_message_ref"])
+         require(message == self.additional_ref(index["expected_literal_message_ref"]) ==
+-                viewer.agent_message(reference).encode("utf-8", "strict"), "ORIGINAL_PLAIN_AUTHOR_MESSAGE_NOT_EXACT")
++                protocol.author_message(literals, reference), "ORIGINAL_PLAIN_AUTHOR_MESSAGE_NOT_EXACT")
+         request = self.additional_doc(index["spawn_request_ref"])
+         actual_spawn = self.additional_doc(index["spawn_result_ref"])
+         observed = index["observed_author_requests"][0]
+@@ -776,7 +785,7 @@
+                 self.canonical.dumps(observed["spawn_result_ref"]) == self.canonical.dumps(index["spawn_result_ref"]) and
+                 observed["agent_id"] == actual_spawn["task_name"], "ACTUAL_SINGLE_SPAWN_REQUEST_BINDING")
+         final = self.additional_doc(index["literal_final_ref"])
+-        expected = {"markers": list(dict.fromkeys(re.findall(r"UNRELATED_019_002_[A-Za-z0-9_]+", fixture["user"]))),
++        expected = {"markers": list(dict.fromkeys(re.findall(literals["marker_pattern"], fixture["user"]))),
+                     "field_roots": {"/" + key: sha(fixture[key].encode("utf-8")) for key in ("system", "user")},
+                     "field_eof": {"/system": True, "/user": True},
+                     "field_chars": {"/" + key: len(fixture[key]) for key in ("system", "user")}}
+--- /dev/null
++++ validation/tier2-support-019-qualification-adapters-006/author_protocol_reconstruction.py
+@@ -0,0 +1,254 @@
++"""Registered independent string reconstruction; no producer import/execution.
++
++Only frozen literal/AST schemas are interpreted. This support module performs
++no tool, file, viewer, model, compiler, task or qualification calls itself.
++"""
++import ast
++import hashlib
++import json
++
++CONSTANT_NAMES = ("READER_SOURCE", "_EXEC_PRAGMA", "_VIEW_GUARD", "_NEXT_EMIT",
++                  "CHECKPOINT_VALIDATOR_SOURCE", "OWN_SHA256_SOURCE")
++FUNCTION_NAMES = ("inline_source", "inline_command", "inline_prefix", "own_session_key", "_closed_view",
++                  "initial_session_template", "next_session_template", "legacy_agent_message",
++                  "own_checkpoint_key", "own_pending_key", "own_hash_key", "_author_observer",
++                  "author_initial_session_template", "author_next_session_template", "_checkpoint_bindings",
++                  "confirm_session_template", "hash_session_template", "agent_message")
++
++
++def require(ok, code):
++    if not ok:
++        raise ValueError(code)
++
++
++def sha(raw):
++    return "sha256:" + hashlib.sha256(raw).hexdigest()
++
++
++def flatten(node):
++    return flatten(node.left) + flatten(node.right) if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add) else [node]
++
++
++def return_value(function):
++    values = [node.value for node in function.body if isinstance(node, ast.Return)]
++    require(len(values) == 1, "AUTHOR_SOURCE_RETURN_NOT_SINGLE")
++    return values[0]
++
++
++def literal_assignment(function, name):
++    found = [node.value for node in function.body if isinstance(node, ast.Assign)
++             and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name) and node.targets[0].id == name]
++    require(len(found) == 1, "AUTHOR_SOURCE_LITERAL_ASSIGNMENT_NOT_SINGLE:" + name)
++    return ast.literal_eval(found[0])
++
++
++def fragments(node, symbolic):
++    """Closed string-concatenation schema, never eval or arbitrary AST execution."""
++    output = []
++    for part in flatten(node):
++        if isinstance(part, ast.Constant) and type(part.value) is str:
++            output.append({"literal": part.value})
++        else:
++            shape = ast.dump(part, include_attributes=False)
++            require(shape in symbolic, "AUTHOR_UNSUPPORTED_TEMPLATE_EXPRESSION:" + shape)
++            output.append({"symbol": symbolic[shape]})
++    return output
++
++
++def expression(source):
++    return ast.dump(ast.parse(source, mode="eval").body, include_attributes=False)
++
++
++def extract_schema(source):
++    text = source.decode("utf-8", "strict")
++    tree = ast.parse(text)
++    functions = {node.name: node for node in tree.body if isinstance(node, ast.FunctionDef)}
++    require(len(functions) == sum(isinstance(node, ast.FunctionDef) for node in tree.body), "AUTHOR_DUPLICATE_SOURCE_FUNCTION")
++    require(set(FUNCTION_NAMES).issubset(functions), "AUTHOR_SOURCE_FUNCTION_ABSENT")
++    constants = {}
++    for node in tree.body:
++        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
++            name = node.targets[0].id
++            if name in CONSTANT_NAMES:
++                require(name not in constants, "AUTHOR_DUPLICATE_SOURCE_CONSTANT")
++                constants[name] = ast.literal_eval(node.value)
++    require(set(constants) == set(CONSTANT_NAMES) and all(type(value) is str for value in constants.values()), "AUTHOR_SOURCE_CONSTANT_ABSENT_OR_NOT_STRING")
++    hashes = {name: sha(ast.dump(functions[name], include_attributes=False).encode()) for name in FUNCTION_NAMES}
++    legacy = flatten(return_value(functions["legacy_agent_message"]))
++    require(isinstance(legacy[0], ast.Constant) and type(legacy[0].value) is str, "AUTHOR_LEGACY_PREFIX_NOT_LITERAL")
++    legacy_parts = fragments(return_value(functions["legacy_agent_message"]), {
++        expression("json.dumps(reference, sort_keys=True, ensure_ascii=True)"): "reference_json",
++        expression("initial_session_template(reference)"): "legacy_first",
++        expression("next_session_template(reference)"): "legacy_next"})
++    own_keys = {}
++    for name in ("own_checkpoint_key", "own_pending_key", "own_hash_key"):
++        parts = flatten(return_value(functions[name]))
++        require(isinstance(parts[0], ast.Constant) and type(parts[0].value) is str, "AUTHOR_OWN_KEY_PREFIX_NOT_LITERAL")
++        own_keys[name] = parts[0].value
++    observer = functions["_author_observer"]
++    observer_old = literal_assignment(observer, "old")
++    observer_new = literal_assignment(observer, "new")
++    binding_values = [node.value for node in observer.body if isinstance(node, ast.Assign)
++                      and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name) and node.targets[0].id == "bindings"]
++    require(len(binding_values) == 1, "AUTHOR_OBSERVER_BINDINGS_NOT_SINGLE")
++    observer_bindings = fragments(binding_values[0], {
++        expression("json.dumps(reference, sort_keys=True, ensure_ascii=True)"): "reference_json",
++        expression("json.dumps(own_pending_key(reference), ensure_ascii=True)"): "pending_key_json"})
++    checkpoint_bindings = fragments(return_value(functions["_checkpoint_bindings"]), {
++        expression("json.dumps(reference, sort_keys=True, ensure_ascii=True)"): "reference_json",
++        expression("json.dumps(own_checkpoint_key(reference), ensure_ascii=True)"): "checkpoint_key_json"})
++    symbolic = {expression("_EXEC_PRAGMA"): "pragma", expression("_checkpoint_bindings(reference)"): "checkpoint_bindings",
++                expression("CHECKPOINT_VALIDATOR_SOURCE"): "validator", expression("OWN_SHA256_SOURCE"): "sha256",
++                expression("json.dumps(own_pending_key(reference), ensure_ascii=True)"): "pending_key_json",
++                expression("json.dumps(confirmation, sort_keys=True, ensure_ascii=True)"): "confirmation_json",
++                expression("json.dumps(own_hash_key(reference), ensure_ascii=True)"): "hash_key_json"}
++    confirm_parts = fragments(return_value(functions["confirm_session_template"]), symbolic)
++    hash_parts = fragments(return_value(functions["hash_session_template"]), symbolic)
++    message = functions["agent_message"]
++    require(len(message.body) == 7 and isinstance(message.body[0], ast.Assign)
++            and expression("legacy_agent_message(reference)") == ast.dump(message.body[0].value, include_attributes=False), "AUTHOR_MESSAGE_INITIALIZATION_SHAPE")
++    transforms = []
++    allowed_template_calls = {expression("initial_session_template(reference)"): "legacy_first",
++                              expression("author_initial_session_template(reference)"): "author_first",
++                              expression("next_session_template(reference)"): "legacy_next",
++                              expression("author_next_session_template(reference)"): "author_next",
++                              expression(r'instruction + "\nCARRIER:\n"'): "instruction_with_carrier"}
++    for index in (1, 2, 3, 5):
++        node = message.body[index]
++        require(isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name)
++                and node.targets[0].id == "message" and isinstance(node.value, ast.Call)
++                and expression("message.replace") == ast.dump(node.value.func, include_attributes=False)
++                and not node.value.keywords and len(node.value.args) == 3
++                and type(ast.literal_eval(node.value.args[2])) is int and ast.literal_eval(node.value.args[2]) == 1,
++                "AUTHOR_MESSAGE_TRANSFORM_SHAPE")
++        sides = []
++        for side in node.value.args[:2]:
++            if isinstance(side, ast.Constant) and type(side.value) is str:
++                sides.append({"literal": side.value})
++            else:
++                shape = ast.dump(side, include_attributes=False)
++                require(shape in allowed_template_calls, "AUTHOR_MESSAGE_TRANSFORM_UNSUPPORTED")
++                sides.append({"symbol": allowed_template_calls[shape]})
++        transforms.append(sides)
++    require(isinstance(message.body[4], ast.Assign) and len(message.body[4].targets) == 1
++            and isinstance(message.body[4].targets[0], ast.Name) and message.body[4].targets[0].id == "instruction",
++            "AUTHOR_MESSAGE_INSTRUCTION_SHAPE")
++    instruction = ast.literal_eval(message.body[4].value)
++    require(type(instruction) is str, "AUTHOR_MESSAGE_INSTRUCTION_NOT_LITERAL")
++    append_parts = fragments(return_value(message), {
++        expression("message"): "message", expression("confirm_session_template(reference)"): "confirm",
++        expression("hash_session_template(reference)"): "hash"})
++    require("observable-carrier-collector-result" not in observer_new and "store(PENDING_KEY" in observer_new,
++            "AUTHOR_OBSERVER_IS_NOT_OWN_PENDING")
++    return {"constants": constants, "function_ast_hashes": hashes, "agent_message_prefix": legacy[0].value,
++            "message_suffix_parts": [part.value for part in legacy[2:] if isinstance(part, ast.Constant)],
++            "author_protocol": {"format": "verislop.author-protocol-literal-schema/1", "own_keys": own_keys,
++                "legacy_message": legacy_parts, "observer_old": observer_old, "observer_new": observer_new,
++                "observer_bindings": observer_bindings, "checkpoint_bindings": checkpoint_bindings,
++                "confirm": confirm_parts, "hash": hash_parts, "message_transforms": transforms,
++                "instruction": instruction, "message_append": append_parts}}
++
++
++def validate_literals(source, literals):
++    require(type(literals) is dict and literals["source"]["sha256"] == sha(source), "AUTHOR_SOURCE_HASH_MISMATCH")
++    extracted = extract_schema(source)
++    for name in ("constants", "function_ast_hashes", "agent_message_prefix", "message_suffix_parts"):
++        require(literals[name] == extracted[name], "AUTHOR_LITERAL_OR_AST_MISMATCH:" + name)
++    profile = dict(literals["author_protocol"])
++    reference = profile.pop("reconstruction_source")
++    require(type(reference) is dict and set(reference) == {"path", "sha256"}
++            and type(reference["path"]) is str and type(reference["sha256"]) is str, "AUTHOR_RECONSTRUCTION_REFERENCE_SHAPE")
++    require(profile == extracted["author_protocol"], "AUTHOR_PROTOCOL_SCHEMA_NOT_SOURCE_DERIVED")
++    return literals
++
++
++def emit(parts, values):
++    result = []
++    for part in parts:
++        require(type(part) is dict and set(part) in ({"literal"}, {"symbol"}), "AUTHOR_TEMPLATE_FRAGMENT_SHAPE")
++        value = part["literal"] if "literal" in part else values[part["symbol"]]
++        require(type(value) is str, "AUTHOR_TEMPLATE_FRAGMENT_NOT_STRING")
++        result.append(value)
++    return "".join(result)
++
++
++def own_key(prefix, reference):
++    return prefix + json.dumps({"path": reference["path"], "sha256": reference["sha256"]}, sort_keys=True,
++                              ensure_ascii=True, separators=(",", ":"))
++
++
++def closed_view(view):
++    require(type(view) is dict and view.get("operation") in ("inventory", "field"), "AUTHOR_VIEW_NOT_CLOSED")
++    keys = {"operation", "output_cap_bytes", "metadata_reserve_bytes"}
++    if view["operation"] == "field":
++        keys |= {"selector", "start_char"}
++    require(set(view) == keys and type(view["output_cap_bytes"]) is int and 256 <= view["output_cap_bytes"] <= 8192
++            and type(view["metadata_reserve_bytes"]) is int and 128 <= view["metadata_reserve_bytes"] < view["output_cap_bytes"],
++            "AUTHOR_VIEW_FIELDS_OR_BOUNDS")
++    if view["operation"] == "field":
++        require(view["selector"] in ("/system", "/user") and type(view["start_char"]) is int
++                and 0 <= view["start_char"] <= 2**53 - 1, "AUTHOR_VIEW_SELECTOR_OR_CURSOR")
++    return view
++
++
++def legacy_recipe(literals, reference, view=None, first=False):
++    c = literals["constants"]
++    if view is None:
++        view = {"operation": "field", "selector": "/system", "start_char": 0, "output_cap_bytes": 8192, "metadata_reserve_bytes": 2048}
++    closed_view(view)
++    key = own_key("verislop.exact-carrier-session/0.1:", reference)
++    if first:
++        view = {"operation": "inventory", "output_cap_bytes": 8192, "metadata_reserve_bytes": 2048}
++        prefix = "python -I -B - <<'VERISLOP_EXACT_CARRIER_VIEW'\n" + c["READER_SOURCE"] + "\nREFERENCE = json.loads(" + repr(json.dumps(reference, sort_keys=True, ensure_ascii=True)) + ")\n"
++        return (c["_EXEC_PRAGMA"] + "const OWN_KEY = " + json.dumps(key, ensure_ascii=True) + ";\nconst PREFIX = "
++                + json.dumps(prefix, ensure_ascii=True) + ";\nstore(OWN_KEY, PREFIX);\nconst VIEW = "
++                + json.dumps(view, sort_keys=True, ensure_ascii=True) + ";\n" + c["_VIEW_GUARD"])
++    return (c["_EXEC_PRAGMA"] + "const PREFIX = load(" + json.dumps(key, ensure_ascii=True) + ");\n"
++            + 'if (typeof PREFIX !== "string") { throw new Error("OWN_CARRIER_PREFIX_ABSENT"); }\n'
++            + "const VIEW = " + json.dumps(view, sort_keys=True, ensure_ascii=True) + ";\n" + c["_NEXT_EMIT"])
++
++
++def recipes(literals, reference, confirmation=None, view=None):
++    profile, c = literals["author_protocol"], literals["constants"]
++    require(type(reference) is dict and set(reference) == {"path", "sha256", "request_sha256"}
++            and all(type(value) is str for value in reference.values()), "AUTHOR_REFERENCE_NOT_EXACT")
++    if confirmation is None:
++        confirmation = {"chunk_id": "COPY_ACTUAL_CHUNK_ID", "outer_output_intact": True}
++    require(type(confirmation) is dict and set(confirmation) == {"chunk_id", "outer_output_intact"}
++            and type(confirmation["chunk_id"]) is str and confirmation["chunk_id"]
++            and type(confirmation["outer_output_intact"]) is bool, "AUTHOR_CONFIRMATION_NOT_CLOSED")
++    values = {"reference_json": json.dumps(reference, sort_keys=True, ensure_ascii=True), "pragma": c["_EXEC_PRAGMA"],
++              "validator": c["CHECKPOINT_VALIDATOR_SOURCE"], "sha256": c["OWN_SHA256_SOURCE"],
++              "confirmation_json": json.dumps(confirmation, sort_keys=True, ensure_ascii=True)}
++    for function, symbol in (("own_pending_key", "pending_key_json"), ("own_checkpoint_key", "checkpoint_key_json"),
++                             ("own_hash_key", "hash_key_json")):
++        values[symbol] = json.dumps(own_key(profile["own_keys"][function], reference), ensure_ascii=True)
++    values["checkpoint_bindings"] = emit(profile["checkpoint_bindings"], values)
++    values["legacy_first"] = legacy_recipe(literals, reference, first=True)
++    values["legacy_next"] = legacy_recipe(literals, reference, view=view)
++    for before, after in (("legacy_first", "author_first"), ("legacy_next", "author_next")):
++        lines = values[before].split("\n")
++        require(lines.count(profile["observer_old"]) == 1, "AUTHOR_SINGLE_FORWARDING_STATEMENT_REQUIRED")
++        replaced = "\n".join(profile["observer_new"] if line == profile["observer_old"] else line for line in lines)
++        require(replaced.startswith(c["_EXEC_PRAGMA"]), "AUTHOR_PRAGMA_CHANGED")
++        values[after] = c["_EXEC_PRAGMA"] + emit(profile["observer_bindings"], values) + replaced[len(c["_EXEC_PRAGMA"]):]
++    values["confirm"] = emit(profile["confirm"], values)
++    values["hash"] = emit(profile["hash"], values)
++    return {name: values[name] for name in ("legacy_first", "legacy_next", "author_first", "author_next", "confirm", "hash")}
++
++
++def author_message(literals, reference):
++    values = recipes(literals, reference)
++    values["reference_json"] = json.dumps(reference, sort_keys=True, ensure_ascii=True)
++    profile = literals["author_protocol"]
++    values["message"] = emit(profile["legacy_message"], values)
++    values["instruction_with_carrier"] = profile["instruction"] + "\nCARRIER:\n"
++    for sides in profile["message_transforms"]:
++        require(type(sides) is list and len(sides) == 2, "AUTHOR_MESSAGE_TRANSFORM_NOT_CLOSED")
++        values["message"] = values["message"].replace(emit([sides[0]], values), emit([sides[1]], values), 1)
++    message = emit(profile["message_append"], values)
++    require("observable-carrier-collector-result" not in profile["observer_new"]
++            and "store(PENDING_KEY" in profile["observer_new"], "AUTHOR_MESSAGE_CONTAINS_COLLECTOR_OBSERVER")
++    require(values["author_first"] in message and values["author_next"] in message
++            and values["confirm"] in message and values["hash"] in message, "AUTHOR_RECIPE_BYTES_NOT_COMPLETE")
++    return message.encode("utf-8", "strict")

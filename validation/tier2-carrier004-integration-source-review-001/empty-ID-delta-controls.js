@@ -1,0 +1,11 @@
+
+const assert=require('assert');const input=JSON.parse(require('fs').readFileSync(0,'utf8'));const ref=input.reference;const inv=input.view;const doc=JSON.parse(input.source_derived_output);const pending=(d,v,chunk)=>({reference:ref,view:v,result:{chunk_id:chunk,exit_code:0,original_token_count:100,wall_time_seconds:0.001,output:checkpointWire(d)+'\n'}});const ack=chunk=>({chunk_id:chunk,outer_output_intact:true});const controls=[];
+let state=checkpointConfirm(undefined,pending(doc,inv,'empty-id-inventory'),ack('empty-id-inventory'),ref);assert.strictEqual(state.inventory.request_id,'');controls.push({id:'exact_C003_01_witness_now_creates_inventory',status:'PASS'});
+const bad={...doc,request_id:null};assert.throws(()=>checkpointConfirm(undefined,pending(bad,inv,'strict-id'),ack('strict-id'),ref),/ACTUAL_VIEW_IDENTITY_MISMATCH/);controls.push({id:'strict_string_type_retained',status:'PASS'});
+for(const selector of ['/system','/user']){
+ const v={operation:'field',selector,start_char:0,output_cap_bytes:8192,metadata_reserve_bytes:2048};const d={};for(const [k,val]of Object.entries(doc))if(k!=='fields'&&k!=='navigation')d[k]=val;Object.assign(d,{operation:'field',selector,field_chars:0,field_utf8_bytes:0,start_char:0,end_char:0,start_utf8_byte:0,end_utf8_byte:0,content_chars:0,content_utf8_bytes:0,content:'',next_char:0,field_eof:true});
+ if(selector==='/system'){assert.throws(()=>checkpointConfirm(state,pending({...d,request_id:'changed'},v,'changed-id'),ack('changed-id'),ref),/ACTUAL_REQUEST_IDENTITY_CHANGED/);controls.push({id:'stable_exact_request_identity_retained',status:'PASS'});}
+ state=checkpointConfirm(state,pending(d,v,selector),ack(selector),ref);
+}
+const fields=checkpointReconstruct(state,ref).fields;for(const selector of ['/system','/user']){assert.strictEqual(fields[selector].field_eof,true);assert.strictEqual(fields[selector].content,'');assert.strictEqual('sha256:'+ownViewSha256(fields[selector].content),input.empty_sha256);}controls.push({id:'exact_empty_ID_checkpoint_both_EOF_and_hash',status:'PASS'});
+console.log(JSON.stringify({format:'verislop.carrier004-minimal-source-delta-controls/1',controls,control_count:controls.length,actual_VIEW_calls:0,target_reader_calls:0,model_calls:0,Lean_calls:0,runtime_authority:false}));

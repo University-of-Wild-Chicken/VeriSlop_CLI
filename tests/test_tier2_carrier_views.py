@@ -334,8 +334,10 @@ class CarrierViewTests(unittest.TestCase):
     def test_inline_message_and_snapshot_binding(self):
         reference, _ = self.carrier()
         message = viewer.agent_message(reference)
-        self.assertIn(viewer.initial_session_template(reference), message)
-        self.assertIn(viewer.next_session_template(reference), message)
+        self.assertIn(viewer.author_initial_session_template(reference), message)
+        self.assertIn(viewer.author_next_session_template(reference), message)
+        self.assertIn(viewer.confirm_session_template(reference), message)
+        self.assertIn(viewer.hash_session_template(reference), message)
         self.assertIn(json.dumps(viewer.inline_prefix(reference), ensure_ascii=True),
                       viewer.initial_session_template(reference))
         self.assertIn("bootstrap_tier2_carrier_view.py", '\n'.join(bootstrap.TRANSPORT_FILES))

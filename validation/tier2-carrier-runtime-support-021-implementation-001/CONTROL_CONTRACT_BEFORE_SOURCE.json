@@ -1,0 +1,84 @@
+{
+  "format": "verislop.support021-finite-source-controls/1",
+  "status": "SPECIFIED_BEFORE_CANDIDATE_SOURCE",
+  "root_specification": {
+    "path": "validation/tier2-carrier-runtime-support-021-design/SPECIFICATION_BEFORE_IMPLEMENTATION.json",
+    "sha256": "sha256:b50715d1bf8386f3537fa2288566f16d51d2c2f09327dda26a2a708d2a5df902"
+  },
+  "candidate_directory": "validation/tier2-carrier-runtime-support-021-implementation-001",
+  "scope": "SOURCE_READINESS_ONLY_NOT_QUALIFICATION",
+  "runs": 1,
+  "two_build_or_repeat_claim": false,
+  "controls": [
+    {
+      "id": "C01",
+      "check": "Authenticate nonempty registered input source guards before and after actual controls."
+    },
+    {
+      "id": "C02",
+      "check": "Compact source differs only in runtime_agent_message string constants; every other AST and fixed constant stays exact."
+    },
+    {
+      "id": "C03",
+      "check": "Runtime JS and reader copies remain byte-exact; no runtime accepted-domain or execution change."
+    },
+    {
+      "id": "C04",
+      "check": "Parser differs only in _view/_operation attempted numeric validation; all other ASTs/constants and four-key success set stay exact."
+    },
+    {
+      "id": "C05",
+      "check": "Capture factory and legacy bootstrap source are byte/AST exact with unchanged relative-path/hash mechanics."
+    },
+    {
+      "id": "C06",
+      "check": "Independent existing PureTemplateAST reconstruction of unrelated generic message equals candidate generator bytes; template API outputs equal preimage."
+    },
+    {
+      "id": "C07",
+      "check": "Message states cap256..8192, reserve128<=reserve<cap, scalar safe cursor and ordered selectors."
+    },
+    {
+      "id": "C08",
+      "check": "Message mandates explicit same accepted cursor valid NEXT recovery/default8192/2048, truncation4096/2048, no erroneous confirmation or first editable-error FINAL."
+    },
+    {
+      "id": "C09",
+      "check": "Actual Q006 unsuccessful literal is accepted only as UNATTESTED failure evidence; unchanged predecessor rejects INVALID_OWN_CAP."
+    },
+    {
+      "id": "C10",
+      "check": "Explicit synthetic failure reports with cap65536, negative cursor, reserve>=cap and signed safe endpoints accepted as evidence only; literals preserved."
+    },
+    {
+      "id": "C11",
+      "check": "Boolean attempted numeric values reject in operation/view; unsafe signed integers and floats reject."
+    },
+    {
+      "id": "C12",
+      "check": "Duplicate JSON keys, wrong closed shapes, unauthorized diagnostic branch and authority overclaims reject unchanged."
+    },
+    {
+      "id": "C13",
+      "check": "Five-key failure output always success=false with zero discharged claims; four-key success input never admitted by failure parser."
+    },
+    {
+      "id": "C14",
+      "check": "Unchanged producer/runtime accepted numeric domain still rejects invalid request values; no model/task/VIEW/runtime process/Lean/qualification executed."
+    }
+  ],
+  "allowed_message_insertion": {
+    "bounds": "Every VIEW output_cap_bytes is an integer from 256 through 8192 inclusive; metadata_reserve_bytes is an integer with 128 <= metadata_reserve_bytes < output_cap_bytes. Field start_char is an exact nonnegative JSON-safe integer counting decoded Unicode scalars; selector is exactly /system or /user. Confirm inventory, complete /system EOF, then complete /user EOF. ",
+    "recovery": "For an observed INVALID_CLOSED_VIEW_BOUNDS or another rejected editable VIEW argument, criticize the actual selector/start_char/cap/reserve against the bounds above and explicitly issue a fresh valid NEXT at the SAME accepted selector and start_char, using output_cap_bytes 8192 and metadata_reserve_bytes 2048. Restore the last accepted selector/cursor if the rejected attempt used an invalid selector or cursor. Do not CONFIRM the rejected result, advance accepted state, or return an incomplete FINAL merely because this first editable request was rejected. For actual nested or outer truncation, explicitly retry that SAME accepted selector/cursor with output_cap_bytes 4096 and metadata_reserve_bytes 2048. Continue each permitted explicit VIEW and CONFIRM through both EOFs; incomplete reading or a large input alone is not a fixed-source blocker. Stop only when an actual exposed blocking operation cannot be corrected using permitted closed values, and report its concrete observed error or explicitly UNKNOWN/unavailable. "
+  },
+  "attempted_numeric_evidence_domain": {
+    "type": "exact int, booleans excluded",
+    "low": -9007199254740991,
+    "high": 9007199254740991,
+    "not_runtime_acceptance": true
+  },
+  "capture_factory_delta": "NONE: current source has no diagnostic parser constants; preserve byte-exact per root clarification",
+  "synthetic_controls_are_actual_tool_attestation": false,
+  "no_model_or_task_execution": true,
+  "no_production_or_frozen_Q006_mutations": true
+}

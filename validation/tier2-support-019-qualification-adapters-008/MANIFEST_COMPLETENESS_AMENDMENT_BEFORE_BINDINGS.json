@@ -1,0 +1,30 @@
+{
+  "format": "verislop.support020-adapters008-manifest-completeness-amendment/1",
+  "status": "SPECIFIED_BEFORE_COMPLETE_MANIFEST_BINDINGS",
+  "preserved_first_manifest": {
+    "path": "validation/tier2-support-019-qualification-adapters-008/hash-manifest.json",
+    "sha256": "sha256:a0b666dc9f5847e51ee986aa7eb0490f753306502c85a94a5a75720503325531",
+    "byte_count": 93669
+  },
+  "preserved_first_seal": {
+    "path": "validation/tier2-support-019-qualification-adapters-008/SEAL.sha256",
+    "sha256": "sha256:8054bbbcf1eb42f4c06c34937e70658210b1302397a8fb000c184fdae68a54b8",
+    "byte_count": 85
+  },
+  "actual_omitted_historical_preimages": [
+    {
+      "path": "validation/tier2-support-019-qualification-adapters-008/preimages/tier2-support-019-qualification-adapters-006/SEAL.sha256",
+      "sha256": "sha256:7927d2fccd7d498dce126055e9649d6f0b0fbcaae831defe34cf00259ba09054",
+      "byte_count": 85
+    },
+    {
+      "path": "validation/tier2-support-019-qualification-adapters-008/preimages/tier2-support-019-qualification-adapters-006/hash-manifest.json",
+      "sha256": "sha256:904e981a2b38a4153ef66d700d8394ac4b2251c3adb90383d4f9462526508bbc",
+      "byte_count": 18197
+    }
+  ],
+  "cause": "The packager used basename exclusion instead of excluding only its own root manifest/seal. Source-copy fidelity independently authenticated all172 baseline entries; these two old nested source-manifest/seal records were omitted only from the own-file inventory.",
+  "correction": "Append complete-hash-manifest.json and COMPLETE_SEAL.sha256, preserving every prior file, covering every actual own file except the two new authoritative manifest/seal paths. No source, predicate, contract or current runtime evidence changes.",
+  "authoritative_manifest": "validation/tier2-support-019-qualification-adapters-008/complete-hash-manifest.json",
+  "qualification_authority": false
+}

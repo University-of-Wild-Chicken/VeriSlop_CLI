@@ -1,0 +1,5 @@
+# PURE005 binding source specified before preparation
+
+Apply REG005/SPECIFICATION_BEFORE_SOURCE.md and SOURCE_BINDING_DRAFT.json. Copy sealed PURE004 verify_carrier_controls.py, retaining its raw preimage. Change only EXPECTED to the actual sealed candidate006 hash sha256:f855de49fa8522cfc91053fe3f1f0db1ebd3c199260acbb97618d0f998c5eb4a and the sole current candidate guard path to validation/tier2-support019-author-recovery-implementation-006/bootstrap_tier2_carrier_view.py. Under /usr/bin/python3.12, normalize exactly those two bindings and require complete AST equality.
+
+WITNESS_SCHEMA.json stays byte-exact PURE004. All30 control definitions, current17 checkpoint definitions, floor and acceptance predicates remain unchanged. Existing earlier source-only receipts stay historical and are never asserted as current outcomes. The copied producer is source preparation only; no control, test, VIEW, model, Lean, current27, native/task or qualification execution is authorized. Source package inputs bind actual candidate/source specification identities; root-owned review/installation/preflight remain separate prerequisites.

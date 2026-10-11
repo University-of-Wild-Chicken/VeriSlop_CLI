@@ -1,0 +1,18 @@
+{
+  "format": "verislop.carrier006-registered-interpreter-amendment/1",
+  "status": "BEFORE_CANDIDATE_REVIEW_CONTROLS",
+  "authority": "SOURCE_ONLY",
+  "registered_review_interpreter": "/usr/bin/python3.12",
+  "actual_observed_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "syntax_parser": "/usr/local/bin/node --input-type=module --check",
+  "reported_concrete_issue": "Historical005 function_ast_hashes were generated using Python3.10 AST dump. Python3.12 FunctionDef AST dump includes type_params=[] even for unchanged function source. A profile copied without regenerating exact current-interpreter hashes cannot satisfy validate_literals.",
+  "required_independent_checks": [
+    "Retain immutable old005 profile unchanged as historical evidence.",
+    "Compare source-derived old005 and actual006 profiles using the same explicitly registered3.12 interpreter.",
+    "For every old005 function independently prove removing only the empty type_params field from current3.12 AST reproduces the historical function hash. Any additional mismatch remains a concrete blocker.",
+    "For candidate006 external independent profile use exact source-derived3.12 AST hashes, constants, instruction and reconstruction schema, then validate_literals and fullmessage reconstruction under3.12.",
+    "Require eventual active externalprofile005 to be generated/validated by the root registered3.12 interpreter; no old function hash import and no helper/predicate alteration."
+  ],
+  "independent_case_overlap_resolution": "Do not rerun creator pure-state validation or parser tests. Review grammar-valid pathological scalar Unicode reference/chunk literals through exact immutable recipe reconstruction and Node syntax only, retain malformed raw-transcription witness, and check exact AST/raw-byte/message fidelity.",
+  "runtime_calls": 0
+}

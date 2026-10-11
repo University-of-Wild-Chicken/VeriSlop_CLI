@@ -1,0 +1,5 @@
+# Candidate004 source handoff
+
+Candidate004 removes only the checkpoint nonempty-request-ID restriction; the unchanged reader accepts an empty string ID. Exact stable identity/string validation remains. All other module ASTs match sealed003. The new generic regression demonstrates actual unchanged reader acceptance and completed own checkpoint/hash availability for empty ID. All22 generic source checks completed0 with source and production guards unchanged. This is development evidence only; installation, runtime qualification, author completion, task TESTED and activation remain unresolved.
+
+SOURCE_INTEGRATION.md is retained byte-exact historical003 integration guidance. This handoff supersedes only its candidate source path/digest: use implementation004 and its capture-amendment003 factory. No fixture/cursor/model/compiler/budget/claim floor changes. The collector revision remains003 and case IDs remainAC002-001..004; only its source candidate path/digest change. The build script is a source assembly recipe, not invoked in this repair; no sealed source may be rebuilt. Source-checks run once before seal, not a live qualification.

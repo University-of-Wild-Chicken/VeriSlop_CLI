@@ -1,0 +1,5 @@
+# Source observer versus quoted own data, specified before repair
+
+The new independent formatter's proposed global substring check `observable-carrier-collector-result not in message` would reject a legal own carrier filename containing that text, although the producer preserves the filename as quoted data and supplies no collector observer. This is a concrete generic input: `/synthetic/observable-carrier-collector-result/own.json`. Keep full exact-message comparison, but constrain the static observer/key source fragments rather than matching untrusted quoted path/reference text across the entire message.
+
+Check source-derived observer_new contains only the exact own PENDING_KEY store and no collector key identifier; the complete source/AST/literal verification and required exact FIRST/NEXT/CONFIRM/HASH inclusion make injected extra collector instructions fail exact message comparison. Add an unrelated filename positive control and a tampered static observer negative control. No source identity, raw FINAL, semantic scope or review/count requirement is relaxed.

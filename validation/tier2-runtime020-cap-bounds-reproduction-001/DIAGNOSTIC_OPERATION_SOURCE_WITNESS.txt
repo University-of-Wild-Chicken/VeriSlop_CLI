@@ -1,0 +1,15 @@
+def _operation(value):
+    if value is None:
+        return
+    _keys(value, {"chunk_id", "selector", "start_char", "output_cap_bytes", "metadata_reserve_bytes"}, "INVALID_OWN_OPERATION")
+    _nullable_string(value["chunk_id"], "INVALID_OWN_CHUNK", nonempty=True)
+    if value["selector"] is not None:
+        _enum(value["selector"], {"/system", "/user"}, "INVALID_OWN_SELECTOR")
+    if value["start_char"] is not None:
+        _integer(value["start_char"], "INVALID_OWN_CURSOR")
+    if value["output_cap_bytes"] is not None:
+        _integer(value["output_cap_bytes"], "INVALID_OWN_CAP", low=256, high=8192)
+    if value["metadata_reserve_bytes"] is not None:
+        _integer(value["metadata_reserve_bytes"], "INVALID_OWN_RESERVE", low=128, high=8191)
+        if value["output_cap_bytes"] is not None:
+            _need(value["metadata_reserve_bytes"] < value["output_cap_bytes"], "INVALID_OWN_RESERVE")

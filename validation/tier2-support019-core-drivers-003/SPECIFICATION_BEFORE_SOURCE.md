@@ -1,0 +1,13 @@
+# Carrier003 installation and current pure-source integration specification
+
+This source preparation precedes production mutation. No runtime qualification, task proof, TESTED, activation or release authority is granted. Sealed carrier003 and old qualified-run roots remain immutable. Installation requires independent source review of carrier003 with no unresolved concrete blocker.
+
+Copy the reviewed sealed carrier003 module byte-for-byte to synthetic_dataset/tools/bootstrap_tier2_carrier_view.py. Preserve the exact old reader and legacy initial/next APIs. Add tests/test_tier2_carrier_checkpoints.py using the candidate's generic checkpoint controls against the installed module, with the independent legacy baseline explicitly bound to immutable implementation002. All existing tests and mandatory180/15 and current191/17 identities remain; new identities are resolved by actual nonexecuting preflight, never predicted from labels.
+
+Prepare a new core-drivers003 carrier pure producer from sealed002. Keep all30 original test IDs, complete case ASTs, witness roles/schema/source pairs/observations and source-only predicates exactly; continue executing their immutable historical source modules as source-preservation controls. Authenticate BOTH installed current003 and sealed candidate003 against the actual003 digest. Additionally require reader bytes and legacy API source ASTs equal historical002 before these controls. New checkpoint tests independently exercise installed003 and are mandatory members of the registered whole suite. No old30 runtime PASS is reused. Copy the original witness schema exactly. Producer hash/output receipts and installed/source roots are regenerated for fresh Q003; the sidecar keeps every original witness and reports actual current installed digest.
+
+The factory used for actual Q003 view collection is sealed capture-amendment003. Original30 tests still authenticate the historical002 factory unchanged; exact independent actual recipe validation separately binds new factory003. Source code/AST equivalence prerequisites cannot discharge runtime/current-root claims.
+
+A registered generic integration test command may execute only new checkpoint module plus existing carrier sessions/views, with actual subprocess argv/time/PID/exit/logs retained. This is source development evidence, not task TESTED or any closure PASS. Production remains runtime-unqualified until the fresh whole27 qualification and independent admission finish.
+
+Current candidate is004 under the separately frozen amendment; all30 old controls remain unchanged and fresh runtime evidence is required.

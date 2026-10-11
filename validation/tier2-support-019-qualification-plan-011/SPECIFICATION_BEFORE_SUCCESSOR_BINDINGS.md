@@ -1,0 +1,9 @@
+# Plan010 source bindings specified before source preparation
+
+Apply the already written REG005/SPECIFICATION_BEFORE_SOURCE.md and SOURCE_BINDING_DRAFT.json. Copy the sealed plan009 owned source bytes and preserve every raw predecessor byte in an explicit historical preimage directory. Preserve all27 claim objects, equality55/pure30/checkpoint17 definitions, floor180/15, every success predicate and all generic helper algorithms.
+
+Change materialize_registration.py only at its EXPECTED_CARRIER assignment to actual sealed candidate006 sha256:f855de49fa8522cfc91053fe3f1f0db1ebd3c199260acbb97618d0f998c5eb4a. Adapter revision007 stays exact. Compare complete predecessor/successor ASTs under /usr/bin/python3.12 after normalizing only that assignment. Other Python files stay byte-exact. Keep immutable preimages and actual source/hash references; no guessed hashes.
+
+The active adaptation metadata will bind actual candidate006/factory/parser, both external REG005 profiles derived under the registered interpreter, byte-exact adapters007, PURE005 and independently sealed current review006. Its final source fidelity role is FINAL_CURRENT006_BINDINGS_SOURCE_FIDELITY.json. Do not seal active adaptation/template metadata until actual review and declared root metadata replay. Keep historical009 fidelity/receipts explicitly opaque historical inputs, never a current PASS or acceptance prerequisite.
+
+The materializer source will remain fixed after this exact carrier binding. Source-ready must include both external profiles and actual installation001 specification/prod005 raw preimage/current installation observation when available. This plan has no source/input root or runtime authority before the separate root-owned current freeze. No Q005 creation, source builder/preflight execution, VIEW/model/Lean/current27/core/native/task execution is authorized here.

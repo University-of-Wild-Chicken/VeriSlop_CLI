@@ -1,0 +1,35 @@
+function runtimeMain(request) {
+  const extras = request && request.operation === "view" ? ["view"]
+    : request && request.operation === "confirm" ? ["pending", "confirmation"] : [];
+  checkpointKeys(request, ["format", "operation", "reference", "session_path", "code"].concat(extras), "INVALID_RUNTIME_REQUEST");
+  checkpointNeed(request.format === RUNTIME_FORMAT
+    && ["view", "confirm", "hash"].includes(request.operation), "INVALID_RUNTIME_OPERATION");
+  runtimeCodeGuard(request.code);
+  runtimeReferenceAndSession(request);
+  if (request.operation === "view") {
+    runtimeView(request.view);
+    const payload = checkpointWire({reference: request.reference, view: request.view, reader_sha256: request.code.reader_sha256});
+    runtimeCodeGuard(request.code);
+    const result = childProcess.spawnSync(request.code.python_path, ["-I", "-B", request.code.reader_path, payload],
+      {encoding: null, maxBuffer: 32768});
+    checkpointNeed(!result.error && Number.isInteger(result.status) && result.signal === null
+      && result.stderr.length === 0, "READER_PROCESS_INCOMPLETE");
+    runtimeCodeGuard(request.code);
+    process.stdout.write(result.stdout);
+    process.exitCode = result.status;
+    return;
+  }
+  const output = runtimeLocked(request.session_path, () => {
+    const state = runtimeState(request.session_path, request.reference);
+    if (request.operation === "hash") {
+      const hashes = runtimeHash(state, request.reference);
+      runtimeCodeGuard(request.code);
+      return hashes;
+    }
+    const next = checkpointConfirm(state, request.pending, request.confirmation, request.reference);
+    runtimeCodeGuard(request.code);
+    runtimeAtomicCommit(request.session_path, next);
+    return checkpointSummary(next);
+  });
+  process.stdout.write(checkpointWire(output) + "\n");
+}

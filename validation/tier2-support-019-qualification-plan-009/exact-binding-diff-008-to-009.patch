@@ -1,0 +1,20 @@
+--- validation/tier2-support-019-qualification-plan-008/materialize_registration.py
++++ validation/tier2-support-019-qualification-plan-009/materialize_registration.py
+@@ -18,7 +18,7 @@
+ HERE = Path(__file__).resolve().parent
+ # Source preparation only. Root must fill the exact reviewed carrier003 hash and
+ # checkpoint ID tuple from completed source bytes before final review/freeze.
+-EXPECTED_CARRIER = 'sha256:774081ab079b0bb9086479782d065c9e4b91c372ecce765c248b533c1c2b666a'
++EXPECTED_CARRIER = None
+ EXPECTED_CHECKPOINT_IDS = (
+     'tests.test_tier2_carrier_checkpoints.CarrierCheckpointTests.test_author_recipe_fixed_diff_and_distinct_zero_view_exceptions',
+     'tests.test_tier2_carrier_checkpoints.CarrierCheckpointTests.test_checkpoint_reference_or_original_content_tamper_rejected',
+@@ -71,7 +71,7 @@
+     controls = tracked_load(HERE / "control-registration.json")
+     claims = tracked_load(HERE / "claims.json")
+     adapters = tracked_load(HERE / "predicate-reader-adaptation-specification.json")
+-    need(adapters["adapter_revision"] == "006" and
++    need(adapters["adapter_revision"] == "007" and
+          adapters["binding_status"] == "ROOT_SOURCE_REVIEWED_FROZEN" and
+          type(adapters["source_templates"]) is list and adapters["source_templates"] and
+          all(type(entry) is dict and type(entry.get("path")) is str and

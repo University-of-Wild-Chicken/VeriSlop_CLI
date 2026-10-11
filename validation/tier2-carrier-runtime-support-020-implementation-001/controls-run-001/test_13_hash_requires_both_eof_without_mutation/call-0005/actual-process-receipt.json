@@ -1,0 +1,20 @@
+{
+  "format": "verislop.runtime020-generic-subprocess-observation/1",
+  "actual_pid": 3524122,
+  "argv": [
+    "/bin/sh",
+    "-c",
+    "/usr/bin/python3.12 -I -B -c 'import hashlib,json,os,sys\nr=json.loads(sys.argv[1]);c=r[\"code\"]\nassert c[\"node_path\"]==\"/usr/bin/node\" and c[\"python_path\"]==\"/usr/bin/python3.12\"\nfor k in (\"runtime\",\"reader\"):\n p=c[k+\"_path\"];assert os.path.isabs(p) and os.path.realpath(p)==p\n with open(p,\"rb\") as f: actual=\"sha256:\"+hashlib.sha256(f.read()).hexdigest()\n if actual!=c[k+\"_sha256\"]:raise SystemExit(\"REGISTERED_CODE_HASH_MISMATCH\")\nos.execv(c[\"node_path\"],[c[\"node_path\"],c[\"runtime_path\"],sys.argv[1]])\n' '{\"code\":{\"node_path\":\"/usr/bin/node\",\"python_path\":\"/usr/bin/python3.12\",\"reader_path\":\"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/reader.py\",\"reader_sha256\":\"sha256:c917f273389e2b9ee56be04b5c6e56ed889c49a29e4262dbf1dfb68294d67e5f\",\"runtime_path\":\"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/carrier_runtime.js\",\"runtime_sha256\":\"sha256:49437d060a0da10c84bd6c4483f9c55b0d57cf8512840a906b6ab98ae6b4feb7\",\"session_directory\":\"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/controls-run-001/test_13_hash_requires_both_eof_without_mutation/own-session-output\"},\"format\":\"verislop.carrier-runtime-request/0.1\",\"operation\":\"hash\",\"reference\":{\"path\":\"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/controls-run-001/test_13_hash_requires_both_eof_without_mutation/unrelated-carrier.json\",\"request_sha256\":\"sha256:7acf66a6a76dbe11be7f82db43883f5b1d04dcfe07426e7701319213bf935635\",\"sha256\":\"sha256:9b788a065ef4e8a39623e85100c51cbe543bfc56d9aca894a215c2fbe6521c03\"},\"session_path\":\"/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/controls-run-001/test_13_hash_requires_both_eof_without_mutation/own-session-output/verislop-runtime020-ccf45fd1a2fdf095b6412f406db2b6a0f81970350d6f3c4ce382412eb4c93a79.json\"}'"
+  ],
+  "cwd": "/home/augustus/VeriSlop_CLI/validation/tier2-carrier-runtime-support-020-implementation-001/controls-run-001/test_13_hash_requires_both_eof_without_mutation",
+  "integer_returncode": 2,
+  "stdout_sha256": "sha256:a87cf08f308f83832a826dcd6cef693feba09b5487ad1b3bfb374e938c27816c",
+  "stdout_bytes": 197,
+  "stderr_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_bytes": 0,
+  "operation": "hash",
+  "mock_tool_chunk_id": true,
+  "qualified_evidence": false,
+  "model_calls": 0,
+  "runtime_timeout": null
+}

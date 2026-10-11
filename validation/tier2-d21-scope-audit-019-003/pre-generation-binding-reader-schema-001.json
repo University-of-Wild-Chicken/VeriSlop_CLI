@@ -1,0 +1,363 @@
+{
+  "$defs": {
+    "artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "canonical_root": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "hash": {
+      "pattern": "^(sha256:)?[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "path": {
+      "pattern": "^/",
+      "type": "string"
+    },
+    "pointer": {
+      "pattern": "^($|/)",
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authorization": {
+      "const": "root-explicit-new-qualified-paths-before-generation"
+    },
+    "cohort": {
+      "const": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-019/run"
+    },
+    "controller_inputs": {
+      "description": "Exact native019 public controller source metadata under the driver root. Append-only activation amendment and prerequisite binding have dedicated required artifact fields.",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "engineering_record": {
+      "$ref": "#/$defs/artifact"
+    },
+    "expected_qualification_input_root": {
+      "$ref": "#/$defs/canonical_root"
+    },
+    "expected_source_root": {
+      "$ref": "#/$defs/canonical_root"
+    },
+    "format": {
+      "const": "verislop.d21-pre-generation-binding-spec/1"
+    },
+    "native_activation_amendment": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver019-activation-amendment-001/source-binding-amendment.json"
+        },
+        "sha256": {
+          "const": "sha256:df3918b1d2f64dccca03cb5a85496a10c449ec92c616b875da990e2559e56165"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "native_activation_binding": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "pattern": "^/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver019-activation-amendment-001/[^/]+\\.json$",
+          "type": "string"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "native_driver": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver-019/driver.py"
+        },
+        "sha256": {
+          "const": "sha256:afeed7df381d443ad60051bc9e0a04ff84a9a82611a49b7373c9545468445830"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "native_driver_manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver-019/hash-manifest.json"
+        },
+        "sha256": {
+          "const": "sha256:06f75555119779873187668c3a19fc32913cf990736f19e578787bd0b34be863"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "native_driver_seal": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "/home/augustus/VeriSlop_CLI/validation/tier2-native-live-driver-019/SEAL.sha256"
+        },
+        "sha256": {
+          "const": "sha256:98c15d19006c80c39b4a957d261a18381713e500655fbc5bdf8cf40dfbd1a376"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "preregistration_input_root_hash": {
+      "const": "a421f73bc4bce33cd891066888737281bae85ead961c342eb768ca6d32a280d8"
+    },
+    "preregistration_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "project": {
+      "const": "/home/augustus/VeriSlop_CLI/synthetic_dataset/bootstrap/stages/tier2-source-facets-019/project"
+    },
+    "project_snapshot_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "protocol_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "qualification_admission_receipt": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_admission_verifier": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_ancillary_index_hashes": {
+      "additionalProperties": false,
+      "properties": {
+        "author": {
+          "$ref": "#/$defs/canonical_root"
+        },
+        "carrier": {
+          "$ref": "#/$defs/canonical_root"
+        },
+        "equality": {
+          "$ref": "#/$defs/canonical_root"
+        },
+        "pure": {
+          "$ref": "#/$defs/canonical_root"
+        }
+      },
+      "required": [
+        "equality",
+        "carrier",
+        "author",
+        "pure"
+      ],
+      "type": "object"
+    },
+    "qualification_closure_id": {
+      "pattern": "^support019-final-current-root-[0-9]{3}$",
+      "type": "string"
+    },
+    "qualification_finalizer_receipt": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_independent_admission": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_independent_report": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_input_manifest": {
+      "additionalProperties": false,
+      "description": "Actual registered qualification input inventory; the selected value's qualified-project canonical digest must equal the actual report input_root.",
+      "properties": {
+        "canonical_pointer": {
+          "$ref": "#/$defs/pointer"
+        },
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "canonical_pointer"
+      ],
+      "type": "object"
+    },
+    "qualification_links": {
+      "description": "Current actual final report hash pointers to its fresh engineering record/source freeze. No historical outcome or synthetic roots.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "artifact": {
+            "enum": [
+              "engineering_record",
+              "source_freeze"
+            ]
+          },
+          "expected": {
+            "$ref": "#/$defs/hash"
+          },
+          "report_pointer": {
+            "$ref": "#/$defs/pointer"
+          }
+        },
+        "required": [
+          "artifact",
+          "report_pointer",
+          "expected"
+        ],
+        "type": "object"
+      },
+      "minItems": 2,
+      "type": "array"
+    },
+    "qualification_predicate_receipt": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_process_output_index": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_process_receipts": {
+      "description": "Preserved final report-authenticated actual numeric-zero phase receipt links; additional direct finalizer/reader/admission receipts are required separately.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "$ref": "#/$defs/path"
+          },
+          "report_sha256_pointer": {
+            "$ref": "#/$defs/pointer"
+          },
+          "returncode_pointer": {
+            "$ref": "#/$defs/pointer"
+          },
+          "sha256": {
+            "$ref": "#/$defs/hash"
+          }
+        },
+        "required": [
+          "path",
+          "sha256",
+          "returncode_pointer",
+          "report_sha256_pointer"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "qualification_report": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_report_schema": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_report_schema_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "qualification_root": {
+      "pattern": "^/home/augustus/VeriSlop_CLI/validation/tier2-support-019-qualification-[0-9]{3}$",
+      "type": "string"
+    },
+    "qualification_specification": {
+      "$ref": "#/$defs/artifact"
+    },
+    "qualification_verifier": {
+      "$ref": "#/$defs/artifact"
+    },
+    "reader_schema_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "reader_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "source_freeze": {
+      "$ref": "#/$defs/artifact"
+    },
+    "stage": {
+      "const": "tier2-source-facets-019"
+    }
+  },
+  "required": [
+    "format",
+    "authorization",
+    "stage",
+    "project",
+    "cohort",
+    "reader_sha256",
+    "reader_schema_sha256",
+    "preregistration_input_root_hash",
+    "expected_source_root",
+    "expected_qualification_input_root",
+    "qualification_report",
+    "qualification_report_schema_sha256",
+    "qualification_verifier",
+    "qualification_specification",
+    "qualification_links",
+    "qualification_input_manifest",
+    "qualification_process_receipts",
+    "engineering_record",
+    "source_freeze",
+    "protocol_sha256",
+    "preregistration_sha256",
+    "project_snapshot_sha256",
+    "native_driver",
+    "controller_inputs",
+    "qualification_independent_report",
+    "qualification_independent_admission",
+    "qualification_finalizer_receipt",
+    "qualification_predicate_receipt",
+    "qualification_admission_receipt",
+    "qualification_process_output_index",
+    "qualification_ancillary_index_hashes",
+    "qualification_report_schema",
+    "qualification_admission_verifier",
+    "qualification_root",
+    "qualification_closure_id",
+    "native_driver_manifest",
+    "native_driver_seal",
+    "native_activation_amendment",
+    "native_activation_binding"
+  ],
+  "title": "D21 stage019 source019-003 closed binding; exact lexical integers and sealed source/activation links",
+  "type": "object"
+}

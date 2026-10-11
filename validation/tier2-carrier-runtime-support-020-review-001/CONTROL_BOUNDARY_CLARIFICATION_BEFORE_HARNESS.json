@@ -1,0 +1,40 @@
+{
+  "format": "verislop.carrier-runtime-control-boundary-amendment/1",
+  "status": "SPECIFIED_BEFORE_HARNESS_SOURCE_OR_CONTROL_EXECUTION",
+  "control_contract_ref": {
+    "path": "validation/tier2-carrier-runtime-support-020-review-001/CONTROL_CONTRACT_BEFORE_CANDIDATE.json",
+    "sha256": "sha256:4fb5a3aba15cab2f83878132110068080e45d1ea4434393ec43c2da79bb8dac0"
+  },
+  "authority": "Root explicitly confirmed registered publisher/root fixed templates and own reference/session descriptors supply immutable pins; arbitrary callers are outside this correctness boundary.",
+  "affected_controls": [
+    "S020-R02",
+    "S020-R05"
+  ],
+  "clarification": [
+    "R02 uses unchanged root-registered pins while changing a candidate-owned temporary target byte or attempting a foreign path under those unchanged pins. A code identity error must precede execution of the changed target.",
+    "R05 changes a foreign reference or session_path while retaining the fixed registered code/session-directory and own-session binding. A different registered generic session can legitimately be constructed by its own publisher; this is not a global filesystem isolation claim.",
+    "No claim forbids arbitrary out-of-protocol callers from recomputing digests or changing all bindings. Such caller-provided digests are not publisher authentication.",
+    "Static author templates keep REQUEST/reference/code/session and runtime/launcher source exact; only the declared closed VIEW/CONFIRM fields are author edits."
+  ],
+  "harness_plan": {
+    "directory": "validation/tier2-carrier-runtime-support-020-review-001",
+    "file": "independent_runtime_controls.py",
+    "registration_format": "verislop.carrier-runtime-independent-control-registration/1",
+    "registration_required_before_execution": [
+      "Exact contract and boundary-amendment refs",
+      "Candidate API/runtime/reader/legacy and source-literal file refs",
+      "Exact harness source ref",
+      "Fresh output root",
+      "Exact Python/Node versions and pinned paths",
+      "Root authorization for source-only generic controls"
+    ],
+    "draft_interface": "compact_protocol.py code_bindings, session_path, runtime_command, runtime_*_template and REQUEST_FORMAT; direct runtime invocations use exact closed canonical JSON",
+    "execution_guard": "No import of candidate executable API, no process/model/VIEW or fixture setup until source registration authenticates candidate+harness files and explicit controls_authorized true",
+    "runs": 2,
+    "fresh_state": "Two separate run directories; each control creates its own carrier/session with unrelated generic data.",
+    "process_observations": "Actual Popen PID, exact integer returncode, argv or fixed shell command, stdout/stderr raw byte files and refs. Hidden nested PID unavailable unless exposed.",
+    "synthetic_pending": "Synthetic-control chunk_id and native-like result envelope constructed from actual generic process stdout/status; explicitly labeled synthetic and not native tool attestation.",
+    "no_hard_deadline": true,
+    "no_task_model_lean_qualification_authority": true
+  }
+}

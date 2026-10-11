@@ -1,0 +1,53 @@
+{
+  "all_other_function_ASTs_exact": true,
+  "all_other_preserved_file_byte_comparisons_exact": true,
+  "allowed_delta": {
+    "existing_main_assert_exact_new": "assert all(materializer_adapter_revision_fidelity(PLAN+'/'+n,OLDPLAN+'/'+n) if n=='materialize_registration.py' else (ROOT/PLAN/n).read_bytes()==(ROOT/OLDPLAN/n).read_bytes() for n in preserved)",
+    "existing_main_assert_exact_old": "assert all((ROOT/PLAN/n).read_bytes()==(ROOT/OLDPLAN/n).read_bytes() for n in preserved)",
+    "metadata_fidelity_required_correction": "A future final current fidelity must label materializer version-normalized AST equality against012 explicitly; it must not set any byte-exact-materializer flag to true or include materializer in a byte-exact claim map. This final metadata output remains unresolved until actual022+023 inputs exist.",
+    "module_import_addition": "import ast",
+    "new_helper_exact_source": "def materializer_adapter_revision_fidelity(current_name, predecessor_name):\n current=ast.parse((ROOT/current_name).read_text(encoding=\"utf-8\"))\n predecessor=ast.parse((ROOT/predecessor_name).read_text(encoding=\"utf-8\"))\n for tree, expected in ((current,\"009\"),(predecessor,\"008\")):\n  matches=[node for node in ast.walk(tree) if isinstance(node,ast.Compare) and\n   isinstance(node.left,ast.Subscript) and isinstance(node.left.value,ast.Name) and\n   node.left.value.id==\"adapters\" and isinstance(node.left.slice,ast.Constant) and\n   node.left.slice.value==\"adapter_revision\" and len(node.ops)==1 and\n   isinstance(node.ops[0],ast.Eq) and len(node.comparators)==1 and\n   isinstance(node.comparators[0],ast.Constant)]\n  assert len(matches)==1 and type(matches[0].comparators[0].value) is str and matches[0].comparators[0].value==expected\n  matches[0].comparators[0].value=\"DECLARED_ADAPTER_REVISION_BINDING\"\n return ast.dump(current,include_attributes=False)==ast.dump(predecessor,include_attributes=False)\n"
+  },
+  "current_materializer": {
+    "byte_count": 19499,
+    "path": "validation/tier2-support-019-qualification-plan-013/materialize_registration.py",
+    "sha256": "sha256:4ca49818783362d2cc3d88b154d1ab6c2ad51ca8f3f59b4b30585c1f4c24c496"
+  },
+  "execution": {
+    "VIEW": 0,
+    "compiler_kernel": 0,
+    "current27": 0,
+    "finisher": 0,
+    "fixture_generation": 0,
+    "materializer": 0,
+    "model": 0,
+    "native": 0,
+    "preflight": 0,
+    "profile": 0,
+    "task": 0
+  },
+  "finisher_preimage": {
+    "byte_count": 9313,
+    "path": "validation/tier2-support019-registration-inputs-008/finish_source_metadata.py",
+    "sha256": "sha256:8867834337126d0035c86bfe7aa92889a30a9afc229102b5aca08d2f3de97206"
+  },
+  "format": "verislop.support022-finisher-materializer-binding-normalization-before-source/1",
+  "immutable_predecessor_materializer": {
+    "byte_count": 19499,
+    "path": "validation/tier2-support-019-qualification-plan-012/materialize_registration.py",
+    "sha256": "sha256:c645692f1a47ad861ee4e83b52952572c52a26824e3c6588212904f3a0d2a711"
+  },
+  "normalization_scope": "Exactly one adapters[adapter_revision] Eq string Compare RHS: predecessor008 versus current009. All remaining materializer AST nodes/constants/statements must match. No wildcard string normalization, sourcehash acceptance or changed predicate allowed.",
+  "pending_required_actual_dependencies": [
+    "authenticated support023 ledger/author correction package",
+    "actual adapters009 source and seal",
+    "root final source preparation authorization"
+  ],
+  "prior_narrow_fidelity": {
+    "byte_count": 32803,
+    "path": "validation/tier2-support019-registration-inputs-008/NARROW_SOURCE_DELTA_FIDELITY.json",
+    "sha256": "sha256:fa38ce8ff4bf442f94670aa9021230320336644eab043e16e004ac70203e2e96"
+  },
+  "root_scope": "Root authorizes preparation of required finisher materializer normalization amendment; no helper execution or final binding now.",
+  "status": "DECLARED_NOT_APPLIED"
+}

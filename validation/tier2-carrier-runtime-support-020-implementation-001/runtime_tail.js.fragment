@@ -1,0 +1,160 @@
+const RUNTIME_FORMAT = "verislop.carrier-runtime-request/0.1";
+const STATE_BASENAME_PREFIX = "verislop-runtime020-";
+
+function runtimeDigest(bytes) {
+  return "sha256:" + crypto.createHash("sha256").update(bytes).digest("hex");
+}
+function runtimeParse(text) {
+  checkpointText(text);
+  const value = JSON.parse(text);
+  checkpointNeed(checkpointWire(value) === text, "NONCANONICAL_RUNTIME_JSON");
+  return value;
+}
+function runtimeDecode(bytes) {
+  return new TextDecoder("utf-8", {fatal: true}).decode(bytes);
+}
+function runtimeCodeGuard(code) {
+  checkpointKeys(code, ["runtime_path", "runtime_sha256", "reader_path", "reader_sha256",
+    "node_path", "python_path", "session_directory"], "INVALID_RUNTIME_CODE_BINDING");
+  checkpointNeed(code.runtime_path === __filename
+    && code.reader_path === path.join(__dirname, "reader.py")
+    && code.node_path === "/usr/bin/node" && code.python_path === "/usr/bin/python3.12"
+    && process.execPath === fs.realpathSync(code.node_path), "RUNTIME_CODE_PATH_MISMATCH");
+  for (const [name, expected] of [[code.runtime_path, code.runtime_sha256], [code.reader_path, code.reader_sha256]]) {
+    checkpointNeed(typeof expected === "string" && /^sha256:[0-9a-f]{64}$/.test(expected), "INVALID_RUNTIME_SOURCE_IDENTITY");
+    checkpointNeed(fs.lstatSync(name).isFile() && fs.realpathSync(name) === name
+      && runtimeDigest(fs.readFileSync(name)) === expected, "RUNTIME_SOURCE_IDENTITY_MISMATCH");
+  }
+  checkpointNeed(typeof code.session_directory === "string"
+    && path.isAbsolute(code.session_directory) && path.normalize(code.session_directory) === code.session_directory
+    && fs.realpathSync(code.session_directory) === code.session_directory
+    && fs.lstatSync(code.session_directory).isDirectory(), "INVALID_OWN_SESSION_DIRECTORY");
+}
+function runtimeReferenceAndSession(request) {
+  checkpointReference(request.reference);
+  checkpointText(request.reference.path);
+  checkpointNeed(path.normalize(request.reference.path) === request.reference.path, "INVALID_OWN_REFERENCE_PATH");
+  const basename = STATE_BASENAME_PREFIX + runtimeDigest(Buffer.from(checkpointWire(request.reference), "utf8")).slice(7) + ".json";
+  checkpointNeed(request.session_path === path.join(request.code.session_directory, basename), "UNMATCHED_OWN_SESSION_PATH");
+}
+function runtimeView(view) {
+  const names = view && view.operation === "inventory"
+    ? ["operation", "output_cap_bytes", "metadata_reserve_bytes"]
+    : ["operation", "selector", "start_char", "output_cap_bytes", "metadata_reserve_bytes"];
+  checkpointKeys(view, names, "INVALID_CLOSED_VIEW");
+  checkpointNeed(Number.isSafeInteger(view.output_cap_bytes) && view.output_cap_bytes >= 256 && view.output_cap_bytes <= 8192
+    && Number.isSafeInteger(view.metadata_reserve_bytes) && view.metadata_reserve_bytes >= 128
+    && view.metadata_reserve_bytes < view.output_cap_bytes, "INVALID_CLOSED_VIEW_BOUNDS");
+  checkpointNeed(view.operation === "inventory" || (view.operation === "field"
+    && (view.selector === "/system" || view.selector === "/user")
+    && Number.isSafeInteger(view.start_char) && view.start_char >= 0), "INVALID_CLOSED_VIEW_RANGE");
+}
+function runtimeState(name, reference) {
+  let descriptor;
+  try {
+    descriptor = fs.openSync(name, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
+  } catch (error) {
+    if (error.code === "ENOENT") return undefined;
+    throw error;
+  }
+  try {
+    checkpointNeed(fs.fstatSync(descriptor).isFile(), "INVALID_OWN_SESSION_FILE");
+    const text = runtimeDecode(fs.readFileSync(descriptor));
+    checkpointNeed(text.endsWith("\n"), "NONCANONICAL_OWN_SESSION");
+    const state = runtimeParse(text.slice(0, -1));
+    checkpointReconstruct(state, reference);
+    return state;
+  } finally {
+    fs.closeSync(descriptor);
+  }
+}
+function runtimeAtomicCommit(name, state) {
+  const temporary = name + ".temporary-" + process.pid;
+  let descriptor;
+  try {
+    descriptor = fs.openSync(temporary, "wx", 0o600);
+    fs.writeFileSync(descriptor, checkpointWire(state) + "\n", "utf8");
+    fs.fsyncSync(descriptor);
+    fs.closeSync(descriptor); descriptor = undefined;
+    fs.renameSync(temporary, name);
+  } finally {
+    if (descriptor !== undefined) fs.closeSync(descriptor);
+    if (fs.existsSync(temporary)) fs.unlinkSync(temporary);
+  }
+}
+function runtimeLocked(name, callback) {
+  const lock = name + ".lock";
+  let descriptor;
+  try {
+    descriptor = fs.openSync(lock, "wx", 0o600);
+  } catch (error) {
+    if (error.code === "EEXIST") throw new Error("OWN_SESSION_BUSY");
+    throw error;
+  }
+  try {
+    return callback();
+  } finally {
+    fs.closeSync(descriptor); fs.unlinkSync(lock);
+  }
+}
+function runtimeHash(state, reference) {
+  const fields = checkpointReconstruct(state, reference).fields;
+  const roots = {}, chars = {}, bytes = {};
+  for (const selector of ["/system", "/user"]) {
+    const field = fields[selector];
+    checkpointNeed(field.field_eof && field.next_char === field.field_chars
+      && field.next_utf8_byte === field.field_utf8_bytes, "OWN_FIELDS_NOT_COMPLETE");
+  }
+  for (const selector of ["/system", "/user"]) {
+    const field = fields[selector];
+    roots[selector] = "sha256:" + ownViewSha256(field.content);
+    chars[selector] = field.field_chars; bytes[selector] = field.field_utf8_bytes;
+  }
+  return {format: "verislop.own-view-field-hashes/0.1", field_roots: roots,
+    field_chars: chars, field_utf8_bytes: bytes, field_eof: {"/system": true, "/user": true},
+    availability_only: true, semantic_consumption: "UNATTESTED", semantic_acceptance_authority: false};
+}
+function runtimeMain(request) {
+  const extras = request && request.operation === "view" ? ["view"]
+    : request && request.operation === "confirm" ? ["pending", "confirmation"] : [];
+  checkpointKeys(request, ["format", "operation", "reference", "session_path", "code"].concat(extras), "INVALID_RUNTIME_REQUEST");
+  checkpointNeed(request.format === RUNTIME_FORMAT
+    && ["view", "confirm", "hash"].includes(request.operation), "INVALID_RUNTIME_OPERATION");
+  runtimeCodeGuard(request.code);
+  runtimeReferenceAndSession(request);
+  if (request.operation === "view") {
+    runtimeView(request.view);
+    const payload = checkpointWire({reference: request.reference, view: request.view, reader_sha256: request.code.reader_sha256});
+    runtimeCodeGuard(request.code);
+    const result = childProcess.spawnSync(request.code.python_path, ["-I", "-B", request.code.reader_path, payload],
+      {encoding: null, maxBuffer: 32768});
+    checkpointNeed(!result.error && Number.isInteger(result.status) && result.signal === null
+      && result.stderr.length === 0, "READER_PROCESS_INCOMPLETE");
+    runtimeCodeGuard(request.code);
+    process.stdout.write(result.stdout);
+    process.exitCode = result.status;
+    return;
+  }
+  const output = runtimeLocked(request.session_path, () => {
+    const state = runtimeState(request.session_path, request.reference);
+    if (request.operation === "hash") {
+      const hashes = runtimeHash(state, request.reference);
+      runtimeCodeGuard(request.code);
+      return hashes;
+    }
+    const next = checkpointConfirm(state, request.pending, request.confirmation, request.reference);
+    runtimeCodeGuard(request.code);
+    runtimeAtomicCommit(request.session_path, next);
+    return checkpointSummary(next);
+  });
+  process.stdout.write(checkpointWire(output) + "\n");
+}
+try {
+  checkpointNeed(process.argv.length === 3, "INVALID_RUNTIME_ARGUMENTS");
+  runtimeMain(runtimeParse(process.argv[2]));
+} catch (error) {
+  const code = typeof error.message === "string" ? error.message : "RUNTIME_FAILURE";
+  process.stdout.write(checkpointWire({format: "verislop.carrier-runtime-error/0.1", status: "error", code,
+    availability_only: true, semantic_consumption: "UNATTESTED", semantic_acceptance_authority: false}) + "\n");
+  process.exitCode = 2;
+}
