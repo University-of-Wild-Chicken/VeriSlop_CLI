@@ -20,7 +20,7 @@ MODULE = "VeriSlopReviewProbe"
 THEOREM = MODULE + ".result"
 STRATEGY = "kernel-ground-normalization/1"
 PROOF = ("by\n  with_unfolding_all\n"
-         "    simp only [eq_self, true_implies, implies_true, and_true, true_and, "
+         "    try simp only [eq_self, true_implies, implies_true, and_true, true_and, "
          "not_true_eq_false, not_false_eq_true]\n    all_goals decide +kernel")
 DIAGNOSTIC_ROWS = 8
 DIAGNOSTIC_ROW_BYTES = 512
@@ -226,6 +226,57 @@ def check(tc, ctx, spec: target.GoalSpec, expression: dict, *, deadline: float,
         raise
 
 
+def _record_decision_prelude(profile) -> str:
+    """Derive constructive equality only for exact acyclic admitted nominal records."""
+    records = profile.records
+    def dependencies(sort):
+        if isinstance(sort, str):
+            if sort not in {"Nat", "Int", "Bool", "String", "Unit"}:
+                raise Unsupported("record equality field sort is outside admitted ground sorts")
+            return set()
+        if not isinstance(sort, dict) or len(sort) != 1:
+            raise Unsupported("record equality field has no exact admitted sort")
+        if "enum" in sort:
+            row = profile.enums.get(sort["enum"], {})
+            binding = row.get("decidable_eq")
+            if not isinstance(binding, dict) or not binding.get("lean_decl") or not binding.get("decl_hash"):
+                raise Unsupported("record equality requires a checked nominal enum decision")
+            return set()
+        if "record" in sort:
+            if sort["record"] not in records:
+                raise Unsupported("record equality field names an unknown nominal record")
+            return {sort["record"]}
+        if "list" in sort:
+            return dependencies(sort["list"])
+        if "option" in sort:
+            return dependencies(sort["option"])
+        if "result" in sort:
+            payload = sort["result"]
+            if not isinstance(payload, dict) or set(payload) != {"error", "ok"}:
+                raise Unsupported("record equality sum field has no exact admitted payload sorts")
+            return dependencies(payload["error"]) | dependencies(payload["ok"])
+        raise Unsupported("record equality field is outside admitted ground sorts")
+    graph = {name: set().union(*(dependencies(field["sort"]) for field in row["fields"]))
+             for name, row in records.items()}
+    ordered, done, visiting = [], set(), set()
+    def visit(name):
+        if name in done:
+            return
+        if name in visiting:
+            raise Unsupported("recursive nominal record equality is outside the admitted profile")
+        visiting.add(name)
+        for child in sorted(graph[name]):
+            visit(child)
+        visiting.remove(name)
+        done.add(name)
+        ordered.append(name)
+    for name in sorted(records):
+        visit(name)
+    return "".join("deriving instance _root_.DecidableEq for _root_." +
+                   target.lean_name(parse_name(records[name]["lean_decl"])) + "\n"
+                   for name in ordered)
+
+
 def _check(tc, ctx, spec: target.GoalSpec, expression: dict, *, deadline: float,
            goal_parts: dict[str, bytes] | None, attempts: list[dict]) -> dict:
     pol, sources = ctx.policy, target.library_sources()
@@ -261,7 +312,8 @@ def _check(tc, ctx, spec: target.GoalSpec, expression: dict, *, deadline: float,
             expected = expression if truth else app(const("Not"), expression)
             source = (f"import {target.GOAL_MODULE}\nset_option maxRecDepth 100000\n"
                       "set_option maxHeartbeats 2000000\nset_option smartUnfolding false\nnamespace " + MODULE + "\n"
-                      "theorem result : " + target.Printer().term(expected) + " := " + PROOF + "\n"
+                      + _record_decision_prelude(spec.profile)
+                      + "theorem result : " + target.Printer().term(expected) + " := " + PROOF + "\n"
                       "end " + MODULE + "\n").encode()
             result, parts = leanbridge.compile_named_module(tc, root / ("positive" if truth else "negative"),
                 MODULE, source, dependencies, read_only=[imported], **_options(pol, deadline))

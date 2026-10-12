@@ -10,10 +10,10 @@ import json
 import os
 import re
 
-FORMAT = "verislop.carrier-runtime-registration/1"
+FORMAT = "verislop.carrier-runtime-registration/2"
 REGISTRATION_PATH = "synthetic_dataset/tools/carrier_runtime020-registration.json"
 INTEGRATION_PATH = "synthetic_dataset/tools/bootstrap_tier2_runtime_integration.py"
-REVISION = "support022-compact-runtime/1"
+REVISION = "support025-running-result-DEVELOPMENT_ONLY/1"
 ROLES = {"generator", "reader", "runtime"}
 CODE_KEYS = {"runtime_path", "runtime_sha256", "reader_path", "reader_sha256",
              "node_path", "python_path", "session_directory"}

@@ -102,9 +102,12 @@ class ContractRefutationEqualityTests(unittest.TestCase):
             cls.fixtures[variant] = source, form, base, env, analysis
 
     def run_check(self, variant, *, analysis=None, source=None, suffix=""):
-        original_source, form, base, env, original_analysis = self.fixtures[variant]
+        original_source, form, _, env, original_analysis = self.fixtures[variant]
         supplied_source = original_source if source is None else source
         supplied_analysis = original_analysis if analysis is None else analysis
+        base, _, problems = contract.compose_challenge(supplied_source,
+            contract.registry_lean(records(), contract.binding_names(form)))
+        self.assertEqual([], problems)
         value = RECORD_INPUT if variant == "existing" else INPUT
         proposals = [{"obligation_id": "O1", "inputs": [value]}]
         pkg = Package(self.root / (self.id().split(".")[-1] + suffix))
@@ -211,6 +214,8 @@ class ContractRefutationEqualityTests(unittest.TestCase):
         commented = original.replace(b"import Std\n", b"import Std\n-- same semantics, new bytes\n", 1)
         result, pkg, supplied = self.run_check("private", source=commented)
         self.assert_bound_refutation(result, pkg, supplied)
+        proof_source = (pkg.root / result["receipts"][0]["artifacts"]["source"]["path"]).read_bytes()
+        self.assertIn(b"-- same semantics, new bytes\n", proof_source)
         self.assertNotEqual(canonical.digest(original), result["candidate_source_hash"])
         self.assertEqual(canonical.digest(commented), result["candidate_source_hash"])
 

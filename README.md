@@ -304,6 +304,11 @@ Tier 2 closure regressions cover complete dispatch, independent materialization/
 
 ## Local synthetic benchmark
 
+Generated experiment and bootstrapping evidence is kept locally and ignored by
+Git. Historical report links below refer to those local files, which are absent
+from a fresh clone. The fixed corpus, harness, sources, and test fixtures remain
+tracked; see [local evidence retention](docs/local-evidence-retention.md).
+
 [synthetic_dataset/](synthetic_dataset/README.md) contains 100 locally authored
 Python tasks, 200 public examples, 957 held-out cases, deterministic generators,
 oracle validation, and the paired raw-model/full-CLI benchmark. Users select
@@ -337,7 +342,7 @@ examples/    bounded-increment and checked-subtraction requests and candidates
 formal/      Lean design model and finite admission/lifecycle conformance oracle
 verislop/    the CLI (pure Python) and lean/VeriSlopKernel.lean (trusted kernel tool)
 tests/       unit, acceptance-scenario and provider/review tests
-synthetic_dataset/  fixed tasks, benchmark harness, recorded artifacts and reports
+synthetic_dataset/  tracked fixed tasks and harness; locally retained run evidence
 bin/         source-checkout launcher
 ```
 

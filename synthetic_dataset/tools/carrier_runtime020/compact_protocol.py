@@ -10,7 +10,7 @@ import json
 import os
 import shlex
 
-API_REVISION = "support022-compact-runtime/1"
+API_REVISION = "support025-running-result-DEVELOPMENT_ONLY/1"
 REQUEST_FORMAT = "verislop.carrier-runtime-request/0.1"
 EXEC_PRAGMA = '// @exec: {"max_output_tokens": 20000}\n'
 NODE_PATH = "/usr/bin/node"
@@ -121,19 +121,37 @@ def _view(view):
     return dict(view)
 
 
-def _recipe(request, reference, *, view=None, confirmation=None):
+def own_context_key(reference):
+    """Hash own reference metadata in the producer; emitted INIT never hashes."""
+    digest = hashlib.sha256(_json(_reference(reference)).encode("utf-8")).hexdigest()
+    return "verislop.runtime024-own-context/0.1:" + digest
+
+
+def runtime_restore_template(reference, code):
+    """Zero-I/O fixed data initialization; never change pending or accepted state."""
     prefix = shlex.quote(PYTHON_PATH) + " -I -B -c " + shlex.quote(LAUNCHER_SOURCE) + " "
-    result = (EXEC_PRAGMA + "const REQUEST = " + _json(request) + ";\n"
-              + "const PENDING_KEY = " + _json(own_pending_key(reference)) + ";\n")
+    context = {"request": _request(reference, code, "view"), "prefix": prefix,
+               "pending_key": own_pending_key(reference)}
+    return (EXEC_PRAGMA + "store(" + _json(own_context_key(reference)) + ", " + _json(context) + ");\n"
+            + 'text({format: "verislop.transport-context-availability/1", status: "STORED", availability_only: true, semantic_acceptance_authority: false});\n')
+
+
+def _recipe(request, reference, *, view=None, confirmation=None):
+    result = (EXEC_PRAGMA + "const CONTEXT = load(" + _json(own_context_key(reference)) + ");\n"
+              + 'if (CONTEXT === undefined || CONTEXT === null) throw new Error("OWN_TRANSPORT_CONTEXT_ABSENT");\n'
+              + 'if (typeof CONTEXT !== "object" || Array.isArray(CONTEXT) || Object.keys(CONTEXT).sort().join(",") !== "pending_key,prefix,request" || typeof CONTEXT.prefix !== "string" || typeof CONTEXT.pending_key !== "string" || typeof CONTEXT.request !== "object" || CONTEXT.request === null || Array.isArray(CONTEXT.request)) throw new Error("OWN_TRANSPORT_CONTEXT_INVALID");\n'
+              + "const REQUEST = {...CONTEXT.request};\nREQUEST.operation = " + _json(request["operation"]) + ";\n")
     if view is not None:
         result += "const VIEW = " + _json(_view(view)) + ";\nREQUEST.view = VIEW;\n"
     if confirmation is not None:
         result += ("const CONFIRM = " + _json(confirmation) + ";\n"
-                   + "REQUEST.pending = load(PENDING_KEY);\nREQUEST.confirmation = CONFIRM;\n")
-    result += (SHELL_SAFE_JS + "const cmd = " + _json(prefix) + " + posixQuote(wire(REQUEST));\n"
+                   + 'const PENDING = load(CONTEXT.pending_key);\n'
+                   + 'if (PENDING === undefined || PENDING === null) throw new Error("OWN_PENDING_OBSERVATION_ABSENT");\n'
+                   + "REQUEST.pending = PENDING;\nREQUEST.confirmation = CONFIRM;\n")
+    result += (SHELL_SAFE_JS + "const cmd = CONTEXT.prefix + posixQuote(wire(REQUEST));\n"
                + "const ACTUAL_RESULT = await tools.exec_command({cmd, max_output_tokens: 16384});\n")
     if view is not None:
-        result += "store(PENDING_KEY, {reference: REQUEST.reference, view: VIEW, result: ACTUAL_RESULT});\n"
+        result += "store(CONTEXT.pending_key, {reference: REQUEST.reference, view: VIEW, result: ACTUAL_RESULT});\n"
     result += "text(ACTUAL_RESULT);\n"
     return result
 
@@ -166,19 +184,55 @@ def runtime_checkpoint_template(reference, code):
     return _recipe(_request(reference, code, "checkpoint"), reference)
 
 
+
+def runtime_wait_template(reference, code):
+    """One explicit poll of the retained own execution; zero VIEW/state commits."""
+    checked_reference = _reference(reference); checked_code = _code(code)
+    return (EXEC_PRAGMA + "const CONTEXT = load(" + _json(own_context_key(reference)) + ");\n"
+            + SHELL_SAFE_JS + """if (CONTEXT === undefined || CONTEXT === null) throw new Error("OWN_TRANSPORT_CONTEXT_ABSENT");
+if (typeof CONTEXT !== "object" || Array.isArray(CONTEXT) || Object.keys(CONTEXT).sort().join(",") !== "pending_key,prefix,request" || typeof CONTEXT.pending_key !== "string" || typeof CONTEXT.request !== "object" || CONTEXT.request === null || Array.isArray(CONTEXT.request)) throw new Error("OWN_TRANSPORT_CONTEXT_INVALID");
+const PENDING = load(CONTEXT.pending_key);
+if (PENDING === undefined || PENDING === null) throw new Error("OWN_PENDING_OBSERVATION_ABSENT");
+if (typeof PENDING !== "object" || Array.isArray(PENDING) || Object.keys(PENDING).sort().join(",") !== "reference,result,view" || wire(PENDING.reference) !== wire(CONTEXT.request.reference)) throw new Error("INVALID_OWN_PENDING");
+const SEQUENCE_FORMAT = "verislop.actual-execution-result-sequence/0.1";
+const IS_SEQUENCE = PENDING.result !== null && typeof PENDING.result === "object" && PENDING.result.format === SEQUENCE_FORMAT;
+if (IS_SEQUENCE && (Array.isArray(PENDING.result) || Object.keys(PENDING.result).sort().join(",") !== "format,results" || !Array.isArray(PENDING.result.results) || PENDING.result.results.length < 2)) throw new Error("INVALID_RUNNING_RESULT_CHAIN");
+const RESULTS = IS_SEQUENCE ? PENDING.result.results.slice() : [PENDING.result];
+let SESSION;
+for (const result of RESULTS) {
+  if (result === null || typeof result !== "object" || Array.isArray(result) || typeof result.chunk_id !== "string" || result.chunk_id.length === 0 || typeof result.output !== "string" || !Number.isSafeInteger(result.session_id) || result.session_id < 0 || "exit_code" in result) throw new Error("OWN_EXECUTION_NOT_RUNNING");
+  if (SESSION === undefined) SESSION = result.session_id;
+  if (result.session_id !== SESSION) throw new Error("INVALID_RUNNING_RESULT_CHAIN");
+  if ("original_token_count" in result && (!Number.isSafeInteger(result.original_token_count) || result.original_token_count < 0 || result.original_token_count > 16384)) throw new Error("NESTED_OUTPUT_TRUNCATION");
+}
+const BEFORE = wire(PENDING);
+const LAST = RESULTS[RESULTS.length - 1];
+const ACTUAL_RESULT = await tools.write_stdin({session_id: SESSION, max_output_tokens: 16384, yield_time_ms: 1000});
+text(ACTUAL_RESULT);
+const CURRENT = load(CONTEXT.pending_key);
+if (CURRENT === undefined || CURRENT === null || wire(CURRENT) !== BEFORE) {
+  store(CONTEXT.pending_key + "/unapplied-wait/" + LAST.chunk_id, {pending: JSON.parse(BEFORE), result: ACTUAL_RESULT});
+  throw new Error("OWN_PENDING_OBSERVATION_REPLACED");
+}
+store(CONTEXT.pending_key, {reference: PENDING.reference, view: PENDING.view, result: {format: SEQUENCE_FORMAT, results: RESULTS.concat([ACTUAL_RESULT])}});
+""")
+
 def runtime_agent_message(reference, code):
     reference = _reference(reference); code = _code(code)
-    return ("COMPACT REGISTERED CARRIER RUNTIME — support022/1\n"
+    return ("COMPACT DEVELOPMENT CARRIER RUNTIME — support025-running-result/1\n"
             "Read this own carrier completely through the exact fixed recipes below. This version explicitly permits invoking only the registered local runtime and its fixed reader/code guard. The runtime may read its fixed source files, this exact own carrier on VIEW only, and the declared own-session file. It may persist only that session. Other helpers, carriers, files, history, network, agents and expected-answer/root oracles are outside this permission.\n"
             "Reference: " + _json(reference) + "\nRegistered code: " + _json(code)
             + "\nOwn session file: " + session_path(reference, code) + "\n"
-            "FIRST requests inventory; NEXT requests one explicit closed VIEW per call. Every VIEW output_cap_bytes is an integer from 256 through 8192 inclusive; metadata_reserve_bytes is an integer with 128 <= metadata_reserve_bytes < output_cap_bytes. Field start_char is an exact nonnegative JSON-safe integer counting decoded Unicode scalars; selector is exactly /system or /user. Confirm inventory, complete /system EOF, then complete /user EOF. Edit ONLY NEXT VIEW selector/start_char/cap/reserve, never REQUEST, code, reference, session, launcher or wrapper. No recipe selects or retrieves the next cursor automatically. Every recipe forwards the complete actual tool result. FIRST/NEXT stage only that exact result under your bound own pending key and do not commit accepted state.\n"
+            "Run INIT_RESTORE unchanged before FIRST and explicitly after transport context is lost. INIT_RESTORE stores only fixed reference-bound request/launcher/pending-key data; it reads no files, calls no runtime or reader, computes no hashes and commits no accepted state. It never removes or replaces your original pending observation. Missing context raises OWN_TRANSPORT_CONTEXT_ABSENT with zero runtime calls; explicitly restore context, CHECKPOINT accepted availability, then issue the originally required explicit operation. Missing pending raises OWN_PENDING_OBSERVATION_ABSENT with zero calls; CHECKPOINT and explicitly re-request the SAME accepted cursor. No recipe restores, retries or retrieves automatically. FIRST requests inventory; NEXT requests one explicit closed VIEW per call. Every VIEW output_cap_bytes is an integer from 256 through 8192 inclusive; metadata_reserve_bytes is an integer with 128 <= metadata_reserve_bytes < output_cap_bytes. Field start_char is an exact nonnegative JSON-safe integer counting decoded Unicode scalars; selector is exactly /system or /user. Confirm inventory, complete /system EOF, then complete /user EOF. Edit ONLY NEXT VIEW selector/start_char/cap/reserve, never REQUEST, code, reference, session, launcher or wrapper. No recipe selects or retrieves the next cursor automatically. Every recipe forwards the complete actual tool result. FIRST/NEXT stage only that exact result under your bound own pending key and do not commit accepted state.\n"
+            "If FIRST/NEXT returns an actually exposed running session_id, explicitly invoke the unchanged WAIT recipe once for that retained execution. WAIT performs zero VIEW, starts no process, chooses no cursor and polls only that exact session; invoke it explicitly again only if its actual return remains running. Every original/wait return is retained literally in order. Inspect each visible outer response for intactness; CONFIRM outer_output_intact=true asserts all those responses are intact. A wait yield is not a timeout or deadline. Do not edit WAIT, poll a replacement session, issue a new NEXT while a wait is outstanding, or manufacture a completed tool result.\n"
             "After observing complete integer-zero completion, its actually exposed chunk_id and intact outer response, use CONFIRM. Edit ONLY CONFIRM.chunk_id and outer_output_intact; true asserts that you checked the visible outer output is intact, not hidden-envelope attestation. CONFIRM performs zero VIEW but one explicitly permitted runtime tool call. It validates status, exact original identity/Unicode/UTF8/cursors/bounds and persists atomically only on success. Rejected/malformed/truncated/nonzero/running output never advances accepted state. For an observed INVALID_CLOSED_VIEW_BOUNDS or another rejected editable VIEW argument, criticize the actual selector/start_char/cap/reserve against the bounds above and explicitly issue a fresh valid NEXT at the SAME accepted selector and start_char, using output_cap_bytes 8192 and metadata_reserve_bytes 2048. Restore the last accepted selector/cursor if the rejected attempt used an invalid selector or cursor. Do not CONFIRM the rejected result, advance accepted state, or return an incomplete FINAL merely because this first editable request was rejected. For actual nested or outer truncation, explicitly retry that SAME accepted selector/cursor with output_cap_bytes 4096 and metadata_reserve_bytes 2048. Continue each permitted explicit VIEW and CONFIRM through both EOFs; incomplete reading or a large input alone is not a fixed-source blocker. Stop only when an actual exposed blocking operation cannot be corrected using permitted closed values, and report its concrete observed error or explicitly UNKNOWN/unavailable. OWN_SESSION_BUSY requires an explicit retry of the same confirmation; no automatic retry or retrieval is performed.\n"
             "Confirm inventory, then complete /system EOF, then complete /user EOF, including explicit EOF for empty fields. Use HASH only after both confirmed EOFs and complete totals. HASH is zero VIEW but one runtime tool call, reconstructs original accepted observations and hashes exact scalar UTF8 fields without reading the carrier. Do not invent roots or replace full field coverage with hashes or summaries. Validate each intact actual response. Own state survives compression as availability only.\n"
             "After compression, a lost accepted cursor, or a lost unconfirmed VIEW, and before every FINAL, explicitly execute the fixed CHECKPOINT recipe below. CHECKPOINT is zero VIEW: it reads only the accepted own-session observations, validates their exact replay and returns accepted availability cursors/totals/EOF without reading the carrier, invoking the reader, computing roots or committing state. An EMPTY report means no accepted inventory exists: resume FIRST and CONFIRM inventory. For an existing summary, continue the first incomplete field in the required /system then /user order by explicitly editing NEXT to its exact returned next_char, and then CONFIRM the intact result. If an unconfirmed VIEW was lost, re-request that SAME accepted cursor; no rejected or unconfirmed attempt advances it. If all fields have confirmed EOF, HASH remains the only fixed field-hash recipe. A checkpoint summary does not replace your inspection or any SYSTEM-defined requirement. If CHECKPOINT itself has an actual exposed blocker, retain that error without inventing a summary. No recipe automatically chooses a cursor, retries, loops over VIEW or retrieves content.\n"
             "Keep exact SYSTEM-defined response/review/search/proof requirements and literal FINAL. Report only concrete observed errors or explicitly UNKNOWN/unavailable; this revised transport does not explain the historical failure. Availability/checkpoints/hashes establish no semantic consumption, understanding, ACCEPT, proof, TESTED, lifecycle or end-to-end authority. No inference, retrieval or review deadline, resampling, additional agent or automatic VIEW loop is authorized.\n"
-            "FIRST functions.exec (execute unchanged):\n```javascript\n" + runtime_initial_template(reference, code)
+            "INIT_RESTORE functions.exec (execute unchanged; fixed data only):\n```javascript\n" + runtime_restore_template(reference, code)
+            + "```\nFIRST functions.exec (execute unchanged after INIT_RESTORE):\n```javascript\n" + runtime_initial_template(reference, code)
             + "```\nNEXT functions.exec (edit ONLY closed VIEW):\n```javascript\n" + runtime_next_template(reference, code)
+            + "```\nWAIT functions.exec (unchanged; one explicit poll of the retained actual execution):\n```javascript\n" + runtime_wait_template(reference, code)
             + "```\nCONFIRM functions.exec (edit ONLY closed confirmation after intact observed completion):\n```javascript\n" + runtime_confirm_template(reference, code)
             + "```\nCHECKPOINT functions.exec (execute unchanged after compression/lost cursor and before FINAL):\n```javascript\n" + runtime_checkpoint_template(reference, code)
             + "```\nHASH functions.exec (execute unchanged after both confirmed EOFs):\n```javascript\n" + runtime_hash_template(reference, code) + "```\n")
@@ -191,7 +245,7 @@ def source_profile(session_directory):
     for node in tree.body:
         if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
             constants[node.targets[0].id] = ast.literal_eval(node.value)
-    return {"format": "verislop.compact-runtime-source-profile/0.1", "api_revision": API_REVISION,
+    return {"format": "verislop.compact-runtime-source-profile/0.2", "api_revision": API_REVISION,
             "source": {"path": str(Path(__file__).resolve()), "sha256": "sha256:" + hashlib.sha256(source).hexdigest(), "byte_count": len(source)},
             "code": code_bindings(session_directory), "constants": constants,
             "function_ast_hashes": {node.name: "sha256:" + hashlib.sha256(ast.dump(node, include_attributes=False).encode()).hexdigest()

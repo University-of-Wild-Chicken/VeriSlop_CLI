@@ -197,7 +197,15 @@ class CarrierCheckpointTests(unittest.TestCase):
         self.assertEqual(CANDIDATE.initial_session_template(REFERENCE), BASELINE.initial_session_template(REFERENCE))
         for current in (view(), view("/user", 17, 4096), {"operation": "inventory", "output_cap_bytes": 8192, "metadata_reserve_bytes": 2048}):
             self.assertEqual(CANDIDATE.next_session_template(REFERENCE, current), BASELINE.next_session_template(REFERENCE, current))
-        self.assertEqual(CANDIDATE.legacy_agent_message(REFERENCE), BASELINE.agent_message(REFERENCE))
+        expected = BASELINE.agent_message(REFERENCE)
+        anchor = "\n\nFIRST functions.exec (execute unchanged):\n```javascript\n"
+        self.assertEqual(expected.count(anchor), 1)
+        expected = expected.replace(
+            anchor,
+            "\n\nINLINE READ-ONLY RECIPE\nFIRST functions.exec (execute unchanged):\n```javascript\n",
+            1,
+        )
+        self.assertEqual(CANDIDATE.legacy_agent_message(REFERENCE), expected)
 
     def test_outer_truncation_stages_without_commit_and_same_cursor_retry(self):
         fields = {"/system": "own synthetic", "/user": "payload"}

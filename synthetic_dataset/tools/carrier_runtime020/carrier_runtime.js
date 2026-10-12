@@ -42,6 +42,46 @@ function checkpointReference(reference) {
     && /^sha256:[0-9a-f]{64}$/.test(reference.sha256)
     && /^sha256:[0-9a-f]{64}$/.test(reference.request_sha256), "INVALID_OWN_REFERENCE");
 }
+// Derived stream projection; every result remains an unchanged actual return.
+function checkpointExecution(value, confirmation) {
+  const sequence = value !== null && typeof value === "object"
+    && value.format === "verislop.actual-execution-result-sequence/0.1";
+  let results;
+  if (sequence) {
+    checkpointKeys(value, ["format", "results"], "INVALID_RUNNING_RESULT_CHAIN");
+    checkpointNeed(Array.isArray(value.results) && value.results.length >= 2, "INVALID_RUNNING_RESULT_CHAIN");
+    results = value.results;
+  } else {
+    results = [value];
+  }
+  let session;
+  let output = "";
+  for (let index = 0; index < results.length; index += 1) {
+    const result = results[index];
+    checkpointNeed(result !== null && typeof result === "object" && !Array.isArray(result)
+      && typeof result.output === "string", "ACTUAL_RESULT_NOT_COMPLETE_OR_UNMATCHED");
+    checkpointWire(result);
+    if ("original_token_count" in result) {
+      checkpointInteger(result.original_token_count, "INVALID_ACTUAL_TOKEN_COUNT");
+      checkpointNeed(result.original_token_count <= 16384, "NESTED_OUTPUT_TRUNCATION");
+    }
+    if (index + 1 < results.length) {
+      checkpointNeed(typeof result.chunk_id === "string" && result.chunk_id.length > 0
+        && Number.isSafeInteger(result.session_id) && result.session_id >= 0
+        && !("exit_code" in result), "INVALID_RUNNING_RESULT_CHAIN");
+      if (session === undefined) session = result.session_id;
+      checkpointNeed(result.session_id === session, "INVALID_RUNNING_RESULT_CHAIN");
+    } else {
+      checkpointNeed(typeof result.chunk_id === "string" && result.chunk_id === confirmation.chunk_id
+        && Number.isInteger(result.exit_code) && result.exit_code === 0
+        && !("session_id" in result), "ACTUAL_RESULT_NOT_COMPLETE_OR_UNMATCHED");
+    }
+    output += result.output;
+  }
+  checkpointText(output);
+  return {terminal: results[results.length - 1], output};
+}
+
 function checkpointAdvance(before, pending, confirmation, ownReference) {
   checkpointReference(ownReference);
   checkpointKeys(pending, ["reference", "view", "result"], "INVALID_OWN_PENDING");
@@ -49,16 +89,8 @@ function checkpointAdvance(before, pending, confirmation, ownReference) {
   checkpointKeys(confirmation, ["chunk_id", "outer_output_intact"], "INVALID_OUTER_CONFIRMATION");
   checkpointNeed(typeof confirmation.chunk_id === "string" && confirmation.chunk_id.length > 0
     && confirmation.outer_output_intact === true, "OUTER_OUTPUT_NOT_CONFIRMED_INTACT");
-  const result = pending.result, view = pending.view;
-  checkpointNeed(result !== null && typeof result === "object" && !Array.isArray(result)
-    && typeof result.chunk_id === "string" && result.chunk_id === confirmation.chunk_id
-    && Number.isInteger(result.exit_code) && result.exit_code === 0
-    && !("session_id" in result) && typeof result.output === "string", "ACTUAL_RESULT_NOT_COMPLETE_OR_UNMATCHED");
-  checkpointWire(result);
-  if ("original_token_count" in result) {
-    checkpointInteger(result.original_token_count, "INVALID_ACTUAL_TOKEN_COUNT");
-    checkpointNeed(result.original_token_count <= 16384, "NESTED_OUTPUT_TRUNCATION");
-  }
+  const execution = checkpointExecution(pending.result, confirmation);
+  const output = execution.output, view = pending.view;
   const viewFields = view && view.operation === "inventory"
     ? ["operation", "output_cap_bytes", "metadata_reserve_bytes"]
     : ["operation", "output_cap_bytes", "metadata_reserve_bytes", "selector", "start_char"];
@@ -67,8 +99,8 @@ function checkpointAdvance(before, pending, confirmation, ownReference) {
     && Number.isSafeInteger(view.metadata_reserve_bytes) && view.metadata_reserve_bytes >= 128
     && view.metadata_reserve_bytes < view.output_cap_bytes, "INVALID_CLOSED_OWN_VIEW_BOUNDS");
   let doc;
-  try { doc = JSON.parse(result.output); } catch (_) { throw new Error("MALFORMED_OR_TRUNCATED_ACTUAL_OUTPUT"); }
-  checkpointNeed(checkpointWire(doc) + "\n" === result.output, "NONCANONICAL_OR_DUPLICATE_ACTUAL_OUTPUT");
+  try { doc = JSON.parse(output); } catch (_) { throw new Error("MALFORMED_OR_TRUNCATED_ACTUAL_OUTPUT"); }
+  checkpointNeed(checkpointWire(doc) + "\n" === output, "NONCANONICAL_OR_DUPLICATE_ACTUAL_OUTPUT");
   const baseKeys = ["format", "status", "carrier_path", "carrier_raw_bytes", "carrier_sha256", "request_sha256", "request_id",
     "char_unit", "byte_unit", "output_cap_bytes", "metadata_reserve_bytes", "operation"];
   const extraKeys = view.operation === "inventory" ? ["fields", "navigation"]
@@ -82,10 +114,10 @@ function checkpointAdvance(before, pending, confirmation, ownReference) {
     && doc.operation === view.operation && doc.output_cap_bytes === view.output_cap_bytes
     && doc.metadata_reserve_bytes === view.metadata_reserve_bytes, "ACTUAL_VIEW_IDENTITY_MISMATCH");
   checkpointInteger(doc.carrier_raw_bytes, "INVALID_CARRIER_TOTAL");
-  checkpointNeed(checkpointText(result.output).bytes <= view.output_cap_bytes, "ACTUAL_OUTPUT_OVER_CAP");
+  checkpointNeed(checkpointText(output).bytes <= view.output_cap_bytes, "ACTUAL_OUTPUT_OVER_CAP");
   if (view.operation === "inventory") {
     checkpointNeed(doc.navigation === "complete_linear_fields_only" && Array.isArray(doc.fields) && doc.fields.length === 2
-      && checkpointText(result.output).bytes <= view.metadata_reserve_bytes, "INVALID_ACTUAL_INVENTORY");
+      && checkpointText(output).bytes <= view.metadata_reserve_bytes, "INVALID_ACTUAL_INVENTORY");
     const fields = {};
     for (let index = 0; index < 2; index += 1) {
       const item = doc.fields[index], selector = index === 0 ? "/system" : "/user";
@@ -122,7 +154,7 @@ function checkpointAdvance(before, pending, confirmation, ownReference) {
     && doc.end_utf8_byte <= field.field_utf8_bytes && typeof doc.field_eof === "boolean"
     && doc.field_eof === (doc.end_char === field.field_chars), "ACTUAL_CURSOR_LENGTH_OR_EOF_MISMATCH");
   checkpointNeed(checkpointText(checkpointWire(doc.content)).bytes <= view.output_cap_bytes - view.metadata_reserve_bytes
-    && checkpointText(result.output).bytes - checkpointText(checkpointWire(doc.content)).bytes + 2 <= view.metadata_reserve_bytes,
+    && checkpointText(output).bytes - checkpointText(checkpointWire(doc.content)).bytes + 2 <= view.metadata_reserve_bytes,
     "ACTUAL_CONTENT_OR_METADATA_BOUNDS_MISMATCH");
   checkpointNeed(doc.end_char > doc.start_char || doc.field_eof, "NO_CONTENT_ADVANCEMENT");
   if (doc.start_char < field.next_char) {
