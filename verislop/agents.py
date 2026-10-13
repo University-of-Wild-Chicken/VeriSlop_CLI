@@ -961,9 +961,88 @@ def assemble_proof_response(response: str) -> str:
     return fences[-1] if fences else response
 
 
+FRAGMENT_PROVER_SYSTEM = f"""You are a VeriSlop proof agent ({PROMPT_VERSION}) for a FROZEN Lean 4 v4.34.1 job.
+Return only one or more raw Lean theorem commands with the EXACT FROZEN THEOREM HEADERS supplied below.
+Propose proof bodies only. Preserve all theorem names, binders, types and propositions. Do not add imports,
+definitions, helper lemmas, attributes, namespace commands or prose. The supervisor inserts your proof bodies
+into the exact frozen source; all existing definitions and supplied verifier libraries remain available there.
+The environment has Lean Std and the provided verifier libraries, NOT Mathlib. Tactics such as simp, omega,
+grind, decide, rfl and cbv may be available; ring_nf and norm_num are not Std tactics. Use concrete supplied
+Lean diagnostics to repair the previous proposal. Do not use sorry, axiom, native_decide, implemented_by or extern.
+Return the theorem commands themselves, not JSON or a complete file. A single lean code fence is permitted."""
+
+
+def _proof_completion(broker, conf: dict, pkg: Package, events: EventSink, fallback: str,
+                      instance: str, system: str, user: str, purpose: str, frozen: str,
+                      previous: str | None, decoder, router=None, *, toolchain_pin=None) -> tuple[str, str]:
+    """Dispatch one proposal, with explicit optional-service escalation and exact assembly."""
+    from . import proof_fragments, proof_routing
+    if toolchain_pin is None:
+        from .leanbridge import DEFAULT_TOOLCHAIN
+        toolchain_pin = DEFAULT_TOOLCHAIN
+    while True:
+        selected, routed_instance = fallback, instance
+        if router is not None:
+            selected, allocation = router.next()
+            routed_instance += f"/{allocation['phase']}/{allocation['ordinal']}"
+        mode = proof_routing.response_format(conf, selected)
+        call_system, call_user = system, user
+        if mode == "theorem_fragment":
+            call_system = FRAGMENT_PROVER_SYSTEM
+            call_user += "\nEXACT FROZEN THEOREM HEADERS (copy all header tokens; supply only proof bodies):\n"
+            try:
+                call_user += "\n".join(proof_fragments.expected_headers(frozen))
+            except proof_fragments.FragmentError as exc:
+                if router is not None:
+                    router.context_rejected(str(exc))
+                raise
+        try:
+            call_purpose = "prove-vscore" if mode == "theorem_fragment" and purpose == "generate" else purpose
+            comp = recorded_call(broker, pkg, selected, routed_instance, call_system, call_user, call_purpose)
+        except Exception as exc:
+            if router is not None and router.failure(exc):
+                continue
+            raise
+        from .errors import BlockedError
+        try:
+            if router is not None:
+                router.completion(comp)
+            if mode == "theorem_fragment":
+                baseline, rejected_previous = previous, None
+                if previous is not None:
+                    try:
+                        proof_fragments.validate_previous(previous, frozen, toolchain_pin)
+                    except proof_fragments.FragmentError as exc:
+                        baseline, rejected_previous = frozen, str(exc)
+                assembled = proof_fragments.assemble(comp.text, frozen, baseline, toolchain_pin=toolchain_pin)
+                from . import agent_memory
+                agent_memory.capture_context(pkg, "proof-fragment/assembly", {
+                    "agent": selected, "instance": routed_instance,
+                    "frozen_sha256": canonical.digest(frozen.encode()), "lean_toolchain": toolchain_pin,
+                    "syntax_helper_sha256": canonical.digest(proof_fragments.SYNTAX_HELPER.read_bytes()),
+                    "previous_sha256": canonical.digest(previous.encode()) if previous is not None else None,
+                    "rejected_previous_reason": rejected_previous,
+                    "assembly_baseline_sha256": canonical.digest(baseline.encode()) if baseline is not None else canonical.digest(frozen.encode()),
+                    "response_sha256": canonical.digest(comp.text.encode()),
+                    "assembled_sha256": canonical.digest(assembled.encode())})
+                return assembled, comp.text
+            return decoder(comp.text), comp.text
+        except (BlockedError, InfrastructureError, UsageError) as exc:
+            if router is not None:
+                router.failure(exc)
+            raise
+
+
 def prover_agent(config: str | Path, pkg: Package, events: EventSink) -> Callable[[dict[str, Any]], str]:
     broker, conf = _broker(config, pkg)
     agent = _role(conf, "prover")
+    router = None
+
+    def configure_search(job: dict, fallback_budget: int):
+        nonlocal router
+        from . import proof_routing
+        router = proof_routing.create(broker, conf, pkg, events, job, fallback_budget)
+        return router
 
     def run(ctx: dict[str, Any]) -> str:
         user = "CURRENT FILE:\n```lean\n" + ctx["best"] + "\n```\n"
@@ -976,9 +1055,14 @@ def prover_agent(config: str | Path, pkg: Package, events: EventSink) -> Callabl
         if ctx.get("critique"):
             user += "\nAUTONOMOUS PROOF CRITIQUE (untrusted correction advice; frozen statements cannot change):\n" + json.dumps(
                 {"status": ctx["critique"]["status"], "feedback": ctx["critique"].get("feedback", [])}, ensure_ascii=False)
-        comp = recorded_call(broker, pkg, agent, f"prover/{ctx['attempt']}", PROVER_SYSTEM, user, "prove")
-        return assemble_proof_response(comp.text)
+        source, _ = _proof_completion(broker, conf, pkg, events, agent, f"prover/{ctx['attempt']}",
+                                      PROVER_SYSTEM, user, "prove", ctx.get("challenge", ctx["best"]),
+                                      ctx["best"], assemble_proof_response, router,
+                                      toolchain_pin=ctx.get("lean_toolchain"))
+        return source
 
+    run.configure_search = configure_search
+    run.routing_enabled = conf.get("proof_routing", {}).get("enabled") is True
     return run
 
 
@@ -1524,7 +1608,8 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
             feedback = diagnostics(stage, "source", exc, source, relation)
             fsutil.write_json(stage / "source-diagnostics.json", feedback, once=True)
             continue
-        proof = proposed.get("proof_source", "import VeriSlopBridgeGoal\nnamespace VeriSlopBridgeProof\ntheorem edge : VeriSlopBridgeGoal.EdgeProp := by sorry\nend VeriSlopBridgeProof\n").encode("utf-8")
+        proof_template = "import VeriSlopBridgeGoal\nnamespace VeriSlopBridgeProof\ntheorem edge : VeriSlopBridgeGoal.EdgeProp := by sorry\nend VeriSlopBridgeProof\n"
+        proof = proposed.get("proof_source", proof_template).encode("utf-8")
         proof_feedback: dict = {}
         last_bounded_proof = proof if len(proof) <= vscore_target.MAX_PROOF_BYTES else b"import VeriSlopBridgeGoal\nnamespace VeriSlopBridgeProof\ntheorem edge : VeriSlopBridgeGoal.EdgeProp := by sorry\nend VeriSlopBridgeProof\n"
         if "proof_source" in proposed:
@@ -1549,27 +1634,56 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
             prover_context["readable_source_view"] = info.get("readable_source_view")
         prover_context["relation_hash"] = canonical.digest(relation)
         prover_context["goal_hash"] = canonical.digest(spec.text.encode())
-        for proof_number in range(1, proof_attempts + 1 if prover else 1):
+        from . import proof_fragments, proof_routing
+        router = proof_routing.create(broker, conf, pkg, events, {
+            "kind": "vscore", "source_sha256": canonical.digest(source),
+            "relation_sha256": canonical.digest(relation), "goal_sha256": canonical.digest(spec.text.encode()),
+            "fixed_context_sha256": canonical.digest_json(fixed),
+            "verifier_library_sha256": canonical.digest_json(prover_context["verifier_library"]),
+            "proof_template_sha256": canonical.digest(proof_template.encode())}, proof_attempts) if prover else None
+        proposal_limit = proof_attempts + (3 if router is not None else 0)
+        for proof_number in range(1, proposal_limit + 1 if prover else 1):
+            if router is not None and not router.available():
+                break
             prover_context["proof_hash"] = canonical.digest(proof)
             user = "FIXED VSCORE PROOF CONTEXT (data):\n" + json.dumps(prover_context, ensure_ascii=False)
             user += "\nCURRENT CANDIDATE PROOF:\n```lean\n" + proof.decode("utf-8") + "\n```\n"
             if proof_feedback:
                 user += "\nCHECKER ERROR INVENTORY (excerpts; full artifact referenced):\n" + json.dumps(proof_feedback, ensure_ascii=False)
-            comp = recorded_call(broker, pkg, prover, f"prover/vscore/{number}/{proof_number}", components["prover_system"], user, "generate")
-            proof = _proof_text(comp.text).encode("utf-8")
+            response_path = stage / f"responses/proof-{proof_number}.txt"
+            try:
+                proposed_proof, raw_response = _proof_completion(broker, conf, pkg, events, prover,
+                    f"prover/vscore/{number}/{proof_number}", components["prover_system"], user, "generate",
+                    proof_template, proof.decode("utf-8"), _proof_text, router,
+                    toolchain_pin=fixed["lean_toolchain"])
+            except proof_fragments.FragmentError as exc:
+                retain(stage, {f"responses/proof-{proof_number}.txt": exc.response.encode("utf-8")})
+                proof_feedback = diagnostics(stage, f"proof-{proof_number}", exc, source, relation,
+                                              exc.response.encode("utf-8"), response_path)
+                if router is not None:
+                    router.evaluation(False, proof_feedback)
+                continue
+            proof = proposed_proof.encode("utf-8")
             if len(proof) <= vscore_target.MAX_PROOF_BYTES:
                 last_bounded_proof = proof
-            response_path = stage / f"responses/proof-{proof_number}.txt"
             retain(stage, {f"proofs/{proof_number}.lean": proof,
-                           f"responses/proof-{proof_number}.txt": comp.text.encode("utf-8")})
+                           f"responses/proof-{proof_number}.txt": raw_response.encode("utf-8")})
             events.emit("candidate_proposal", "generate", f"VSCore proof proposal (source {number}, proof {proof_number})")
             try:
                 if len(proof) > vscore_target.MAX_PROOF_BYTES:
                     raise ValueError("proof exceeds the registered proof size budget")
                 checked(stage, source, relation, proof, f"proof-{proof_number}")
+                if router is not None:
+                    router.evaluation(True)
                 return {"program.vscore.json": source, "relation.json": relation, "Proof.lean": proof,**metadata}, {}
             except (ValueError, vscore_checker.EdgeFailure) as exc:
                 proof_feedback = diagnostics(stage, f"proof-{proof_number}", exc, source, relation, proof, response_path)
+                if router is not None:
+                    router.evaluation(False, proof_feedback)
+            except InfrastructureError as exc:
+                if router is not None:
+                    router.failure(exc)
+                raise
         # A failed proof search leaves a concrete source candidate for IMPLEMENTED/LINKED.
         fallback = {"program.vscore.json": source, "relation.json": relation, "Proof.lean": last_bounded_proof,**metadata}
         if not proof_feedback:

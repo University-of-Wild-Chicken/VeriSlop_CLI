@@ -160,12 +160,26 @@ class OllamaProviderTests(unittest.TestCase):
         self.assertEqual(comp.model_digest_sha256, DIGEST)
         transcript = canonical.load_file(next((self.root / "transcripts").glob("*.json")))
         self.assertEqual(transcript["model_digest_sha256"], DIGEST)
+        self.assertEqual(31, transcript["input_tokens"])
+        self.assertEqual(20, transcript["output_tokens"])
+
+    def test_fragment_mode_omits_json_enforcement_only_for_proof_subprocesses(self):
+        self.conf["agents"]["qwen"]["proof_response_format"] = "theorem_fragment"
+        self.save()
+        broker = self.broker()
+        for purpose in ("prove", "prove-vscore", "generate", "test"):
+            broker.call("qwen", "wire/" + purpose, "Return only Lean.",
+                        "Return the following theorem:\ntheorem t : True := by trivial", purpose)
+        chats = [r[3] for r in self.server.requests if r[0] == "POST"]
+        self.assertEqual([False, False, True, True], ["format" in request for request in chats])
+        self.assertEqual(["json", "json"], [request["format"] for request in chats[2:]])
 
     def test_wrong_pinned_digest_prevents_inference(self):
         self.conf["agents"]["qwen"]["model_identity"]["model_digest_sha256"] = "b" * 64
         self.save()
-        with self.assertRaisesRegex(InfrastructureError, "differs from the configured pin"):
+        with self.assertRaisesRegex(InfrastructureError, "differs from the configured pin") as raised:
             self.call()
+        self.assertIs(raised.exception.diagnostics[0].details["binding_failure"], True)
         self.assertEqual([r[0] for r in self.server.requests], ["GET"])
 
     def test_catalog_replacement_during_inference_is_rejected(self):

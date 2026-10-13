@@ -82,6 +82,9 @@ class Broker:
                            if "context_window_tokens" in conf else {})
         provider = conf["provider"]
         prov = self.r.provider(provider)
+        if (prov["api_family"] == "ollama_chat" and purpose in {"prove", "prove-vscore"}
+                and conf.get("proof_response_format") == "theorem_fragment"):
+            context_options["ollama_json_mode"] = False
         profile = self.r.profiles.get(provider)
         if profile is None or not profile.get("base_url"):
             raise UsageError(f"provider {provider} has no resolved endpoint profile")
@@ -110,15 +113,15 @@ class Broker:
                         digest = ollama_model_digest(profile, model, prov["request_timeout_seconds"], secret)
                         expected = conf.get("model_identity", {}).get("model_digest_sha256")
                         if expected is not None and digest != expected:
-                            raise ProviderError("bad_response", "installed Ollama model digest differs from the configured pin")
+                            raise ProviderError("bad_response", "installed Ollama model digest differs from the configured pin", binding_failure=True)
                     comp = complete(prov["api_family"], profile, secret, model, system, user,
                                     conf["max_output_tokens"], prov["request_timeout_seconds"], **context_options)
                     if digest is not None:
                         if ollama_model_digest(profile, model, prov["request_timeout_seconds"], secret) != digest:
-                            raise ProviderError("bad_response", "Ollama model catalog changed during inference")
+                            raise ProviderError("bad_response", "Ollama model catalog changed during inference", binding_failure=True)
                         allowed_models = {model, model + ":latest"} if ":" not in model.rsplit("/", 1)[-1] else {model}
                         if comp.returned_model not in allowed_models:
-                            raise ProviderError("bad_response", "Ollama returned a different model identifier")
+                            raise ProviderError("bad_response", "Ollama returned a different model identifier", binding_failure=True)
                         comp.model_digest_sha256 = digest
                 break
             except ProviderError as exc:
@@ -128,7 +131,8 @@ class Broker:
                               context_window_tokens=context_tokens)
                     raise InfrastructureError(f"provider {provider} ({exc.kind}): {exc.message}",
                                               [Diagnostic("PROVIDER_FAILURE", f"{provider}: {exc}", severity="infrastructure",
-                                                          details={"kind": exc.kind, "status": exc.status})]) from None
+                                                          details={"kind": exc.kind, "status": exc.status,
+                                                                   **({"binding_failure": True} if exc.binding_failure else {})})]) from None
                 time.sleep(min(30.0, exc.retry_after or 2.0 * attempts))
         del secret
         with self.budget.lock:
@@ -150,6 +154,8 @@ class Broker:
             "returned_model": comp.returned_model if comp else None, "request_id": comp.request_id if comp else None,
             "model_digest_sha256": comp.model_digest_sha256 if comp else None,
             "attempts": attempts, "error": error, "wall_ms": wall_ms,
+            "input_tokens": comp.input_tokens if comp else None,
+            "output_tokens": comp.output_tokens if comp else None,
             "context_window_tokens": context_window_tokens,
             "system_sha256": canonical.digest(system.encode()), "user_sha256": canonical.digest(user.encode()),
             "system": system, "user": user, "response": text,

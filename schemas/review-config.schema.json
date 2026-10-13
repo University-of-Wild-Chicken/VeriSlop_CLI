@@ -23,6 +23,20 @@
         "native_binary"
       ]
     },
+    "proof_routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "initial_agent": {"type": "string", "minLength": 1},
+        "initial_attempts": {"const": 3}
+      },
+      "required": ["enabled"],
+      "allOf": [{
+        "if": {"properties": {"enabled": {"const": true}}},
+        "then": {"required": ["initial_agent", "initial_attempts"]}
+      }]
+    },
     "providers": {
       "type": "object",
       "minProperties": 1,
@@ -166,6 +180,10 @@
             "minimum": 1024,
             "maximum": 262144,
             "description": "Optional explicit Ollama per-request num_ctx; omitted preserves the server's model setting. Other API families reject this field."
+          },
+          "proof_response_format": {
+            "enum": ["complete_file", "theorem_fragment"],
+            "description": "Optional proof-subprocess response protocol; complete_file is the default. Fragment mode inserts only exact-header theorem proof bodies into the frozen scaffold."
           }
         },
         "required": [

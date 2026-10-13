@@ -36,6 +36,7 @@ class ProviderError(Exception):
     status: int | None = None
     retryable: bool = False
     retry_after: float | None = None
+    binding_failure: bool = False  # explicitly detected model identity/pin failure; never optional fallback
 
     def __str__(self) -> str:
         return f"{self.kind}: {self.message}"

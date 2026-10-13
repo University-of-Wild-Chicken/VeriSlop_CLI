@@ -90,6 +90,15 @@ def resolve(conf: dict[str, Any], user_profiles: dict[str, dict[str, Any]]) -> R
         if agent not in agents:
             diags.append(Diagnostic("CONFIGURATION_INVALID", f"role {role} references unknown agent {agent}"))
         used_agents.add(agent)
+    routing = conf.get("proof_routing", {})
+    if routing.get("enabled") is True:
+        initial = routing.get("initial_agent")
+        if initial not in agents:
+            diags.append(Diagnostic("CONFIGURATION_INVALID", f"proof_routing references unknown initial agent {initial}"))
+        else:
+            used_agents.add(initial)
+            if agents[initial]["tool_profile"] != "proof_sandbox":
+                diags.append(Diagnostic("CONFIGURATION_INVALID", f"proof_routing initial agent {initial} must use tool_profile proof_sandbox"))
     tier_ids: set[str] = set()
     for tier in conf["review"]["review_tiers"]:
         if tier["id"] in tier_ids:

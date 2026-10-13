@@ -16,8 +16,8 @@ import time
 from pathlib import Path
 from typing import Any, Callable
 
-from . import contract_values, agent_memory, canonical, contract, dsl, fsutil, leanbridge, native_contract
-from .errors import Diagnostic, UsageError
+from . import contract_values, agent_memory, canonical, contract, dsl, fsutil, leanbridge, native_contract, proof_fragments
+from .errors import Diagnostic, InfrastructureError, UsageError
 from .events import EventSink
 from .package import Package
 from .stage import StageResult, status_from
@@ -283,6 +283,14 @@ def run(
     profile = contractmod.frozen_json(pkg, "profile.json")
     pol = contractmod.frozen_json(pkg, "policy.json")
     tc = leanbridge.resolve_toolchain((chdir / "lean-toolchain").read_text())
+    router = None
+    if agent is not None and getattr(agent, "routing_enabled", False):
+        job = {"kind": "contract", "challenge_sha256": canonical.digest(challenge.encode()),
+               "statements_sha256": canonical.digest_json(statements),
+               "profile_sha256": canonical.digest_json(profile), "policy_sha256": canonical.digest_json(pol),
+               "formalization_sha256": canonical.digest_json(contractmod.frozen_json(pkg, "formalization.json")),
+               "lean_toolchain": (chdir / "lean-toolchain").read_text()}
+        router = agent.configure_search(job, max_attempts)
     proofs = pkg.path("contract") / "proofs"
     proofs.mkdir(parents=True, exist_ok=True)
     log = proofs / "attempts.jsonl"
@@ -306,11 +314,13 @@ def run(
                 seen_failures.add(canonical.digest_json({k: entry[k] for k in ("source_sha256", "errors", "sorries")}))
 
     def record(kind: str, src: str, res: dict[str, Any], proposal: str | None = None,
-               *, update_latest: bool = True) -> None:
+               *, update_latest: bool = True, eligible_baseline: bool = True) -> None:
         nonlocal best, best_src, latest_src, latest_result
         entry = {"generator": kind, "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                  "source_sha256": canonical.digest(src.encode()), **{k: res[k] for k in ("ok", "sorries", "complete", "wall_ms")},
                  "errors": res["errors"]}
+        if not eligible_baseline:
+            entry["protocol_rejected"] = True
         # Keep the generator's exact submission separately from the compiled file, which may
         # include the supervisor's frozen registry. Neither source is rewritten to repair it.
         submitted = src if proposal is None else proposal
@@ -323,7 +333,7 @@ def run(
             latest_src, latest_result = submitted, dict(entry)
         events.emit("candidate_proposal", "prove", f"{kind}: ok={res['ok']} remaining sorries={res['sorries']}",
                     details={"generator": kind, "complete": res["complete"]})
-        if _better(best, res):
+        if eligible_baseline and _better(best, res):
             best, best_src = res, src
         agent_memory.capture_context(pkg, "prove/attempt", {
             "challenge_hash": canonical.digest(challenge.encode()), "candidate": latest_src,
@@ -336,11 +346,15 @@ def run(
 
     if saved is not None:
         previous_critique = saved.get("critique")
-        src = with_registry(saved["best"], challenge)
-        record("retained_best", src, evaluate(tc, pol, src))
+        if saved["best"] is not None:
+            src = with_registry(saved["best"], challenge)
+            record("retained_best", src, evaluate(tc, pol, src))
         if saved["candidate"] != saved["best"]:
-            src = with_registry(saved["candidate"], challenge)
-            record("retained_latest", src, evaluate(tc, pol, src), saved["candidate"])
+            if saved["result"].get("protocol_rejected") is True:
+                record("retained_latest", saved["candidate"], saved["result"], saved["candidate"], eligible_baseline=False)
+            else:
+                src = with_registry(saved["candidate"], challenge)
+                record("retained_latest", src, evaluate(tc, pol, src), saved["candidate"])
 
     if candidate is not None:
         submitted = Path(candidate).read_text()
@@ -355,8 +369,10 @@ def run(
             record("challenge_as_is", base, evaluate(tc, pol, base))
     attempts = 0
     repeated = 0
+    previous_route_phase = None
     critic_needed = True
-    while (agent is not None and (best is None or not best["complete"]) and attempts < max_attempts
+    while (agent is not None and (best is None or not best["complete"])
+           and (router.available() if router is not None else attempts < max_attempts)
            and (deadline is None or time.monotonic() < deadline)):
         attempts += 1
         agent_serial += 1
@@ -376,20 +392,38 @@ def run(
             result.diagnostics.extend(Diagnostic.from_json(d) for d in previous_critique.get("diagnostics", []))
             if previous_critique["status"] == "INCOMPLETE":
                 break
-        proposal = agent({"challenge": challenge, "best": best_src or challenge,
-                          "errors": (latest_result or {}).get("errors", []), "statements": statements, "attempt": agent_serial,
-                          "previous_candidate": latest_src, "previous_result": latest_result, "critique": previous_critique})
-        src = with_registry(proposal, challenge)
-        evaluated = evaluate(tc, pol, src)
+        try:
+            eligible_baseline = True
+            proposal = agent({"challenge": challenge, "best": best_src or challenge,
+                              "lean_toolchain": (chdir / "lean-toolchain").read_text().strip(),
+                              "errors": (latest_result or {}).get("errors", []), "statements": statements, "attempt": agent_serial,
+                              "previous_candidate": latest_src, "previous_result": latest_result, "critique": previous_critique})
+            src = with_registry(proposal, challenge)
+            evaluated = evaluate(tc, pol, src)
+        except proof_fragments.FragmentError as exc:
+            eligible_baseline = False
+            proposal = exc.response
+            src = proposal
+            evaluated = {"ok": False, "errors": ["fragment protocol: " + str(exc)],
+                         "sorries": 0, "complete": False, "wall_ms": 0}
+        except InfrastructureError as exc:
+            if router is not None:
+                router.failure(exc)
+            raise
+        if router is not None:
+            if router.last_phase != previous_route_phase:
+                repeated = 0
+            previous_route_phase = router.last_phase
+            router.evaluation(evaluated["complete"], evaluated["errors"])
         signature = canonical.digest_json({"source_sha256": canonical.digest(src.encode()),
                                            "errors": evaluated["errors"], "sorries": evaluated["sorries"]})
         duplicate = not evaluated["complete"] and signature in seen_failures
         repeated = repeated + 1 if duplicate else 0
-        record("agent:prover", src, evaluated, proposal)
+        record("agent:prover", src, evaluated, proposal, eligible_baseline=eligible_baseline)
         if not evaluated["complete"]:
             seen_failures.add(signature)
         critic_needed = duplicate
-        if repeated >= 2:
+        if repeated >= 2 and (router is None or router.last_phase == "fallback"):
             result.diagnostics.append(Diagnostic("NO_PROGRESS",
                 "the prover repeated the same failed candidate and diagnostics; a fresh contract repair is required"))
             break
@@ -397,11 +431,15 @@ def run(
     if best_src is None:
         result.diagnostics.append(Diagnostic("PROOF_UNRESOLVED", "no proof generator produced a candidate"))
         result.status = "BLOCKED"
+        if router is not None:
+            result.summary["proof_routing"] = router.summary()
         return result
     fsutil.atomic_write(proofs / "candidate.lean", best_src.encode())
     result.artifacts["proof_candidate"] = pkg.rel(proofs / "candidate.lean")
     result.summary = {"complete": best["complete"], "remaining_sorries": best["sorries"], "errors": best["errors"][:10],
                       "budget_seconds": budget_seconds, "agent_attempts": attempts, "repeated_failures": repeated}
+    if router is not None:
+        result.summary["proof_routing"] = router.summary()
     if not best["ok"]:
         result.diagnostics.append(Diagnostic("CANDIDATE_BUILD_FAILURE", "best proof candidate does not elaborate: " + "; ".join(best["errors"][:3])))
     elif best["sorries"]:
