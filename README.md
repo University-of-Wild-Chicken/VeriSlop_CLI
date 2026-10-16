@@ -263,6 +263,18 @@ by default. Local Pythagoras-Prover-4B is evaluated in the
 [bounded compatibility report](docs/small-prover-live-results.md); enabling it does
 not imply improved coverage or measured token savings.
 
+The opt-in [local hybrid workflow](docs/local-hybrid-workflow.md) adds checked Qwen
+proof refinement between Pythagoras and Sol. Its
+[configuration](examples/local-hybrid-config.json) uses Qwen for authoring,
+implementation and concrete review, with durable proof feedback across resumes.
+It explicitly enables Sol fallback for invalid autonomous critic responses;
+valid counterexamples still require repair, and checkpoint reviewers remain Qwen.
+Its Ollama reviewer enables optional `review_response_format: "json_schema"` to
+constrain ballot syntax. Omit the field to keep ordinary JSON generation; probe
+replay and all acceptance rules remain mandatory in either mode.
+The [live hybrid results](docs/local-hybrid-live-results.md) distinguish accepted
+proof diagnostics from the still-blocked natural-language software trial.
+
 `providers probe` requires explicit `--live` and sends one JSON echo challenge per selected `--agent` (repeat the flag to select more). It checks protocol parsing, the challenge, returned model metadata and token usage through the actual broker, with no retries, a maximum 30-second request timeout and bounded output. Probe responses are not saved as transcripts. A successful probe establishes that this call worked; agent reliability, model alias equivalence and formal correctness remain separate questions. Use `--endpoint-profiles PATH` for user-supplied Meta Muse and Qwen/DashScope regional endpoints.
 
 Reviewers at every tier must construct concrete probes before voting. The supervisor replays them against the bound artifacts and records expected versus observed results. Only confirmed counterexamples count as technical rejections; speculative findings are invalid and unresolved replay leaves review incomplete. Stored votes re-tally from their raw responses and replay receipts. See [the counterexample protocol](docs/adversarial-counterexamples.md) for supported probe kinds and limits. Acceptance escalates tier by tier, and changed artifacts invalidate old votes. Review never assigns a proof or bridge milestone.

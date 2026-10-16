@@ -1,0 +1,124 @@
+{
+  "schema_version": "0.1",
+  "bridge_tier": 0,
+  "endpoint": "test_campaign",
+  "providers": {
+    "local": {
+      "adapter": "ollama",
+      "api_family": "ollama_chat",
+      "endpoint_profile": "ollama-local",
+      "concurrency": 1,
+      "request_timeout_seconds": null
+    },
+    "openai": {
+      "adapter": "openai",
+      "api_family": "responses",
+      "endpoint_profile": "openai-direct",
+      "credential_ref": "env:OPENAI_API_KEY",
+      "concurrency": 1,
+      "request_timeout_seconds": null
+    }
+  },
+  "agents": {
+    "qwen-author": {
+      "provider": "local",
+      "model_ref": "env:VERISLOP_QWEN_MODEL",
+      "tool_profile": "candidate_writer",
+      "max_output_tokens": 8192,
+      "context_window_tokens": 32768
+    },
+    "qwen-reviewer": {
+      "provider": "local",
+      "model_ref": "env:VERISLOP_QWEN_MODEL",
+      "tool_profile": "review_readonly",
+      "review_response_format": "json_schema",
+      "max_output_tokens": 2048,
+      "context_window_tokens": 40960
+    },
+    "qwen-proof-refiner": {
+      "provider": "local",
+      "model_ref": "env:VERISLOP_QWEN_MODEL",
+      "tool_profile": "proof_sandbox",
+      "proof_response_format": "theorem_fragment",
+      "max_output_tokens": 8192,
+      "context_window_tokens": 32768
+    },
+    "pythagoras": {
+      "provider": "local",
+      "model_ref": "env:VERISLOP_PYTHAGORAS_MODEL",
+      "tool_profile": "proof_sandbox",
+      "proof_response_format": "theorem_fragment",
+      "max_output_tokens": 8192,
+      "context_window_tokens": 32768
+    },
+    "sol-prover": {
+      "provider": "openai",
+      "model_ref": "gpt-6.1-sol",
+      "tool_profile": "proof_sandbox",
+      "max_output_tokens": 16384
+    },
+    "sol-critic": {
+      "provider": "openai",
+      "model_ref": "gpt-6.1-sol",
+      "tool_profile": "review_readonly",
+      "max_output_tokens": 8192
+    }
+  },
+  "roles": {
+    "interpreter": "qwen-author",
+    "formalizer": "qwen-author",
+    "implementer": "qwen-author",
+    "repairer": "qwen-author",
+    "prover": "sol-prover"
+  },
+  "review": {
+    "checkpoints": [
+      "formal_contract",
+      "release"
+    ],
+    "restart_after_repair": "first_tier",
+    "budgets": {
+      "max_repair_rounds": 2,
+      "max_provider_retries": 0,
+      "max_calls_per_instance": 24,
+      "max_total_tokens": 1000000,
+      "max_wall_seconds_per_tier": 0
+    },
+    "review_tiers": [
+      {
+        "id": "R0",
+        "reviewers": [
+          {
+            "agent": "qwen-reviewer",
+            "count": 1,
+            "focus": "counterexamples"
+          }
+        ],
+        "consensus": {
+          "mode": "unanimous",
+          "require_all_responses": true,
+          "max_soft_rejects": 0,
+          "max_abstentions": 0,
+          "blocking_findings_veto": true
+        }
+      }
+    ]
+  },
+  "release": {
+    "require_mechanical_pass": true,
+    "require_all_review_tiers": true,
+    "require_requested_bridge_tier": true
+  },
+  "proof_routing": {
+    "enabled": true,
+    "initial_agent": "pythagoras",
+    "initial_attempts": 3,
+    "refinement_agent": "qwen-proof-refiner",
+    "refinement_attempts": 3
+  },
+  "critic_routing": {
+    "enabled": true,
+    "fallback_agent": "sol-critic",
+    "fallback_attempts": 2
+  }
+}

@@ -39,7 +39,7 @@ MILESTONES_FOR = {
     "release": MILESTONES,
 }
 
-REVIEW_SYSTEM = """You are an adversarial reviewer in a VeriSlop review tier (verislop.review-prompts/0.7).
+REVIEW_SYSTEM = """You are an adversarial reviewer in a VeriSlop review tier (verislop.review-prompts/0.8).
 Your task is to CONSTRUCT concrete counterexample candidates and try to refute the scoped obligations.
 Search boundary inputs, error cases, witness failures, omitted exact request clauses and false mechanical claims.
 Speculation about reliability, possible bugs, confidence, style, or inadequate testing is not a finding.
@@ -48,8 +48,10 @@ CHECKPOINT RESTRICTION: interpretation and formal_contract allow ONLY mechanical
 target_case is Python implementation/release ONLY; it cannot execute a Lean reference at formal_contract.
 Select only the current checkpoint's allowed proposal kinds and exact closed fields. At earlier checkpoints, test a
 registered mechanical claim or construct an exact missing-clause probe; no input assignment executes the Lean model.
-When a probe kind is invalid, discard that probe and CONSTRUCT a new probe of an allowed kind. Removing an extra
-field or renaming the kind while retaining its old fields does not correct it. Never invent a result or acceptance.
+When a probe kind is unavailable at this checkpoint, discard it and CONSTRUCT a new probe of an allowed kind;
+renaming an unavailable kind while retaining its old fields does not correct it. When the kind IS allowed but
+has extra keys, REMOVE those extra keys while preserving the concrete inputs and required fields. Put prose in
+search.method or rationale, not extra probe fields. Never invent a result or acceptance.
 DECISION SCOPE: formal_contract reviews the current INTERPRETED, FORMALIZED, TYPECHECKED and PROVED reference claims.
 It does not review future Python IMPLEMENTED, LINKED, TESTED or closure claims. A future artifact absent by stage
 design is not an unresolved current claim. Your review judgment concerns this checkpoint, not verification of later
@@ -299,8 +301,33 @@ def _checkpoint_guidance(checkpoint: str, policy: dict[str, Any]) -> str:
                 "future_artifact_rule": "an artifact absent by stage design is not an unresolved current claim; actual current uncertainty still warrants ABSTAIN",
                 "closed_proposal_templates": policy["proposals"], "restriction": restriction,
                 "template_scope": "syntax illustrations only; construct your own probes, not votes or claimed replay results"}, ensure_ascii=False)
-            + "\nDiscard probes of an invalid kind and reconstruct an allowed probe using its exact closed fields; "
-              "do not merely remove a field or rename the old probe. The packet and scope remain unchanged.\n")
+            + "\nDiscard probes of an invalid kind and reconstruct an allowed probe using its exact closed fields. "
+              "For an allowed kind with extra fields, remove those fields and retain the concrete inputs; "
+              "put explanations in search.method or rationale. The packet and scope remain unchanged.\n")
+
+
+def _ballot_shape_reminder(policy: dict[str, Any]) -> str:
+    """Repeat only closed syntax at the prompt tail, never candidate values or evidence."""
+    from .review_counterexamples import PROPOSAL_FIELDS
+    fields = {kind: sorted(PROPOSAL_FIELDS[kind]) for kind in policy["proposals"]}
+    return ("\nFINAL BALLOT SHAPE CHECK (supervisor-selected):\n"
+            "Every search.probes item and finding.counterexample must use exactly its admitted kind's keys: "
+            + json.dumps(fields, separators=(",", ":"))
+            + ". No additional probe keys are allowed. For an allowed kind, remove extra metadata keys "
+              "and preserve the concrete inputs and required fields; move prose to search.method or rationale. "
+              "For an unavailable kind, construct a new allowed probe. Supply missing required fields from "
+              "the current packet and your constructed case; never invent an execution result. Return the "
+              "complete ballot for the unchanged scope. All probes remain subject to independent replay.\n")
+
+
+def _ballot_retry_feedback(previous: str | None, failures: list[str]) -> str:
+    """Exact rejected bytes and actual validation errors; no repaired model output."""
+    if not failures:
+        return ""
+    return ("\nPREVIOUS BALLOT (untrusted proposal; correct its protocol without inventing an acceptance):\n"
+            + previous + "\nBALLOT VALIDATOR DIAGNOSTICS:\n- " + "\n- ".join(failures)
+            + "\nReturn a corrected complete ballot for the SAME packet and scope. Preserve concrete search; "
+              "do not change the target, reviewer membership or consensus policy.")
 
 
 # ------------------------------------------------------------------------------------------
@@ -549,8 +576,11 @@ def parse_ballot(obj: Any, scope: list[str], policy: dict | None = None) -> tupl
     probes = search["probes"]
     if (not isinstance(search["method"], str) or not search["method"].strip() or
             type(search["attempted_cases"]) is not int or not isinstance(probes, list) or
-            not 1 <= len(probes) <= MAX_REVIEW_PROBES or search["attempted_cases"] != len(probes)):
+            not 1 <= len(probes) <= MAX_REVIEW_PROBES):
         return None, "every reviewer must construct 1 through 8 concrete probes; attempted_cases must match"
+    if search["attempted_cases"] != len(probes):
+        return None, (f"attempted_cases is {search['attempted_cases']}, but search.probes contains {len(probes)} "
+                      "concrete probe(s); report the exact emitted probe count")
     if search["conclusion"] not in ("NO_COUNTEREXAMPLE_FOUND", "COUNTEREXAMPLE_CANDIDATE", "INCOMPLETE"):
         return None, "invalid counterexample search conclusion"
     hashes = []
@@ -818,6 +848,7 @@ def _campaign(pkg: Package, events: EventSink, conf: dict[str, Any], r, checkpoi
 
         def review_slot(slot: str) -> tuple[str, dict[str, Any] | None, dict[str, Any] | None]:
             from . import review_counterexamples
+            from .agent_effects import EffectError, review_call
 
             agent = slot.split("/", 1)[1].split("#", 1)[0]
             failures = []
@@ -828,13 +859,14 @@ def _campaign(pkg: Package, events: EventSink, conf: dict[str, Any], r, checkpoi
             for attempt in range(1, attempts + 1):
                 adir = cdir / "ballot-attempts" / slot.replace("/", "_")
                 try:
-                    feedback = ""
-                    if failures:
-                        feedback = ("\nPREVIOUS BALLOT (untrusted proposal; correct its protocol without inventing an acceptance):\n"
-                                    + previous + "\nBALLOT VALIDATOR DIAGNOSTICS:\n- " + "\n- ".join(failures)
-                                    + "\nReturn a corrected complete ballot for the SAME packet and scope. Preserve concrete search; "
-                                      "do not change the target, reviewer membership or consensus policy." + checkpoint_guidance)
-                    comp = broker.call(agent, slot, REVIEW_SYSTEM, user + feedback, f"review:{checkpoint}")
+                    feedback = _ballot_retry_feedback(previous, failures)
+                    comp = review_call(broker, agent, slot, REVIEW_SYSTEM,
+                                       user + feedback + _ballot_shape_reminder(packet["counterexample_policy"]),
+                                       checkpoint, root, conf)
+                except EffectError as exc:
+                    fsutil.write_json(adir / f"{attempt}.json", {"attempt": attempt, "status": "effect_check_failed",
+                                      "diagnostics": [str(exc)]}, once=True)
+                    return slot, None, {"slot_id": slot, "kind": "effect_check_failed", "detail": str(exc)}
                 except InfrastructureError as exc:
                     fsutil.write_json(adir / f"{attempt}.json", {"attempt": attempt, "status": "provider_failure",
                                       "diagnostics": [exc.message]}, once=True)

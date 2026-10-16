@@ -34,6 +34,13 @@ class ReviewProtocolRepairTests(unittest.TestCase):
         self.pkg = self.tmp.path / "package"
         self.assertEqual(0, build(self.pkg, "interpret")["interpret"][0])
 
+    def test_effect_dsl_opt_in_review_entry(self):
+        conf = canonical.load_file(self.config)
+        conf["agent_effect_dsl"] = {"enabled": True}
+        self.config.write_bytes(canonical.dumps(conf))
+        code, result, output, campaign, certificate = self.invoke()
+        self.assertEqual(code, 0, output)
+
     def configure(self, **budgets):
         conf = canonical.load_file(self.config)
         conf["review"]["budgets"].update(budgets)
@@ -64,6 +71,15 @@ class ReviewProtocolRepairTests(unittest.TestCase):
         self.assertEqual(2, len(self.mock.requests))
         first_user, corrected_user = [x["body"]["messages"][1]["content"] for x in self.mock.requests]
         self.assertEqual(review_packet(first_user), review_packet(corrected_user))
+        tail = review._ballot_shape_reminder(review_packet(first_user)["counterexample_policy"])
+        self.assertTrue(first_user.endswith(tail))
+        self.assertTrue(corrected_user.endswith(tail))
+        self.assertTrue(corrected_user.startswith(first_user[:-len(tail)]))
+        self.assertIn(bad_responses[0], corrected_user[:-len(tail)])
+        marker = "CURRENT CHECKPOINT RULES (supervisor-selected):"
+        self.assertEqual(1, first_user.count(marker))
+        self.assertEqual(1, corrected_user.count(marker))
+        self.assertEqual(first_user.split("REVIEW PACKET", 1)[0], corrected_user.split("REVIEW PACKET", 1)[0])
         self.assertIn(bad_responses[0], corrected_user)
         self.assertIn("search must record method, attempted_cases, constructed probes and conclusion", corrected_user)
         attempt = campaign / "ballot-attempts/R0_critic#1"
@@ -97,9 +113,39 @@ class ReviewProtocolRepairTests(unittest.TestCase):
             guidance = json.JSONDecoder().raw_decode(user.split("CURRENT CHECKPOINT RULES (supervisor-selected):", 1)[1].lstrip())[0]
             self.assertEqual(["mechanical_failure", "missing_requirement"], guidance["allowed_probe_kinds"])
             self.assertIn("cannot execute a Lean reference", guidance["restriction"])
-        self.assertEqual(2, users[2].count("CURRENT CHECKPOINT RULES (supervisor-selected):"))
+        tail = review._ballot_shape_reminder(review_packet(users[0])["counterexample_policy"])
+        self.assertTrue(all(u.startswith(users[0][:-len(tail)]) and u.endswith(tail) for u in users))
+        self.assertTrue(all(u.count("CURRENT CHECKPOINT RULES (supervisor-selected):") == 1 for u in users))
         self.assertIn("Discard probes of an invalid kind and reconstruct an allowed probe", users[2])
         self.assertEqual("REVIEW_ACCEPTED", cert["final"])
+
+    def test_allowed_probe_extra_metadata_is_rejected_then_model_removes_it_before_replay(self):
+        raw = []
+        def respond(system, user, model):
+            packet = review_packet(user)
+            ballot = accepted_review(user, packet["scope"])
+            if not raw:
+                ballot["search"]["probes"][0]["note"] = "metadata is not an admitted probe field"
+                raw.append(json.dumps(ballot))
+                return raw[0]
+            self.assertIn("unexpected keys: ['note']", user)
+            self.assertIn("missing keys: []", user)
+            self.assertIn(raw[0], user)
+            self.assertIn("When the kind IS allowed", system)
+            self.assertTrue(user.endswith(review._ballot_shape_reminder(packet["counterexample_policy"])))
+            return json.dumps(ballot)
+        self.handler = respond
+        code, result, output, campaign, cert = self.invoke()
+        self.assertEqual(0, code, (result, output))
+        self.assertEqual(2, len(self.mock.requests))
+        self.assertEqual("REVIEW_ACCEPTED", cert["final"])
+        attempt = campaign / "ballot-attempts/R0_critic#1"
+        self.assertEqual(raw[0], (attempt / "1.raw.txt").read_text())
+        self.assertEqual("invalid_protocol", canonical.load_file(attempt / "1.json")["status"])
+        self.assertEqual("valid_protocol", canonical.load_file(attempt / "2.json")["status"])
+        saved = canonical.load_file(campaign / "ballots/R0_critic#1.json")
+        self.assertNotIn("note", saved["search"]["probes"][0])
+        self.assertTrue(saved["counterexample_receipts"])
 
     def test_exhausted_protocol_budget_never_reduces_the_denominator(self):
         self.handler = lambda *_: "no JSON object"
@@ -338,7 +384,13 @@ class TargetAssignmentGuidanceTests(unittest.TestCase):
         policy = self.policy()
         templates = [policy["proposals"], review._counterexample_policy(self.pkg, "interpretation", ["O1"])["proposals"]]
         for proposals in templates:
+            reminder = review._ballot_shape_reminder({"proposals": proposals})
+            shape_text = reminder.split("keys: ", 1)[1]
+            shape = json.JSONDecoder().raw_decode(shape_text)[0]
+            self.assertEqual(set(proposals), set(shape))
             for kind, template in proposals.items():
+                self.assertEqual(sorted(template), shape[kind])
+                self.assertEqual(sorted(review_counterexamples.PROPOSAL_FIELDS[kind]), shape[kind])
                 example = copy.deepcopy(template)
                 if kind == "target_case":
                     example.update(obligation_id="O1", assignment=policy["target_case_binders"]["obligations"]["O1"]["assignment_example"])

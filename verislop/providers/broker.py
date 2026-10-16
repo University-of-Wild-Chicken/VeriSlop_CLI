@@ -2,7 +2,8 @@
 
 * Agent prompts, packets and transcripts never contain credentials; outbound prompts are
   scanned for the resolved secret and refused if it appears (defense in depth).
-* Budgets are finite: calls per agent instance, total tokens, bounded retries honouring
+* Call counts are bounded; total tokens use estimated admission reservations (a soft
+  stopping policy, not a strict usage/cost cap). Bounded retries honour
   retry-after. No silent fallback to a different provider or model.
 * Every call is recorded (without secrets) in the run package's agent transcript log with the
   requested and returned model identities.
@@ -31,6 +32,7 @@ class Budget:
     used_tokens: int = 0
     calls: dict[str, int] = field(default_factory=dict)
     lock: threading.Lock = field(default_factory=threading.Lock)
+    reserved_tokens: int = 0
 
 
 class Broker:
@@ -76,12 +78,42 @@ class Broker:
     def call(self, agent: str, instance: str, system: str, user: str, purpose: str) -> Completion:
         if any(d.severity == "blocking" for d in self.r.diagnostics):
             raise UsageError("provider configuration has blocking diagnostics", self.r.diagnostics)
+        # An admission estimate, NOT a provider-independent token upper bound.
+        # Protocol framing, hidden reasoning and failed/retried requests may cost more.
+        reservation = (len(system.encode("utf-8")) + len(user.encode("utf-8"))
+                       + self.r.agent(agent)["max_output_tokens"])
+        with self.budget.lock:
+            if self.budget.used_tokens + self.budget.reserved_tokens + reservation > self.budget.max_total_tokens:
+                raise InfrastructureError("total token admission budget exhausted",
+                                          [Diagnostic("BUDGET_EXHAUSTED", "total token admission budget exhausted", severity="blocking")])
+            self.budget.reserved_tokens += reservation
+        try:
+            return self._call_reserved(agent, instance, system, user, purpose)
+        finally:
+            # _call_reserved settles reported usage before returning. Until this release,
+            # concurrent admissions conservatively see both usage and the reservation.
+            with self.budget.lock:
+                self.budget.reserved_tokens -= reservation
+
+    def _call_reserved(self, agent: str, instance: str, system: str, user: str, purpose: str) -> Completion:
+        if any(d.severity == "blocking" for d in self.r.diagnostics):
+            raise UsageError("provider configuration has blocking diagnostics", self.r.diagnostics)
         conf = self.r.agent(agent)
         context_tokens = conf.get("context_window_tokens")
         context_options = ({"ollama_context_tokens": context_tokens}
                            if "context_window_tokens" in conf else {})
         provider = conf["provider"]
         prov = self.r.provider(provider)
+        response_schema = None
+        if "review_response_format" in conf:
+            if (conf["review_response_format"] != "json_schema" or prov["api_family"] != "ollama_chat"
+                    or conf["tool_profile"] != "review_readonly"):
+                raise UsageError("review response format configuration is unsupported", [Diagnostic(
+                    "CONFIGURATION_INVALID", "review_response_format=json_schema requires an Ollama review_readonly agent")])
+            from .review_format import REVIEW_PURPOSES, ollama_review_schema
+            if purpose in REVIEW_PURPOSES:
+                response_schema = ollama_review_schema()
+                context_options["ollama_response_schema"] = response_schema
         if (prov["api_family"] == "ollama_chat" and purpose in {"prove", "prove-vscore"}
                 and conf.get("proof_response_format") == "theorem_fragment"):
             context_options["ollama_json_mode"] = False
@@ -128,7 +160,7 @@ class Broker:
                 if not exc.retryable or attempts > self.budget.max_retries:
                     del secret
                     self._log(agent, instance, purpose, model, None, system, user, None, attempts, str(exc),
-                              context_window_tokens=context_tokens)
+                              context_window_tokens=context_tokens, response_schema=response_schema)
                     raise InfrastructureError(f"provider {provider} ({exc.kind}): {exc.message}",
                                               [Diagnostic("PROVIDER_FAILURE", f"{provider}: {exc}", severity="infrastructure",
                                                           details={"kind": exc.kind, "status": exc.status,
@@ -138,12 +170,12 @@ class Broker:
         with self.budget.lock:
             self.budget.used_tokens += (comp.input_tokens or 0) + (comp.output_tokens or 0)
         self._log(agent, instance, purpose, model, comp, system, user, comp.text, attempts, None, int((time.time() - t0) * 1000),
-                  context_window_tokens=context_tokens)
+                  context_window_tokens=context_tokens, response_schema=response_schema)
         return comp
 
     def _log(self, agent: str, instance: str, purpose: str, model: str, comp: Completion | None, system: str, user: str,
              text: str | None, attempts: int, error: str | None, wall_ms: int = 0,
-             *, context_window_tokens: int | None = None) -> None:
+             *, context_window_tokens: int | None = None, response_schema: dict | None = None) -> None:
         if self.transcripts is None:
             return
         with self._lock:
@@ -160,4 +192,7 @@ class Broker:
             "system_sha256": canonical.digest(system.encode()), "user_sha256": canonical.digest(user.encode()),
             "system": system, "user": user, "response": text,
         }
+        if response_schema is not None:
+            entry["response_format"] = {"mode": "json_schema", "schema": response_schema,
+                                        "schema_sha256": canonical.digest_json(response_schema)}
         fsutil.write_json(self.transcripts / f"{int(time.time() * 1000)}-{seq:04d}-{instance.replace('/', '_')}.json", entry, pretty=True)

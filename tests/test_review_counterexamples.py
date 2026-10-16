@@ -105,6 +105,19 @@ class CounterexampleReplayTests(unittest.TestCase):
         self.assertEqual([], rc.validate_proposal(signed))
         self.assertEqual("UNSUPPORTED", self.replay_target(signed["assignment"])["status"])
 
+    def test_closed_key_diagnostics_name_extras_and_missing_without_editing_probe(self):
+        proposal = {"kind": "target_case", "obligation_id": "O1", "note": "constructed boundary"}
+        before = canonical.dumps(proposal)
+        errors = rc.validate_proposal(proposal)
+        self.assertEqual(1, len(errors))
+        self.assertIn("unexpected keys: ['note']", errors[0])
+        self.assertIn("missing keys: ['assignment']", errors[0])
+        self.assertIn("search.method or rationale", errors[0])
+        self.assertEqual(before, canonical.dumps(proposal))
+        result = rc.replay(self.pkg, "implementation", proposal)
+        self.assertEqual("UNSUPPORTED", result["status"])
+        self.assertEqual(proposal, result["proposal"])
+
     def test_real_target_observation_confirms_false_predicate_and_keeps_exact_bindings(self):
         result = self.replay_target([{"int": "2"}], "def f(n): return n + 1\n")
         self.assertEqual(result["status"], "CONFIRMED", result)

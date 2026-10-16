@@ -1,7 +1,7 @@
 """Protocol adapters: build requests and parse text completions for each API family.
 
-Compatible syntax does not imply identical semantics: adapters only use plain text generation
-with a separate system instruction, and record requested and returned model identities.
+Compatible syntax does not imply identical semantics: adapters use text generation with a
+separate system instruction and optional Ollama response schema, and record model identities.
 """
 
 from __future__ import annotations
@@ -112,9 +112,13 @@ def _headers(profile: dict[str, Any], secret: str) -> dict[str, str]:
 
 def complete(family: str, profile: dict[str, Any], secret: str, model: str, system: str, user: str,
              max_output_tokens: int, timeout: float | None, *, ollama_context_tokens: int | None = None,
-             ollama_json_mode: bool = True) -> Completion:
+             ollama_json_mode: bool = True, ollama_response_schema: dict[str, Any] | None = None) -> Completion:
     if type(ollama_json_mode) is not bool:
         raise ProviderError("bad_request", "ollama_json_mode must be a boolean")
+    if ollama_response_schema is not None:
+        if (family != "ollama_chat" or not isinstance(ollama_response_schema, dict)
+                or ollama_response_schema.get("type") != "object" or not ollama_json_mode):
+            raise ProviderError("bad_request", "ollama_response_schema requires an Ollama object schema with JSON mode enabled")
     if ollama_context_tokens is not None:
         if family != "ollama_chat" or type(ollama_context_tokens) is not int or not 1024 <= ollama_context_tokens <= 262144:
             raise ProviderError("bad_request", "context_window_tokens requires Ollama and an integer from 1024 to 262144")
@@ -128,7 +132,9 @@ def complete(family: str, profile: dict[str, Any], secret: str, model: str, syst
             "model": model, "stream": False, "think": False,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
             "options": options}
-        if ollama_json_mode:
+        if ollama_response_schema is not None:
+            payload["format"] = ollama_response_schema
+        elif ollama_json_mode:
             payload["format"] = "json"
         body, hdr = _inference_request(base, "/api/chat", h, payload, timeout, secret)
         if body.get("done") is not True or body.get("error") is not None:

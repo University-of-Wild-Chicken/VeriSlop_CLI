@@ -95,6 +95,40 @@ class SmallProverVSCoreTests(unittest.TestCase):
         self.assertNotIn(b'def helper', files['Proof.lean'])
         self.assertIn(b'by rfl', files['Proof.lean'])
 
+    def test_hybrid_refiner_receives_rejected_raw_fragment_and_restores_it_for_identical_job(self):
+        params, relation, source, fixed, info = self.fixture()
+        self.conf['agents']['refiner'] = {**self.conf['agents']['small'], 'model_ref': 'refiner:test'}
+        self.conf['proof_routing'].update(refinement_agent='refiner', refinement_attempts=3)
+        broker = Broker(config.resolve(self.conf, {}), None)
+        rejected = 'theorem edge : True := by trivial'
+        calls = []
+        def completion(broker, agent, instance, system, user, purpose):
+            calls.append((agent, instance, purpose, user))
+            if instance.startswith('implementer/'):
+                text = json.dumps({'program': canonical.loads(source), 'relation': relation})
+            elif agent == 'small':
+                text = rejected
+            else:
+                text = 'theorem edge : VeriSlopBridgeGoal.EdgeProp := by rfl'
+            return Completion(text, broker.model_for(agent), broker.model_for(agent), None, 8, 6)
+        def preview(pkg, source, relation, proof=None, **kw):
+            return SimpleNamespace(text='fixed generated goal', refinement_symbols=[]), None, info
+        with patch.object(agents, '_vscore_context', return_value=fixed), patch.object(Broker, 'call', new=completion), \
+             patch.object(vscore3_checker, 'preview', side_effect=preview), \
+             patch.object(agents._vscore_components(params)['target'], 'library_sources', return_value={}):
+            files, _ = agents._vscore_implementation(broker, self.conf, self.pkg, self.events, {'parameters': params}, 1, 3)
+            first_calls = list(calls)
+            resumed, _ = agents._vscore_implementation(broker, self.conf, self.pkg, self.events, {'parameters': params}, 1, 3)
+        self.assertEqual(['local-author'] + ['small'] * 3 + ['refiner'], [c[0] for c in first_calls])
+        self.assertEqual(['local-author', 'refiner'], [c[0] for c in calls[len(first_calls):]])
+        for call in (first_calls[-1], calls[-1]):
+            self.assertIn('EXACT RETAINED PROOF REJECTION', call[3])
+            self.assertIn(rejected, call[3])
+            self.assertIn('fragment header does not match a frozen theorem: edge', call[3])
+            self.assertEqual('prove-vscore', call[2])
+        self.assertEqual(files['Proof.lean'], resumed['Proof.lean'])
+        self.assertNotIn(b': True :=', files['Proof.lean'])
+
 
 if __name__ == '__main__':
     unittest.main()

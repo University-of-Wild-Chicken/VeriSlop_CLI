@@ -398,11 +398,13 @@ def run(
                               "lean_toolchain": (chdir / "lean-toolchain").read_text().strip(),
                               "errors": (latest_result or {}).get("errors", []), "statements": statements, "attempt": agent_serial,
                               "previous_candidate": latest_src, "previous_result": latest_result, "critique": previous_critique})
+            raw_response = getattr(agent, "last_raw_response", proposal)
             src = with_registry(proposal, challenge)
             evaluated = evaluate(tc, pol, src)
         except proof_fragments.FragmentError as exc:
             eligible_baseline = False
             proposal = exc.response
+            raw_response = exc.response
             src = proposal
             evaluated = {"ok": False, "errors": ["fragment protocol: " + str(exc)],
                          "sorries": 0, "complete": False, "wall_ms": 0}
@@ -414,7 +416,7 @@ def run(
             if router.last_phase != previous_route_phase:
                 repeated = 0
             previous_route_phase = router.last_phase
-            router.evaluation(evaluated["complete"], evaluated["errors"])
+            router.evaluation(evaluated["complete"], evaluated["errors"], candidate=src, response=raw_response)
         signature = canonical.digest_json({"source_sha256": canonical.digest(src.encode()),
                                            "errors": evaluated["errors"], "sorries": evaluated["sorries"]})
         duplicate = not evaluated["complete"] and signature in seen_failures

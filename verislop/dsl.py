@@ -83,6 +83,16 @@ def check_sort(s: Any, profile: "Profile", depth: int = 0) -> None:
         check_sort(r["error"], profile, depth + 1)
         check_sort(r["ok"], profile, depth + 1)
         return
+    if isinstance(s, str):
+        references = []
+        if profile.encoding == ENCODING_V2 and s in profile.records:
+            references.append(canonical.dumps({"record": s}).decode())
+        if s in profile.enums:
+            references.append(canonical.dumps({"enum": s}).decode())
+        if references:
+            raise DSLError(f"invalid sort {s!r}; a declared named type at a SORT position uses "
+                + " or ".join(references) + ", not a bare name. DSL 0.2 supports acyclic nested record fields. "
+                "Record/field TERM nodes still use their declared bare record ID in the sort field.")
     raise DSLError(f"invalid sort {s!r}")
 
 

@@ -23,18 +23,46 @@
         "native_binary"
       ]
     },
+    "agent_effect_dsl": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {"enabled": {"type": "boolean"}},
+      "required": ["enabled"]
+    },
     "proof_routing": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "enabled": {"type": "boolean"},
         "initial_agent": {"type": "string", "minLength": 1},
-        "initial_attempts": {"const": 3}
+        "initial_attempts": {"const": 3},
+        "refinement_agent": {"type": "string", "minLength": 1},
+        "refinement_attempts": {"type": "integer", "minimum": 1, "maximum": 3}
       },
       "required": ["enabled"],
       "allOf": [{
         "if": {"properties": {"enabled": {"const": true}}},
         "then": {"required": ["initial_agent", "initial_attempts"]}
+      }, {
+        "if": {"required": ["refinement_agent"]},
+        "then": {"required": ["refinement_attempts"]}
+      }, {
+        "if": {"required": ["refinement_attempts"]},
+        "then": {"required": ["refinement_agent"]}
+      }]
+    },
+    "critic_routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "fallback_agent": {"type": "string", "minLength": 1},
+        "fallback_attempts": {"type": "integer", "minimum": 1, "maximum": 3}
+      },
+      "required": ["enabled"],
+      "allOf": [{
+        "if": {"properties": {"enabled": {"const": true}}},
+        "then": {"required": ["fallback_agent", "fallback_attempts"]}
       }]
     },
     "providers": {
@@ -181,6 +209,10 @@
             "maximum": 262144,
             "description": "Optional explicit Ollama per-request num_ctx; omitted preserves the server's model setting. Other API families reject this field."
           },
+          "review_response_format": {
+            "const": "json_schema",
+            "description": "Optional Ollama-only closed raw-ballot generation for ordinary review checkpoints. Autonomous critics and other roles keep their own response protocols."
+          },
           "proof_response_format": {
             "enum": ["complete_file", "theorem_fragment"],
             "description": "Optional proof-subprocess response protocol; complete_file is the default. Fragment mode inserts only exact-header theorem proof bodies into the frozen scaffold."
@@ -268,7 +300,8 @@
             },
             "max_total_tokens": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 1,
+              "description": "Soft token admission budget shared by calls on one Budget object: reported usage plus in-flight estimates (prompt UTF-8 bytes plus max_output_tokens). Not a strict provider token or monetary cap; framing, reasoning, missing usage and failed/retried requests may exceed estimates."
             },
             "max_wall_seconds_per_tier": {
               "type": "integer",

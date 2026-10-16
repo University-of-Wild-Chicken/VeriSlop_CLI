@@ -24,7 +24,13 @@ from .bridges.manifest import InvalidPackage, PackageReader
 
 VERIFIER = "verislop.review-counterexample"
 RECEIPT_FORMAT = "verislop.review-counterexample-receipt/0.2"
-SUPPORTED_PROPOSAL_KINDS = ("target_case", "source_violation", "missing_requirement", "mechanical_failure")
+PROPOSAL_FIELDS = {
+    "target_case": frozenset({"kind", "obligation_id", "assignment"}),
+    "source_violation": frozenset({"kind", "obligation_id", "file", "ast_path", "rule"}),
+    "missing_requirement": frozenset({"kind", "start_byte", "end_byte", "quoted"}),
+    "mechanical_failure": frozenset({"kind", "claim_id"}),
+}
+SUPPORTED_PROPOSAL_KINDS = tuple(PROPOSAL_FIELDS)
 STATUSES = ("CONFIRMED", "NOT_REPRODUCED", "UNSUPPORTED", "INFRASTRUCTURE_FAILURE")
 MAX_PROPOSAL_BYTES = 65536
 MAX_CALLS = 32
@@ -59,12 +65,14 @@ def validate_proposal(obj: Any) -> list[str]:
     if not isinstance(obj, dict) or obj.get("kind") not in SUPPORTED_PROPOSAL_KINDS:
         return ["proposal must name one supported kind"]
     kind = obj["kind"]
-    fields = {"target_case": {"kind", "obligation_id", "assignment"},
-              "source_violation": {"kind", "obligation_id", "file", "ast_path", "rule"},
-              "missing_requirement": {"kind", "start_byte", "end_byte", "quoted"},
-              "mechanical_failure": {"kind", "claim_id"}}[kind]
+    fields = PROPOSAL_FIELDS[kind]
     if set(obj) != fields:
-        return [f"{kind} accepts exactly {', '.join(sorted(fields))}"]
+        unexpected = sorted(set(obj) - fields, key=str)
+        missing = sorted(fields - set(obj))
+        return [f"{kind} accepts exactly {', '.join(sorted(fields))}; "
+                f"unexpected keys: {unexpected!r}; missing keys: {missing!r}. "
+                "Remove unexpected keys from the probe; put explanations in search.method or rationale. "
+                "Supply any missing required fields without inventing execution results."]
     try:
         if len(canonical.dumps(obj)) > MAX_PROPOSAL_BYTES:
             return ["proposal exceeds byte budget"]

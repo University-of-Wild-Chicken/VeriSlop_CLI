@@ -33,6 +33,7 @@ IDS = {
     "review-config": "urn:verislop:schema:review-config:0.1",
     "review-ballot": "urn:verislop:schema:review-ballot:0.1",
     "review-ballot-v2": "urn:verislop:schema:review-ballot:0.2",
+    "review-model-response": "urn:verislop:schema:review-model-response:0.1",
     "review-counterexample-proposal": "urn:verislop:schema:review-counterexample-proposal:0.2",
     "review-counterexample-receipt": "urn:verislop:schema:review-counterexample-receipt:0.2",
     "interpretation": "urn:verislop:schema:interpretation:0.1",

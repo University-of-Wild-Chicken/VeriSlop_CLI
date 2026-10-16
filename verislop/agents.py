@@ -987,6 +987,10 @@ def _proof_completion(broker, conf: dict, pkg: Package, events: EventSink, fallb
             routed_instance += f"/{allocation['phase']}/{allocation['ordinal']}"
         mode = proof_routing.response_format(conf, selected)
         call_system, call_user = system, user
+        if router is not None and router.feedback() is not None:
+            call_user += "\nEXACT RETAINED PROOF REJECTION (untrusted source/response with actual checker diagnostics; bound to this frozen job):\n"
+            call_user += json.dumps(router.feedback(), ensure_ascii=False)
+            call_user += "\nRepair the proof body using these concrete errors. The frozen statements, definitions, imports, program and relation must not change.\n"
         if mode == "theorem_fragment":
             call_system = FRAGMENT_PROVER_SYSTEM
             call_user += "\nEXACT FROZEN THEOREM HEADERS (copy all header tokens; supply only proof bodies):\n"
@@ -1055,10 +1059,11 @@ def prover_agent(config: str | Path, pkg: Package, events: EventSink) -> Callabl
         if ctx.get("critique"):
             user += "\nAUTONOMOUS PROOF CRITIQUE (untrusted correction advice; frozen statements cannot change):\n" + json.dumps(
                 {"status": ctx["critique"]["status"], "feedback": ctx["critique"].get("feedback", [])}, ensure_ascii=False)
-        source, _ = _proof_completion(broker, conf, pkg, events, agent, f"prover/{ctx['attempt']}",
+        source, raw_response = _proof_completion(broker, conf, pkg, events, agent, f"prover/{ctx['attempt']}",
                                       PROVER_SYSTEM, user, "prove", ctx.get("challenge", ctx["best"]),
                                       ctx["best"], assemble_proof_response, router,
                                       toolchain_pin=ctx.get("lean_toolchain"))
+        run.last_raw_response = raw_response
         return source
 
     run.configure_search = configure_search
@@ -1641,7 +1646,7 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
             "fixed_context_sha256": canonical.digest_json(fixed),
             "verifier_library_sha256": canonical.digest_json(prover_context["verifier_library"]),
             "proof_template_sha256": canonical.digest(proof_template.encode())}, proof_attempts) if prover else None
-        proposal_limit = proof_attempts + (3 if router is not None else 0)
+        proposal_limit = router.proposal_limit if router is not None else proof_attempts
         for proof_number in range(1, proposal_limit + 1 if prover else 1):
             if router is not None and not router.available():
                 break
@@ -1661,7 +1666,8 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
                 proof_feedback = diagnostics(stage, f"proof-{proof_number}", exc, source, relation,
                                               exc.response.encode("utf-8"), response_path)
                 if router is not None:
-                    router.evaluation(False, proof_feedback)
+                    router.evaluation(False, _vscore_failure_record(exc, source, relation, exc.response.encode("utf-8")),
+                                      candidate=exc.response, response=exc.response)
                 continue
             proof = proposed_proof.encode("utf-8")
             if len(proof) <= vscore_target.MAX_PROOF_BYTES:
@@ -1679,7 +1685,8 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
             except (ValueError, vscore_checker.EdgeFailure) as exc:
                 proof_feedback = diagnostics(stage, f"proof-{proof_number}", exc, source, relation, proof, response_path)
                 if router is not None:
-                    router.evaluation(False, proof_feedback)
+                    router.evaluation(False, _vscore_failure_record(exc, source, relation, proof),
+                                      candidate=proof.decode("utf-8"), response=raw_response)
             except InfrastructureError as exc:
                 if router is not None:
                     router.failure(exc)

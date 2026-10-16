@@ -77,6 +77,14 @@ def resolve(conf: dict[str, Any], user_profiles: dict[str, dict[str, Any]]) -> R
     agents = conf["agents"]
     providers = conf["providers"]
     for name, agent in agents.items():
+        if "review_response_format" in agent:
+            if agent["review_response_format"] != "json_schema":
+                diags.append(Diagnostic("CONFIGURATION_INVALID", f"agent {name}: review_response_format must be json_schema when supplied"))
+            provider = providers.get(agent["provider"])
+            if provider is None or provider["api_family"] != "ollama_chat":
+                diags.append(Diagnostic("CONFIGURATION_INVALID", f"agent {name}: review_response_format is supported only for Ollama"))
+            if agent["tool_profile"] != "review_readonly":
+                diags.append(Diagnostic("CONFIGURATION_INVALID", f"agent {name}: review_response_format requires tool_profile review_readonly"))
         if "context_window_tokens" not in agent:
             continue
         context = agent["context_window_tokens"]
@@ -92,13 +100,25 @@ def resolve(conf: dict[str, Any], user_profiles: dict[str, dict[str, Any]]) -> R
         used_agents.add(agent)
     routing = conf.get("proof_routing", {})
     if routing.get("enabled") is True:
-        initial = routing.get("initial_agent")
-        if initial not in agents:
-            diags.append(Diagnostic("CONFIGURATION_INVALID", f"proof_routing references unknown initial agent {initial}"))
+        for phase in ("initial", "refinement"):
+            selected = routing.get(phase + "_agent")
+            if phase == "refinement" and selected is None:
+                continue
+            if selected not in agents:
+                diags.append(Diagnostic("CONFIGURATION_INVALID", f"proof_routing references unknown {phase} agent {selected}"))
+            else:
+                used_agents.add(selected)
+                if agents[selected]["tool_profile"] != "proof_sandbox":
+                    diags.append(Diagnostic("CONFIGURATION_INVALID", f"proof_routing {phase} agent {selected} must use tool_profile proof_sandbox"))
+    critic_route = conf.get("critic_routing", {})
+    if critic_route.get("enabled") is True:
+        selected = critic_route.get("fallback_agent")
+        if selected not in agents:
+            diags.append(Diagnostic("CONFIGURATION_INVALID", f"critic_routing references unknown fallback agent {selected}"))
         else:
-            used_agents.add(initial)
-            if agents[initial]["tool_profile"] != "proof_sandbox":
-                diags.append(Diagnostic("CONFIGURATION_INVALID", f"proof_routing initial agent {initial} must use tool_profile proof_sandbox"))
+            used_agents.add(selected)
+            if agents[selected]["tool_profile"] != "review_readonly":
+                diags.append(Diagnostic("CONFIGURATION_INVALID", f"critic_routing fallback agent {selected} must use tool_profile review_readonly"))
     tier_ids: set[str] = set()
     for tier in conf["review"]["review_tiers"]:
         if tier["id"] in tier_ids:
