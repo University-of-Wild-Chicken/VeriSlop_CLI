@@ -315,7 +315,7 @@ def _messages(res: Any) -> tuple[list[dict[str, Any]], list[str], list[dict[str,
     messages: list[dict[str, Any]] = []
     errors: list[str] = []
     sorries: list[dict[str, int]] = []
-    for line in res.stdout.decode("utf-8", "replace").splitlines():
+    for line in res.stdout.decode("utf-8", "replace").split("\n"):
         line = line.strip()
         if not line.startswith("{"):
             continue
@@ -328,7 +328,7 @@ def _messages(res: Any) -> tuple[list[dict[str, Any]], list[str], list[dict[str,
         pos = msg.get("pos") or {}
         if msg.get("severity") == "error":
             errors.append(f"{pos.get('line', '?')}:{pos.get('column', '?')}: {text}")
-        if SORRY_WARNING in text:
+        if msg.get("severity") == "warning" and msg.get("kind") == "hasSorry":
             sorries.append({"line": int(pos.get("line", 0)), "column": int(pos.get("column", 0))})
     return messages, errors, sorries
 

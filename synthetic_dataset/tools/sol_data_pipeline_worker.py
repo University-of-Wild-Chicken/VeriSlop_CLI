@@ -15,6 +15,7 @@ import re
 import sys
 import threading
 import time
+from typing import Callable
 
 from verislop import canonical, cli
 from verislop.agents import extract_json
@@ -88,7 +89,8 @@ def transport_error_message(envelope: dict) -> str:
 class MailboxTransport:
     """Share finite logical-call accounting across every CLI role and broker."""
 
-    def __init__(self, directory: Path, max_calls: int, poll_seconds: float = 0.25):
+    def __init__(self, directory: Path, max_calls: int, poll_seconds: float = 0.25, *,
+                 response_validator: Callable[[Path, dict], None] | None = None):
         if type(max_calls) is not int or not 1 <= max_calls <= 128:
             raise ValueError("logical-call limit must be between 1 and 128")
         if not 0 < poll_seconds <= 1:
@@ -96,6 +98,7 @@ class MailboxTransport:
         self.directory = directory
         self.directory.mkdir(parents=True, exist_ok=True)
         self.max_calls, self.poll_seconds = max_calls, poll_seconds
+        self.response_validator = response_validator
         self.lock = threading.Lock()
         self.agent_task_ids: set[str] = set()
         self.state = {"calls": 0, "responses": 0, "transport_errors": 0, "output_bytes": 0,
@@ -149,6 +152,8 @@ class MailboxTransport:
                 envelope = canonical.loads(response_bytes)
             except (ValueError, UnicodeError):
                 raise _failure("simulation response envelope is invalid JSON") from None
+            if self.response_validator is not None:
+                self.response_validator(request_path, envelope)
             text, agent_task_id = validate_response(envelope, request_id, canonical.digest(request_bytes))
             text_bytes = text.encode("utf-8")
             failed_empty = "transport_error" in envelope

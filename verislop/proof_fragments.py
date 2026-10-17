@@ -235,8 +235,21 @@ def declarations(source: str) -> list[Theorem]:
     return result
 
 
-def expected_headers(frozen: str) -> list[str]:
-    return [t.header_text + ":=" for t in _frozen_declarations(frozen) if t.hole]
+def _selected(frozen_decls: list[Theorem], selected_names: list[str] | None) -> set[str]:
+    eligible = {t.name for t in frozen_decls if t.hole}
+    if selected_names is None:
+        return eligible
+    if (not isinstance(selected_names, list) or not selected_names
+            or any(not isinstance(name, str) for name in selected_names)
+            or len(set(selected_names)) != len(selected_names) or not set(selected_names) <= eligible):
+        raise FragmentError("proof focus names must be a nonempty subset of frozen theorem holes")
+    return set(selected_names)
+
+
+def expected_headers(frozen: str, selected_names: list[str] | None = None) -> list[str]:
+    decls = _frozen_declarations(frozen)
+    selected = _selected(decls, selected_names)
+    return [t.header_text + ":=" for t in decls if t.name in selected]
 
 
 def _frozen_declarations(frozen: str) -> list[Theorem]:
@@ -269,8 +282,21 @@ def _masked(source: str, theorems: list[Theorem], expected: set[str]) -> str:
     return source
 
 
+def validate_focused_candidate(candidate: str, frozen: str, baseline: str,
+                               selected_names: list[str],
+                               toolchain_pin: str = leanbridge.DEFAULT_TOOLCHAIN) -> None:
+    """Full-file proposals cannot rewrite proofs outside the exact dispatch."""
+    selected = _selected(_frozen_declarations(frozen), selected_names)
+    validate_previous(baseline, frozen, toolchain_pin)
+    validate_previous(candidate, frozen, toolchain_pin)
+    if (_masked(candidate, declarations(candidate), selected)
+            != _masked(baseline, declarations(baseline), selected)):
+        raise FragmentError("focused full-file proposal changed bytes outside selected proof bodies", candidate)
+
+
 def assemble(response: str, frozen: str, previous: str | None = None,
-             *, toolchain_pin: str = leanbridge.DEFAULT_TOOLCHAIN) -> str:
+             *, toolchain_pin: str = leanbridge.DEFAULT_TOOLCHAIN,
+             selected_names: list[str] | None = None) -> str:
     """Insert exact submitted proof bytes only; fail closed on unsupported syntax."""
     try:
         submitted = response.strip()
@@ -278,7 +304,8 @@ def assemble(response: str, frozen: str, previous: str | None = None,
         if fenced:
             submitted = fenced.group(1)
         frozen_decls = _frozen_declarations(frozen)
-        expected = {t.name: t for t in frozen_decls if t.hole}
+        selected = _selected(frozen_decls, selected_names)
+        expected = {t.name: t for t in frozen_decls if t.name in selected}
         if not expected:
             raise FragmentError("frozen source has no supported theorem holes")
         base = frozen

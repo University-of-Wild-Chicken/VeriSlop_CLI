@@ -57,7 +57,8 @@
       "properties": {
         "enabled": {"type": "boolean"},
         "fallback_agent": {"type": "string", "minLength": 1},
-        "fallback_attempts": {"type": "integer", "minimum": 1, "maximum": 3}
+        "fallback_attempts": {"type": "integer", "minimum": 1, "maximum": 3},
+        "on_context_limit": {"type": "boolean", "default": false}
       },
       "required": ["enabled"],
       "allOf": [{
@@ -213,9 +214,18 @@
             "const": "json_schema",
             "description": "Optional Ollama-only closed raw-ballot generation for ordinary review checkpoints. Autonomous critics and other roles keep their own response protocols."
           },
+          "proof_retention": {
+            "type": "boolean",
+            "default": false,
+            "description": "Optional bounded mechanical proof-body retention for contract proof search only; no proof authority. Disabled by default."
+          },
           "proof_response_format": {
             "enum": ["complete_file", "theorem_fragment"],
             "description": "Optional proof-subprocess response protocol; complete_file is the default. Fragment mode inserts only exact-header theorem proof bodies into the frozen scaffold."
+          },
+          "vscore_authoring_format": {
+            "enum": ["canonical_json", "surface"],
+            "description": "Optional VSCore implementation authoring protocol; canonical_json is the default. Surface is supported only for VSCore 0.3 implementation and is compiled to canonical JSON before unchanged native checking. Other roles keep their protocols."
           }
         },
         "required": [

@@ -17,6 +17,8 @@ fn adjust(x:Int)->Int{-x+Int.ofNat(2)}
 entry integer(x:Int)->Int{Int.fdiv(call adjust(x),int(-3))}
 entry trunc(x:Int)->Nat{Int.toNat(x)}
 entry unicode()->String{string(955,128640)}
+entry unicode_append(left:String,right:String)->String{String.append(left,right)}
+entry unicode_length(text:String)->Nat{String.length(text)}
 entry less(x:String,y:String)->Bool{x<y}
 entry cell()->Variant(Choice){variant Choice.cell(record Cell{title="z",payload=some(-7)})}
 entry inspect(x:Variant(Choice))->Option(Int){match x{variant Choice.empty()=>none[Int];variant Choice.cell(c)=>c.payload;}}

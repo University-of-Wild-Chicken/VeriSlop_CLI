@@ -455,6 +455,16 @@ class Parser:
             if len(args) != (2 if tag == "int_fdiv" else 1):
                 raise core.SourceError(f"{tag}: wrong arity")
             return (tag, *args)
+        if self.take("String"):
+            self.expect(".")
+            tag = next((tag for name, tag in (("append", "string_append"), ("length", "string_length")) if self.take(name)), None)
+            if tag is None:
+                raise core.SourceError("unknown String operation")
+            self.expect("(")
+            args = self.args()
+            if len(args) != (2 if tag == "string_append" else 1):
+                raise core.SourceError(f"{tag}: wrong arity")
+            return (tag, *args)
         for built, tag in (("List", "list_fold_named"), ("Nat", "nat_fold_named")):
             if self.take(built):
                 self.expect(".")
@@ -506,7 +516,7 @@ def _elab(enums: dict, decls: dict, helpers: dict, ctx: list[tuple[str, Any]], r
     infer = lambda x: core.type_of(enums, decls, helpers, [t for _, t in ctx], x)
     if tag in ("int", "string"):
         return raw
-    if tag in (*core.UNARY_OPS, "int_fdiv", "list_get", "list_append"):
+    if tag in (*core.UNARY_OPS, "int_fdiv", "list_get", "list_append", "string_append"):
         return (tag, *(elab(x) for x in raw[1:]))
     if tag == "name":
         for i, (n, _) in enumerate(ctx):

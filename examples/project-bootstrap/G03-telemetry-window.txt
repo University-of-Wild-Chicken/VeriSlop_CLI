@@ -1,0 +1,22 @@
+Implement the pure aggregation component for a service telemetry dashboard.
+Deliver a typed solve entry in program.vscore.json using vscore/0.3 and the
+data-pipeline/0.3 profile. This certifies restricted-source semantics, not actual
+clock readings, network collection, storage or dashboard rendering.
+
+Input is a record with start (natural number), end (natural number), and events
+(list of records). Each event has timestamp (natural number), duration (natural
+number), and failed (Boolean). Select events with start <= timestamp < end and
+failed=false. If end <= start, select no events. Retain duplicates and input order.
+Return a record with count (natural number), total_duration (natural number), and
+durations (list of natural numbers). Durations contains each selected duration in
+input order; count is the number selected; total_duration is their exact sum.
+
+There are no extra bounds on timestamps, durations, or list length. Empty input,
+zero duration, and equal start/end are valid. The entry is total, deterministic,
+pure, and does not use floating point or mutate input values.
+
+Public example:
+start=10, end=20, events=[{timestamp:9,duration:100,failed:false},
+ {timestamp:10,duration:2,failed:false},{timestamp:19,duration:3,failed:true},
+ {timestamp:19,duration:4,failed:false},{timestamp:20,duration:50,failed:false}]
+returns count=2, total_duration=6, durations=[2,4].

@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
+from relation_authoring_fixture import mock_relation_authority
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import test_small_prover_routing as route_fixture
@@ -20,7 +21,9 @@ from verislop.providers.broker import Broker
 
 
 class SmallProverVSCoreTests(unittest.TestCase):
-    setUp = route_fixture.SmallProverRoutingTests.setUp
+    def setUp(self):
+        route_fixture.SmallProverRoutingTests.setUp(self)
+        self.addCleanup(mock_relation_authority().close)
 
     def fixture(self):
         params = {'tier': 2, 'target': 'vscore', 'endpoint': 'restricted_source',
@@ -56,8 +59,7 @@ class SmallProverVSCoreTests(unittest.TestCase):
             return SimpleNamespace(text='fixed generated goal', refinement_symbols=[]), None, info
         with patch.object(agents, '_vscore_context', return_value=fixed), \
              patch.object(Broker, 'call', new=completion), \
-             patch.object(vscore3_checker, 'preview', side_effect=preview), \
-             patch.object(agents._vscore_components(params)['target'], 'library_sources', return_value={}):
+             patch.object(vscore3_checker, 'preview', side_effect=preview):
             files, _ = agents._vscore_implementation(broker, self.conf, self.pkg, self.events,
                                                     {'parameters': params}, 1, 3)
             first_calls = list(calls)
@@ -65,7 +67,7 @@ class SmallProverVSCoreTests(unittest.TestCase):
             files2, _ = agents._vscore_implementation(broker, self.conf, self.pkg, self.events,
                                                      {'parameters': params}, 1, 3)
         self.assertEqual(['local-author', 'small', 'small', 'small', 'local-author'], [c[0] for c in first_calls])
-        self.assertEqual(['generate', 'prove-vscore', 'prove-vscore', 'prove-vscore', 'generate'], [c[2] for c in first_calls])
+        self.assertEqual(['generate', 'prove-vscore', 'prove-vscore', 'prove-vscore', 'prove-vscore'], [c[2] for c in first_calls])
         self.assertEqual(['local-author', 'local-author'], [c[0] for c in calls[len(first_calls):]])
         self.assertIn(b'by rfl', files['Proof.lean'])
         self.assertEqual(files['Proof.lean'], files2['Proof.lean'])
@@ -87,8 +89,7 @@ class SmallProverVSCoreTests(unittest.TestCase):
                 raise vscore3_checker.EdgeFailure([Diagnostic('CANDIDATE_BUILD_FAILURE', 'fixture: initial proof failed')])
             return SimpleNamespace(text='fixed generated goal', refinement_symbols=[]), None, info
         with patch.object(agents, '_vscore_context', return_value=fixed), patch.object(Broker, 'call', new=completion), \
-             patch.object(vscore3_checker, 'preview', side_effect=preview), \
-             patch.object(agents._vscore_components(params)['target'], 'library_sources', return_value={}):
+             patch.object(vscore3_checker, 'preview', side_effect=preview):
             files, _ = agents._vscore_implementation(broker, self.conf, self.pkg, self.events, {'parameters': params}, 1, 3)
         self.assertEqual(['local-author', 'small'], [c[0] for c in calls])
         self.assertIn('fixture: initial proof failed', calls[1][1])
@@ -114,8 +115,7 @@ class SmallProverVSCoreTests(unittest.TestCase):
         def preview(pkg, source, relation, proof=None, **kw):
             return SimpleNamespace(text='fixed generated goal', refinement_symbols=[]), None, info
         with patch.object(agents, '_vscore_context', return_value=fixed), patch.object(Broker, 'call', new=completion), \
-             patch.object(vscore3_checker, 'preview', side_effect=preview), \
-             patch.object(agents._vscore_components(params)['target'], 'library_sources', return_value={}):
+             patch.object(vscore3_checker, 'preview', side_effect=preview):
             files, _ = agents._vscore_implementation(broker, self.conf, self.pkg, self.events, {'parameters': params}, 1, 3)
             first_calls = list(calls)
             resumed, _ = agents._vscore_implementation(broker, self.conf, self.pkg, self.events, {'parameters': params}, 1, 3)

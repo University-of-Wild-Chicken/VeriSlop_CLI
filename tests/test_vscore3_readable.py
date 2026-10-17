@@ -7,6 +7,7 @@ import json
 import shutil
 from types import SimpleNamespace
 from unittest.mock import patch
+from relation_authoring_fixture import mock_relation_authority
 import unittest
 from pathlib import Path
 
@@ -86,6 +87,8 @@ def matrix_context(contract):
       h("natPrimitives",["nat"],("option","nat"),("list_get",("list_range",v(0)),("list_length",("list_range",v(0))))),
       h("stringOrder",[ns,"string"],ns,("list_sort",("list_unique",("cons",("string",tuple(map(ord,"λ snow"))),v(1))))),
       h("stringCompare",["string","string"],"bool",op("or",op("lt",v(1),v(0)),op("le",v(1),v(0)))),
+      h("stringAppend",["string","string"],"string",("string_append",v(1),v(0))),
+      h("stringLength",["string"],"nat",("string_length",v(0))),
       h("unitValue",[],"unit",("unit",)),
       h("boolValue",[],"bool",("bool",True)),
       h("natValue",[],"nat",("nat",11)),
@@ -221,7 +224,7 @@ class ReadableUnitTests(unittest.TestCase):
                             raise C.EdgeFailure([Diagnostic("CANDIDATE_BUILD_FAILURE","fresh rejected proof")])
                     return spec,None,info
                 try:
-                    with patch.object(agents,"_vscore_context",return_value=fixed),patch.object(agents,"_role",return_value="implementer"),\
+                    with mock_relation_authority(), patch.object(agents,"_vscore_context",return_value=fixed),patch.object(agents,"_role",return_value="implementer"),\
                          patch.object(agents,"recorded_call",side_effect=lambda *args:SimpleNamespace(text=next(responses))),\
                          patch.object(C,"preview",side_effect=preview):
                         files,_=agents._vscore_implementation(None,{"roles":{"prover":"prover"}},pkg,events,{"parameters":params},1,1)

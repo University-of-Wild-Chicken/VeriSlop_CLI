@@ -497,6 +497,16 @@ def _select(history: list, *, stage_prefixes: list[str] | None, stages: list[str
     return history
 
 
+def snapshot_refs(pkg: Any, *, stage: str) -> list[dict]:
+    """Read exact-stage references in authenticated journal order, without hydration."""
+    _stage(stage)
+    with _store(pkg) as root:
+        if root is None:
+            return []
+        history, _index, _journal, _storage = _history(root)
+        return [dict(ref) for ref, _doc in _select(history, stage_prefixes=None, stages=[stage])]
+
+
 def latest_snapshot(pkg: Any, *, stage_prefix: str | None = None) -> dict | None:
     """Return the latest validated snapshot ref without hydrating its artifacts."""
     if stage_prefix is not None:

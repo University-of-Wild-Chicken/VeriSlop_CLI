@@ -275,6 +275,42 @@ replay and all acceptance rules remain mandatory in either mode.
 The [live hybrid results](docs/local-hybrid-live-results.md) distinguish accepted
 proof diagnostics from the still-blocked natural-language software trial.
 
+The [project-component bootstrap](docs/bootstrap-local-projects.md) adds an explicit
+`tier2-project` mode with a [user-selectable model configuration](examples/local-hybrid-tier2-config.json).
+Its admission, inventory, telemetry and release-manifest requests target verified
+VSCore restricted-source semantics. [Focused proof repair](docs/bootstrap-proof-focus.md)
+preserves already solved bodies and removes exact duplicate prompt content.
+The [implementation context](docs/bootstrap-implementation-context.md) preserves
+exact contracts and rejected proposals in a compact, restorable encoding;
+[release review guidance](docs/bootstrap-review-targets.md) binds its displayed
+mechanical references to the complete retained packet.
+The Tier 2 example opts into [surface authoring](docs/bootstrap-surface-authoring.md)
+so a model can write the existing textual grammar; canonical JSON remains the
+verified deliverable. Remove that option to keep canonical JSON authoring.
+Both VSCore 0.3 authoring modes accept [exact accepted relation names](docs/bootstrap-relation-authoring.md):
+an unambiguous accepted Lean declaration name can resolve to its canonical symbol
+ID, with the raw response, authenticated mapping and normalized relation retained.
+The native bridge still checks signatures and refinement against the accepted contract.
+The [bound release-review display](docs/bootstrap-release-context.md) retains the
+full accepted Lean source, generated implementation, scoped claims and probe policy.
+Bulky checked evidence details use exact references to the retained native packet.
+Reviewer context capacity is an explicit per-agent setting. A bounded trial can
+select 65,536 tokens for Qwen review while authors and provers keep 32,768;
+the installed model must support the selected capacity. Capacity checks and
+release voting remain mandatory.
+It also opts into [critic capacity fallback](docs/bootstrap-critic-capacity.md):
+a measured local context overflow before dispatch can use the configured Sol
+critic when the transport supplies the full preflight receipt (as the hybrid
+harness does). Global budgets, checker failures and concrete vetoes still stop
+the route; ordinary HTTP context errors do not qualify.
+The example enables [bounded proof retention](docs/bootstrap-proof-retention.md)
+on its configured prover role and uses theorem fragments for Sol replies. Native
+recompilation may retain useful edits from a failed proposal, with at most two
+rechecks per proposal and four per proof job. Retention is search progress only;
+acceptance still rejects unresolved axioms. Omit `proof_retention` to disable it.
+The [String increment](docs/bootstrap-string-coverage.md) adds Unicode concatenation
+and scalar length; grammar checks alone do not qualify a live project trial.
+
 `providers probe` requires explicit `--live` and sends one JSON echo challenge per selected `--agent` (repeat the flag to select more). It checks protocol parsing, the challenge, returned model metadata and token usage through the actual broker, with no retries, a maximum 30-second request timeout and bounded output. Probe responses are not saved as transcripts. A successful probe establishes that this call worked; agent reliability, model alias equivalence and formal correctness remain separate questions. Use `--endpoint-profiles PATH` for user-supplied Meta Muse and Qwen/DashScope regional endpoints.
 
 Reviewers at every tier must construct concrete probes before voting. The supervisor replays them against the bound artifacts and records expected versus observed results. Only confirmed counterexamples count as technical rejections; speculative findings are invalid and unresolved replay leaves review incomplete. Stored votes re-tally from their raw responses and replay receipts. See [the counterexample protocol](docs/adversarial-counterexamples.md) for supported probe kinds and limits. Acceptance escalates tier by tier, and changed artifacts invalidate old votes. Review never assigns a proof or bridge milestone.

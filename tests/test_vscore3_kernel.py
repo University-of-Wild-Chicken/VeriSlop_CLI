@@ -41,6 +41,8 @@ entry picked(limit: Int, xs: List(Int)) -> List(Int) { List.filter(xs; item => i
 entry total(limit: Int, xs: List(Int)) -> Int { List.sum(List.map(List.filter(xs; item => item < limit); item => item + limit)) }
 entry nat_total(xs: List(Nat)) -> Nat { List.sum(xs) }
 entry bool_mapped(xs: List(Int)) -> List(Bool) { List.map(xs; item => item < int(0)) }
+entry string_joined(left: String, right: String) -> String { String.append(left, right) }
+entry string_count(value: String) -> Nat { String.length(value) }
 '''
     prog = src.parse_surface(text)
     data = src.source_bytes(prog)
@@ -84,6 +86,18 @@ entry bool_mapped(xs: List(Int)) -> List(Bool) { List.map(xs; item => item < int
         ("total", "[.int 2, .cons (.int 3) (.cons (.int (-2)) (.cons (.int 1) .nil))]", ".int 3"),
         ("nat_total", "[.cons (.nat 1) (.cons (.nat 4) .nil)]", ".nat 5"),
         ("bool_mapped", "[.cons (.int (-1)) (.cons (.int 0) .nil)]", ".cons (.bool true) (.cons (.bool false) .nil)"),
+        ("string_joined", '[.string "", .string ""]', '.string ""'),
+        ("string_joined", '[.string "", .string "abc"]', '.string "abc"'),
+        ("string_joined", '[.string "abc", .string ""]', '.string "abc"'),
+        ("string_joined", '[.string "ab", .string "cd"]', '.string "abcd"'),
+        ("string_joined", '[.string "e", .string (String.ofList [Char.ofNat 769])]', '.string (String.ofList [Char.ofNat 101, Char.ofNat 769])'),
+        ("string_joined", '[.string (String.ofList [Char.ofNat 0, Char.ofNat 955]), .string (String.ofList [Char.ofNat 128640, Char.ofNat 1114111])]', '.string (String.ofList [Char.ofNat 0, Char.ofNat 955, Char.ofNat 128640, Char.ofNat 1114111])'),
+        ("string_count", '[.string ""]', '.nat 0'),
+        ("string_count", '[.string "abc"]', '.nat 3'),
+        ("string_count", '[.string (String.ofList [Char.ofNat 0])]', '.nat 1'),
+        ("string_count", '[.string "λ🚀"]', '.nat 2'),
+        ("string_count", '[.string (String.ofList [Char.ofNat 101, Char.ofNat 769])]', '.nat 2'),
+        ("string_count", '[.string (String.ofList [Char.ofNat 1114111])]', '.nat 1'),
     ]
     for entry, args, value in values:
         if entry == "sorted_result":
@@ -125,6 +139,21 @@ example : rejected (compileExpr 3 profile [] [] [] (.listMap (.int 0) (.var 0)))
 example : rejected (compileExpr 3 profile [] [] [] (.listMap (.nil .int) (.var 1))) = true := by decide +kernel
 example : rejected (compileExpr 3 profile [] [] [] (.listFilter (.nil .int) (.int 1))) = true := by decide +kernel
 example : rejected (compileExpr 3 profile [] [] [] (.listSum (.nil .bool))) = true := by decide +kernel
+example : rejected (compileExpr 3 profile [] [] [] (.stringAppend (.nat 1) (.string []))) = true := by decide +kernel
+example : rejected (compileExpr 3 profile [] [] [] (.stringAppend (.string []) (.bool true))) = true := by decide +kernel
+example : rejected (compileExpr 3 profile [] [] [] (.stringLength (.nat 1))) = true := by decide +kernel
+example : rejected (compileExpr 3 profile [] [] [] (.stringLength (.string [55296]))) = true := by decide +kernel
+example : rejected (compileExpr 3 profile [] [] [] (.stringAppend (.string []) (.string [1114112]))) = true := by decide +kernel
+example : featuresExpr (.stringLength (.var 0)) = ["string", "base"] := by decide +kernel
+example : featuresExpr (.stringAppend (.var 0) (.var 1)) = ["string", "base", "base"] := by decide +kernel
+example : rejected (decodeExpr 10 (.obj [("left", .obj [("tag", .str "string"), ("value", .arr [])]), ("tag", .str "string_append")])) = true := by decide +kernel
+example : rejected (decodeExpr 10 (.obj [("extra", .bool true), ("left", .obj [("tag", .str "string"), ("value", .arr [])]), ("right", .obj [("tag", .str "string"), ("value", .arr [])]), ("tag", .str "string_append")])) = true := by decide +kernel
+example : rejected (decodeExpr 10 (.obj [("tag", .str "string_length")])) = true := by decide +kernel
+example : rejected (decodeExpr 10 (.obj [("extra", .bool true), ("tag", .str "string_length"), ("value", .obj [("tag", .str "string"), ("value", .arr [])])])) = true := by decide +kernel
+-- λ plus a supplementary-plane scalar is two scalars but six UTF-8 bytes.
+example : "λ🚀".length = 2 ∧ "λ🚀".utf8ByteSize = 6 := by decide +kernel
+-- A decomposed accent remains two scalars rather than normalizing to é.
+example : String.append "e" (String.ofList [Char.ofNat 769]) ≠ "é" := by decide +kernel
 example : rejected (decodeIntLiteral "-0") = true := by decide +kernel
 example : rejected (decodeIntLiteral "+1") = true := by decide +kernel
 example : rejected (decodeIntLiteral "01") = true := by decide +kernel
@@ -160,6 +189,16 @@ end DataConformance
 
 
 class VSCore3KernelTests(unittest.TestCase):
+    def test_string_feature_cannot_be_disabled(self):
+        text = '''program "vscore/0.3" profile "data-pipeline/0.3";
+fn count(value: String) -> Nat { String.length(value) }
+entry count_empty() -> Nat { call count(String.append(string(), string())) }
+'''
+        prog = src.parse_surface(text)
+        self.assertIn("string", src.required_features(prog))
+        with self.assertRaisesRegex(src.SourceError, "unsupported required features: string"):
+            src.check_program({}, prog, allowed_features=tuple(f for f in src.FEATURES if f != "string"))
+
     def test_two_clean_builds_and_full_kernel_replay(self):
         tc = leanbridge.resolve_toolchain()
         observations = []

@@ -26,12 +26,13 @@ CONSTRUCTORS = ("var", "nat", "int", "string", "bool", "unit", "enum", "bin", "n
                 "ok", "error", "matchResult", "record", "project", "none", "some", "matchOption", "nil",
                 "cons", "matchList", "call", "listFold", "natFold", "intNeg", "intFdiv", "natToInt",
                 "intToNat", "listLength", "listRange", "listGet", "listAppend", "listReverse", "listSort",
-                "listUnique", "listMap", "listFilter", "listSum")
+                "listUnique", "listMap", "listFilter", "listSum", "stringAppend", "stringLength")
 TAGS = {"let": "letE", "match": "matchResult", "match_option": "matchOption", "match_list": "matchList",
         "list_fold": "listFold", "nat_fold": "natFold", "int_neg": "intNeg", "int_fdiv": "intFdiv",
         "nat_to_int": "natToInt", "int_to_nat": "intToNat", "list_length": "listLength", "list_range": "listRange",
         "list_get": "listGet", "list_append": "listAppend", "list_reverse": "listReverse", "list_sort": "listSort",
-        "list_unique": "listUnique", "list_map": "listMap", "list_filter": "listFilter", "list_sum": "listSum"}
+        "list_unique": "listUnique", "list_map": "listMap", "list_filter": "listFilter", "list_sum": "listSum",
+        "string_append": "stringAppend", "string_length": "stringLength"}
 
 
 class Unavailable(Exception):
@@ -244,8 +245,9 @@ class Renderer:
             ty, value = child(e[1]); item = self.fresh(); result, body = child(e[2], [(ty[1], item)] + stack)
             primitive = "map" if tag == "list_map" else "filter"
             return (("list", result) if primitive == "map" else ty), f"(List.{primitive} (fun {item} => ({body})) ({value}))"
-        if tag in ("int_fdiv", "list_append", "list_get"):
+        if tag in ("int_fdiv", "list_append", "list_get", "string_append"):
             ty, a = child(e[1]); _, b = child(e[2])
+            if tag == "string_append": return "string", f"(String.append ({a}) ({b}))"
             if tag == "list_append": return ty, f"(({a}) ++ ({b}))"
             if tag == "list_get": return ("option", ty[1]), f"(List.get?Internal ({a}) ({b}))"
             return "int", f"(Int.fdiv ({a}) ({b}))"
@@ -253,7 +255,8 @@ class Renderer:
         unary = {"int_neg": ("int", "Int.neg"), "nat_to_int": ("int", "Int.ofNat"),
                  "int_to_nat": ("nat", "Int.toNat"), "list_range": (("list", "nat"), "List.range"),
                  "list_length": ("nat", "List.length"), "list_reverse": (ty, "List.reverse"),
-                 "list_unique": (ty, "List.eraseDups"), "list_sum": (ty[1] if isinstance(ty, tuple) else ty, "List.sum")}
+                 "list_unique": (ty, "List.eraseDups"), "list_sum": (ty[1] if isinstance(ty, tuple) else ty, "List.sum"),
+                 "string_length": ("nat", "String.length")}
         if tag == "list_sort":
             return ty, f"(List.mergeSort ({value}) (fun a b => decide (a ≤ b)))"
         result, primitive = unary[tag]

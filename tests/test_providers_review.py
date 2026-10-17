@@ -64,6 +64,21 @@ PROPOSAL = {
 
 
 def review_packet(user: str) -> dict:
+    from verislop import exact_context, review_prompt
+
+    marker = re.search(r"review_target_root [^)]*\):\n", user)
+    if marker is not None and user[marker.end():].startswith(exact_context.PREFIX):
+        raw = user[marker.end():].encode("utf-8")
+        line = raw[len(exact_context.PREFIX.encode()):].split(b"\n", 1)[0]
+        header = json.loads(line)
+        length = len(exact_context.PREFIX.encode()) + len(line) + 1
+        for index, row in enumerate(header["strings"]):
+            length += (len(f"EXACT STRING {index} {row['utf8_bytes']} UTF8 BYTES\n".encode())
+                       + row["utf8_bytes"] + len(f"\nEND EXACT STRING {index}\n".encode()))
+        display = exact_context.restore_prompt(raw[:length].decode("utf-8"))
+        if display["format"] != review_prompt.FORMAT:
+            raise AssertionError("unexpected review display format")
+        return display["packet"]
     m = re.search(r"review_target_root [^)]*\):\n(\{.*?\})\n", user, re.S)
     if m is None:
         raise AssertionError("review mock did not receive a bound packet")

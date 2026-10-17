@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
+from relation_authoring_fixture import mock_relation_authority
 
 from verislop import agents, canonical, capabilities, cli, fsutil, generate
 from verislop.backends import admission, registry, vscore3_admission
@@ -21,6 +22,7 @@ from verislop.targets import vscore_source, vscore2_source, vscore2_check, vscor
 
 class VSCore3WorkflowUnits(unittest.TestCase):
     def setUp(self):
+        self.addCleanup(mock_relation_authority().close)
         self.tmp = tempfile.TemporaryDirectory(prefix="verislop-vscore3-workflow-unit-")
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
@@ -256,8 +258,7 @@ class VSCore3WorkflowUnits(unittest.TestCase):
         with patch.object(agents, "_vscore_context", return_value=self.fixed_context()), \
              patch.object(agents, "_role", return_value="implementer"), \
              patch.object(agents, "recorded_call", side_effect=proposal) as calls, \
-             patch.object(vscore3_checker, "preview", side_effect=preview), \
-             patch.object(agents._vscore_components(self.params)["target"], "library_sources", return_value={"VSCore3": b"fixture library"}):
+             patch.object(vscore3_checker, "preview", side_effect=preview):
             files, bindings = agents._vscore_implementation(None, {"roles": {"prover": "prover"}}, self.pkg,
                                                            self.events, {"parameters": self.params}, 2, 2)
         self.assertEqual(files["program.vscore.json"], source)
@@ -277,6 +278,9 @@ class VSCore3WorkflowUnits(unittest.TestCase):
         self.assertTrue(canonical.load_file(attempts / "source-2/checks/proof-2.json")["passed"])
         self.assertEqual(calls.call_args_list[0].args[4], agents.VSCORE3_IMPLEMENTER_SYSTEM)
         self.assertEqual(calls.call_args_list[2].args[4], agents.VSCORE3_PROVER_SYSTEM)
+        self.assertEqual(calls.call_args_list[1].args[6], "generate")
+        self.assertEqual(calls.call_args_list[2].args[6], "prove-vscore")
+        self.assertEqual(calls.call_args_list[3].args[6], "prove-vscore")
         self.assertIn("vscore-source-v3", calls.call_args_list[1].args[5])
         self.assertIn("fixture repair needed", calls.call_args_list[2].args[5])
         self.assertIn("fixture rejected repair", calls.call_args_list[3].args[5])
@@ -288,8 +292,7 @@ class VSCore3WorkflowUnits(unittest.TestCase):
         with patch.object(agents, "_vscore_context", return_value=self.fixed_context()), \
              patch.object(agents, "_role", return_value="implementer"), \
              patch.object(agents, "recorded_call", return_value=SimpleNamespace(text=response)), \
-             patch.object(vscore3_checker, "preview", return_value=(SimpleNamespace(text="fixture goal"), None, self.info)) as preview, \
-             patch.object(agents._vscore_components(self.params)["target"], "library_sources", return_value={}):
+             patch.object(vscore3_checker, "preview", return_value=(SimpleNamespace(text="fixture goal"), None, self.info)) as preview:
             files, _ = agents._vscore_implementation(None, {"roles": {}}, self.pkg, self.events,
                                                    {"parameters": self.params}, 1, 0)
         self.assertEqual(files["program.vscore.json"], source)

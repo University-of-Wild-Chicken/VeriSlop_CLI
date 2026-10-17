@@ -283,10 +283,10 @@ class ReviewProtocolRepairTests(unittest.TestCase):
         self.assertNotIn("target_case", guidance["closed_proposal_templates"])
         self.assertIn("target_case cannot execute a Lean reference", guidance["restriction"])
         self.assertIn("interpretation and formal_contract allow ONLY mechanical_failure and missing_requirement", review.REVIEW_SYSTEM)
-        self.assertIn("Python implementation/release ONLY", review.REVIEW_SYSTEM)
+        self.assertIn("implementation/release ONLY when admitted for Python or VSCore 0.3 kernel replay", review.REVIEW_SYSTEM)
         self.assertEqual(["INTERPRETED", "FORMALIZED", "TYPECHECKED", "PROVED"], guidance["current_milestones"])
         self.assertEqual(["IMPLEMENTED", "LINKED", "TESTED", "END_TO_END_VERIFIED"], guidance["outside_checkpoint_milestones"])
-        self.assertIn("future Python implementation/testing/closure are outside this checkpoint", guidance["decision_scope"])
+        self.assertIn("future implementation/testing/closure are outside this checkpoint", guidance["decision_scope"])
         self.assertIn("actual current uncertainty still warrants ABSTAIN", guidance["future_artifact_rule"])
         release = review._checkpoint_guidance("release", review._counterexample_policy(pkg, "release", ["O17"]))
         release_rules = json.JSONDecoder().raw_decode(release.split("CURRENT CHECKPOINT RULES (supervisor-selected):", 1)[1].lstrip())[0]
@@ -301,6 +301,32 @@ class ReviewProtocolRepairTests(unittest.TestCase):
         clause = policy["proposals"]["missing_requirement"]
         prompt = pkg.path("prompt").read_bytes()
         self.assertEqual(clause["quoted"], prompt[clause["start_byte"]:clause["end_byte"]].decode())
+
+    def test_target_guidance_tracks_backend_checkpoint_capability(self):
+        from verislop.backends import registry
+
+        pkg = Package(self.pkg)
+        for backend in (registry.VSCORE_ID, registry.VSCORE3_ID):
+            for checkpoint in review.CHECKPOINTS:
+                with self.subTest(backend=backend, checkpoint=checkpoint), \
+                        patch.object(registry, "frozen_backend", return_value=({"id": backend}, [])), \
+                        patch.object(registry, "is_vscore", return_value=True), \
+                        patch.object(review, "_target_case_binders", return_value={"obligations": {}}):
+                    policy = review._counterexample_policy(pkg, checkpoint, ["O17"])
+                    text = review._checkpoint_guidance(checkpoint, policy)
+                    rules = json.JSONDecoder().raw_decode(text.split(
+                        "CURRENT CHECKPOINT RULES (supervisor-selected):", 1)[1].lstrip())[0]
+                    admitted = backend == registry.VSCORE3_ID and checkpoint in ("implementation", "release")
+                    self.assertEqual(admitted, "target_case" in policy["proposals"])
+                    self.assertEqual(list(policy["proposals"]), rules["allowed_probe_kinds"])
+                    self.assertNotIn("source_violation", policy["proposals"])
+                    if admitted:
+                        self.assertIn("admitted target replay", rules["restriction"])
+                        self.assertTrue(any("pinned kernel replay" in s for s in policy["limitations"]))
+                    elif checkpoint in ("implementation", "release"):
+                        self.assertIn("no admitted target_case replay", rules["restriction"])
+                    else:
+                        self.assertIn("No target execution", rules["restriction"])
 
 
 class TargetAssignmentGuidanceTests(unittest.TestCase):

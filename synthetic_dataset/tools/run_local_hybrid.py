@@ -38,6 +38,10 @@ from synthetic_dataset.tools.sol_data_pipeline_worker import (
 ROOT = Path(__file__).resolve().parents[2]
 PROMPTS = ROOT / "examples/proof-of-concept/data-pipelines"
 TASKS = ("P03-unicode-labels", "P01-numeric-batch")
+PROJECT_PROMPTS = ROOT / "examples/project-bootstrap"
+PROJECT_TASKS = ("G01-inference-admission", "G02-inventory-reconciliation",
+                 "G03-telemetry-window", "G04-release-manifest")
+TRIAL_MODES = ("tier0-python", "tier2-project")
 FORMAT = "verislop.local-hybrid-trial/0.1"
 
 
@@ -53,10 +57,24 @@ def failure(message: str, kind: str, **details) -> InfrastructureError:
 
 
 def source_inventory() -> dict[str, str]:
-    paths = [ROOT / "pyproject.toml", ROOT / "docs/local-hybrid-workflow.md"]
+    paths = [ROOT / "pyproject.toml", ROOT / "docs/local-hybrid-workflow.md",
+             ROOT / "docs/bootstrap-local-projects.md",
+             ROOT / "docs/bootstrap-string-coverage.md",
+             ROOT / "docs/bootstrap-proof-focus.md",
+             ROOT / "docs/bootstrap-implementation-context.md",
+             ROOT / "docs/bootstrap-review-targets.md",
+             ROOT / "docs/bootstrap-surface-authoring.md",
+             ROOT / "docs/bootstrap-proof-retention.md",
+             ROOT / "docs/bootstrap-critic-capacity.md",
+             ROOT / "docs/bootstrap-relation-authoring.md",
+             ROOT / "docs/bootstrap-release-context.md"]
     paths += [p for name in ("verislop", "schemas", "formal", "policies", "synthetic_dataset/tools")
               for p in (ROOT / name).rglob("*") if p.is_file() and p.suffix in {".py", ".lean", ".json"}]
     paths += list((ROOT / "synthetic_dataset").glob("*.py"))
+    paths += list((ROOT / "grammar").glob("*.ebnf"))
+    paths += list((ROOT / "examples/project-bootstrap").glob("*.txt"))
+    paths += [ROOT / name for name in ("lean-toolchain", "lakefile.lean", "lake-manifest.json")
+              if (ROOT / name).is_file()]
     return {p.relative_to(ROOT).as_posix(): canonical.digest_file(p)
             for p in sorted(set(paths)) if p.is_file()}
 
@@ -96,13 +114,24 @@ def sol_routes(conf: dict) -> dict[str, list[str]]:
     return routes
 
 
-def validate_configuration(conf: dict, profiles: dict, pyth_agent: str) -> None:
+def mode_parameters(mode: str) -> dict:
+    if mode == "tier0-python":
+        return {"tier": 0, "target": "python", "required_state": "TESTED", "endpoint": "test_campaign"}
+    if mode == "tier2-project":
+        return {"tier": 2, "target": "vscore", "required_state": "END_TO_END_VERIFIED",
+                "endpoint": "restricted_source", "backend_version": "0.3"}
+    raise ValueError("unsupported hybrid trial mode")
+
+
+def validate_configuration(conf: dict, profiles: dict, pyth_agent: str, *,
+                           trial_mode: str = "tier0-python") -> None:
+    selected = mode_parameters(trial_mode)
     resolved = provider_config.resolve(conf, profiles["profiles"])
     problems = [d for d in resolved.diagnostics if d.severity == "blocking"]
     if problems:
         raise UsageError("hybrid configuration has blocking diagnostics", problems)
-    if conf.get("bridge_tier") != 0 or conf.get("endpoint") != "test_campaign":
-        raise ValueError("this trial requires explicit Tier 0 test_campaign")
+    if conf.get("bridge_tier") != selected["tier"] or conf.get("endpoint") != selected["endpoint"]:
+        raise ValueError(f"this trial requires explicit Tier {selected['tier']} {selected['endpoint']}")
     if conf["review"]["checkpoints"] != ["formal_contract", "release"]:
         raise ValueError("this trial freezes formal_contract and release review checkpoints")
     if conf["review"]["budgets"]["max_wall_seconds_per_tier"] != 0:
@@ -153,24 +182,30 @@ def validate_configuration(conf: dict, profiles: dict, pyth_agent: str) -> None:
 
 
 def prepare(out: Path, config: Path, profiles: Path, tokenizer: Path, *,
-            tasks=TASKS[:1], pyth_agent="pythagoras", native_limit=48, sol_limit=8,
+            tasks=None, pyth_agent="pythagoras", native_limit=48, sol_limit=8,
             independent_check=False, qwen_tokenizer: Path | None = None,
-            runtime_manifest: Path | None = None) -> dict:
+            runtime_manifest: Path | None = None, trial_mode: str = "tier0-python") -> dict:
     out = out.absolute()
+    selected = mode_parameters(trial_mode)
+    allowed_tasks = TASKS if trial_mode == "tier0-python" else PROJECT_TASKS
+    tasks = allowed_tasks[:1] if tasks is None else tasks
     if out.exists() or out.is_symlink():
         raise ValueError("trial directory is write-once; select a fresh path")
-    if not tasks or len(set(tasks)) != len(tasks) or any(t not in TASKS for t in tasks):
-        raise ValueError("select each supported task at most once")
+    if not tasks or len(set(tasks)) != len(tasks) or any(t not in allowed_tasks for t in tasks):
+        raise ValueError("select each supported task at most once for the frozen trial mode")
+    if trial_mode == "tier2-project" and independent_check:
+        raise ValueError("the Python independent checker is not a Tier 2 project checker")
     if not 1 <= native_limit <= 128 or not 1 <= sol_limit <= 128:
         raise ValueError("logical call bounds must be within 1..128")
     conf, prof = provider_config.load(config), canonical.load_file(profiles)
     provider_config.load_user_profiles(profiles)
-    validate_configuration(conf, prof, pyth_agent)
+    validate_configuration(conf, prof, pyth_agent, trial_mode=trial_mode)
     out.mkdir(parents=True)
     once(out / "config.json", conf)
     once(out / "provider-home/endpoint-profiles.json", prof)
     for task in tasks:
-        fsutil.write_once(out / "prompts" / f"{task}.txt", (PROMPTS / f"{task}.txt").read_bytes())
+        prompt_directory = PROMPTS if trial_mode == "tier0-python" else PROJECT_PROMPTS
+        fsutil.write_once(out / "prompts" / f"{task}.txt", (prompt_directory / f"{task}.txt").read_bytes())
     _, external = load_prompt_tokenizer(SimpleNamespace(tokenizer=tokenizer), out)
     tokenizers = [Path(tokenizer).resolve()]
     qwen_freeze = None
@@ -204,8 +239,8 @@ def prepare(out: Path, config: Path, profiles: Path, tokenizer: Path, *,
     archive = freeze_sources(out, sources)
     inputs[archive.name] = canonical.digest_file(archive)
     protocol = {"format": FORMAT, "prepared_at_utc": datetime.now(timezone.utc).isoformat(),
-        "tasks": list(tasks), "tier": 0, "target": "python", "required_state": "TESTED",
-        "endpoint": "test_campaign", "contract_repair_rounds": 2, "builtin_tactics": True,
+        "tasks": list(tasks), "trial_mode": trial_mode, **selected,
+        "contract_repair_rounds": 2, "builtin_tactics": True,
         "model_generation_deadline": None, "proof_search_deadline": None,
         "native_calls_per_task": native_limit, "sol_calls_per_task": sol_limit,
         "pyth_agent": pyth_agent, "tokenizer": str(Path(tokenizer).resolve()),
@@ -227,7 +262,9 @@ def prepare(out: Path, config: Path, profiles: Path, tokenizer: Path, *,
                             "trigger": "invalid_primary_critic_protocol_exhausted"}
                            if conf.get("critic_routing", {}).get("enabled") else {"enabled": False}),
         "positive_candidate_arguments": [],
-        "scope": "Natural-language strict Tier 0 TESTED trial; no universal implementation refinement or END_TO_END_VERIFIED claim",
+        "scope": ("Natural-language strict Tier 0 TESTED trial; no universal implementation refinement or END_TO_END_VERIFIED claim"
+                  if trial_mode == "tier0-python" else
+                  "Natural-language strict Tier 2 VSCore 0.3 project component; END_TO_END_VERIFIED only for restricted-source semantics"),
         "origin_audit": "Native transcripts, assembly snapshots and acceptance retained; full supplemental mixed-model origin replay is not performed",
         "limits": ["Builtin tactics may complete proofs without model calls",
                    "Local model digest is checked by the native broker; Sol snapshot and tool restrictions are unattested",
@@ -247,6 +284,14 @@ def verify_inputs(out: Path) -> dict:
             or freeze.get("protocol_sha256") != canonical.digest_file(out / "protocol.json")
             or protocol["source_hashes"] != source_inventory()):
         raise ValueError("INPUT_MUTATION: protocol or runtime changed after freeze")
+    mode = protocol.get("trial_mode", "tier0-python")
+    if any(protocol.get(key) != value for key, value in mode_parameters(mode).items()):
+        raise ValueError("INPUT_MUTATION: assurance mode differs from frozen invocation")
+    allowed_tasks = TASKS if mode == "tier0-python" else PROJECT_TASKS
+    if (not protocol.get("tasks") or len(protocol["tasks"]) != len(set(protocol["tasks"]))
+            or any(task not in allowed_tasks for task in protocol["tasks"])
+            or (mode == "tier2-project" and protocol.get("independent_check"))):
+        raise ValueError("INPUT_MUTATION: task/checker selection differs from frozen mode")
     for name, digest in protocol["run_inputs"].items():
         if canonical.digest_file(out / name) != digest:
             raise ValueError("INPUT_MUTATION: trial input changed: " + name)
@@ -259,13 +304,22 @@ def verify_inputs(out: Path) -> dict:
     return protocol
 
 
-def cli_argv(out: Path, task: str) -> list[str]:
-    return ["run", "--runs-dir", str(out / "tasks" / task / "runs"), "--run-id", task.lower(),
-        "--prompt-file", str(out / "prompts" / f"{task}.txt"), "--request-ref", f"data-pipelines/{task}.txt",
-        "--mode", "software", "--tier", "0", "--target", "python", "--endpoint", "test_campaign",
-        "--require-state", "TESTED", "--require-tests", "--policy", "strict", "--non-interactive",
+def cli_argv(out: Path, task: str, protocol: dict | None = None) -> list[str]:
+    mode = (protocol or {}).get("trial_mode", "tier0-python")
+    selected = mode_parameters(mode)
+    allowed_tasks = TASKS if mode == "tier0-python" else PROJECT_TASKS
+    if task not in allowed_tasks:
+        raise ValueError("task is outside the frozen trial mode")
+    request_prefix = "data-pipelines" if mode == "tier0-python" else "project-bootstrap"
+    argv = ["run", "--runs-dir", str(out / "tasks" / task / "runs"), "--run-id", task.lower(),
+        "--prompt-file", str(out / "prompts" / f"{task}.txt"), "--request-ref", f"{request_prefix}/{task}.txt",
+        "--mode", "software", "--tier", str(selected["tier"]), "--target", selected["target"],
+        "--endpoint", selected["endpoint"], "--require-state", selected["required_state"],
+        "--policy", "strict", "--non-interactive",
         "--config", str(out / "config.json"), "--budget-seconds", "0", "--repair-rounds", "2",
-        "--seed", "20261013", "--cases", "32", "--json", "--quiet"]
+        "--json", "--quiet"]
+    return argv + (["--require-tests", "--seed", "20261013", "--cases", "32"] if mode == "tier0-python"
+                   else ["--backend-version", "0.3", "--no-tests"])
 
 
 class HybridTransport:
@@ -275,7 +329,9 @@ class HybridTransport:
         if protocol.get("qwen_tokenizer") is not None and qwen_tokenizer is None:
             raise ValueError("frozen Qwen tokenizer is required for this trial")
         self.directory = out / "tasks" / task
-        self.mailbox = MailboxTransport(self.directory / "mailbox", protocol["sol_calls_per_task"])
+        from synthetic_dataset.tools import hybrid_response
+        self.mailbox = MailboxTransport(self.directory / "mailbox", protocol["sol_calls_per_task"],
+            response_validator=lambda path, envelope: hybrid_response.validate_response(out, task, path, envelope))
         self.lock = threading.Lock()
         self.native_used = 0
         self.rows = []
@@ -445,7 +501,7 @@ def run(out: Path) -> dict:
             verify_inputs(out)
             directory = out / "tasks" / task
             directory.mkdir(parents=True)
-            argv = cli_argv(out, task)
+            argv = cli_argv(out, task, protocol)
             once(directory / "invocation.json", {"argv": argv, "positive_candidate_arguments": []})
             atomic_json(out / "active-task.json", {"task": task, "phase": "generation"})
             transport = HybridTransport(out, task, protocol, tokenizer, qwen_tokenizer)
@@ -478,8 +534,15 @@ def run(out: Path) -> dict:
                     result["terminal_status"] = report.get("terminal_status")
                     result["stages"] = report.get("stages")
                     result["obligations"] = report.get("obligations")
-                    from synthetic_dataset.tools.check_data_pipeline_poc import native_tested_gate
-                    result["native_pass"] = code == 0 and native_tested_gate(report)
+                    if protocol.get("trial_mode", "tier0-python") == "tier2-project":
+                        from synthetic_dataset.tools.local_hybrid_tier2 import native_gate, constructor_coverage
+                        result["native_audit"] = native_gate(out, task, active, report, result["native_result"], code)
+                        result["native_pass"] = result["native_audit"]["status"] == "PASS"
+                        if result["native_pass"]:
+                            result["source_coverage"] = constructor_coverage(active)
+                    else:
+                        from synthetic_dataset.tools.check_data_pipeline_poc import native_tested_gate
+                        result["native_pass"] = code == 0 and native_tested_gate(report)
             result["status"] = "VERIFIED" if result["native_pass"] else "INFRASTRUCTURE_FAILURE" if code == 3 else "BLOCKED"
             atomic_json(out / "active-task.json", {"task": task, "phase": "generation_complete"})
             if protocol["independent_check"] and result.get("active_package"):
@@ -520,7 +583,8 @@ def main(argv=None):
     prepare_parser.add_argument("--runtime-manifest", type=Path,
         help="optional JSON runtime settings/probe receipt, retained and hash-bound before inference")
     prepare_parser.add_argument("--pyth-agent", default="pythagoras")
-    prepare_parser.add_argument("--tasks", nargs="+", choices=TASKS, default=list(TASKS[:1]))
+    prepare_parser.add_argument("--trial-mode", choices=TRIAL_MODES, default="tier0-python")
+    prepare_parser.add_argument("--tasks", nargs="+", choices=TASKS + PROJECT_TASKS)
     prepare_parser.add_argument("--native-limit", type=int, default=48)
     prepare_parser.add_argument("--sol-limit", type=int, default=8)
     prepare_parser.add_argument("--independent-check", action="store_true")
@@ -537,7 +601,7 @@ def main(argv=None):
         result = prepare(out, args.config, args.endpoint_profiles, args.pyth_tokenizer, tasks=args.tasks,
             pyth_agent=args.pyth_agent, native_limit=args.native_limit, sol_limit=args.sol_limit,
             independent_check=args.independent_check, qwen_tokenizer=args.qwen_tokenizer,
-            runtime_manifest=args.runtime_manifest)
+            runtime_manifest=args.runtime_manifest, trial_mode=args.trial_mode)
     elif args.command == "run":
         result = run(out)
     elif args.command == "pending":

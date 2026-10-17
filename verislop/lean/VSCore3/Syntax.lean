@@ -66,6 +66,8 @@ inductive Expr where
   | listMap (value body : Expr)
   | listFilter (value body : Expr)
   | listSum (value : Expr)
+  | stringAppend (left right : Expr)
+  | stringLength (value : Expr)
 
 inductive DataDecl where
   | record (id : String) (fields : List (String × Ty))

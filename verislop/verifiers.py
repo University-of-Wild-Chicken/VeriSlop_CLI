@@ -257,7 +257,7 @@ VERIFIERS: dict[str, dict] = {
     },
     "verislop.review-consensus": {
         "milestones": [],
-        "sources": ["review.py", "review_counterexamples.py", "review_projection.py", "generate.py", "lifecycle.py", "package.py",
+        "sources": ["review.py", "review_counterexamples.py", "review_projection.py", "review_prompt.py", "exact_context.py", "generate.py", "lifecycle.py", "package.py",
                     "testing.py", "segment.py", "targets/python_harness.py", *NATIVE_SOURCE, *VSCORE_BACKEND],
         "schemas": ["review-ballot.schema.json", "review-ballot-v2.schema.json", "review-config.schema.json",
                     "review-counterexample-proposal.schema.json", "review-counterexample-receipt.schema.json",

@@ -77,6 +77,10 @@ def resolve(conf: dict[str, Any], user_profiles: dict[str, dict[str, Any]]) -> R
     agents = conf["agents"]
     providers = conf["providers"]
     for name, agent in agents.items():
+        if "proof_retention" in agent and type(agent["proof_retention"]) is not bool:
+            diags.append(Diagnostic("CONFIGURATION_INVALID", f"agent {name}: proof_retention must be a boolean"))
+        if agent.get("vscore_authoring_format", "canonical_json") not in ("canonical_json", "surface"):
+            diags.append(Diagnostic("CONFIGURATION_INVALID", f"agent {name}: vscore_authoring_format must be canonical_json or surface"))
         if "review_response_format" in agent:
             if agent["review_response_format"] != "json_schema":
                 diags.append(Diagnostic("CONFIGURATION_INVALID", f"agent {name}: review_response_format must be json_schema when supplied"))

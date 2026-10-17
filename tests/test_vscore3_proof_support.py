@@ -9,6 +9,7 @@ import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
+from relation_authoring_fixture import mock_relation_authority
 
 from verislop import agents, canonical, export, leanbridge, policy, schemas
 from verislop.bridges import vscore3_checker as checker
@@ -138,6 +139,7 @@ example (xs : List Nat) :
 
 class CompleteProofDiagnosticsTests(unittest.TestCase):
     def setUp(self):
+        self.addCleanup(mock_relation_authority().close)
         self.tmp = tempfile.TemporaryDirectory(prefix="verislop-generic-proof-diagnostics-")
         self.addCleanup(self.tmp.cleanup)
         self.pkg = Package(Path(self.tmp.name) / "run")
@@ -283,8 +285,8 @@ class CompleteProofDiagnosticsTests(unittest.TestCase):
              patch.object(checker, "preview", return_value=(self.spec, None, self.info)):
             agents._vscore_implementation(None, {"roles": {}}, self.pkg, self.events,
                                           {"parameters": self.params}, 2, 0)
-        feedback = json.loads(calls.call_args_list[1].args[5].split(
-            "CHECKER ERROR INVENTORY FROM THE PREVIOUS ATTEMPT (excerpts; full artifact referenced):\n", 1)[1])
+        from verislop import exact_context
+        feedback = exact_context.restore_prompt(calls.call_args_list[1].args[5])["previous_diagnostics"]
         self.assertEqual(feedback["error_count"], len(issues))
         artifact = self.pkg.root / feedback["full_diagnostics"]["path"]
         self.assertEqual(canonical.digest(artifact.read_bytes()), feedback["full_diagnostics"]["sha256"])

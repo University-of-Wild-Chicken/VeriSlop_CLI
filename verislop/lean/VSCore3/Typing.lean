@@ -57,10 +57,10 @@ theorem expr_snd_size_lt (p : String × Expr) : sizeOf p.2 < sizeOf p := by
 
 def exprBudget : Expr → Nat
   | .bin _ a b | .letE a b | .cons a b | .intFdiv a b | .listGet a b |
-    .listAppend a b | .listMap a b | .listFilter a b => 1 + exprBudget a + exprBudget b
+    .listAppend a b | .listMap a b | .listFilter a b | .stringAppend a b => 1 + exprBudget a + exprBudget b
   | .not e | .ok _ e | .error _ e | .project e _ | .some e | .intNeg e |
     .natToInt e | .intToNat e | .listLength e | .listRange e | .listReverse e |
-    .listSort e | .listUnique e | .listSum e => 1 + exprBudget e
+    .listSort e | .listUnique e | .listSum e | .stringLength e => 1 + exprBudget e
   | .ite a b c | .matchResult a b c | .matchOption a b c | .matchList a b c |
     .listFold a b c | .natFold a b c => 1 + exprBudget a + exprBudget b + exprBudget c
   | .record _ fs => 1 + (fs.map (fun f => exprBudget f.2)).sum
@@ -87,6 +87,13 @@ def compileExpr : Nat → Profile → DataContext → HelperContext → (Γ : Li
     | .string cs =>
       if !cs.all validScalar then throw "invalid Unicode scalar value"
       return ⟨.string, fun _ => String.ofList (cs.map Char.ofNat)⟩
+    | .stringAppend a b =>
+      let a ← castCompiled .string (← compileExpr f p ds hs Γ a)
+      let b ← castCompiled .string (← compileExpr f p ds hs Γ b)
+      return ⟨.string, fun env => String.append (a env) (b env)⟩
+    | .stringLength e =>
+      let e ← castCompiled .string (← compileExpr f p ds hs Γ e)
+      return ⟨.nat, fun env => String.length (e env)⟩
     | .bool b => return ⟨.bool, fun _ => b⟩
     | .unit => return ⟨.unit, fun _ => ()⟩
     | .enum id ctor =>
@@ -408,6 +415,8 @@ def featuresExpr : Expr → List String
   | .var _ | .nat _ | .bool _ | .unit | .enum _ _ => ["base"]
   | .int _ => ["int"]
   | .string _ => ["string"]
+  | .stringAppend a b => "string" :: (featuresExpr a ++ featuresExpr b)
+  | .stringLength e => "string" :: featuresExpr e
   | .intNeg e | .natToInt e | .intToNat e => "int" :: featuresExpr e
   | .intFdiv a b => "int" :: (featuresExpr a ++ featuresExpr b)
   | .listLength e | .listRange e | .listReverse e | .listSort e | .listUnique e | .listSum e =>

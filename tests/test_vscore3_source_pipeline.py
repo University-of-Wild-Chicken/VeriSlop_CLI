@@ -323,14 +323,66 @@ class RegisteredVSCore3SourcePipelineTests(unittest.TestCase):
                 receipt = self.mechanical_probe(self.pkg, claim_id, name=str(index))
                 self.assert_bound_pass(self.pkg, snapshot, claim_id, receipt)
 
+    def test_release_context_roundtrip_and_ballot_correction(self):
+        from test_providers_review import accepted_review, review_packet
+        from verislop import exact_context, review_prompt
+
+        pkg = self.review_copy("context-campaign")
+        displayed = []
+
+        def reviewer(system, user, model):
+            self.assertIn(exact_context.PREFIX, user)
+            self.assertEqual(review.VSCORE3_RELEASE_SYSTEM, system)
+            packet = review_packet(user)
+            displayed.append(packet)
+            self.assertEqual("VERIFIED", packet["mechanical_snapshot"]["mechanical_status"])
+            self.assertEqual(["A", "B"], [b["build"] for b in packet["mechanical_snapshot"]["builds"]])
+            ballot = accepted_review(user, packet["scope"])
+            if len(displayed) == 1:
+                del ballot["search"]
+            return json.dumps(ballot)
+
+        mock = MockLLM(reviewer)
+        try:
+            config, env = mock_config(pkg.root.parent, mock.port, [unanimous("release", "reviewer", 1)], checkpoints=["release"])
+            config, env = self.preregister_review_context(config, env)
+            events = EventSink(pkg.run_id, pkg.root, quiet=True)
+            try:
+                with patch.dict("os.environ", env):
+                    result = review.run(pkg, events, config, checkpoint="release")
+            finally:
+                events.close()
+        finally:
+            mock.close()
+        self.assertEqual("PASS", result.status, [d.to_json() for d in result.diagnostics])
+        self.assertEqual(2, len(displayed))
+        self.assertEqual(displayed[0], displayed[1])
+        campaign = next(pkg.path("reviews").glob("rc-*"))
+        full = canonical.load_file(campaign / "packet.json")
+        display = canonical.load_file(campaign / "prompt-view.json")
+        self.assertEqual(canonical.dumps(full), canonical.dumps(review_prompt.restore_packet(display, full)))
+        self.assertEqual(full["scope"], displayed[0]["scope"])
+        self.assertEqual([{key: row[key] for key in review_prompt.VISIBLE_CLAIM_FIELDS}
+                          for row in full["required_mechanical_claims"]], displayed[0]["required_mechanical_claims"])
+        self.assertEqual({key: value for key, value in full["vscore"].items() if key != "goal"},
+                         {key: value for key, value in displayed[0]["vscore"].items() if key != "goal"})
+        self.assertEqual(full["lean_accepted_source"], displayed[0]["lean_accepted_source"])
+        self.assertEqual(full["implementation"], displayed[0]["implementation"])
+        from verislop.providers import config as pcfg
+        with patch.dict("os.environ", env):
+            resolved = pcfg.resolve(canonical.load_file(config), pcfg.load_user_profiles(None))
+            self.assertEqual(review.reviewer_configuration_hash(resolved.conf, resolved, system=review.VSCORE3_RELEASE_SYSTEM),
+                             canonical.load_file(campaign / "campaign.json")["target_components"]["reviewer_configuration_hash"])
+        shutil.copytree(pkg.path("reviews"), self.review_capture / self._testMethodName / "reviews")
+        fsutil.write_json(self.review_capture / self._testMethodName / "result.json", result.to_json())
+
     def test_release_ballot_accepts_replayed_bridge_and_provenance_probes(self):
         pkg = self.review_copy("campaign")
         claim_ids = [vscore3.selection(pkg)["edge_claim_id"], "BRIDGE:structure:implementation", "CLOSURE:provenance"]
 
         def reviewer(system, user, model):
-            start = user.index("REVIEW PACKET (")
-            start = user.index("\n", start) + 1
-            packet, _ = json.JSONDecoder().raw_decode(user[start:])
+            from test_providers_review import review_packet
+            packet = review_packet(user)
             selected_claims = claim_ids if packet["checkpoint"] == "release" else ["PROVED:W1@1"]
             self.assertTrue(set(selected_claims).issubset(packet["counterexample_policy"]["mechanical_claim_ids"]))
             return json.dumps({"verdict": "ACCEPT", "reviewed_obligations": packet["scope"], "findings": [],

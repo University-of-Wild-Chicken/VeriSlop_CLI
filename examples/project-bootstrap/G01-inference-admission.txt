@@ -1,0 +1,30 @@
+Implement the pure memory-admission component for a local model-serving scheduler.
+Deliver a typed solve entry in program.vscore.json, using vscore/0.3 and the
+data-pipeline/0.3 profile. The contract certifies restricted-source semantics, not
+actual GPU allocation or a Python service.
+
+Input is a record with natural-number fields capacity, reserved, context_tokens,
+and bytes_per_token, and a list of natural numbers called shards. All sizes are
+bytes. Each list item is the memory size of one model shard; repeated sizes are
+distinct shards and must each contribute. Zero sizes and an empty list are valid.
+There are no additional bounds or preconditions, including when reserved exceeds
+capacity. Use unbounded mathematical arithmetic.
+
+Return a record with fields demand (natural number), admitted (Boolean), spare
+(natural number), and shortfall (natural number). Demand is reserved memory plus
+the sum of every shard size plus context_tokens multiplied by bytes_per_token.
+Admit exactly when demand is at most capacity. Spare is capacity minus demand
+clamped at zero. Shortfall is demand minus capacity clamped at zero. In particular,
+exact equality admits the request and returns zero spare and zero shortfall.
+
+The entry is total and deterministic on typed inputs, has no external I/O or
+mutation, and uses no floating point. Do not simulate a GPU, inspect hardware,
+read files, call services, or impose a machine-word limit.
+
+Public examples:
+capacity=100, reserved=10, shards=[20,20], context_tokens=5, bytes_per_token=4
+returns demand=70, admitted=true, spare=30, shortfall=0.
+capacity=50, reserved=60, shards=[], context_tokens=0, bytes_per_token=99
+returns demand=60, admitted=false, spare=0, shortfall=10.
+capacity=0, reserved=0, shards=[], context_tokens=0, bytes_per_token=0
+returns demand=0, admitted=true, spare=0, shortfall=0.

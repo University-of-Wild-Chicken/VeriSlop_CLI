@@ -5,6 +5,7 @@ import json
 import tempfile
 import unittest
 from unittest.mock import patch
+from relation_authoring_fixture import mock_relation_authority
 
 from verislop import agents, canonical, cli
 from verislop.bridges import vscore3_checker as checker
@@ -15,6 +16,7 @@ from verislop.targets import vscore3_source as source, vscore3_target as target
 
 class CompileProcessPersistenceTests(unittest.TestCase):
     def setUp(self):
+        self.addCleanup(mock_relation_authority().close)
         temp = tempfile.TemporaryDirectory(prefix="verislop-process-consumers-")
         self.addCleanup(temp.cleanup)
         self.root = Path(temp.name)

@@ -255,6 +255,28 @@ def _critic_job(data: dict, instance: str) -> str:
     return canonical.digest_json({"packet": semantic, "configured_instance": instance})
 
 
+def _pre_dispatch_context_limit(exc: InfrastructureError) -> bool:
+    """Recognize an explicit failed allocation, never infer one from error text."""
+    if len(exc.diagnostics) != 1:
+        return False
+    diagnostic = exc.diagnostics[0]
+    details = diagnostic.details
+    if (diagnostic.code != "PROVIDER_FAILURE" or diagnostic.severity != "infrastructure"
+            or not isinstance(details, dict) or details.get("kind") != "context_budget_exceeded"
+            or details.get("call_dispatched") is not False
+            or ("binding_failure" in details and details["binding_failure"] is not False)):
+        return False
+    preflight = details.get("prompt_preflight")
+    if (not isinstance(preflight, dict) or preflight.get("kind") != "context_budget_exceeded"
+            or preflight.get("fits") is not False):
+        return False
+    names = ("input_tokens", "declared_max_output_tokens", "context_window_tokens", "total_budget_tokens")
+    if any(type(preflight.get(name)) is not int for name in names):
+        return False
+    inputs, output, window, total = (preflight[name] for name in names)
+    return inputs >= 0 and output > 0 and window > 0 and total == inputs + output and total > window
+
+
 class _CriticAttempts:
     """Persist bounded dispatches for an explicitly routed critic slot.
 
@@ -288,6 +310,14 @@ class _CriticAttempts:
 
     def _save(self):
         agent_memory.capture_context(self.pkg, self.stage, self.state)
+
+    def failed_attempt(self, agent: str, instance: str, ordinal: int) -> dict:
+        """Exact durable allocation/error, stable across retained-error replay."""
+        key = canonical.digest_json({"agent": agent, "instance": instance, "ordinal": ordinal})
+        attempt = self.state["attempts"][key]
+        if "failure" not in attempt:
+            raise blocked("STALE_OR_UNBOUND_EVIDENCE", "critic capacity route lacks its retained failure")
+        return canonical.loads(canonical.dumps(attempt))
 
     def call(self, agent: str, instance: str, ordinal: int, user: str) -> str:
         from .agents import recorded_call
@@ -376,6 +406,7 @@ def critic_agent(config: str | Path, pkg, events):
                     if route is None and agent_memory.latest_snapshot(pkg, stage_prefix="critic-route/" + _critic_job(data, instance)[7:]):
                         raise blocked("STALE_OR_UNBOUND_EVIDENCE", "cannot disable retained critic routing for the same job")
                     phases = [(selected_agent, instance, 2)]
+                    capacity_failure = None
                     if route:
                         phases.append((routing["fallback_agent"], instance + "/fallback/" + routing["fallback_agent"],
                                        routing["fallback_attempts"]))
@@ -383,13 +414,24 @@ def critic_agent(config: str | Path, pkg, events):
                         membership[-1] = instance
                         for correction_attempt in range(attempt_limit):
                             checked = None
+                            dispatch = {"configured_agent": spec["agent"], "configured_instance": configured_instance,
+                                "effective_agent": selected_agent, "effective_instance": instance,
+                                "reason": ("primary_context_budget_exceeded" if capacity_failure is not None else
+                                           "primary_protocol_exhausted") if phase_index else "configured_primary"}
+                            if capacity_failure is not None:
+                                dispatch["primary_capacity_failure"] = capacity_failure
                             user = json.dumps({**prompt_data, "focus": spec["focus"], "protocol_errors": invalid,
                                 "previous_response": previous_response, "current_response_requirements": _response_requirements(data),
-                                "critic_dispatch": {"configured_agent": spec["agent"], "configured_instance": configured_instance,
-                                    "effective_agent": selected_agent, "effective_instance": instance,
-                                    "reason": "primary_protocol_exhausted" if phase_index else "configured_primary"}}, ensure_ascii=False)
-                            previous_response = (route.call(selected_agent, instance, correction_attempt + 1, user) if route else
-                                recorded_call(broker, pkg, selected_agent, instance, SYSTEM, user, "critic").text)
+                                "critic_dispatch": dispatch}, ensure_ascii=False)
+                            try:
+                                previous_response = (route.call(selected_agent, instance, correction_attempt + 1, user) if route else
+                                    recorded_call(broker, pkg, selected_agent, instance, SYSTEM, user, "critic").text)
+                            except InfrastructureError as exc:
+                                if (phase_index == 0 and route is not None and routing.get("on_context_limit") is True
+                                        and _pre_dispatch_context_limit(exc)):
+                                    capacity_failure = route.failed_attempt(selected_agent, instance, correction_attempt + 1)
+                                    break  # Never retry the same oversized primary allocation.
+                                raise
                             try:
                                 value = extract_json(previous_response)
                                 invalid = validate(value, data)
@@ -421,16 +463,20 @@ def critic_agent(config: str | Path, pkg, events):
                                                    for d in checked.get("diagnostics", []))
                             if not invalid:
                                 break
-                        if not invalid:
+                        if not invalid and not (phase_index == 0 and capacity_failure is not None):
                             break  # A valid disposition, including ABSTAIN/REPAIR, never escalates.
                         if phase_index + 1 < len(phases):
-                            results.append({"tier": tier["id"], "agent": selected_agent, "instance": instance,
+                            observation = {"tier": tier["id"], "agent": selected_agent, "instance": instance,
                                             "configured_agent": spec["agent"], "configured_instance": configured_instance,
-                                            "status": "INVALID", "errors": invalid,
+                                            "status": "CONTEXT_LIMIT" if capacity_failure is not None else "INVALID", "errors": invalid,
                                             "attempted_checks": attempted_checks, "superseded_by": phases[phase_index + 1][1],
-                                            "counts_as_vote": False})
+                                            "counts_as_vote": False}
+                            if capacity_failure is not None:
+                                observation["failed_allocation"] = capacity_failure
+                            results.append(observation)
                             attempted_checks = []
-                            events.emit("progress", ctx["phase"], "autonomous critic protocol fallback",
+                            events.emit("progress", ctx["phase"], "autonomous critic capacity fallback" if capacity_failure is not None
+                                        else "autonomous critic protocol fallback",
                                         details={"configured_instance": configured_instance, "fallback_agent": phases[phase_index + 1][0]})
                     if invalid:
                         ballots[instance] = {"verdict": "ABSTAIN"}

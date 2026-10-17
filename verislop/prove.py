@@ -16,7 +16,7 @@ import time
 from pathlib import Path
 from typing import Any, Callable
 
-from . import contract_values, agent_memory, canonical, contract, dsl, fsutil, leanbridge, native_contract, proof_fragments
+from . import contract_values, agent_memory, canonical, contract, dsl, fsutil, leanbridge, native_contract, proof_fragments, proof_focus, proof_retention
 from .errors import Diagnostic, InfrastructureError, UsageError
 from .events import EventSink
 from .package import Package
@@ -236,12 +236,22 @@ def with_registry(candidate: str, challenge: str) -> str:
     return composed.decode()
 
 
-def evaluate(tc: leanbridge.Toolchain, pol: dict[str, Any], src: str) -> dict[str, Any]:
+def evaluate(tc: leanbridge.Toolchain, pol: dict[str, Any], src: str, *,
+             retain_native: bool = False, timeout_seconds: float | None = None) -> dict[str, Any]:
     with fsutil.temporary_directory(prefix="verislop-prove-") as tmp:
-        comp = leanbridge.compile_module(tc, src.encode(), Path(tmp), timeout=pol["build_timeout_seconds"],
+        comp = leanbridge.compile_module(tc, src.encode(), Path(tmp), timeout=pol["build_timeout_seconds"] if timeout_seconds is None else timeout_seconds,
                                          memory_mb=pol["memory_mb"], require_network_isolation=pol["require_network_isolation"])
-    return {"ok": comp.ok, "errors": comp.errors, "sorries": len(comp.sorry_positions),
-            "complete": comp.ok and not comp.sorry_positions, "wall_ms": int(comp.wall_seconds * 1000)}
+    result = {"ok": comp.ok, "errors": comp.errors, "sorries": len(comp.sorry_positions),
+            "complete": comp.ok and not comp.sorry_positions, "wall_ms": int(comp.wall_seconds * 1000),
+            "native_diagnostics": {"source_sha256": canonical.digest(src.encode()),
+                "policy_sha256": canonical.digest_json(pol), "toolchain": tc.identity(),
+                "sorry_positions": comp.sorry_positions}}
+    if retain_native:
+        result["native_observation"] = {"format": proof_retention.NATIVE_FORMAT,
+            "source_sha256": canonical.digest(src.encode()), "policy_sha256": canonical.digest_json(pol),
+            "toolchain": tc.identity(), "messages": comp.messages, "process": comp.process_evidence,
+            "ok": comp.ok, "timed_out": comp.timed_out, "olean_present": comp.olean is not None}
+    return result
 
 
 def _better(a: dict[str, Any] | None, b: dict[str, Any]) -> bool:
@@ -262,6 +272,7 @@ def run(
     portfolio: bool = True,
     agent: Callable[[dict[str, Any]], str] | None = None,
     critic: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+    retain_proof_bodies: bool | None = None,
 ) -> StageResult:
     from . import contract as contractmod
 
@@ -283,14 +294,25 @@ def run(
     profile = contractmod.frozen_json(pkg, "profile.json")
     pol = contractmod.frozen_json(pkg, "policy.json")
     tc = leanbridge.resolve_toolchain((chdir / "lean-toolchain").read_text())
-    router = None
-    if agent is not None and getattr(agent, "routing_enabled", False):
+    enabled = getattr(agent, "proof_retention_enabled", False) if retain_proof_bodies is None else retain_proof_bodies
+    if type(enabled) is not bool:
+        raise UsageError("retain_proof_bodies must be a boolean")
+    def native_evaluate(source: str, timeout: float | None = None) -> dict:
+        if enabled:
+            return evaluate(tc, pol, source, retain_native=True, timeout_seconds=timeout)
+        return evaluate(tc, pol, source)
+    router, retention = None, None
+    if enabled or (agent is not None and getattr(agent, "routing_enabled", False)):
         job = {"kind": "contract", "challenge_sha256": canonical.digest(challenge.encode()),
                "statements_sha256": canonical.digest_json(statements),
                "profile_sha256": canonical.digest_json(profile), "policy_sha256": canonical.digest_json(pol),
                "formalization_sha256": canonical.digest_json(contractmod.frozen_json(pkg, "formalization.json")),
                "lean_toolchain": (chdir / "lean-toolchain").read_text()}
-        router = agent.configure_search(job, max_attempts)
+        if enabled:
+            retention = proof_retention.Search(pkg, job, challenge, tc.identity(), pol)
+            job = {**job, "proof_retention": retention.job}
+        if agent is not None and getattr(agent, "routing_enabled", False):
+            router = agent.configure_search(job, max_attempts)
     proofs = pkg.path("contract") / "proofs"
     proofs.mkdir(parents=True, exist_ok=True)
     log = proofs / "attempts.jsonl"
@@ -299,9 +321,12 @@ def run(
     best_src: str | None = None
     latest_src: str | None = None
     latest_result: dict[str, Any] | None = None
+    latest_raw: str | None = None
+    latest_native: dict | None = None
     previous_critique = None
     retained = agent_memory.latest_snapshot(pkg, stage_prefix="prove/attempt")
-    saved = canonical.loads(agent_memory.restore(pkg, retained)["payload.json"]) if retained else None
+    retained_artifacts = agent_memory.restore(pkg, retained) if retained else None
+    saved = canonical.loads(retained_artifacts["payload.json"]) if retained_artifacts else None
     agent_serial = saved.get("agent_attempt", 0) if saved else 0
     if saved and saved["challenge_hash"] != canonical.digest(challenge.encode()):
         raise UsageError("retained proof context does not match the frozen challenge",
@@ -314,8 +339,8 @@ def run(
                 seen_failures.add(canonical.digest_json({k: entry[k] for k in ("source_sha256", "errors", "sorries")}))
 
     def record(kind: str, src: str, res: dict[str, Any], proposal: str | None = None,
-               *, update_latest: bool = True, eligible_baseline: bool = True) -> None:
-        nonlocal best, best_src, latest_src, latest_result
+               *, update_latest: bool = True, eligible_baseline: bool = True, raw_response: str | None = None) -> None:
+        nonlocal best, best_src, latest_src, latest_result, latest_raw, latest_native
         entry = {"generator": kind, "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                  "source_sha256": canonical.digest(src.encode()), **{k: res[k] for k in ("ok", "sorries", "complete", "wall_ms")},
                  "errors": res["errors"]}
@@ -331,6 +356,12 @@ def run(
         fsutil.atomic_write(proofs / "proposals" / f"{entry['proposal_sha256'].split(':')[1][:16]}.lean", submitted.encode())
         if update_latest:
             latest_src, latest_result = submitted, dict(entry)
+            if enabled:
+                latest_native = res
+                native_bytes = canonical.dumps(res)
+                latest_result["native_result_ref"] = {"path": agent_memory.BASE + "/blobs/" + canonical.sha256_hex(native_bytes) + ".blob",
+                    "sha256": canonical.digest(native_bytes), "size": len(native_bytes)}
+                latest_raw = submitted if raw_response is None else raw_response
         events.emit("candidate_proposal", "prove", f"{kind}: ok={res['ok']} remaining sorries={res['sorries']}",
                     details={"generator": kind, "complete": res["complete"]})
         if eligible_baseline and _better(best, res):
@@ -338,35 +369,61 @@ def run(
         agent_memory.capture_context(pkg, "prove/attempt", {
             "challenge_hash": canonical.digest(challenge.encode()), "candidate": latest_src,
             "best": best_src, "result": latest_result, "recorded_evaluation": entry,
-            "critique": previous_critique, "agent_attempt": agent_serial}, extra_artifacts={
+            "critique": previous_critique, "agent_attempt": agent_serial,
+            **({"latest_raw_response": latest_raw, "proof_retention": retention.summary()} if enabled else {})}, extra_artifacts={
                 "proposal.lean": submitted.encode(), "Contract.lean": src.encode(),
                 "latest-proposal.lean": latest_src.encode(), "latest-diagnostics.json": canonical.dumps(latest_result),
                 "profile.json": canonical.dumps(profile), "statements.json": canonical.dumps(statements),
-                "diagnostics.json": canonical.dumps(res)})
+                "diagnostics.json": canonical.dumps(res),
+                **({"latest-raw-response.txt": latest_raw.encode()} if enabled and latest_raw is not None else {}),
+                **({"latest-native-diagnostics.json": canonical.dumps(latest_native)} if enabled and latest_native is not None else {})})
 
     if saved is not None:
         previous_critique = saved.get("critique")
+        if enabled:
+            latest_src, latest_result, latest_raw = saved["candidate"], saved["result"], saved.get("latest_raw_response")
+            if (("latest-native-diagnostics.json" in retained_artifacts)
+                    != ("native_result_ref" in latest_result)):
+                raise UsageError("retained proof native feedback reference/artifact presence differs",
+                    [Diagnostic("STALE_OR_UNBOUND_EVIDENCE", "proof native feedback is missing or unbound")])
+            if "latest-native-diagnostics.json" in retained_artifacts:
+                native_bytes = retained_artifacts["latest-native-diagnostics.json"]
+                expected_ref = {"path": agent_memory.BASE + "/blobs/" + canonical.sha256_hex(native_bytes) + ".blob",
+                    "sha256": canonical.digest(native_bytes), "size": len(native_bytes)}
+                if latest_result.get("native_result_ref") != expected_ref:
+                    raise UsageError("retained proof native feedback reference differs",
+                        [Diagnostic("STALE_OR_UNBOUND_EVIDENCE", "proof native feedback identity mismatch")])
+                latest_native = canonical.loads(native_bytes)
         if saved["best"] is not None:
             src = with_registry(saved["best"], challenge)
-            record("retained_best", src, evaluate(tc, pol, src))
-        if saved["candidate"] != saved["best"]:
+            record("retained_best", src, native_evaluate(src), update_latest=not enabled)
+        if not enabled and saved["candidate"] != saved["best"]:
             if saved["result"].get("protocol_rejected") is True:
                 record("retained_latest", saved["candidate"], saved["result"], saved["candidate"], eligible_baseline=False)
             else:
                 src = with_registry(saved["candidate"], challenge)
-                record("retained_latest", src, evaluate(tc, pol, src), saved["candidate"])
+                record("retained_latest", src, native_evaluate(src), saved["candidate"])
+
+    if (retention is not None and saved is not None and retention.promoted_source is not None
+            and retention.promoted_source != best_src):
+        # A promoted receipt is durable before the general attempt checkpoint.
+        # Restore that crash window only through a fresh whole-module build.
+        src = retention.promoted_source
+        record("retained_mechanical_baseline", src, native_evaluate(src), update_latest=False)
 
     if candidate is not None:
         submitted = Path(candidate).read_text()
         src = with_registry(submitted, challenge)
-        record("candidate_file", src, evaluate(tc, pol, src), submitted)
+        record("candidate_file", src, native_evaluate(src), submitted)
     if (best is None or not best["complete"]) and portfolio and (deadline is None or time.monotonic() < deadline):
         base = best_src if best_src is not None and best and best["ok"] else challenge
         if sorry_sites(base):
             src = apply_portfolio(base, statements, profile)
-            record("builtin_tactic_portfolio", src, evaluate(tc, pol, src), update_latest=latest_src is None)
+            record("builtin_tactic_portfolio", src, native_evaluate(src), update_latest=latest_src is None)
         elif best is None:
-            record("challenge_as_is", base, evaluate(tc, pol, base))
+            record("challenge_as_is", base, native_evaluate(base))
+    if enabled and (best is None or not best["ok"]) and (deadline is None or time.monotonic() < deadline):
+        record("retention_initial_baseline", challenge, native_evaluate(challenge), update_latest=latest_src is None)
     attempts = 0
     repeated = 0
     previous_route_phase = None
@@ -394,13 +451,20 @@ def run(
                 break
         try:
             eligible_baseline = True
+            prior_best, prior_best_src = best, best_src
+            # Only this run's native evaluation can focus the dispatch. Resume
+            # re-evaluates the retained baseline above; old metadata is not used.
+            focus = proof_focus.select(challenge, best_src or challenge, best,
+                tc.identity() if best and "native_diagnostics" in best else None, pol)
             proposal = agent({"challenge": challenge, "best": best_src or challenge,
+                              "proof_focus": focus,
                               "lean_toolchain": (chdir / "lean-toolchain").read_text().strip(),
                               "errors": (latest_result or {}).get("errors", []), "statements": statements, "attempt": agent_serial,
-                              "previous_candidate": latest_src, "previous_result": latest_result, "critique": previous_critique})
+                              "previous_candidate": latest_src, "previous_result": latest_result, "critique": previous_critique,
+                              **({"previous_raw_response": latest_raw, "mechanical_retention": retention.summary()} if enabled else {})})
             raw_response = getattr(agent, "last_raw_response", proposal)
             src = with_registry(proposal, challenge)
-            evaluated = evaluate(tc, pol, src)
+            evaluated = native_evaluate(src)
         except proof_fragments.FragmentError as exc:
             eligible_baseline = False
             proposal = exc.response
@@ -421,7 +485,16 @@ def run(
                                            "errors": evaluated["errors"], "sorries": evaluated["sorries"]})
         duplicate = not evaluated["complete"] and signature in seen_failures
         repeated = repeated + 1 if duplicate else 0
-        record("agent:prover", src, evaluated, proposal, eligible_baseline=eligible_baseline)
+        record("agent:prover", src, evaluated, proposal, eligible_baseline=eligible_baseline, raw_response=raw_response)
+        if (retention is not None and eligible_baseline and evaluated["ok"] is False
+                and prior_best is not None and prior_best["ok"] is True):
+            promoted = retention.attempt(baseline=prior_best_src, baseline_result=prior_best,
+                proposal=src, raw_response=raw_response, failed_result=evaluated,
+                selected=focus["names"] if focus and focus["basis"] == "native_sorry_positions" else None,
+                proposal_id=agent_serial, evaluate=native_evaluate, deadline=deadline)
+            if promoted is not None:
+                retained_source, retained_result = promoted
+                record("mechanical_proof_retention", retained_source, retained_result, update_latest=False)
         if not evaluated["complete"]:
             seen_failures.add(signature)
         critic_needed = duplicate
@@ -442,6 +515,8 @@ def run(
                       "budget_seconds": budget_seconds, "agent_attempts": attempts, "repeated_failures": repeated}
     if router is not None:
         result.summary["proof_routing"] = router.summary()
+    if retention is not None:
+        result.summary["proof_retention"] = retention.summary()
     if not best["ok"]:
         result.diagnostics.append(Diagnostic("CANDIDATE_BUILD_FAILURE", "best proof candidate does not elaborate: " + "; ".join(best["errors"][:3])))
     elif best["sorries"]:

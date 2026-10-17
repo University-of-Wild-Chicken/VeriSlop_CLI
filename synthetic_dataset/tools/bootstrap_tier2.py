@@ -1125,7 +1125,7 @@ def response_audit(cohort: Path, task: dict) -> dict:
             "model_identity_attested": False, "milestone_authority": False}
 
 
-def native_audit(pkg, report: dict, configuration: Path | None = None) -> dict:
+def native_audit(pkg, report: dict, configuration: Path | None = None, *, provider_context=None) -> dict:
     """Read-only validation of CURRENT registered native closure, not a rescore."""
     from verislop import schemas, view, review, lifecycle
     from verislop.backends import vscore3_closure
@@ -1223,7 +1223,9 @@ def native_audit(pkg, report: dict, configuration: Path | None = None) -> dict:
             stored = pkg.path("closure") / "review-config.json"
             if load(stored) != load(configuration):
                 raise ValueError("release configuration differs from the frozen cohort")
-            with _frozen_provider_context(configuration):
+            # New transport harnesses must authenticate their own frozen provider
+            # inputs; legacy cohorts retain their exact preregistration checks.
+            with (provider_context or _frozen_provider_context)(configuration):
                 gate = review.gate(pkg, stored)  # Read-only certificate/projection checks; no role call.
             published_gate = {**gate, "diagnostics": [d.to_json() for d in gate["diagnostics"]]}
             if (report.get("review", {}) != published_gate

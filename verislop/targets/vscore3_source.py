@@ -23,7 +23,7 @@ MAX_DECLARATIONS = 1024
 MAX_NODES = 65536
 FEATURES = ("base", "nominalData", "option", "list", "acyclicCalls", "listFold", "natFold", "int", "string", "pureList")
 BIN_OPS = old.BIN_OPS
-UNARY_OPS = ("int_neg", "nat_to_int", "int_to_nat", "list_length", "list_range", "list_reverse", "list_sort", "list_unique", "list_sum")
+UNARY_OPS = ("int_neg", "nat_to_int", "int_to_nat", "list_length", "list_range", "list_reverse", "list_sort", "list_unique", "list_sum", "string_length")
 parse_json = old.parse_json
 lean_string = old.lean_string
 lean_list = old.lean_list
@@ -62,6 +62,7 @@ _SHAPES = {**old._SHAPES,
     "int": ["tag", "value"], "string": ["tag", "value"],
     **{tag: ["tag", "value"] for tag in UNARY_OPS},
     "int_fdiv": ["left", "right", "tag"],
+    "string_append": ["left", "right", "tag"],
     "list_map": ["body", "tag", "value"], "list_filter": ["body", "tag", "value"],
     "list_get": ["index", "tag", "value"], "list_append": ["left", "right", "tag"],
     "record": ["fields", "record", "tag"], "project": ["field", "tag", "value"],
@@ -124,7 +125,7 @@ def decode_expr(j: Any, depth: int = 0) -> Any:
         return (tag, _codepoints(j["value"]))
     if tag in UNARY_OPS:
         return (tag, sub("value"))
-    if tag in ("int_fdiv", "list_append"):
+    if tag in ("int_fdiv", "list_append", "string_append"):
         return (tag, sub("left"), sub("right"))
     if tag in ("list_map", "list_filter"):
         return (tag, sub("value"), sub("body"))
@@ -363,6 +364,10 @@ def type_of(enums: dict, declarations: dict, helpers: dict, ctx: list, e: Any) -
         if any(infer(x) != expected for x in e[1:]):
             raise SourceError(f"{tag}: operands must have {expected} type")
         return "nat" if tag == "int_to_nat" else "int"
+    if tag in ("string_append", "string_length"):
+        if any(infer(x) != "string" for x in e[1:]):
+            raise SourceError(f"{tag}: operands must have String type")
+        return "nat" if tag == "string_length" else "string"
     if tag == "list_range":
         if infer(e[1]) != "nat":
             raise SourceError("list_range: bound must have Nat type")
@@ -584,7 +589,7 @@ def required_features(prog: dict) -> list[str]:
             tag = e[0]
             if tag == "int" or tag in ("int_fdiv", "int_neg", "nat_to_int", "int_to_nat"):
                 found.add("int")
-            if tag == "string":
+            if tag in ("string", "string_append", "string_length"):
                 found.add("string")
             if tag.startswith("list_") and tag not in ("list_fold",):
                 found.update(("list", "pureList"))
@@ -624,7 +629,7 @@ def expr_json(e: Any) -> dict:
         return {"tag": tag, "value": list(e[1])}
     if tag in UNARY_OPS:
         return {"tag": tag, "value": enc(e[1])}
-    if tag in ("int_fdiv", "list_append"):
+    if tag in ("int_fdiv", "list_append", "string_append"):
         return {"left": enc(e[1]), "right": enc(e[2]), "tag": tag}
     if tag in ("list_map", "list_filter"):
         return {"body": enc(e[2]), "tag": tag, "value": enc(e[1])}
@@ -704,10 +709,11 @@ def lean_expr(e: Any) -> str:
         return f"({prefix}int {value})"
     if tag == "string":
         return f"({prefix}string {lean_list([str(p) for p in e[1]])})"
-    if tag in (*UNARY_OPS, "int_fdiv", "list_get", "list_append", "list_map", "list_filter"):
+    if tag in (*UNARY_OPS, "int_fdiv", "list_get", "list_append", "list_map", "list_filter", "string_append"):
         ctor = {"int_fdiv": "intFdiv", "int_neg": "intNeg", "nat_to_int": "natToInt", "int_to_nat": "intToNat",
                 "list_length": "listLength", "list_range": "listRange", "list_reverse": "listReverse",
-                "list_sort": "listSort", "list_unique": "listUnique", "list_get": "listGet", "list_append": "listAppend", "list_map": "listMap", "list_filter": "listFilter", "list_sum": "listSum"}[tag]
+                "list_sort": "listSort", "list_unique": "listUnique", "list_get": "listGet", "list_append": "listAppend", "list_map": "listMap", "list_filter": "listFilter", "list_sum": "listSum",
+                "string_append": "stringAppend", "string_length": "stringLength"}[tag]
         return f"({prefix}{ctor} " + " ".join(enc(x) for x in e[1:]) + ")"
     if tag in ("var", "nat"):
         return f"({prefix}{tag} {e[1]})"

@@ -196,11 +196,13 @@ def decodeExpr : Nat → Json → Except String Expr
         let initial ← sub "initial"
         let step ← sub "step"
         return if tag == "list_fold" then .listFold source initial step else .natFold source initial step
-      else if tag == "int_fdiv" || tag == "list_append" then do
+      else if tag == "int_fdiv" || tag == "list_append" || tag == "string_append" then do
         if keys != ["left", "right", "tag"] then throw "binary primitive: unexpected or missing fields"
         let l ← sub "left"
         let r ← sub "right"
-        return if tag == "int_fdiv" then .intFdiv l r else .listAppend l r
+        if tag == "int_fdiv" then return .intFdiv l r
+        else if tag == "list_append" then return .listAppend l r
+        else return .stringAppend l r
       else if tag == "list_get" then do
         if keys != ["index", "tag", "value"] then throw "list_get: unexpected or missing fields"
         return .listGet (← sub "value") (← sub "index")
@@ -211,7 +213,8 @@ def decodeExpr : Nat → Json → Except String Expr
         return if tag == "list_map" then .listMap v body else .listFilter v body
       else if tag == "int_neg" || tag == "nat_to_int" || tag == "int_to_nat" ||
           tag == "list_length" || tag == "list_range" || tag == "list_reverse" ||
-          tag == "list_sort" || tag == "list_unique" || tag == "list_sum" then do
+          tag == "list_sort" || tag == "list_unique" || tag == "list_sum" ||
+          tag == "string_length" then do
         if keys != ["tag", "value"] then throw "unary primitive: unexpected or missing fields"
         let v ← sub "value"
         if tag == "int_neg" then return .intNeg v
@@ -222,7 +225,8 @@ def decodeExpr : Nat → Json → Except String Expr
         else if tag == "list_reverse" then return .listReverse v
         else if tag == "list_sort" then return .listSort v
         else if tag == "list_unique" then return .listUnique v
-        else return .listSum v
+        else if tag == "list_sum" then return .listSum v
+        else return .stringLength v
       else
         match decodeBinOp tag with
         | some op =>

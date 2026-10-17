@@ -1,0 +1,24 @@
+Implement the pure inventory reconciliation component for a stock movement ledger.
+Deliver a typed solve entry in program.vscore.json using vscore/0.3 and the
+data-pipeline/0.3 profile. This certifies the pure component under restricted-source
+semantics; database transactions, external storage and actual stock are outside
+this contract.
+
+Input is a list of movement records. Each movement has sku (Unicode string), delta
+(unbounded mathematical integer), and committed (Boolean). Ignore uncommitted
+movements completely. Return a list of records with fields sku and quantity.
+Include each SKU appearing in a committed movement exactly once, ordered by that
+SKU's first appearance among committed movements. Quantity is the sum of delta
+for all committed movements with that exact SKU. Preserve a zero or negative
+quantity in the output. Empty SKU strings are valid and compare exactly; do not
+trim or normalize them. Repeated movements contribute separately.
+
+The input list may be empty and has no artificial length or integer bounds. The
+entry is total and deterministic on typed inputs with no external I/O, no input
+mutation and no floating point.
+
+Public examples:
+[] returns [].
+[{sku:"B",delta:4,committed:false},{sku:"A",delta:2,committed:true},
+ {sku:"B",delta:-1,committed:true},{sku:"A",delta:-2,committed:true}]
+returns [{sku:"A",quantity:0},{sku:"B",quantity:-1}].

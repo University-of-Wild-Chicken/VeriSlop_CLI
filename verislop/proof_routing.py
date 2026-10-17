@@ -47,7 +47,7 @@ class Router:
                    "profiles": {p: broker.r.profiles[p] for p in providers},
                    "fallback_budget": fallback_budget,
                    "implementation": {name: canonical.digest((Path(__file__).resolve().parent / name).read_bytes())
-                       for name in ("proof_routing.py", "proof_fragments.py", "agents.py", "lean/VeriSlopProofSyntax.lean")}}
+                       for name in ("proof_routing.py", "proof_fragments.py", "proof_focus.py", "agents.py", "lean/VeriSlopProofSyntax.lean")}}
         self.binding_hash = canonical.digest_json(binding)
         self._feedback = None
         ref = agent_memory.latest_snapshot(pkg, stage_prefix=self.stage)

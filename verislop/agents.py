@@ -565,6 +565,11 @@ outside this frontend, but it has exactly the same strict proof and executable-D
 Use a declared enum for a field restricted to identifier-valued string choices; these sorts and their constructor
 string codecs are supported. Legacy typed /0.1 responses remain accepted but cannot declare enums. Raw Lean
 also admits nullary inductive enums. Distinguish a frontend limitation from a missing backend capability.
+Declaration names are not bare sorts: at EVERY type position, a declared record uses {{"record":"RecordName"}},
+never "RecordName". For example, a record-to-record signature has
+"args":[{{"record":"RecordName"}}],"result":{{"record":"RecordName"}}. The same rule applies to
+record fields, predicate arguments and quantified binder sorts. A term's record/field declaration-name string
+is a different syntactic position; retain the TERM grammar below.
 
 TERM grammar (objects have exactly the listed keys):
 - {{"tag":"var","index":0}}; {{"tag":"nat","value":"0"}}; {{"tag":"int","value":"-1"}};
@@ -942,6 +947,13 @@ registry byte-for-byte; return the complete file rather than a list of replaceme
 is supplied, use its exact diagnostics to repair its proofs. A successful incomplete baseline is not evidence that
 the previous proposal compiled. Do not discard the current Lean failures or alter a frozen statement to fix them."""
 
+FOCUSED_PROVER_SYSTEM = PROVER_SYSTEM.replace(
+    "Replace every `sorry` with a proof.",
+    "Replace only the selected unresolved proof bodies. Preserve every other proof body byte-for-byte, "
+    "including any existing unused `sorry` tactic alternatives; Lean has already elaborated those declarations without sorry warnings.").replace(
+    "Do not use `sorry`, `native_decide`,",
+    "Do not introduce `sorry` in selected proof bodies. Do not introduce `native_decide`,")
+
 
 def assemble_proof_response(response: str) -> str:
     """Deterministically preserve the supported JSON/fenced/legacy proof envelope."""
@@ -974,7 +986,8 @@ Return the theorem commands themselves, not JSON or a complete file. A single le
 
 def _proof_completion(broker, conf: dict, pkg: Package, events: EventSink, fallback: str,
                       instance: str, system: str, user: str, purpose: str, frozen: str,
-                      previous: str | None, decoder, router=None, *, toolchain_pin=None) -> tuple[str, str]:
+                      previous: str | None, decoder, router=None, *, toolchain_pin=None,
+                      proof_data: dict | None = None, selected_names: list[str] | None = None) -> tuple[str, str]:
     """Dispatch one proposal, with explicit optional-service escalation and exact assembly."""
     from . import proof_fragments, proof_routing
     if toolchain_pin is None:
@@ -987,19 +1000,41 @@ def _proof_completion(broker, conf: dict, pkg: Package, events: EventSink, fallb
             routed_instance += f"/{allocation['phase']}/{allocation['ordinal']}"
         mode = proof_routing.response_format(conf, selected)
         call_system, call_user = system, user
-        if router is not None and router.feedback() is not None:
+        if selected_names is not None and mode == "complete_file" and system == PROVER_SYSTEM:
+            call_system = FOCUSED_PROVER_SYSTEM
+        if proof_data is not None:
+            from . import proof_focus, agent_memory
+            context = {**proof_data, "retained_rejection": router.feedback() if router is not None else None}
+            projection = proof_focus.project_context(context)
+            agent_memory.capture_context(pkg, "proof-context/projection", projection)
+            call_user = proof_focus.render_context(projection)
+        elif router is not None and router.feedback() is not None:
             call_user += "\nEXACT RETAINED PROOF REJECTION (untrusted source/response with actual checker diagnostics; bound to this frozen job):\n"
             call_user += json.dumps(router.feedback(), ensure_ascii=False)
             call_user += "\nRepair the proof body using these concrete errors. The frozen statements, definitions, imports, program and relation must not change.\n"
         if mode == "theorem_fragment":
             call_system = FRAGMENT_PROVER_SYSTEM
+            if purpose == "prove-vscore" and system == VSCORE3_PROVER_SYSTEM:
+                # Preserve task-neutral bridge guidance when changing only the
+                # response protocol. The complete-module output instruction is
+                # intentionally excluded: fragments remain the sole envelope.
+                guidance, separator, _ = system.partition("Return ONLY the complete proof module")
+                if not separator:
+                    raise ValueError("VSCore proof guidance has no registered output boundary")
+                call_user += "\nVSCORE PROOF ENVIRONMENT GUIDANCE (the theorem-fragment response protocol above still applies):\n" + guidance
             call_user += "\nEXACT FROZEN THEOREM HEADERS (copy all header tokens; supply only proof bodies):\n"
             try:
-                call_user += "\n".join(proof_fragments.expected_headers(frozen))
+                call_user += "\n".join(proof_fragments.expected_headers(frozen, selected_names))
             except proof_fragments.FragmentError as exc:
                 if router is not None:
                     router.context_rejected(str(exc))
                 raise
+        if selected_names is not None:
+            call_user += ("\nFOCUSED PROOF DISPATCH: replace only these unresolved theorem bodies: "
+                          + json.dumps(selected_names, ensure_ascii=False)
+                          + ". Preserve every other proof body byte-for-byte from CURRENT FILE. "
+                          "A fragment may submit any nonempty subset of the selected theorems. "
+                          "A complete-file response must contain the whole CURRENT FILE with only selected proof bodies changed.\n")
         try:
             call_purpose = "prove-vscore" if mode == "theorem_fragment" and purpose == "generate" else purpose
             comp = recorded_call(broker, pkg, selected, routed_instance, call_system, call_user, call_purpose)
@@ -1018,7 +1053,10 @@ def _proof_completion(broker, conf: dict, pkg: Package, events: EventSink, fallb
                         proof_fragments.validate_previous(previous, frozen, toolchain_pin)
                     except proof_fragments.FragmentError as exc:
                         baseline, rejected_previous = frozen, str(exc)
-                assembled = proof_fragments.assemble(comp.text, frozen, baseline, toolchain_pin=toolchain_pin)
+                if selected_names is not None and rejected_previous is not None:
+                    raise proof_fragments.FragmentError("focused baseline no longer preserves the frozen scaffold", comp.text)
+                assembled = proof_fragments.assemble(comp.text, frozen, baseline, toolchain_pin=toolchain_pin,
+                                                      selected_names=selected_names)
                 from . import agent_memory
                 agent_memory.capture_context(pkg, "proof-fragment/assembly", {
                     "agent": selected, "instance": routed_instance,
@@ -1030,7 +1068,14 @@ def _proof_completion(broker, conf: dict, pkg: Package, events: EventSink, fallb
                     "response_sha256": canonical.digest(comp.text.encode()),
                     "assembled_sha256": canonical.digest(assembled.encode())})
                 return assembled, comp.text
-            return decoder(comp.text), comp.text
+            decoded = decoder(comp.text)
+            if selected_names is not None:
+                try:
+                    proof_fragments.validate_focused_candidate(decoded, frozen, previous, selected_names, toolchain_pin)
+                except proof_fragments.FragmentError as exc:
+                    exc.response = comp.text
+                    raise
+            return decoded, comp.text
         except (BlockedError, InfrastructureError, UsageError) as exc:
             if router is not None:
                 router.failure(exc)
@@ -1049,25 +1094,28 @@ def prover_agent(config: str | Path, pkg: Package, events: EventSink) -> Callabl
         return router
 
     def run(ctx: dict[str, Any]) -> str:
-        user = "CURRENT FILE:\n```lean\n" + ctx["best"] + "\n```\n"
-        if ctx.get("previous_candidate") is not None:
-            user += "\nPREVIOUS PROOF ATTEMPT (exact untrusted submitted source; repair proofs without changing the frozen contract):\n" + json.dumps(
-                {"lean_source": ctx["previous_candidate"], "result": ctx.get("previous_result")}, ensure_ascii=False, indent=1)
-            user += "\nThe CURRENT FILE is the best baseline; the PREVIOUS PROOF ATTEMPT is the latest evaluated proposal. Its failures must be addressed even if the baseline elaborates with unresolved sorry proofs.\n"
-        if ctx["errors"]:
-            user += "LEAN ERRORS (latest attempt, not merely the best baseline):\n" + "\n".join(ctx["errors"]) + "\n"
-        if ctx.get("critique"):
-            user += "\nAUTONOMOUS PROOF CRITIQUE (untrusted correction advice; frozen statements cannot change):\n" + json.dumps(
-                {"status": ctx["critique"]["status"], "feedback": ctx["critique"].get("feedback", [])}, ensure_ascii=False)
+        from . import proof_focus
+        selected_names = proof_focus.focused_names(ctx.get("proof_focus"), ctx.get("challenge", ctx["best"]), ctx["best"])
+        data = {"current_file": ctx["best"], "previous_attempt": (
+                {"lean_source": ctx["previous_candidate"], "result": ctx.get("previous_result")}
+                if ctx.get("previous_candidate") is not None else None),
+                "errors": ctx["errors"], "critique": (
+                    {"status": ctx["critique"]["status"], "feedback": ctx["critique"].get("feedback", [])}
+                    if ctx.get("critique") else None), "focus": ctx.get("proof_focus")}
+        if "mechanical_retention" in ctx:
+            data["mechanical_retention"] = ctx["mechanical_retention"]
+            if data["previous_attempt"] is not None:
+                data["previous_attempt"]["raw_response"] = ctx.get("previous_raw_response")
         source, raw_response = _proof_completion(broker, conf, pkg, events, agent, f"prover/{ctx['attempt']}",
-                                      PROVER_SYSTEM, user, "prove", ctx.get("challenge", ctx["best"]),
+                                      PROVER_SYSTEM, "", "prove", ctx.get("challenge", ctx["best"]),
                                       ctx["best"], assemble_proof_response, router,
-                                      toolchain_pin=ctx.get("lean_toolchain"))
+                                      toolchain_pin=ctx.get("lean_toolchain"), proof_data=data, selected_names=selected_names)
         run.last_raw_response = raw_response
         return source
 
     run.configure_search = configure_search
     run.routing_enabled = conf.get("proof_routing", {}).get("enabled") is True
+    run.proof_retention_enabled = conf.get("agents", {}).get(agent, {}).get("proof_retention", False)
     return run
 
 
@@ -1283,6 +1331,10 @@ def implementer_agent(config: str | Path, pkg: Package, events: EventSink, *, at
     agent = _role(conf, "implementer")
 
     def run(ctx: dict[str, Any]) -> tuple[dict[str, bytes], dict]:
+        if (conf.get("agents", {}).get(agent, {}).get("vscore_authoring_format") == "surface"
+                and ctx["parameters"].get("target") != "vscore"):
+            raise UsageError("surface authoring requires VSCore 0.3", [Diagnostic(
+                "UNSUPPORTED_CAPABILITY", "surface authoring is supported only for the registered VSCore 0.3 implementation role")])
         if ctx["parameters"].get("target") == "vscore":
             return _vscore_implementation(broker, conf, pkg, events, ctx, attempts, proof_attempts)
         statements = _accepted_implementation_formulas(pkg, ctx)
@@ -1374,6 +1426,8 @@ The helper relation has exactly schema_version="0.3", format="verislop.vscore-re
 template="vscore.reference_refinement/0.3", source_slot="vscore-source", proof_slot="vscore-proof",
 and bindings=[{{"symbol": <accepted symbol>, "entry": <program entry>}}, ...]. Use these literal slot IDs;
 slots are not filenames or theorem names. Sort bindings by unique symbol and use unique entries.
+For binding.symbol, use the keys in the existing accepted_profile.symbols table; each lean_decl is the exact
+accepted native name. Only exact unambiguous lean_decl spellings may be normalized to those canonical IDs.
 Do not reinterpret retained Python delivery requirements or weaken the accepted contract.
 Return ONLY a JSON object with exactly:
 {{"program": <source program object>, "relation": <relation descriptor object>, "proof_source": <optional Lean proof text>}}
@@ -1415,6 +1469,20 @@ For closed decidable witness preconditions, decide +kernel is available. Broad c
 Return ONLY the complete proof module in one ```lean code block. A failed attempt receives bounded checker
 diagnostics with a compact entry for every reported error and a bound full-error artifact reference;
 no response assigns an evidence outcome or lifecycle state."""
+
+
+VSCORE3_SURFACE_IMPLEMENTER_SYSTEM = VSCORE3_IMPLEMENTER_SYSTEM.replace(
+    "Use only the supplied canonical source grammar:", "Use only the supplied complete EBNF surface grammar:").replace(
+    "String literals are arrays of Unicode scalar codepoints; signed Int literals are canonical decimal strings.",
+    "Surface text is ASCII: string(codepoints) encodes Unicode scalars; int(n) constructs signed Int literals.").replace(
+    '{"program": <source program object>, "relation": <relation descriptor object>, "proof_source": <optional Lean proof text>}',
+    '{"program_source": <complete surface source string>, "relation": <relation descriptor object>, "proof_source": <optional Lean proof text>}').replace(
+    "The supervisor encodes canonical source/relation bytes and derives the Lean goal.",
+    "The supervisor compiles program_source using the registered surface parser and exact accepted enums, "
+    "then checks its canonical program.vscore.json and derives the Lean goal. "
+    "Do not include a program field or mix response formats. Surface text is retained as authoring input, "
+    "not certified; the host surface compiler is a trusted translation. "
+    "All accepted type IDs, constructor identities and field order remain exact.")
 
 
 def _vscore_components(parameters: dict[str, Any]) -> dict[str, Any]:
@@ -1520,8 +1588,26 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
         raise UsageError("VSCore search budgets require 1..10 source attempts and 0..10 proof attempts")
     fixed = _vscore_context(pkg, ctx)
     implementer = _role(conf, "implementer")
+    authoring_format = conf.get("agents", {}).get(implementer, {}).get("vscore_authoring_format", "canonical_json")
+    if authoring_format not in ("canonical_json", "surface"):
+        raise UsageError("invalid VSCore authoring format", [Diagnostic(
+            "CONFIGURATION_INVALID", "vscore_authoring_format must be canonical_json or surface")])
+    if authoring_format == "surface" and fixed["parameters"].get("backend_version") != "0.3":
+        raise UsageError("surface authoring requires VSCore 0.3", [Diagnostic(
+            "UNSUPPORTED_CAPABILITY", "surface authoring is supported only for the registered VSCore 0.3 implementation role")])
+    relation_authority = None
+    if fixed["parameters"].get("backend_version") == "0.3":
+        from . import relation_authoring
+        relation_authority = relation_authoring.prepare(pkg, fixed)
+    authoring_fixed = fixed
+    if authoring_format == "surface":
+        from . import surface_context
+        authoring_fixed = surface_context.project_fixed_context(pkg, fixed)
+        enums = surface_context.accepted_enums(fixed)
     prover = conf["roles"].get("prover")
     feedback: dict = {}
+    previous_response: str | None = None
+    previous_diagnostic_record: dict | None = None
     fallback: dict[str, bytes] | None = None
     root = pkg.root / "agents" / "vscore-attempts"
     root.mkdir(parents=True, exist_ok=True)
@@ -1536,12 +1622,16 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
     def diagnostics(stage: Path, label: str, exc: Exception, source: bytes | None,
                     relation: bytes | None, proof: bytes | None = None,
                     response_path: Path | None = None) -> dict:
+        nonlocal previous_diagnostic_record
         record = _vscore_failure_record(exc, source, relation, proof)
+        if getattr(exc, "relation_input_kind", None) is not None:
+            record["relation_input_kind"] = exc.relation_input_kind
         response_path = response_path or stage / "response.txt"
         record["response_artifact"] = {"path": str(response_path.relative_to(pkg.root)),
                                        "sha256": canonical.digest(response_path.read_bytes())}
         path = stage / f"diagnostics/{label}.json"
         fsutil.write_json(path, record, once=True)
+        previous_diagnostic_record = record
         return _vscore_failure_feedback(record, str(path.relative_to(pkg.root)))
 
     selected_readable = None
@@ -1580,25 +1670,63 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
         selected_readable,selected_diagnostics = None,{}
         number = first + offset
         stage = root / f"source-{number}"
-        user = "FIXED ACCEPTED CONTRACT AND TARGET (data):\n" + json.dumps(fixed, ensure_ascii=False)
-        if feedback:
-            user += "\nCHECKER ERROR INVENTORY FROM THE PREVIOUS ATTEMPT (excerpts; full artifact referenced):\n" + json.dumps(feedback, ensure_ascii=False)
-        comp = recorded_call(broker, pkg, implementer, f"implementer/vscore/{number}", components["implementer_system"], user, "generate")
+        implementer_system = (VSCORE3_SURFACE_IMPLEMENTER_SYSTEM if authoring_format == "surface"
+                              else components["implementer_system"])
+        if fixed["parameters"].get("backend_version") == "0.3":
+            from . import exact_context, agent_memory
+            context = {"fixed_context": authoring_fixed, "previous_response": previous_response,
+                       "previous_diagnostics": feedback, "previous_diagnostic_record": previous_diagnostic_record}
+            projected = exact_context.project_context(context)
+            user = exact_context.render_context(projected)
+            if previous_response is not None:
+                implementer_system += ("\nSOURCE CORRECTION: previous_response is the exact untrusted rejected proposal. "
+                                       "Correct it using previous_diagnostics and the complete previous_diagnostic_record "
+                                       "while preserving the entire fixed_context contract.\n")
+            agent_memory.checkpoint(pkg, f"implementer/vscore/context/{number}",
+                {"context.json": canonical.dumps(context)}, metadata={"encoding": exact_context.FORMAT,
+                    "prompt_sha256": canonical.digest(user.encode())})
+        else:
+            user = "FIXED ACCEPTED CONTRACT AND TARGET (data):\n" + json.dumps(fixed, ensure_ascii=False)
+            if feedback:
+                user += "\nCHECKER ERROR INVENTORY FROM THE PREVIOUS ATTEMPT (excerpts; full artifact referenced):\n" + json.dumps(feedback, ensure_ascii=False)
+        comp = recorded_call(broker, pkg, implementer, f"implementer/vscore/{number}", implementer_system, user, "generate")
+        previous_response = comp.text
         events.emit("candidate_proposal", "generate", f"VSCore source proposal (attempt {number})")
         fsutil.write_once(stage / "response.txt", comp.text.encode("utf-8"))
         source, relation = None, None
         try:
             proposed = extract_json(comp.text)
-            if not isinstance(proposed, dict) or not {"program", "relation"} <= set(proposed) or set(proposed) - {"program", "relation", "proof_source"}:
-                raise ValueError("VSCore proposal must contain only program, relation and optional proof_source")
-            if not isinstance(proposed["program"], dict) or not isinstance(proposed["relation"], dict):
-                raise ValueError("program and relation must be JSON objects")
-            source, relation = canonical.dumps(proposed["program"]), canonical.dumps(proposed["relation"])
-            retain(stage, {"program.vscore.json": source, "relation.json": relation})
-            issues = schemas.validate(components["source_schema"], proposed["program"])
+            if relation_authority is not None and isinstance(proposed, dict) and "relation" in proposed:
+                retain(stage, {"relation.raw.json": canonical.dumps(proposed["relation"])})
+            if relation_authority is not None and isinstance(proposed, dict) and isinstance(proposed.get("proof_source"), str):
+                retain(stage, {"proofs/initial.lean": proposed["proof_source"].encode("utf-8")})
+            program_field = "program_source" if authoring_format == "surface" else "program"
+            if authoring_format == "surface" and isinstance(proposed, dict) and isinstance(proposed.get("program_source"), str):
+                retain(stage, {"program.vsc": proposed["program_source"].encode("utf-8")})
+            if (not isinstance(proposed, dict) or not {program_field, "relation"} <= set(proposed)
+                    or set(proposed) - {program_field, "relation", "proof_source"}):
+                raise ValueError(f"VSCore {authoring_format} proposal must contain only {program_field}, relation and optional proof_source")
+            if not isinstance(proposed["relation"], dict):
+                raise ValueError("relation must be a JSON object")
+            if authoring_format == "surface":
+                if not isinstance(proposed["program_source"], str):
+                    raise ValueError("program_source must be UTF-8 surface text")
+                source = components["source"].compile_surface(proposed["program_source"], enums)
+                program = canonical.loads(source)
+            else:
+                if not isinstance(proposed["program"], dict):
+                    raise ValueError("program must be a JSON object")
+                program = proposed["program"]
+                source = canonical.dumps(program)
+            relation = canonical.dumps(proposed["relation"])
+            retain(stage, {"program.vscore.json": source,
+                **({"relation.json": relation} if relation_authority is None else {})})
+            issues = schemas.validate(components["source_schema"], program)
             if issues:
                 raise vscore_checker.EdgeFailure([Diagnostic("INVALID_CANDIDATE",
                     f"{components['source_schema']}: {issue}") for issue in issues])
+            if relation_authority is not None:
+                relation = relation_authoring.normalize_attempt(pkg, stage, relation_authority, comp.text.encode("utf-8"), relation)
             vscore_target.load_relation(relation)
             if "proof_source" in proposed and not isinstance(proposed["proof_source"], str):
                 raise ValueError("proof_source must be Lean text")
@@ -1627,7 +1755,7 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
             except (ValueError, vscore_checker.EdgeFailure) as exc:
                 proof_feedback = diagnostics(stage, "initial-proof", exc, source, relation, proof)
         prover_context = {"parameters": fixed["parameters"], "source_hash": canonical.digest(source),
-                          "source": proposed["program"], "relation": proposed["relation"],
+                          "source": program, "relation": canonical.loads(relation),
                           "generated_goal": spec.text, "accepted_reference": fixed["accepted_reference"],
                           "accepted_packages": fixed["accepted_packages"], "accepted_profile": fixed["accepted_profile"],
                           "lean_toolchain": fixed["lean_toolchain"],
@@ -1639,12 +1767,17 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
             prover_context["readable_source_view"] = info.get("readable_source_view")
         prover_context["relation_hash"] = canonical.digest(relation)
         prover_context["goal_hash"] = canonical.digest(spec.text.encode())
+        # Bind the immutable proof job to the complete build library, even when
+        # the role prompt uses the fixed compact proof-facing projection.
+        library_hash = canonical.digest_json(prover_context["verifier_library"])
+        from .proof_context import project_vscore_prompt
+        prover_context = project_vscore_prompt(pkg, prover_context)
         from . import proof_fragments, proof_routing
         router = proof_routing.create(broker, conf, pkg, events, {
             "kind": "vscore", "source_sha256": canonical.digest(source),
             "relation_sha256": canonical.digest(relation), "goal_sha256": canonical.digest(spec.text.encode()),
             "fixed_context_sha256": canonical.digest_json(fixed),
-            "verifier_library_sha256": canonical.digest_json(prover_context["verifier_library"]),
+            "verifier_library_sha256": library_hash,
             "proof_template_sha256": canonical.digest(proof_template.encode())}, proof_attempts) if prover else None
         proposal_limit = router.proposal_limit if router is not None else proof_attempts
         for proof_number in range(1, proposal_limit + 1 if prover else 1):
@@ -1658,7 +1791,7 @@ def _vscore_implementation(broker, conf: dict, pkg: Package, events: EventSink, 
             response_path = stage / f"responses/proof-{proof_number}.txt"
             try:
                 proposed_proof, raw_response = _proof_completion(broker, conf, pkg, events, prover,
-                    f"prover/vscore/{number}/{proof_number}", components["prover_system"], user, "generate",
+                    f"prover/vscore/{number}/{proof_number}", components["prover_system"], user, "prove-vscore",
                     proof_template, proof.decode("utf-8"), _proof_text, router,
                     toolchain_pin=fixed["lean_toolchain"])
             except proof_fragments.FragmentError as exc:

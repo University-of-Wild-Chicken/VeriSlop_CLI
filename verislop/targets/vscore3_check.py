@@ -100,7 +100,8 @@ class Reify(base._Reify):
                                  ("list_reverse", "listReverse", 1), ("list_sort", "listSort", 1),
                                  ("list_unique", "listUnique", 1), ("list_get", "listGet", 2),
                                  ("list_append", "listAppend", 2), ("list_map", "listMap", 2),
-                                 ("list_filter", "listFilter", 2), ("list_sum", "listSum", 1)):
+                                 ("list_filter", "listFilter", 2), ("list_sum", "listSum", 1),
+                                 ("string_append", "stringAppend", 2), ("string_length", "stringLength", 1)):
             if (a := self.head(e, env, "VSCore3.Expr." + ctor, arity)) is not None:
                 return (tag, *(self.expr(v) for v in a))
         for tag in ("var", "nat", "bool"):

@@ -50,6 +50,24 @@ class HybridTest(unittest.TestCase):
         self.assertIn("--require-tests", argv)
         self.assertFalse(any("candidate" in item for item in argv))
 
+    def test_tier2_project_invocation_keeps_strict_restricted_source_boundary(self):
+        argv = hybrid.cli_argv(self.out, hybrid.PROJECT_TASKS[0], {"trial_mode": "tier2-project"})
+        for key, value in (("--tier", "2"), ("--target", "vscore"), ("--backend-version", "0.3"),
+                           ("--endpoint", "restricted_source"), ("--require-state", "END_TO_END_VERIFIED"),
+                           ("--budget-seconds", "0"), ("--policy", "strict")):
+            self.assertEqual(value, argv[argv.index(key) + 1])
+        self.assertIn("--no-tests", argv)
+        self.assertNotIn("--require-tests", argv)
+        self.assertFalse(any("candidate" in item for item in argv))
+        with self.assertRaisesRegex(ValueError, "task is outside"):
+            hybrid.cli_argv(self.out, self.task, {"trial_mode": "tier2-project"})
+
+    def test_partial_run_never_resets_logical_budgets(self):
+        hybrid.once(self.out / "run-started.json", {"interrupted": True})
+        with self.assertRaises(FileExistsError), patch.object(hybrid.cli, "main") as run:
+            hybrid.run(self.out)
+        run.assert_not_called()
+
     def test_local_calls_delegate_exact_prompts_and_keep_usage(self):
         transport, broker = self.transport(), self.broker()
         completion = self.completion()
@@ -134,7 +152,7 @@ class HybridTest(unittest.TestCase):
         original.assert_not_called()
         transport.mailbox.call.assert_called_once_with(broker, "sol", "proof/1", "S", "U", "prove")
         self.assertEqual(0, transport.native_used)
-        for agent, purpose in (("sol", "review"), ("sol", "critic"), ("undeclared-sol", "prove")):
+        for agent, purpose in (("sol", "review"), ("sol", "critic"), ("sol", "generate"), ("undeclared-sol", "prove")):
             with self.subTest(agent=agent, purpose=purpose), self.assertRaisesRegex(InfrastructureError, "declared fallback route"):
                 transport.call(original, broker, agent, "review/1", "S", "U", purpose)
         self.assertEqual(1, transport.mailbox.call.call_count)
@@ -263,6 +281,54 @@ class HybridFreezeTest(unittest.TestCase):
         self.conf["proof_routing"]["initial_agent"] = "qwen-proof-refiner"
         with self.assertRaisesRegex(ValueError, "Pythagoras 3"):
             hybrid.validate_configuration(self.conf, self.profiles, "pythagoras")
+
+    def test_tier2_mode_requires_exact_tier_and_endpoint(self):
+        with self.assertRaisesRegex(ValueError, "Tier 2 restricted_source"):
+            hybrid.validate_configuration(self.conf, self.profiles, "pythagoras", trial_mode="tier2-project")
+        self.conf.update(bridge_tier=2, endpoint="restricted_source")
+        hybrid.validate_configuration(self.conf, self.profiles, "pythagoras", trial_mode="tier2-project")
+        with self.assertRaisesRegex(ValueError, "Tier 0 test_campaign"):
+            hybrid.validate_configuration(self.conf, self.profiles, "pythagoras")
+
+    def test_tier2_prepare_freezes_project_spec_and_grammar_and_excludes_python_checker(self):
+        self.conf.update(bridge_tier=2, endpoint="restricted_source")
+        self.config.write_bytes(canonical.dumps(self.conf))
+        out = self.root / "trial"
+        def fake_tokenizer(args, directory):
+            hybrid.once(directory / "prompt-tokenizer-freeze.json", {"test": True})
+            return object(), {}
+        with patch.object(hybrid, "load_prompt_tokenizer", side_effect=fake_tokenizer):
+            protocol = hybrid.prepare(out, self.config, self.profile, self.root, trial_mode="tier2-project")
+        self.assertEqual([hybrid.PROJECT_TASKS[0]], protocol["tasks"])
+        self.assertEqual("END_TO_END_VERIFIED", protocol["required_state"])
+        self.assertEqual("0.3", protocol["backend_version"])
+        self.assertIn("docs/bootstrap-local-projects.md", protocol["source_hashes"])
+        self.assertTrue(any(path.startswith("grammar/") for path in protocol["source_hashes"]))
+        prompt = f"examples/project-bootstrap/{hybrid.PROJECT_TASKS[0]}.txt"
+        self.assertIn(prompt, protocol["source_hashes"])
+        self.assertEqual((hybrid.ROOT / prompt).read_bytes(), (out / "prompts" / f"{hybrid.PROJECT_TASKS[0]}.txt").read_bytes())
+        self.assertEqual(protocol, hybrid.verify_inputs(out))
+        for kwargs in ({"tasks": [hybrid.TASKS[0]]}, {"independent_check": True}):
+            with self.subTest(kwargs=kwargs), self.assertRaises(ValueError):
+                hybrid.prepare(self.root / "invalid", self.config, self.profile, self.root,
+                               trial_mode="tier2-project", **kwargs)
+        with self.assertRaises(ValueError):
+            hybrid.prepare(self.root / "invalid", self.config, self.profile, self.root, trial_mode="tier9")
+
+    def test_modified_project_prompt_blocks_frozen_trial(self):
+        self.conf.update(bridge_tier=2, endpoint="restricted_source")
+        self.config.write_bytes(canonical.dumps(self.conf))
+        out = self.root / "trial"
+        def fake_tokenizer(args, directory):
+            hybrid.once(directory / "prompt-tokenizer-freeze.json", {"test": True})
+            return object(), {}
+        with patch.object(hybrid, "load_prompt_tokenizer", side_effect=fake_tokenizer):
+            hybrid.prepare(out, self.config, self.profile, self.root, trial_mode="tier2-project")
+        prompt = out / "prompts" / f"{hybrid.PROJECT_TASKS[0]}.txt"
+        prompt.chmod(0o600)
+        prompt.write_text("weaker prompt")
+        with self.assertRaisesRegex(ValueError, "trial input changed"):
+            hybrid.verify_inputs(out)
 
     def test_declared_critic_route_requires_sol_but_never_changes_review_membership(self):
         self.conf["agents"]["sol-critic"] = {**self.conf["agents"]["sol-prover"], "tool_profile": "review_readonly"}

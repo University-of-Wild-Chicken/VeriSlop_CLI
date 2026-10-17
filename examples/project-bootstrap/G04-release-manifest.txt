@@ -1,0 +1,44 @@
+Build the pure planning component for a release-artifact publisher. Deliver
+program.vscore.json using VSCore 0.3, profile data-pipeline/0.3, with a typed
+entry named solve. This component computes a manifest; it does not publish files
+or allocate storage.
+
+Input is a record with prefix:String and assets:List(Asset). Each Asset has
+path:String, bytes:Nat and enabled:Bool. Strings are arbitrary finite sequences
+of Unicode scalar values. Asset byte sizes are arbitrary mathematical natural
+numbers. The asset list may be empty, and duplicate assets are valid inputs.
+
+Return a record with items:List(PlannedAsset), total_bytes:Nat and item_count:Nat.
+Each PlannedAsset has destination:String, bytes:Nat and destination_length:Nat.
+
+Include exactly those input assets whose enabled flag is true and whose path is
+nonempty. Their output items must follow the input order and retain duplicates.
+For each included asset, destination is the exact input prefix followed by its
+exact path. Insert no separator, remove no characters, and perform no trimming,
+case conversion or Unicode normalization. Copy its bytes value unchanged.
+destination_length is the number of Unicode scalar values in destination,
+including any NUL or combining characters; it is not the UTF-8 byte length or
+the number of displayed grapheme clusters.
+
+total_bytes is the exact sum of bytes over included assets, counting duplicate
+occurrences separately. item_count is the exact number of output items. If no
+asset is included, items is empty and both totals are zero. An empty prefix is
+valid. There is no input-size cap or additional precondition.
+
+The implementation must be total, deterministic and pure under the restricted
+VSCore source semantics. Input values remain unchanged. No external I/O, floating
+point arithmetic or machine-width integer overflow is part of this component.
+Actual filesystem operations, path validation and network publishing are outside
+this request.
+
+Public examples:
+
+Input:
+{"prefix":"pkg/","assets":[{"path":"λ","bytes":3,"enabled":true},{"path":"","bytes":99,"enabled":true},{"path":"skip","bytes":8,"enabled":false},{"path":"λ","bytes":3,"enabled":true}]}
+Output:
+{"items":[{"destination":"pkg/λ","bytes":3,"destination_length":5},{"destination":"pkg/λ","bytes":3,"destination_length":5}],"total_bytes":6,"item_count":2}
+
+Input:
+{"prefix":"","assets":[]}
+Output:
+{"items":[],"total_bytes":0,"item_count":0}
