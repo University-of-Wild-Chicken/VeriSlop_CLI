@@ -347,6 +347,32 @@ for eligibility and evidence boundaries.
 
 ## Tests
 
+GitHub Actions runs a credential-free Python regression gate on pushes and pull
+requests using Ubuntu 24.04 and Python 3.10 / 3.12. From the repository root,
+reproduce the exact selection with either interpreter (no pip install required):
+
+```bash
+PYTHONPATH=tests python3.10 -m unittest -v test_broker_budget test_agent_effects test_budget_patch_audit
+PYTHONPATH=tests python3.12 -m unittest -v test_broker_budget test_agent_effects test_budget_patch_audit
+```
+
+The explicit allowlist covers shared token reservations, concurrent admission and
+settlement, Agent Effect DSL permissions/identity/composition/budgets, and mocked
+provider/effect-checker integration. These modules use only the standard library,
+local temporary files and controlled mocks; Ollama protocol checks mock transport
+and require no running model. Threaded tests use bounded event/barrier waits.
+No selected tests are conditionally skipped.
+
+This initial gate excludes every other test module, including
+`test_local_hybrid_tier2.py` (project identity and terminal-gate fixture integration,
+left outside this small broker/effect gate) and the Lean/source-pipeline, sandbox,
+live-provider and archived experimental campaigns. It does not install Lean,
+invoke privileged containment, read archived run evidence or configure models.
+Passing this gate is Python regression evidence only; it establishes neither
+formal verification nor end-to-end assurance. Historical evidence is unchanged.
+
+The full suite has the Lean and Linux sandbox prerequisites listed above:
+
 ```bash
 python3 -m unittest discover -s tests -v     # uses the real Lean toolchain and clean builds
 ```
