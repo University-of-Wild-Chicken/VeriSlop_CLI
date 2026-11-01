@@ -639,6 +639,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--version", action="version", version=f"verislop {__version__}")
     sub = p.add_subparsers(dest="command", required=True, parser_class=_Parser)
 
+    s = sub.add_parser("ui", help="open the local web workbench for launching and inspecting runs")
+    s.add_argument("--workspace", default=".", help="workspace root (default: current directory)")
+    s.add_argument("--runs-dir", help="run directory inside the workspace")
+    s.add_argument("--host", default="127.0.0.1", help="loopback address only")
+    s.add_argument("--port", type=int, default=8765)
+
     s = sub.add_parser("run", parents=[common], help="run the full pipeline into .verislop/runs/<run-id>/")
     s.add_argument("--prompt-file", required=True)
     s.add_argument("--mode", choices=["auto", "software"], default="auto")
@@ -893,6 +899,12 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.command == "ui":
+        from . import web
+        ui_args = ["--workspace", args.workspace, "--host", args.host, "--port", str(args.port)]
+        if args.runs_dir:
+            ui_args.extend(["--runs-dir", args.runs_dir])
+        return web.main(ui_args)
     as_json = getattr(args, "json", False)
     try:
         if args.command in WRITING_COMMANDS:

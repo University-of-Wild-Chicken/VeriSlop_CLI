@@ -12,9 +12,13 @@ dependencies = []
 
 [project.scripts]
 verislop = "verislop.cli:main"
+verislop-ui = "verislop.web:main"
 
 [tool.setuptools]
 packages = ["verislop", "verislop.providers", "verislop.targets", "verislop.bridges", "verislop.backends"]
 
+[tool.setuptools.cmdclass]
+build_py = "build_support.BuildPy"
+
 [tool.setuptools.package-data]
-verislop = ["lean/*.lean", "lean/VSCore/*.lean", "lean/VSCore2/*.lean", "lean/VSCore3/*.lean"]
+verislop = ["lean/*.lean", "lean/VSCore/*.lean", "lean/VSCore2/*.lean", "lean/VSCore3/*.lean", "web_assets/*.html", "web_assets/*.css", "web_assets/*.js"]

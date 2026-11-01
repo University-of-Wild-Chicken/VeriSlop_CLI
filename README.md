@@ -4,6 +4,11 @@ VeriSlop turns a software request into explicit obligations, proves a selected f
 
 This repository contains the **design specification** and a **working implementation of the `verislop` CLI** (v0.1). Generators propose; registered verifiers decide. Obligation milestones come from immutable evidence bound to the exact bytes it checked.
 
+**VeriSlop Workbench is the local web MVP:** save software requests, launch the
+strict CLI with your models, and inspect contracts, proofs, test results, and
+implementation artifacts. It runs on your machine with no frontend build step.
+Start with the [workbench guide](docs/workbench.md) or the quickstart below.
+
 - [Specification](docs/specification.md), [contract expression IR](docs/contract-ir.md), [obligation states](docs/obligation-states.md), [providers and adversarial review](docs/providers-and-review.md): the normative design.
 - [Implementation notes](docs/implementation.md): how the CLI realises the specification, artifact by artifact, and where it stops.
 - [Tier 2–4 specification and implementation outline](docs/tier-2-4.md): implemented restricted-source closure and proposed extraction and machine-code backends, with proof obligations and release gates.
@@ -12,7 +17,7 @@ This repository contains the **design specification** and a **working implementa
 - [TESTED campaign specification and formalism](docs/tested-campaigns.md): proposed strict campaign semantics, finite Lean model, VSCore testing outline and concrete-counterexample review requirements. This design does not enable VSCore campaigns.
 - [Structured data test bridge](docs/data-pipeline-bridge.md): signed integers, Unicode strings, lists and fixed-field records, with a preregistered native natural-language proof-of-concept protocol.
 - [Autonomous correction and durable contract context](docs/autonomous-correction.md): configured critic tiers, replayable counterexamples, correction loops and exact JSON/Lean recovery after context loss.
-- [Specification-first coverage bootstrap](docs/coverage-bootstrap.md), [native source facets](docs/bootstrap-native-boundaries.md), [integer-only source policy](docs/bootstrap-integer-source.md), [closed computation proofs](docs/bootstrap-closed-computation.md), and [review scope](docs/bootstrap-review-scope.md): accepted-AST reconstruction, source-bound admission, proof-producing reduction, phase-bound reviews and finite runtime observations; [retained stage results](synthetic_dataset/bootstrap/REPORT.md).
+- [Specification-first coverage bootstrap](docs/coverage-bootstrap.md), [native source facets](docs/bootstrap-native-boundaries.md), [integer-only source policy](docs/bootstrap-integer-source.md), [closed computation proofs](docs/bootstrap-closed-computation.md), and [review scope](docs/bootstrap-review-scope.md): accepted-AST reconstruction, source-bound admission, proof-producing reduction, phase-bound reviews and finite runtime observations. Generated experiment results remain local and are excluded from Git.
 - [Schemas](schemas/): JSON interfaces. Schema validity is structure only; semantic validators check the rest.
 - [Examples](examples/): bounded increment with Python and VSCore candidates, and an independent [checked-subtraction VSCore contract](examples/vscore-subtraction/README.md).
 
@@ -31,9 +36,47 @@ They are evidence milestones, not interchangeable claims. Tests do not establish
 - Lean toolchain `leanprover/lean4:v4.34.1` installed with elan (VeriSlop never downloads toolchains during verification; `VERISLOP_LEAN_PREFIX` can point at a toolchain directory).
 - Linux with bubblewrap (`bwrap`) and unprivileged user/network namespaces (`unshare -rn`). Candidate builds and tests require filesystem and network containment; missing containment fails closed.
 
-Run `bin/verislop doctor` to check these prerequisites. Install with `pip install -e .` (editable, so the bundled schemas are found), or run `bin/verislop` from the checkout.
+Run `bin/verislop doctor` to check these prerequisites. Run from the checkout,
+install with `pip install .`, or use `pip install -e .` for development. Schemas,
+Lean sources, web assets, and the offline example are included in built packages.
 
-## Quickstart (offline, with the bundled candidates)
+## Quickstart
+
+### Local web workbench
+
+Launch and inspect runs from a browser, using the same CLI and evidence gates:
+
+```bash
+git clone https://github.com/University-of-Wild-Chicken/VeriSlop_CLI.git
+cd VeriSlop_CLI
+bin/verislop ui                      # http://127.0.0.1:8765
+# or: python -m verislop.web --workspace . --port 8765
+# installed entry point: verislop-ui --workspace . --port 8765
+```
+
+Keep the server terminal open while using the app. If the port is occupied,
+choose another, for example `bin/verislop ui --port 8766`.
+
+The workbench provides saved software requests, a run launcher, live activity,
+an obligation milestone matrix, and read-only JSON/Lean/source previews. Choose
+**Add request → Save request** to keep a prompt locally without starting models.
+Reopen it to edit, choose a provider configuration, then **Save & launch**.
+Select **Offline example** to run the bundled handwritten Python example without
+model credentials. The server inherits
+your terminal's credential and model environment variables; opening the app does
+not start a run. Tier 2 uses VSCore 0.3 and its restricted-source endpoint.
+
+Existing packages can be opened by their workspace-relative path without changing
+historical evidence. Mechanical closure, release review, process status, and
+individual obligation outcomes are displayed separately. Stop the server with
+Ctrl+C; it interrupts only processes it started. See [workbench usage and API](docs/workbench.md).
+
+This MVP supports one workbench server and one active owned run per workspace.
+Model/reviewer settings use the existing provider JSON format; credentials stay
+in your terminal environment or CLI credential store. Tiers 3–4, hosted
+multi-user operation, and automatic experiment resumption are outside this MVP.
+
+### Command line (offline, with the bundled candidates)
 
 Every generator stage accepts either an LLM agent (`--config`) or a pre-authored candidate. The example candidates make the whole pipeline reproducible without credentials:
 
@@ -352,24 +395,38 @@ requests using Ubuntu 24.04 and Python 3.10 / 3.12. From the repository root,
 reproduce the exact selection with either interpreter (no pip install required):
 
 ```bash
-PYTHONPATH=tests python3.10 -m unittest -v test_broker_budget test_agent_effects test_budget_patch_audit
-PYTHONPATH=tests python3.12 -m unittest -v test_broker_budget test_agent_effects test_budget_patch_audit
+PYTHONPATH=tests python3.10 -m unittest -v test_broker_budget test_agent_effects test_budget_patch_audit test_workbench
+PYTHONPATH=tests python3.12 -m unittest -v test_broker_budget test_agent_effects test_budget_patch_audit test_workbench
 ```
 
 The explicit allowlist covers shared token reservations, concurrent admission and
 settlement, Agent Effect DSL permissions/identity/composition/budgets, and mocked
-provider/effect-checker integration. These modules use only the standard library,
-local temporary files and controlled mocks; Ollama protocol checks mock transport
+provider/effect-checker integration, and the workbench's actual loopback HTTP,
+request persistence, read-only inspection, launch, and cancellation boundaries.
+These modules use only the standard library, local temporary files, controlled
+Python child processes and mocks; Ollama protocol checks mock transport
 and require no running model. Threaded tests use bounded event/barrier waits.
 No selected tests are conditionally skipped.
 
-This initial gate excludes every other test module, including
+The regression allowlist excludes the other pipeline test modules, including
 `test_local_hybrid_tier2.py` (project identity and terminal-gate fixture integration,
 left outside this small broker/effect gate) and the Lean/source-pipeline, sandbox,
 live-provider and archived experimental campaigns. It does not install Lean,
 invoke privileged containment, read archived run evidence or configure models.
 Passing this gate is Python regression evidence only; it establishes neither
 formal verification nor end-to-end assurance. Historical evidence is unchanged.
+
+A separate CI job checks JavaScript syntax and builds a source distribution,
+rebuilds its wheel, and tests a fresh installation outside the checkout. To run
+that packaging check locally with setuptools and wheel installed:
+
+```bash
+node --check verislop/web_assets/app.js
+VERISLOP_TEST_DISTRIBUTION=1 PYTHONPATH=tests python -m unittest -v test_distribution
+```
+
+Build tools are development dependencies; the installed application has no
+third-party Python runtime dependencies. Packaging CI does not run Lean or models.
 
 The full suite has the Lean and Linux sandbox prerequisites listed above:
 
